@@ -2,6 +2,7 @@ import CitationScore from '@/components/CitationScore';
 import PlatformStatus from '@/components/PlatformStatus';
 import DeliverablesChecklist from '@/components/DeliverablesChecklist';
 import ScoreHistory from '@/components/ScoreHistory';
+import Link from 'next/link';
 
 export default function Home() {
   return (
@@ -13,9 +14,15 @@ export default function Home() {
             <h1 className="text-2xl font-bold tracking-widest" style={{ color: '#D4A830' }}>CITED</h1>
             <p className="text-sm text-gray-400 mt-1">AI Visibility Dashboard</p>
           </div>
-          <div className="text-right">
-            <div className="font-semibold">Radley Raven</div>
-            <div className="text-sm text-gray-400">The Oppenheim Group · La Jolla</div>
+          <div className="flex items-center gap-6">
+            <div className="flex items-center gap-4">
+              <Link href="/articles" className="text-sm text-gray-400 hover:text-white transition-colors">Articles</Link>
+              <Link href="/reviews" className="text-sm text-gray-400 hover:text-white transition-colors">Reviews</Link>
+            </div>
+            <div className="text-right">
+              <div className="font-semibold">Radley Raven</div>
+              <div className="text-sm text-gray-400">The Oppenheim Group · La Jolla</div>
+            </div>
           </div>
         </div>
       </header>
