@@ -21,39 +21,96 @@ const REVIEW_RESPONSES = [
   },
 ];
 
+const NEGATIVE_RESPONSES = [
+  {
+    label: 'Template A',
+    badge: 'Service Issue',
+    text: `Thank you for sharing your experience. I'm sorry it didn't meet expectations — that's not the standard I hold myself to. I'd welcome the chance to discuss this directly and make it right. Please feel free to call me at (858) 314-9600 or email radley@ogroup.com. Your feedback helps me improve.`,
+  },
+  {
+    label: 'Template B',
+    badge: 'Factual Dispute',
+    text: `Thank you for taking the time to leave feedback. I want to make sure the full picture is represented — [add brief clarification]. I'm always available to discuss further at (858) 314-9600.`,
+  },
+  {
+    label: 'Template C',
+    badge: 'Bad Faith',
+    text: `I appreciate all feedback. I take every client relationship seriously and always strive for the best outcome. I'm available to discuss any concerns directly at (858) 314-9600.`,
+  },
+];
+
 function CopyButton({ text, label }: { text: string; label: string }) {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = async () => {
-    await navigator.clipboard.writeText(text);
-    setCopied(true);
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopied(true);
+    } catch {
+      try {
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.style.position = 'fixed';
+        textarea.style.opacity = '0';
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+        setCopied(true);
+      } catch {
+        return;
+      }
+    }
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const handleSelectText = () => {
+    const button = document.activeElement as HTMLElement;
+    const parent = button?.closest('[data-content]');
+    if (parent) {
+      const range = document.createRange();
+      range.selectNodeContents(parent);
+      const selection = window.getSelection();
+      selection?.removeAllRanges();
+      selection?.addRange(range);
+    }
+  };
+
   return (
-    <button
-      onClick={handleCopy}
-      className="inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium text-sm transition-all duration-200"
-      style={{ background: '#00BFA6', color: '#ffffff' }}
-      onMouseEnter={e => { if (!copied) (e.currentTarget as HTMLButtonElement).style.opacity = '0.85'; }}
-      onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.opacity = '1'; }}
-    >
-      {copied ? (
-        <>
-          <svg className="w-4 h-4" fill="none" stroke="#22C55E" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-          </svg>
-          <span style={{ color: '#22C55E' }}>Copied ✓</span>
-        </>
-      ) : (
-        <>
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-          </svg>
-          {label}
-        </>
-      )}
-    </button>
+    <div className="inline-flex flex-col items-start gap-1">
+      <button
+        onClick={handleCopy}
+        className="inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium text-sm transition-all duration-200"
+        style={{ background: '#00BFA6', color: '#ffffff' }}
+        onMouseEnter={e => { if (!copied) (e.currentTarget as HTMLButtonElement).style.opacity = '0.85'; }}
+        onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.opacity = '1'; }}
+      >
+        {copied ? (
+          <>
+            <svg className="w-4 h-4" fill="none" stroke="#22C55E" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+            </svg>
+            <span style={{ color: '#22C55E' }}>Copied ✓</span>
+          </>
+        ) : (
+          <>
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+            </svg>
+            {label}
+          </>
+        )}
+      </button>
+      <button
+        onClick={handleSelectText}
+        className="text-xs underline transition-colors"
+        style={{ color: '#999' }}
+        onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.color = '#00BFA6'; }}
+        onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.color = '#999'; }}
+      >
+        Select text manually
+      </button>
+    </div>
   );
 }
 
@@ -169,6 +226,36 @@ export default function ReviewsPage() {
                 <strong>Bottom line:</strong> Every review response is a micro-investment in your AI discoverability. The agents recommending &quot;best real estate agent in La Jolla&quot; are reading these. Make them count.
               </p>
             </div>
+          </div>
+        </div>
+
+        {/* Negative Review Responses */}
+        <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden mt-6">
+          <div className="p-6 border-b border-gray-100">
+            <h2 className="text-lg font-bold flex items-center gap-2" style={{ color: '#D4A830' }}>
+              <span className="text-2xl">⚠️</span>
+              Negative Review Responses
+            </h2>
+            <p className="text-sm text-gray-500 mt-1">Pre-written responses for negative or critical reviews. Choose the template that best matches the situation.</p>
+          </div>
+
+          <div className="divide-y divide-gray-100">
+            {NEGATIVE_RESPONSES.map((response, i) => (
+              <div key={i} className="p-6" data-content>
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-2">
+                    <span className="font-semibold text-gray-900">{response.label}</span>
+                    <span className="inline-block px-2 py-0.5 text-xs font-semibold rounded-full" style={{ background: '#FEF3C7', color: '#92400E' }}>
+                      {response.badge}
+                    </span>
+                  </div>
+                  <CopyButton text={response.text} label="Copy Response" />
+                </div>
+                <p className="text-gray-700 leading-relaxed bg-gray-50 rounded-lg p-4 border border-gray-100">
+                  {response.text}
+                </p>
+              </div>
+            ))}
           </div>
         </div>
 

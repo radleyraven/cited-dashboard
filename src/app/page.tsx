@@ -2,6 +2,7 @@ import CitationScore from '@/components/CitationScore';
 import PlatformStatus from '@/components/PlatformStatus';
 import DeliverablesChecklist from '@/components/DeliverablesChecklist';
 import ScoreHistory from '@/components/ScoreHistory';
+import PlatformCompletionTracker from '@/components/PlatformCompletionTracker';
 import Link from 'next/link';
 
 export default function Home() {
@@ -42,6 +43,11 @@ export default function Home() {
           </div>
         </div>
 
+        {/* Platform Completion Tracker */}
+        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
+          <PlatformCompletionTracker />
+        </div>
+
         {/* Bottom Row: Score History + Deliverables */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Score History */}
@@ -55,19 +61,35 @@ export default function Home() {
           </div>
         </div>
 
+        {/* Quick Actions */}
+        <div className="mt-8 mb-4">
+          <h2 className="text-lg font-bold tracking-wide" style={{ color: '#0A1929' }}>Quick Actions</h2>
+          <p className="text-sm text-gray-500 mt-1">Jump to your most-used tools</p>
+        </div>
+
         {/* Navigation Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Articles Card */}
-          <Link href="/articles" className="block rounded-xl p-6 transition-all duration-200 hover:opacity-90" style={{ background: '#0A1929', border: '1px solid rgba(255,255,255,0.08)' }}>
+          <Link href="/articles" className="block rounded-xl p-6 transition-all duration-200 hover:opacity-90 hover:scale-[1.02]" style={{ background: '#0A1929', border: '2px solid #D4A830' }}>
+            <div className="text-3xl mb-3">📝</div>
             <h3 className="text-lg font-bold mb-2" style={{ color: '#D4A830' }}>Articles</h3>
             <p className="text-sm text-gray-400 mb-4">Copy, publish, and distribute your AI-optimized content</p>
             <span className="text-sm font-semibold" style={{ color: '#00BFA6' }}>Open →</span>
           </Link>
 
           {/* Reviews Card */}
-          <Link href="/reviews" className="block rounded-xl p-6 transition-all duration-200 hover:opacity-90" style={{ background: '#0A1929', border: '1px solid rgba(255,255,255,0.08)' }}>
+          <Link href="/reviews" className="block rounded-xl p-6 transition-all duration-200 hover:opacity-90 hover:scale-[1.02]" style={{ background: '#0A1929', border: '2px solid #D4A830' }}>
+            <div className="text-3xl mb-3">⭐</div>
             <h3 className="text-lg font-bold mb-2" style={{ color: '#D4A830' }}>Reviews</h3>
             <p className="text-sm text-gray-400 mb-4">Respond to reviews with pre-written, AI-optimized responses</p>
+            <span className="text-sm font-semibold" style={{ color: '#00BFA6' }}>Open →</span>
+          </Link>
+
+          {/* Copy Kit Card */}
+          <Link href="/client/radley-raven.html" className="block rounded-xl p-6 transition-all duration-200 hover:opacity-90 hover:scale-[1.02]" style={{ background: '#0A1929', border: '2px solid #D4A830' }}>
+            <div className="text-3xl mb-3">📋</div>
+            <h3 className="text-lg font-bold mb-2" style={{ color: '#D4A830' }}>Copy Kit</h3>
+            <p className="text-sm text-gray-400 mb-4">Your complete copy kit with bios, descriptions, and platform content</p>
             <span className="text-sm font-semibold" style={{ color: '#00BFA6' }}>Open →</span>
           </Link>
         </div>

@@ -73,35 +73,74 @@ function CopyButton({ text, label }: { text: string; label: string }) {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = async () => {
-    await navigator.clipboard.writeText(text);
-    setCopied(true);
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopied(true);
+    } catch {
+      try {
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.style.position = 'fixed';
+        textarea.style.opacity = '0';
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+        setCopied(true);
+      } catch {
+        return;
+      }
+    }
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const handleSelectText = () => {
+    const button = document.activeElement as HTMLElement;
+    const parent = button?.closest('[data-content]');
+    if (parent) {
+      const range = document.createRange();
+      range.selectNodeContents(parent);
+      const selection = window.getSelection();
+      selection?.removeAllRanges();
+      selection?.addRange(range);
+    }
+  };
+
   return (
-    <button
-      onClick={handleCopy}
-      className="inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium text-sm transition-all duration-200"
-      style={{ background: '#00BFA6', color: '#ffffff' }}
-      onMouseEnter={e => { if (!copied) (e.currentTarget as HTMLButtonElement).style.opacity = '0.85'; }}
-      onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.opacity = '1'; }}
-    >
-      {copied ? (
-        <>
-          <svg className="w-4 h-4" fill="none" stroke="#22C55E" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-          </svg>
-          <span style={{ color: '#22C55E' }}>Copied ✓</span>
-        </>
-      ) : (
-        <>
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-          </svg>
-          {label}
-        </>
-      )}
-    </button>
+    <div className="inline-flex flex-col items-start gap-1">
+      <button
+        onClick={handleCopy}
+        className="inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium text-sm transition-all duration-200"
+        style={{ background: '#00BFA6', color: '#ffffff' }}
+        onMouseEnter={e => { if (!copied) (e.currentTarget as HTMLButtonElement).style.opacity = '0.85'; }}
+        onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.opacity = '1'; }}
+      >
+        {copied ? (
+          <>
+            <svg className="w-4 h-4" fill="none" stroke="#22C55E" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+            </svg>
+            <span style={{ color: '#22C55E' }}>Copied ✓</span>
+          </>
+        ) : (
+          <>
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+            </svg>
+            {label}
+          </>
+        )}
+      </button>
+      <button
+        onClick={handleSelectText}
+        className="text-xs underline transition-colors"
+        style={{ color: '#999' }}
+        onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.color = '#00BFA6'; }}
+        onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.color = '#999'; }}
+      >
+        Select text manually
+      </button>
+    </div>
   );
 }
 
@@ -298,7 +337,7 @@ export default function NorthCountyCoastPage() {
               </svg>
               <h2 className="text-lg font-bold" style={{ color: '#D4A830' }}>Step 3: Post to Google Business Profile</h2>
             </div>
-            <p className="text-sm text-gray-500 mt-1">GBP posts are short-form (max 1,500 characters). This is a condensed version of the article optimized for Google's AI. Post it as an Update on your Google Business Profile.</p>
+            <p className="text-sm text-gray-500 mt-1">GBP posts are short-form (max 1,500 characters). This is a condensed version of the article optimized for Google&apos;s AI.</p>
             <div className="mt-4">
               <a
                 href="https://business.google.com"
@@ -313,6 +352,29 @@ export default function NorthCountyCoastPage() {
             <div className="mt-3">
               <CopyButton text={GBP_POST} label="Copy Post" />
             </div>
+          </div>
+
+          {/* GBP Posting Instructions */}
+          <div className="px-6 py-5 border-b border-gray-100" style={{ background: '#f8f9fa' }}>
+            <p className="text-sm font-semibold uppercase tracking-wide mb-3" style={{ color: '#D4A830' }}>How to Post</p>
+            <ol className="space-y-2">
+              {[
+                <>Click <span className="font-semibold">&quot;Posts&quot;</span> tab on your GBP dashboard</>,
+                <>Click <span className="font-semibold">&quot;+ Add post&quot;</span> <span className="text-gray-500">(blue button, top right)</span></>,
+                <>Select <span className="font-semibold">&quot;Update&quot;</span> as the post type</>,
+                <>Paste your post in the <span className="font-semibold">&quot;Description&quot;</span> field <span className="text-gray-500">(0/1,500 characters)</span></>,
+                <>Click <span className="font-semibold">&quot;Select images and videos&quot;</span> to add a photo</>,
+                <>Click <span className="font-semibold">&quot;Add more details&quot;</span> → <span className="font-semibold">&quot;+ Button&quot;</span> → select <span className="font-semibold">&quot;Learn more&quot;</span> → paste your LinkedIn article URL</>,
+                <>Click <span className="font-semibold">&quot;Post&quot;</span></>,
+              ].map((step, i) => (
+                <li key={i} className="flex items-start gap-3">
+                  <span className="flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold" style={{ background: '#D4A830', color: '#0A1929' }}>
+                    {i + 1}
+                  </span>
+                  <span className="text-sm text-gray-700 leading-relaxed">{step}</span>
+                </li>
+              ))}
+            </ol>
           </div>
 
           <div className="px-6 py-5">
