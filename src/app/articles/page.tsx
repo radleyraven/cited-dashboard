@@ -109,6 +109,40 @@ export default function ArticlesPage() {
 
       {/* Main Content */}
       <main className="max-w-4xl mx-auto px-6 py-8">
+
+        {/* LinkedIn Publishing Instructions */}
+        <div className="rounded-xl mb-8 overflow-hidden" style={{ background: '#0A1929', border: '1px solid rgba(255,255,255,0.08)' }}>
+          <div className="px-6 py-4 border-b" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>
+            <div className="flex items-center gap-2">
+              <svg className="w-5 h-5" style={{ color: '#00BFA6' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+              </svg>
+              <h2 className="text-sm font-bold uppercase tracking-widest" style={{ color: '#00BFA6' }}>How to Publish Your Article on LinkedIn</h2>
+            </div>
+          </div>
+          <div className="px-6 py-5">
+            <ol className="space-y-3">
+              {[
+                <>Click <span className="font-semibold text-white">"Copy Full Article"</span> below</>,
+                <>Open LinkedIn → click <span className="font-semibold text-white">"Write article"</span> <span className="text-gray-400">(not "Start a post")</span></>,
+                <>Set the title <span className="text-gray-400">(copy button provided below)</span></>,
+                <>Paste the article body</>,
+                <>Add hashtags at the bottom of the article <span className="text-gray-400">(copy button provided below)</span></>,
+                <>Add a cover image <span className="text-gray-400">(download from below or use your own)</span></>,
+                <>Click <span className="font-semibold text-white">Publish</span> → LinkedIn will show <span className="font-semibold" style={{ color: '#D4A830' }}>"Tell your network what your article is about…"</span> — paste the <span className="font-semibold text-white">Feed Teaser</span> there <span className="text-gray-400">(copy button provided below)</span></>,
+                <>Copy the published article URL → send to your <span className="font-semibold text-white">Cited team</span> for PRISM tracking</>,
+              ].map((step, i) => (
+                <li key={i} className="flex items-start gap-3">
+                  <span className="flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold mt-0.5" style={{ background: '#00BFA6', color: '#0A1929' }}>
+                    {i + 1}
+                  </span>
+                  <span className="text-sm leading-relaxed" style={{ color: '#CBD5E1' }}>{step}</span>
+                </li>
+              ))}
+            </ol>
+          </div>
+        </div>
+
         {/* Article Card */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
           {/* Article Header */}
@@ -126,7 +160,7 @@ export default function ArticlesPage() {
               <CopyButton text={fullArticle} label="Copy Full Article" />
               <CopyButton text={ARTICLE_TITLE} label="Copy Title" />
               <CopyButton text={ARTICLE_HASHTAGS} label="Copy Hashtags" />
-              <CopyButton text={FEED_TEASER} label="Copy Feed Teaser" />
+              <CopyButton text={FEED_TEASER} label="Feed Teaser — paste in LinkedIn's 'Tell your network what your article is about...' box" />
             </div>
           </div>
 
