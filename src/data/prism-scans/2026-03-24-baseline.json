@@ -1,0 +1,23 @@
+{
+  "scan_id": "radley-prism-baseline",
+  "client_key": "radley_raven",
+  "scan_date": "2026-03-24",
+  "scan_type": "baseline",
+  "composite_score": 0.3,
+  "models_tested": ["chatgpt", "claude", "gemini", "perplexity"],
+  "summary": "Near-zero AI visibility. Name recognized when asked directly, but never surfaced unprompted for any discovery query in target markets. No performance stats anywhere for AI to cite.",
+  "category_scores": {
+    "A_generic": {"score": 0, "max": 15, "details": "Not mentioned for any 'best agent in [market]' query"},
+    "B_performance": {"score": 0, "max": 15, "details": "No stats published. AI has nothing to cite."},
+    "C_specialty": {"score": 0, "max": 10, "details": "No specialty content indexed"},
+    "D_knowledge": {"score": 0, "max": 10, "details": "No market-specific content prior to Article 1 (3/26)"},
+    "E_reputation": {"score": 2, "max": 10, "details": "GBP has 5.0 stars / 8 reviews at baseline. Limited keyword richness."},
+    "F_comparison": {"score": 0, "max": 10, "details": "No evaluation/comparison content exists"}
+  },
+  "notable": [
+    "Name recognized by ChatGPT when asked directly (Oppenheim Group association)",
+    "Zillow profile exists but reviews stop in 2021",
+    "GBP verified but no posts, limited reviews",
+    "Zero content indexed in any AI model for target markets"
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "scan_id": "radley-prism-rescan-1",
+  "client_key": "radley_raven",
+  "scan_date": "2026-03-28",
+  "scan_type": "rescan",
+  "composite_score": 0.3,
+  "previous_composite": 0.3,
+  "delta": 0.0,
+  "models_tested": ["chatgpt", "claude", "gemini", "perplexity"],
+  "summary": "Run 3 days early as preview. No movement expected at Day 3 post-optimization. LinkedIn cache still shows old 'Raven & Co.' — hasn't re-indexed since 3/24. Zillow still shows La Jolla. True signal window: April 7 (re-scan #2).",
+  "category_scores": {
+    "A_generic": {"score": 0, "max": 15, "trend": "stable"},
+    "B_performance": {"score": 0, "max": 15, "trend": "stable"},
+    "C_specialty": {"score": 0, "max": 10, "trend": "stable"},
+    "D_knowledge": {"score": 0, "max": 10, "trend": "stable"},
+    "E_reputation": {"score": 2, "max": 10, "trend": "stable"},
+    "F_comparison": {"score": 0, "max": 10, "trend": "stable"}
+  },
+  "notable": [
+    "JamesEdition now surfacing in name search results (new citation source)",
+    "Carlsbad Yelp 'Best' list updated March 2026 — Radley not on it",
+    "Moss Team and Best Life Home Team rising as Carlsbad competitors",
+    "LinkedIn Google cache still shows old profile — re-index pending (7-14 days)"
+  ],
+  "priority_before_next_scan": [
+    "CITED-029: GBP post",
+    "CITED-025: 2-3 Google reviews",
+    "CITED-027: Carlsbad LinkedIn article live",
+    "Deploy citedagent.com DNS"
+  ]
+}

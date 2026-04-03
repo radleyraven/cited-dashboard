@@ -1,21 +1,12 @@
-import fs from "fs";
-
-const SCAN_DIR =
-  "/Users/rrmacmini/.openclaw/workspace/references/cited-clients/radley_raven/data/prism-scans";
+import baseline from "@/data/prism-scans/2026-03-24-baseline.json";
+import rescan1 from "@/data/prism-scans/2026-03-28-rescan1.json";
 
 export function getPrismScans() {
-  const baseline = JSON.parse(
-    fs.readFileSync(`${SCAN_DIR}/2026-03-24-baseline.json`, "utf8")
-  );
-  const rescan1 = JSON.parse(
-    fs.readFileSync(`${SCAN_DIR}/2026-03-28-rescan1.json`, "utf8")
-  );
-
   return {
-    latest: rescan1.composite_score,
+    latest: (rescan1 as any).composite_score,
     history: [
-      { date: baseline.scan_date, score: baseline.composite_score },
-      { date: rescan1.scan_date, score: rescan1.composite_score },
+      { date: (baseline as any).scan_date, score: (baseline as any).composite_score },
+      { date: (rescan1 as any).scan_date, score: (rescan1 as any).composite_score },
     ],
   };
 }
