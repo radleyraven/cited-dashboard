@@ -88,11 +88,13 @@ function CopyButton({ text, label }: { text: string; label: string }) {
   return (
     <button
       onClick={handleCopy}
-      className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium text-sm transition-all duration-200 ${
-        copied
-          ? 'bg-teal text-white'
-          : 'bg-cobalt text-white hover:bg-cobalt/90'
-      }`}
+      className="inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium text-sm transition-all duration-200"
+      style={copied
+        ? { background: '#00BFA6', color: '#ffffff' }
+        : { background: '#00BFA6', color: '#ffffff', opacity: 1 }
+      }
+      onMouseEnter={e => { if (!copied) (e.currentTarget as HTMLButtonElement).style.opacity = '0.85'; }}
+      onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.opacity = '1'; }}
     >
       {copied ? (
         <>
@@ -155,24 +157,24 @@ export default function ArticlesPage() {
                 <>Copy the published article URL → send to your <span className="font-semibold text-white">Cited team</span> for PRISM tracking</>,
               ].map((step, i) => (
                 <li key={i} className="flex items-start gap-3">
-                  <span className="flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold mt-0.5" style={{ background: '#D4A830', color: '#0A1929' }}>
+                  <span className="flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold mt-0.5" style={{ background: '#00BFA6', color: '#ffffff' }}>
                     {i + 1}
                   </span>
-                  <span className="text-sm leading-relaxed" style={{ color: '#CBD5E1' }}>{step}</span>
+                  <span className="text-sm leading-relaxed" style={{ color: '#ffffff' }}>{step}</span>
                 </li>
               ))}
             </ol>
           </div>
         </div>
 
-        {/* Article Card */}
+        {/* Step 1: Article Card */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
           {/* Article Header */}
           <div className="p-6 border-b border-gray-100">
             <div className="flex items-start justify-between gap-4">
               <div>
                 <span className="inline-block px-3 py-1 text-xs font-semibold rounded-full mb-3" style={{ background: '#D4A830', color: '#0A1929' }}>
-                  ARTICLE
+                  STEP 1: LINKEDIN ARTICLE
                 </span>
                 <h2 className="text-xl font-bold text-gray-900 leading-tight">{ARTICLE_TITLE}</h2>
               </div>
@@ -198,9 +200,9 @@ export default function ArticlesPage() {
                 // Check if it's a section header (short line, no period at end)
                 const isHeader = paragraph.length < 80 && !paragraph.endsWith('.') && !paragraph.startsWith('→') && !paragraph.startsWith('Most') && !paragraph.startsWith('I\'ve') && !paragraph.startsWith('Here\'s') && !paragraph.startsWith('What') && !paragraph.startsWith('The buyers') && !paragraph.startsWith('For the') && !paragraph.startsWith('But') && !paragraph.startsWith('La Costa') && !paragraph.startsWith('Santalina') && !paragraph.startsWith('All') && !paragraph.startsWith('If you');
                 const isFrameworkItem = paragraph.startsWith('→');
-                
+
                 if (isHeader) {
-                  return <h3 key={i} className="text-lg font-bold mt-8 mb-3" style={{ color: '#D4A830' }}>{paragraph}</h3>;
+                  return <h3 key={i} className="text-lg font-bold text-black mt-8 mb-3">{paragraph}</h3>;
                 }
                 if (isFrameworkItem) {
                   return (
@@ -227,8 +229,9 @@ export default function ArticlesPage() {
           </div>
         </div>
 
-        {/* Post to Your Feed Section */}
+        {/* Step 2: Share to LinkedIn Feed */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden mt-8">
+          {/* Header */}
           <div className="p-6 border-b border-gray-100">
             <div className="flex items-center gap-2 mb-1">
               <svg className="w-5 h-5" style={{ color: '#D4A830' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -237,49 +240,48 @@ export default function ArticlesPage() {
               <h2 className="text-lg font-bold" style={{ color: '#D4A830' }}>Step 2: Share to Your LinkedIn Feed</h2>
             </div>
             <p className="text-sm text-gray-500 mt-1">After publishing the article, share it as a post to push it into your connections' feeds.</p>
+            {/* Copy Buttons Row */}
+            <div className="flex flex-wrap gap-3 mt-4">
+              <CopyButton text={POST_COPY} label="Copy Post" />
+              <CopyButton text={POST_COMMENT} label="Copy Comment" />
+            </div>
+            {/* Open LinkedIn — right under copy buttons */}
+            <div className="mt-3">
+              <a
+                href="https://www.linkedin.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg font-semibold text-sm transition-all duration-200 hover:opacity-90"
+                style={{ background: '#0A66C2', color: '#ffffff' }}
+              >
+                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                </svg>
+                Open LinkedIn
+              </a>
+            </div>
           </div>
 
-          {/* Post Copy */}
+          {/* Post Copy Content */}
           <div className="px-6 py-5 border-b border-gray-100">
-            <div className="flex items-center justify-between mb-3">
-              <p className="text-sm font-semibold uppercase tracking-wide" style={{ color: '#D4A830' }}>Post Copy</p>
-              <CopyButton text={POST_COPY} label="Copy Post" />
-            </div>
+            <p className="text-sm font-semibold uppercase tracking-wide mb-3" style={{ color: '#D4A830' }}>Post Copy</p>
             <div className="rounded-lg p-4 text-sm text-gray-700 leading-relaxed whitespace-pre-line" style={{ background: '#f8f9fa', border: '1px solid #e5e7eb' }}>
               {POST_COPY}
             </div>
           </div>
 
-          {/* Post Comment */}
-          <div className="px-6 py-5 border-b border-gray-100">
-            <div className="flex items-center justify-between mb-3">
-              <p className="text-sm font-semibold uppercase tracking-wide" style={{ color: '#D4A830' }}>Post Comment</p>
-              <CopyButton text={POST_COMMENT} label="Copy Comment" />
-            </div>
+          {/* Post Comment Content */}
+          <div className="px-6 py-5">
+            <p className="text-sm font-semibold uppercase tracking-wide mb-3" style={{ color: '#D4A830' }}>Post Comment</p>
             <div className="rounded-lg p-4 text-sm text-gray-700 leading-relaxed" style={{ background: '#f8f9fa', border: '1px solid #e5e7eb' }}>
               {POST_COMMENT}
             </div>
           </div>
-
-          {/* LinkedIn Link */}
-          <div className="px-6 py-5">
-            <a
-              href="https://www.linkedin.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg font-semibold text-sm transition-all duration-200 hover:opacity-90"
-              style={{ background: '#0A66C2', color: '#ffffff' }}
-            >
-              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-              </svg>
-              Open LinkedIn
-            </a>
-          </div>
         </div>
 
-        {/* Google Business Profile Section */}
+        {/* Step 3: Google Business Profile */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden mt-8">
+          {/* Header */}
           <div className="p-6 border-b border-gray-100">
             <div className="flex items-center gap-2 mb-1">
               <svg className="w-5 h-5" style={{ color: '#D4A830' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -289,48 +291,29 @@ export default function ArticlesPage() {
               <h2 className="text-lg font-bold" style={{ color: '#D4A830' }}>Step 3: Post to Google Business Profile</h2>
             </div>
             <p className="text-sm text-gray-500 mt-1">GBP posts are short-form (max 1,500 characters). This is a condensed version of the article optimized for Google's AI. Post it as an Update on your Google Business Profile.</p>
-          </div>
-
-          {/* GBP Post Copy */}
-          <div className="px-6 py-5 border-b border-gray-100">
-            <div className="flex items-center justify-between mb-3">
-              <p className="text-sm font-semibold uppercase tracking-wide" style={{ color: '#D4A830' }}>GBP Post</p>
+            {/* Open GBP link — under header, before copy button */}
+            <div className="mt-4">
+              <a
+                href="https://business.google.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg font-semibold text-sm transition-all duration-200 hover:opacity-90"
+                style={{ background: '#00BFA6', color: '#ffffff' }}
+              >
+                Open Google Business Profile →
+              </a>
+            </div>
+            {/* Copy button — right under the link */}
+            <div className="mt-3">
               <CopyButton text={GBP_POST} label="Copy Post" />
             </div>
-            <div className="rounded-lg p-4 text-sm text-gray-700 leading-relaxed whitespace-pre-line" style={{ background: '#f8f9fa', border: '1px solid #e5e7eb' }}>
-              {GBP_POST}
-            </div>
           </div>
 
-          {/* GBP Link + Instructions */}
+          {/* GBP Post Content */}
           <div className="px-6 py-5">
-            <a
-              href="https://business.google.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg font-semibold text-sm transition-all duration-200 hover:opacity-90 mb-5"
-              style={{ background: '#00BFA6', color: '#ffffff' }}
-            >
-              Open Google Business Profile →
-            </a>
-            <div className="rounded-lg p-4" style={{ background: '#f8f9fa', border: '1px solid #e5e7eb' }}>
-              <p className="text-sm font-semibold uppercase tracking-wide mb-3" style={{ color: '#D4A830' }}>How to Post</p>
-              <ol className="space-y-2">
-                {[
-                  <>Open Google Business Profile <span className="text-gray-400">(link above)</span></>,
-                  <>Click <span className="font-semibold text-gray-800">"Add update"</span> <span className="text-gray-400">(or "Create post")</span></>,
-                  <>Paste the post above</>,
-                  <>Add a photo <span className="text-gray-400">(use the Carlsbad listing photo from the article)</span></>,
-                  <>Click <span className="font-semibold text-gray-800">"Post"</span></>,
-                ].map((step, i) => (
-                  <li key={i} className="flex items-start gap-3">
-                    <span className="flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold mt-0.5" style={{ background: '#D4A830', color: '#0A1929' }}>
-                      {i + 1}
-                    </span>
-                    <span className="text-sm leading-relaxed text-gray-700">{step}</span>
-                  </li>
-                ))}
-              </ol>
+            <p className="text-sm font-semibold uppercase tracking-wide mb-3" style={{ color: '#D4A830' }}>GBP Post</p>
+            <div className="rounded-lg p-4 text-sm text-gray-700 leading-relaxed whitespace-pre-line" style={{ background: '#f8f9fa', border: '1px solid #e5e7eb' }}>
+              {GBP_POST}
             </div>
           </div>
         </div>
