@@ -97,7 +97,7 @@ export default function ArticlesPage() {
       <header className="text-white" style={{ background: '#0A1929' }}>
         <div className="max-w-6xl mx-auto px-6 py-6 flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold tracking-widest" style={{ color: '#D4A830' }}>CITED</h1>
+            <h1 className="text-2xl font-bold tracking-widest" style={{ color: '#00BFA6' }}>CITED</h1>
             <p className="text-sm text-gray-400 mt-1">Content Library</p>
           </div>
           <div className="flex items-center gap-4">
