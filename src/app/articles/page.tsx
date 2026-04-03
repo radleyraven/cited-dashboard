@@ -51,6 +51,12 @@ const ARTICLE_HASHTAGS = `#Carlsbad #CarlsbadRealEstate #LaCosta #NorthCountySan
 
 const FEED_TEASER = `Most Carlsbad buyers only look at 92008. Here's what they're missing in 92011 and 92009 — and why the zip code you overlook might be the one you should buy in.`;
 
+const POST_COPY = `Just published: the three Carlsbad zip codes most buyers don't compare — and why the one you overlook might be the smartest buy. Data + local knowledge from 10+ years in North County. Link below 👇
+
+https://www.linkedin.com/pulse/carlsbad-nobody-talks-la-costa-aviara-where-real-value-radley-raven-kb6ke`;
+
+const POST_COMMENT = `Happy to answer any questions about specific communities — feel free to drop a comment or reach out directly.`;
+
 function CopyButton({ text, label }: { text: string; label: string }) {
   const [copied, setCopied] = useState(false);
 
@@ -114,26 +120,23 @@ export default function ArticlesPage() {
         <div className="rounded-xl mb-8 overflow-hidden" style={{ background: '#0A1929', border: '1px solid rgba(255,255,255,0.08)' }}>
           <div className="px-6 py-4 border-b" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>
             <div className="flex items-center gap-2">
-              <svg className="w-5 h-5" style={{ color: '#00BFA6' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5" style={{ color: '#D4A830' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
               </svg>
-              <h2 className="text-sm font-bold uppercase tracking-widest" style={{ color: '#00BFA6' }}>How to Publish Your Article on LinkedIn</h2>
+              <h2 className="text-sm font-bold uppercase tracking-widest" style={{ color: '#D4A830' }}>How to Publish Your Article on LinkedIn</h2>
             </div>
           </div>
           <div className="px-6 py-5">
             <ol className="space-y-3">
               {[
-                <>Click <span className="font-semibold text-white">"Copy Full Article"</span> below</>,
-                <>Open LinkedIn → click <span className="font-semibold text-white">"Write article"</span> <span className="text-gray-400">(not "Start a post")</span></>,
-                <>Set the title <span className="text-gray-400">(copy button provided below)</span></>,
-                <>Paste the article body</>,
-                <>Add hashtags at the bottom of the article <span className="text-gray-400">(copy button provided below)</span></>,
+                <>Copy the <span className="font-semibold text-white">Title</span> using the button below, then open LinkedIn → click <span className="font-semibold text-white">"Write article"</span> <span className="text-gray-400">(not "Start a post")</span> and paste it in</>,
+                <>Click <span className="font-semibold text-white">"Copy Full Article"</span> and paste the body into the article editor <span className="text-gray-400">(hashtags are included at the bottom)</span></>,
                 <>Add a cover image <span className="text-gray-400">(download from below or use your own)</span></>,
                 <>Click <span className="font-semibold text-white">Publish</span> → LinkedIn will show <span className="font-semibold" style={{ color: '#D4A830' }}>"Tell your network what your article is about…"</span> — paste the <span className="font-semibold text-white">Feed Teaser</span> there <span className="text-gray-400">(copy button provided below)</span></>,
                 <>Copy the published article URL → send to your <span className="font-semibold text-white">Cited team</span> for PRISM tracking</>,
               ].map((step, i) => (
                 <li key={i} className="flex items-start gap-3">
-                  <span className="flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold mt-0.5" style={{ background: '#00BFA6', color: '#0A1929' }}>
+                  <span className="flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold mt-0.5" style={{ background: '#D4A830', color: '#0A1929' }}>
                     {i + 1}
                   </span>
                   <span className="text-sm leading-relaxed" style={{ color: '#CBD5E1' }}>{step}</span>
@@ -157,16 +160,15 @@ export default function ArticlesPage() {
             </div>
             {/* Copy Buttons Row */}
             <div className="flex flex-wrap gap-3 mt-4">
-              <CopyButton text={fullArticle} label="Copy Full Article" />
               <CopyButton text={ARTICLE_TITLE} label="Copy Title" />
-              <CopyButton text={ARTICLE_HASHTAGS} label="Copy Hashtags" />
-              <CopyButton text={FEED_TEASER} label="Feed Teaser — paste in LinkedIn's 'Tell your network what your article is about...' box" />
+              <CopyButton text={fullArticle} label="Copy Full Article" />
+              <CopyButton text={FEED_TEASER} label="Copy Feed Teaser" />
             </div>
           </div>
 
           {/* Feed Teaser */}
           <div className="px-6 py-4 border-b border-gray-100" style={{ background: '#f8f9fa' }}>
-            <p className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-1">Feed Teaser</p>
+            <p className="text-sm font-semibold uppercase tracking-wide mb-1" style={{ color: '#D4A830' }}>Feed Teaser</p>
             <p className="text-gray-700 italic">{FEED_TEASER}</p>
           </div>
 
@@ -179,7 +181,7 @@ export default function ArticlesPage() {
                 const isFrameworkItem = paragraph.startsWith('→');
                 
                 if (isHeader) {
-                  return <h3 key={i} className="text-lg font-bold text-cobalt mt-8 mb-3">{paragraph}</h3>;
+                  return <h3 key={i} className="text-lg font-bold mt-8 mb-3" style={{ color: '#D4A830' }}>{paragraph}</h3>;
                 }
                 if (isFrameworkItem) {
                   return (
@@ -195,7 +197,7 @@ export default function ArticlesPage() {
 
           {/* Hashtags */}
           <div className="px-6 py-4 border-t border-gray-100" style={{ background: '#f8f9fa' }}>
-            <p className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-2">Hashtags</p>
+            <p className="text-sm font-semibold uppercase tracking-wide mb-2" style={{ color: '#D4A830' }}>Hashtags</p>
             <div className="flex flex-wrap gap-2">
               {ARTICLE_HASHTAGS.split(' ').map((tag, i) => (
                 <span key={i} className="inline-block px-3 py-1 text-sm rounded-full bg-cobalt/10 text-cobalt font-medium">
@@ -203,6 +205,57 @@ export default function ArticlesPage() {
                 </span>
               ))}
             </div>
+          </div>
+        </div>
+
+        {/* Post to Your Feed Section */}
+        <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden mt-8">
+          <div className="p-6 border-b border-gray-100">
+            <div className="flex items-center gap-2 mb-1">
+              <svg className="w-5 h-5" style={{ color: '#D4A830' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+              </svg>
+              <h2 className="text-lg font-bold" style={{ color: '#D4A830' }}>Step 2: Share to Your LinkedIn Feed</h2>
+            </div>
+            <p className="text-sm text-gray-500 mt-1">After publishing the article, share it as a post to push it into your connections' feeds.</p>
+          </div>
+
+          {/* Post Copy */}
+          <div className="px-6 py-5 border-b border-gray-100">
+            <div className="flex items-center justify-between mb-3">
+              <p className="text-sm font-semibold uppercase tracking-wide" style={{ color: '#D4A830' }}>Post Copy</p>
+              <CopyButton text={POST_COPY} label="Copy Post" />
+            </div>
+            <div className="rounded-lg p-4 text-sm text-gray-700 leading-relaxed whitespace-pre-line" style={{ background: '#f8f9fa', border: '1px solid #e5e7eb' }}>
+              {POST_COPY}
+            </div>
+          </div>
+
+          {/* Post Comment */}
+          <div className="px-6 py-5 border-b border-gray-100">
+            <div className="flex items-center justify-between mb-3">
+              <p className="text-sm font-semibold uppercase tracking-wide" style={{ color: '#D4A830' }}>Post Comment</p>
+              <CopyButton text={POST_COMMENT} label="Copy Comment" />
+            </div>
+            <div className="rounded-lg p-4 text-sm text-gray-700 leading-relaxed" style={{ background: '#f8f9fa', border: '1px solid #e5e7eb' }}>
+              {POST_COMMENT}
+            </div>
+          </div>
+
+          {/* LinkedIn Link */}
+          <div className="px-6 py-5">
+            <a
+              href="https://www.linkedin.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg font-semibold text-sm transition-all duration-200 hover:opacity-90"
+              style={{ background: '#0A66C2', color: '#ffffff' }}
+            >
+              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+              </svg>
+              Open LinkedIn
+            </a>
           </div>
         </div>
 
