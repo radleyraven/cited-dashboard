@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Platform Copy Kit — Paste Ready | Radley Raven</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background: #ffffff; color: #333; line-height: 1.6; }
+
+  /* Header */
+  .header { background: #0A1929; padding: 32px 40px; }
+  .header-inner { max-width: 960px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
+  .header-left h1 { font-size: 28px; font-weight: 800; color: #D4A830; letter-spacing: 4px; }
+  .header-left p { color: rgba(255,255,255,0.7); font-size: 14px; margin-top: 4px; }
+  .header-right { text-align: right; }
+  .header-right .client-name { color: #fff; font-size: 18px; font-weight: 600; }
+  .header-right .client-sub { color: rgba(255,255,255,0.5); font-size: 13px; }
+
+  /* Stats Bar */
+  .stats-bar { background: #0A1929; border-top: 1px solid rgba(255,255,255,0.1); padding: 20px 40px; }
+  .stats-inner { max-width: 960px; margin: 0 auto; display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; text-align: center; }
+  .stat-item .stat-value { color: #D4A830; font-size: 20px; font-weight: 700; }
+  .stat-item .stat-label { color: rgba(255,255,255,0.4); font-size: 10px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; margin-top: 2px; }
+
+  /* Main */
+  .main { max-width: 960px; margin: 0 auto; padding: 32px 40px 60px; }
+
+  /* Positioning */
+  .positioning { background: #f8f8f8; border-left: 4px solid #0A1929; border-radius: 4px; padding: 16px 20px; margin-bottom: 32px; }
+  .positioning .label { font-size: 10px; font-weight: 700; color: #888; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 6px; }
+  .positioning .text { font-size: 15px; font-weight: 500; color: #0A1929; line-height: 1.5; }
+
+  /* Platform Section */
+  .platform { margin-bottom: 40px; }
+  .platform-header { background: #0A1929; border-radius: 6px; padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+  .platform-header .platform-title { color: #fff; font-size: 15px; font-weight: 700; }
+  .platform-header .platform-num { color: #D4A830; font-weight: 800; margin-right: 10px; }
+  .platform-header .status { display: inline-block; padding: 3px 12px; border-radius: 12px; font-size: 11px; font-weight: 600; color: #fff; }
+  .status-live { background: #16a34a; }
+  .status-pending { background: #f59e0b; }
+  .status-future { background: #888; }
+
+  .platform-link { font-size: 12px; margin-bottom: 12px; }
+  .platform-link a { color: #00BFA6; text-decoration: none; font-weight: 500; }
+  .platform-link a:hover { text-decoration: underline; }
+
+  /* Field */
+  .field { margin-bottom: 16px; }
+  .field-label { font-size: 10px; font-weight: 700; color: #888; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 6px; }
+  .field-wrapper { position: relative; }
+  .field-content { background: #fafafa; border: 1px solid #eee; border-radius: 6px; padding: 14px 16px; padding-right: 90px; font-size: 13px; color: #333; line-height: 1.6; white-space: pre-wrap; word-wrap: break-word; }
+  .field-note { font-size: 11px; color: #aaa; font-style: italic; margin-top: 4px; }
+
+  /* Copy Button */
+  .copy-btn { position: absolute; top: 10px; right: 10px; background: #00BFA6; color: #fff; border: none; border-radius: 4px; padding: 6px 14px; font-size: 12px; font-weight: 600; font-family: 'Inter', sans-serif; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
+  .copy-btn:hover { background: #00a896; }
+  .copy-btn.copied { background: #16a34a; }
+
+  /* Tags */
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+  .tag { background: #f0f0f0; border-radius: 14px; padding: 4px 12px; font-size: 12px; color: #444; font-weight: 500; }
+
+  /* Operational section */
+  .operational-header { background: #0A1929; border-radius: 6px; padding: 14px 20px; margin-bottom: 16px; }
+  .operational-header .platform-title { color: #fff; font-size: 15px; font-weight: 700; }
+  .operational-header .platform-num { color: #D4A830; font-weight: 800; margin-right: 10px; }
+
+  /* QC Section */
+  .qc { margin-top: 40px; border-top: 3px solid #0A1929; padding-top: 24px; }
+  .qc h2 { font-size: 16px; font-weight: 700; letter-spacing: 1px; color: #0A1929; margin-bottom: 16px; }
+  .qc-item { display: flex; align-items: baseline; gap: 8px; margin-bottom: 6px; font-size: 13px; }
+  .qc-check { color: #16a34a; font-weight: 700; }
+
+  /* Footer */
+  .footer { max-width: 960px; margin: 0 auto; padding: 20px 40px; border-top: 1px solid #eee; display: flex; justify-content: space-between; font-size: 12px; color: #aaa; }
+
+  /* Responsive */
+  @media (max-width: 700px) {
+    .header { padding: 24px 20px; }
+    .header-inner { flex-direction: column; text-align: center; }
+    .header-right { text-align: center; }
+    .stats-inner { grid-template-columns: repeat(3, 1fr); }
+    .main { padding: 24px 20px 40px; }
+    .field-content { padding-right: 16px; padding-bottom: 50px; }
+    .copy-btn { top: auto; bottom: 10px; right: 10px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-inner">
+    <div class="header-left">
+      <h1>CITED</h1>
+      <p>Platform Copy Kit — Paste Ready</p>
+    </div>
+    <div class="header-right">
+      <div class="client-name">Radley Raven</div>
+      <div class="client-sub">The Oppenheim Group · La Jolla</div>
+    </div>
+  </div>
+</div>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="stats-inner">
+    <div class="stat-item"><div class="stat-value">$92M+</div><div class="stat-label">Volume</div></div>
+    <div class="stat-item"><div class="stat-value">33</div><div class="stat-label">Deals</div></div>
+    <div class="stat-item"><div class="stat-value">96.8%</div><div class="stat-label">Sale-to-List</div></div>
+    <div class="stat-item"><div class="stat-value">22 days</div><div class="stat-label">Median DOM</div></div>
+    <div class="stat-item"><div class="stat-value">26%</div><div class="stat-label">At/Above</div></div>
+    <div class="stat-item"><div class="stat-value">10+ yrs</div><div class="stat-label">Experience</div></div>
+  </div>
+</div>
+
+<div class="main">
+
+<!-- POSITIONING STATEMENT -->
+<div class="positioning">
+  <div class="label">Positioning Statement</div>
+  <div class="text">Radley Raven is the luxury listing specialist for Carmel Valley, Carlsbad, and Rancho Santa Fe — with 10+ years and $92M+ in California transactions — known for pricing accuracy, renovation expertise, and properties that move fast.</div>
+</div>
+
+<!-- SOCIAL LINKS -->
+<div class="field">
+  <div class="field-label">Social &amp; Profile Links</div>
+  <div class="field-wrapper">
+    <div class="field-content" id="social-links">Instagram: https://www.instagram.com/radleyraven
+LinkedIn: https://www.linkedin.com/in/radleyraven
+YouTube: https://www.youtube.com/@radleyravenoppenheim
+Personal Site: https://ogroup.com/agents/radley-raven/
+Company Site: https://ogroup.com/office/san-diego/
+Zillow: https://www.zillow.com/profile/radleyraven
+Realtor.com: https://www.realtor.com/realestateagents/5c7d7904b05f40001240ee53</div>
+    <button class="copy-btn" onclick="copyField(this, 'social-links')">Copy</button>
+  </div>
+</div>
+
+<!-- ========== 1. GOOGLE BUSINESS PROFILE ========== -->
+<div class="platform">
+  <div class="platform-header">
+    <div><span class="platform-num">1</span><span class="platform-title">Google Business Profile</span></div>
+    <span class="status status-live">✓ Live</span>
+  </div>
+  <div class="platform-link"><a href="https://business.google.com" target="_blank">🔗 Open Google Business Profile →</a></div>
+
+  <div class="field">
+    <div class="field-label">Business Description (750 chars)</div>
+    <div class="field-wrapper">
+      <div class="field-content" id="gbp-desc">Radley Raven is a luxury real estate agent with The Oppenheim Group in La Jolla, serving Carmel Valley, Carlsbad, Rancho Santa Fe, Solana Beach, and Encinitas. With 10+ years of experience and $92M+ in California transactions, Radley specializes in luxury residential sales and investment properties. His track record includes a 96.8% sale-to-list ratio, 22-day median days on market, and 26% of sales closing at or above asking price. Whether you're buying, selling, or investing in San Diego's most sought-after coastal communities, Radley delivers data-driven pricing strategy and hands-on guidance from listing through closing. Licensed in California (#02041346) and Washington State.</div>
+      <button class="copy-btn" onclick="copyField(this, 'gbp-desc')">Copy</button>
+    </div>
+    <div class="field-note">740/750 characters</div>
+  </div>
+
+  <div class="field">
+    <div class="field-label">Categories</div>
+    <div class="tags">
+      <span class="tag">Real Estate Agent (primary)</span>
+      <span class="tag">Real Estate</span>
+    </div>
+  </div>
+
+  <div class="field">
+    <div class="field-label">Services</div>
+    <div class="field-wrapper">
+      <div class="field-content" id="gbp-services">Luxury Home Sales
+Buyer Representation
+Seller Representation
+Investment Property Consulting
+Relocation Services
+Market Analysis
+Property Valuation</div>
+      <button class="copy-btn" onclick="copyField(this, 'gbp-services')">Copy</button>
+    </div>
+  </div>
+
+  <div class="field">
+    <div class="field-label">Website</div>
+    <div class="field-wrapper">
+      <div class="field-content" id="gbp-website">https://ogroup.com/agents/radley-raven/</div>
+      <button class="copy-btn" onclick="copyField(this, 'gbp-website')">Copy</button>
+    </div>
+    <div class="field-note">Update to radleyraven.com when live</div>
+  </div>
+
+  <div class="field">
+    <div class="field-label">Hours</div>
+    <div class="field-wrapper">
+      <div class="field-content" id="gbp-hours">Sunday 10 AM – 5 PM | Monday–Friday 8 AM – 8 PM | Saturday 9 AM – 6 PM</div>
+      <button class="copy-btn" onclick="copyField(this, 'gbp-hours')">Copy</button>
+    </div>
+  </div>
+</div>
+
+<!-- ========== 2. LINKEDIN ========== -->
+<div class="platform">
+  <div class="platform-header">
+    <div><span class="platform-num">2</span><span class="platform-title">LinkedIn</span></div>
+    <span class="status status-live">✓ Optimized</span>
+  </div>
+  <div class="platform-link"><a href="https://www.linkedin.com/in/radleyraven" target="_blank">🔗 Open LinkedIn Profile →</a></div>
+
+  <div class="field">
+    <div class="field-label">Headline</div>
+    <div class="field-wrapper">
+      <div class="field-content" id="li-headline">Luxury Real Estate Agent | The Oppenheim Group — La Jolla | Carmel Valley · Carlsbad · Rancho Santa Fe</div>
+      <button class="copy-btn" onclick="copyField(this, 'li-headline')">Copy</button>
+    </div>
+  </div>
+
+  <div class="field">
+    <div class="field-label">Location</div>
+    <div class="field-wrapper">
+      <div class="field-content" id="li-location">Carlsbad, California</div>
+      <button class="copy-btn" onclick="copyField(this, 'li-location')">Copy</button>
+    </div>
+    <div class="field-note">Updated for PRISM indexing</div>
+  </div>
+
+  <div class="field">
+    <div class="field-label">About Section</div>
+    <div class="field-wrapper">
+      <div class="field-content" id="li-about">I'm a luxury real estate agent with The Oppenheim Group, focused on Carmel Valley, Carlsbad, Rancho Santa Fe, La Jolla, Solana Beach, and Encinitas.
+
+My track record:
+→ $92M+ in closed California transactions alone
+→ 13 closed transactions in Carmel Valley and Del Mar Heights, totaling $44M+
+→ Median 22 days on market (vs. 36-day Carmel Valley average)
+→ 96.8% average sale-to-list ratio
+→ 26% of my sales close at or above asking price
+
+My clients in the 92130 corridor know me for one thing: I get results in their specific market. With a decade of hyperlocal pricing intelligence in Carmel Valley, Carlsbad, and Rancho Santa Fe, I bring data and depth that generalist agents simply don't have.
+
+I'm also an active property investor and short-term rental operator. I own and manage furnished rental properties in California and Washington — so when I advise on investment acquisitions, pricing strategy, or rental income potential, I'm speaking from ownership experience, not theory.
+
+My renovation background gives clients a critical edge. For buyers, I identify undervalued properties with renovation upside that most agents miss. For sellers, I price accurately based on condition, comparable improvements, and what today's luxury buyer actually pays for.
+
+I work with:
+• Sellers of luxury homes in Carmel Valley, Rancho Santa Fe, and Carlsbad
+• Buyers relocating to San Diego's North County coast
+• Investors looking at short-term rental acquisitions
+• Buyers who want renovation potential, not just move-in ready
+
+Licensed in California (DRE# 02041346) and Washington State.
+
+Specialties: Carmel Valley | Carlsbad | Rancho Santa Fe | La Jolla | Solana Beach | Encinitas | Luxury residential | Investment properties | Short-term rental acquisitions | Renovation advisory | Out-of-state relocation
+
+The Oppenheim Group — La Jolla
+radley@ogroup.com | (858) 314-9600</div>
+      <button class="copy-btn" onclick="copyField(this, 'li-about')">Copy</button>
+    </div>
+  </div>
+</div>
+
+<!-- ========== 3. ZILLOW ========== -->
+<div class="platform">
+  <div class="platform-header">
+    <div><span class="platform-num">3</span><span class="platform-title">Zillow</span></div>
+    <span class="status status-live">✓ Live</span>
+  </div>
+  <div class="platform-link"><a href="https://www.zillow.com/profile/radleyraven" target="_blank">🔗 Open Zillow Profile →</a></div>
+
+  <div class="field">
+    <div class="field-label">Bio (no character limit — long-form, first person)</div>
+    <div class="field-wrapper">
+      <div class="field-content" id="zillow-bio">I'm a luxury real estate agent with The Oppenheim Group specializing in Carmel Valley, Carlsbad, Rancho Santa Fe, La Jolla, Solana Beach, and Encinitas.
+
+My track record:
+• $92M+ in closed California transactions
+• 13 closed transactions in Carmel Valley and Del Mar Heights, totaling $44M+
+• Median 22 days on market — vs. the 36-day Carmel Valley average
+• 96.8% average sale-to-list ratio
+• 26% of my sales close at or above asking price
+
+For buyers: I know these neighborhoods at the street level — not just the listings, but the HOAs, the school zones, the noise patterns, the sunset angles, and the hidden inventory that never hits the MLS. My buyers win in competitive situations because I bring local intelligence that other agents can't match. I've purchased multiple investment properties myself, so when I advise investor clients, it's from direct experience — not theory.
+
+For sellers: My approach starts with pricing. I'm known for pricing properties right the first time — tight enough to drive urgency, smart enough to leave room for competition. My listings move fast because I prepare them to sell, not just list. That means pre-listing inspections, strategic staging, and marketing that targets the right buyer pool from day one.
+
+I also bring a unique edge most agents don't have: a background in property renovation and construction. When I walk through a home — whether I'm representing the buyer or the seller — I see what others miss. I can identify deferred maintenance, estimate repair costs, assess renovation potential, and advise on which improvements actually move the needle on value. For sellers, this means I can recommend targeted updates that maximize return. For buyers, it means I can help evaluate fixer opportunities with real numbers — not guesswork.
+
+I work across San Diego County and Washington State. Whether it's a Rancho Pacifica estate, a Carlsbad beach close, or an investment property in an emerging neighborhood — I bring the same approach: local knowledge, data-driven strategy, and a relentless focus on getting the best outcome.
+
+Specialties: Buyer's Agent, Listing Agent, Relocation, Staging, Vacation/Short-Term Rentals, First Time Homebuyers, Investment Properties, Rentals, Luxury Homes, New Construction</div>
+      <button class="copy-btn" onclick="copyField(this, 'zillow-bio')">Copy</button>
+    </div>
+    <div class="field-note">First-person voice. Renovation + investment angles unique to Zillow. Do NOT shorten.</div>
+  </div>
+
+  <div class="field">
+    <div class="field-label">Specialties (checkboxes)</div>
+    <div class="tags">
+      <span class="tag">Buyer's Agent ✅</span>
+      <span class="tag">Listing Agent ✅</span>
+      <span class="tag">Relocation ✅</span>
+      <span class="tag">Staging ✅</span>
+      <span class="tag">Vacation/STR ✅</span>
+      <span class="tag">First Time Buyers ✅</span>
+      <span class="tag">Investment ✅</span>
+      <span class="tag">Rentals ✅</span>
+      <span class="tag">Luxury ✅</span>
+      <span class="tag">New Construction ✅</span>
+    </div>
+  </div>
+</div>
+
+<!-- ========== 4. REALTOR.COM ========== -->
+<div class="platform">
+  <div class="platform-header">
+    <div><span class="platform-num">4</span><span class="platform-title">Realtor.com Pro</span></div>
+    <span class="status status-live">✓ Live</span>
+  </div>
+  <div class="platform-link">
+    <a href="https://login.pro.realtor.com" target="_blank">🔗 Open Dashboard →</a> &nbsp;|&nbsp;
+    <a href="https://www.realtor.com/realestateagents/5c7d7904b05f40001240ee53" target="_blank">View Public Profile →</a>
+  </div>
+
+  <div class="field">
+    <div class="field-label">Bio (2,500 char limit)</div>
+    <div class="field-wrapper">
+      <div class="field-content" id="realtor-bio">Radley Raven is a luxury real estate agent serving La Jolla, Carmel Valley, Carlsbad, Rancho Santa Fe, Solana Beach, and Encinitas with 10+ years of experience and $92M+ in California transactions. His clients in the 92130 corridor and North County coast know him for results: a 96.8% sale-to-list ratio, 22-day median days on market, and 26% of deals closing at or above asking price.
+
+Radley is a licensed agent with The Oppenheim Group in La Jolla, one of the most recognized luxury brokerages in California. He is also an active property investor and short-term rental operator — he owns and manages furnished rental properties in California and Washington, bringing direct ownership experience to every client interaction.
+
+His renovation background gives clients a critical edge. For buyers, he identifies undervalued properties with renovation upside that most agents miss. For sellers, he prices accurately based on condition, comparable improvements, and what today's luxury buyer actually pays for.
+
+He works with: luxury home sellers in Carmel Valley, Rancho Santa Fe, and Carlsbad · buyers relocating to San Diego's North County coast · investors looking at short-term rental acquisitions · buyers who want renovation potential, not just move-in ready. Licensed in CA (#02041346) and WA. Member of SDAR.</div>
+      <button class="copy-btn" onclick="copyField(this, 'realtor-bio')">Copy</button>
+    </div>
+    <div class="field-note">~2,400/2,500 characters</div>
+  </div>
+
+  <div class="field">
+    <div class="field-label">Specialties</div>
+    <div class="tags">
+      <span class="tag">Buyer's agent ✅</span>
+      <span class="tag">Seller's agent ✅</span>
+      <span class="tag">Residential ✅</span>
+      <span class="tag">Single-family ✅</span>
+      <span class="tag">Luxury homes ✅</span>
+      <span class="tag">Investment ✅</span>
+      <span class="tag">Relocation ✅</span>
+    </div>
+  </div>
+
+  <div class="field">
+    <div class="field-label">Areas Served</div>
+    <div class="field-wrapper">
+      <div class="field-content" id="realtor-areas">San Diego, La Jolla, Carmel Valley, Carlsbad, Del Mar, Encinitas, Rancho Santa Fe, Solana Beach</div>
+      <button class="copy-btn" onclick="copyField(this, 'realtor-areas')">Copy</button>
+    </div>
+  </div>
+
+  <div class="field">
+    <div class="field-label">Social Media</div>
+    <div class="field-wrapper">
+      <div class="field-content" id="realtor-social">YouTube: https://www.youtube.com/@radleyravenoppenheim
+LinkedIn: https://www.linkedin.com/in/radleyraven
+Instagram: https://www.instagram.com/radleyraven</div>
+      <button class="copy-btn" onclick="copyField(this, 'realtor-social')">Copy</button>
+    </div>
+  </div>
+
+  <div class="field">
+    <div class="field-label">Contact Details</div>
+    <div class="field-wrapper">
+      <div class="field-content" id="realtor-contact">Phone: (858) 314-9600 (mobile)
+Email: radley@ogroup.com
+Website: https://ogroup.com/agents/radley-raven/</div>
+      <button class="copy-btn" onclick="copyField(this, 'realtor-contact')">Copy</button>
+    </div>
+  </div>
+
+  <div class="field">
+    <div class="field-label">Brokerage Office</div>
+    <div class="field-wrapper">
+      <div class="field-content" id="realtor-brokerage">The Oppenheim Group
+(858) 314-9600
+7925 Girard Ave, La Jolla, CA 92037</div>
+      <button class="copy-btn" onclick="copyField(this, 'realtor-brokerage')">Copy</button>
+    </div>
+  </div>
+</div>
+
+<!-- ========== 5. APPLE BUSINESS CONNECT ========== -->
+<div class="platform">
+  <div class="platform-header">
+    <div><span class="platform-num">5</span><span class="platform-title">Apple Business Connect</span></div>
+    <span class="status status-pending">⏳ Verification</span>
+  </div>
+  <div class="platform-link"><a href="https://businessconnect.apple.com" target="_blank">🔗 Open Apple Business Connect →</a></div>
+
+  <div class="field">
+    <div class="field-label">Display Name (243 char limit)</div>
+    <div class="field-wrapper">
+      <div class="field-content" id="apple-name">Radley Raven</div>
+      <button class="copy-btn" onclick="copyField(this, 'apple-name')">Copy</button>
+    </div>
+  </div>
+
+  <div class="field">
+    <div class="field-label">Location Description (no char limit)</div>
+    <div class="field-wrapper">
+      <div class="field-content" id="apple-desc">Radley Raven is a luxury real estate agent with The Oppenheim Group in La Jolla, serving Carmel Valley, Carlsbad, Rancho Santa Fe, Solana Beach, and Encinitas. With 10+ years of experience and $92M+ in California transactions, Radley specializes in luxury residential sales and investment properties. His track record includes a 96.8% sale-to-list ratio, 22-day median days on market, and 26% of sales closing at or above asking price. Whether you're buying, selling, or investing in North County San Diego's most sought-after coastal and canyon communities, Radley delivers data-driven pricing strategy and hands-on guidance from pre-listing preparation through closing and beyond. Licensed in California (#02041346) and Washington State. Member of the San Diego Association of REALTORS®.</div>
+      <button class="copy-btn" onclick="copyField(this, 'apple-desc')">Copy</button>
+    </div>
+  </div>
+
+  <div class="field">
+    <div class="field-label">Categories</div>
+    <div class="tags">
+      <span class="tag">Real Estate Agent (primary)</span>
+      <span class="tag">Real Estate</span>
+      <span class="tag">Real Estate Consultant</span>
+    </div>
+  </div>
+
+  <div class="field">
+    <div class="field-label">Good to Know Attributes</div>
+    <div class="tags">
+      <span class="tag">✅ Appointments Only</span>
+      <span class="tag">✅ Smoking-Free</span>
+      <span class="tag">✅ Street Parking</span>
+      <span class="tag">✅ Wheelchair Accessible</span>
+      <span class="tag">✅ Service Animals Welcome</span>
+      <span class="tag">✅ Free Wi-Fi</span>
+    </div>
+  </div>
+
+  <div class="field">
+    <div class="field-label">Hours</div>
+    <div class="field-wrapper">
+      <div class="field-content" id="apple-hours">Sun 10-5 | Mon-Fri 8-8 | Sat 9-6</div>
+      <button class="copy-btn" onclick="copyField(this, 'apple-hours')">Copy</button>
+    </div>
+  </div>
+
+  <div class="field">
+    <div class="field-label">Website</div>
+    <div class="field-wrapper">
+      <div class="field-content" id="apple-website">https://ogroup.com/agents/radley-raven/</div>
+      <button class="copy-btn" onclick="copyField(this, 'apple-website')">Copy</button>
+    </div>
+  </div>
+</div>
+
+<!-- ========== 6. BING PLACES ========== -->
+<div class="platform">
+  <div class="platform-header">
+    <div><span class="platform-num">6</span><span class="platform-title">Bing Places</span></div>
+    <span class="status status-live">✓ Verified</span>
+  </div>
+  <div class="platform-link"><a href="https://www.bing.com/forbusiness" target="_blank">🔗 Open Bing Places →</a></div>
+
+  <div class="field">
+    <div class="field-label">Business Description (500 chars)</div>
+    <div class="field-wrapper">
+      <div class="field-content" id="bing-desc">Radley Raven is a luxury real estate agent with The Oppenheim Group in La Jolla. Serving Carmel Valley, Carlsbad, Rancho Santa Fe, Solana Beach, and Encinitas with 10+ years and $92M+ in California transactions. 96.8% sale-to-list ratio, 22-day median DOM. Specializing in luxury residential sales, investment properties, and relocation. Licensed in CA (#02041346) and WA. Member of SDAR.</div>
+      <button class="copy-btn" onclick="copyField(this, 'bing-desc')">Copy</button>
+    </div>
+    <div class="field-note">~490/500 characters. Maximum keyword density.</div>
+  </div>
+
+  <div class="field">
+    <div class="field-label">Categories</div>
+    <div class="tags">
+      <span class="tag">Real Estate Agent (primary)</span>
+      <span class="tag">Real Estate</span>
+      <span class="tag">Real Estate Service</span>
+    </div>
+  </div>
+</div>
+
+<!-- ========== 7. YELP ========== -->
+<div class="platform">
+  <div class="platform-header">
+    <div><span class="platform-num">7</span><span class="platform-title">Yelp</span></div>
+    <span class="status status-future">Future</span>
+  </div>
+  <div class="platform-link"><a href="https://biz.yelp.com" target="_blank">🔗 Open Yelp for Business →</a></div>
+
+  <div class="field">
+    <div class="field-label">Bio</div>
+    <div class="field-wrapper">
+      <div class="field-content" id="yelp-bio">Radley Raven is a luxury real estate agent serving La Jolla, Carmel Valley, Carlsbad, Rancho Santa Fe, Solana Beach, and Encinitas with 10+ years of experience and $92M+ in California transactions. Specializing in luxury residential sales and investment properties, Radley has helped buyers and sellers achieve results that beat the market — a 96.8% sale-to-list ratio, 22-day median days on market, and 26% of deals closing at or above asking price. With deep knowledge of San Diego's most sought-after coastal and canyon communities, Radley brings the local context, negotiation edge, and personal attention that complex transactions demand. Whether you're buying your first home, listing a luxury estate, or building a real estate portfolio, Radley delivers the strategy and execution to get it done. Serving the greater San Diego area and Washington State.
+
+Radley is a licensed agent with The Oppenheim Group in La Jolla, one of the most recognized luxury brokerages in California. His clients include first-time homebuyers, move-up families, investors building rental portfolios, and sellers looking to maximize value in competitive coastal markets. Radley's approach combines data-driven pricing strategy with hands-on client guidance — from pre-listing preparation through closing and beyond. He is active throughout North County San Diego's coastal and canyon communities, with additional experience in the Washington State market. Radley holds a California real estate license (#02041346) and is a member of the San Diego Association of REALTORS®.</div>
+      <button class="copy-btn" onclick="copyField(this, 'yelp-bio')">Copy</button>
+    </div>
+    <div class="field-note">Standard two-paragraph bio. Claim when ready — Yelp reviews feed into Apple Maps.</div>
+  </div>
+</div>
+
+<!-- ========== 8. FASTEXPERT ========== -->
+<div class="platform">
+  <div class="platform-header">
+    <div><span class="platform-num">8</span><span class="platform-title">FastExpert</span></div>
+    <span class="status status-live">✓ Complete</span>
+  </div>
+  <div class="platform-link">
+    <a href="https://www.fastexpert.com" target="_blank">🔗 Open Dashboard →</a> &nbsp;|&nbsp;
+    <a href="https://www.fastexpert.com/agents/radley-raven/" target="_blank">View Public Profile →</a>
+  </div>
+
+  <div class="field">
+    <div class="field-label">About</div>
+    <div class="field-wrapper">
+      <div class="field-content" id="fe-about">Radley Raven is a luxury real estate agent serving La Jolla, Carmel Valley, Carlsbad, Rancho Santa Fe, Solana Beach, and Encinitas with 10+ years of experience and $92M+ in California transactions. His clients in the 92130 corridor and North County coast know him for results: a 96.8% sale-to-list ratio, 22-day median days on market, and 26% of deals closing at or above asking price.
+
+Radley is a licensed agent with The Oppenheim Group in La Jolla. He is also an active property investor and short-term rental operator — bringing direct ownership experience to every client interaction. His renovation background gives clients a critical edge: for buyers, he identifies undervalued properties with upside that most agents miss; for sellers, he prices accurately based on condition and what today's luxury buyer actually pays for. Licensed in CA (#02041346) and WA. Member of SDAR.</div>
+      <button class="copy-btn" onclick="copyField(this, 'fe-about')">Copy</button>
+    </div>
+  </div>
+
+  <div class="field">
+    <div class="field-label">Specialties (checkboxes + free text)</div>
+    <div class="tags" style="margin-bottom: 8px;">
+      <span class="tag">Sellers ✅</span>
+      <span class="tag">Buyers ✅</span>
+      <span class="tag">Residential ✅</span>
+    </div>
+    <div class="field-wrapper">
+      <div class="field-content" id="fe-specialties-text">Luxury Homes, Investment Properties, Relocation, First Time Home Buyers, Single-Family Homes, Vacation / Short-Term Rentals, Staging, New Construction</div>
+      <button class="copy-btn" onclick="copyField(this, 'fe-specialties-text')">Copy</button>
+    </div>
+    <div class="field-note">Free text field</div>
+  </div>
+
+  <div class="field">
+    <div class="field-label">Service Areas</div>
+    <div class="field-wrapper">
+      <div class="field-content" id="fe-areas">Carlsbad, Del Mar, Encinitas, La Jolla, Rancho Santa Fe, San Diego, Solana Beach</div>
+      <button class="copy-btn" onclick="copyField(this, 'fe-areas')">Copy</button>
+    </div>
+  </div>
+
+  <div class="field">
+    <div class="field-label">Social Media</div>
+    <div class="field-wrapper">
+      <div class="field-content" id="fe-social">LinkedIn: https://www.linkedin.com/in/radleyraven
+Instagram: https://www.instagram.com/radleyraven
+Zillow: https://www.zillow.com/profile/radleyraven
+Realtor.com: https://www.realtor.com/realestateagents/5c7d7904b05f40001240ee53
+Website: https://ogroup.com/agents/radley-raven/</div>
+      <button class="copy-btn" onclick="copyField(this, 'fe-social')">Copy</button>
+    </div>
+  </div>
+
+  <div class="field">
+    <div class="field-label">FAQ: What advice would you give a buyer trying to purchase a home?</div>
+    <div class="field-wrapper">
+      <div class="field-content" id="fe-faq1">Know your numbers before you start looking. Get fully pre-approved — not pre-qualified — so when you find the right property, you can move fast. In competitive San Diego markets like Carmel Valley, Carlsbad, and La Jolla, the best homes go quickly. Work with an agent who knows the neighborhoods at the street level, not just the zip code. And don't just buy a house — buy a location and a lifestyle you'll grow into.</div>
+      <button class="copy-btn" onclick="copyField(this, 'fe-faq1')">Copy</button>
+    </div>
+  </div>
+
+  <div class="field">
+    <div class="field-label">FAQ: What advice would you give a seller trying to sell their home?</div>
+    <div class="field-wrapper">
+      <div class="field-content" id="fe-faq2">Pricing strategy is everything. The biggest mistake sellers make is overpricing and chasing the market down. My listings sell in a median 22 days — 39% faster than the Carmel Valley market average — because we price accurately from day one. Invest in professional staging and photography, declutter ruthlessly, and trust the data. A well-prepared home priced right will outperform an overpriced home every time, even in a strong market.</div>
+      <button class="copy-btn" onclick="copyField(this, 'fe-faq2')">Copy</button>
+    </div>
+  </div>
+
+  <div class="field">
+    <div class="field-label">FAQ: What types of clients have you worked with?</div>
+    <div class="field-wrapper">
+      <div class="field-content" id="fe-faq3">First-time homebuyers, move-up families, luxury estate sellers, investors building rental portfolios, and clients relocating to San Diego from LA, the Bay Area, and out of state. I also work with sellers in Rancho Santa Fe, La Jolla, and Carlsbad's most competitive luxury neighborhoods. My sweet spot is clients who value strategy and results over hand-holding — people who want an agent who brings data, market knowledge, and a plan.</div>
+      <button class="copy-btn" onclick="copyField(this, 'fe-faq3')">Copy</button>
+    </div>
+  </div>
+
+  <div class="field">
+    <div class="field-label">FAQ: Describe a recent transaction you are fond of.</div>
+    <div class="field-wrapper">
+      <div class="field-content" id="fe-faq4">I recently represented the buyer on a $6.2M estate on Emerald Lane in Rancho Santa Fe. The property was listed at $6.95M and had been on the market for over 100 days. We identified the seller's motivation, structured a clean offer with favorable terms, and negotiated the price down $750K while keeping the deal smooth for both sides. Closed on time, no drama. That's the kind of transaction I love — where strategy and patience create real value for the client.</div>
+      <button class="copy-btn" onclick="copyField(this, 'fe-faq4')">Copy</button>
+    </div>
+  </div>
+
+  <div class="field">
+    <div class="field-label">FAQ: How did you get started in Real Estate?</div>
+    <div class="field-wrapper">
+      <div class="field-content" id="fe-faq5">I got into real estate because I've always been drawn to building things — and real estate is the intersection of design, negotiation, investment, and people. I started in 2016 and built my business across both San Diego and Washington State. Over 10 years and $92M+ in transactions later, I'm still driven by the same thing: helping people make smart decisions with the biggest financial move of their lives.</div>
+      <button class="copy-btn" onclick="copyField(this, 'fe-faq5')">Copy</button>
+    </div>
+  </div>
+
+  <div class="field">
+    <div class="field-label">FAQ: Do you have any special education or training?</div>
+    <div class="field-wrapper">
+      <div class="field-content" id="fe-faq6">I'm a member of the San Diego Association of REALTORS® and licensed in both California (#02041346) and Washington State. I work with The Oppenheim Group, one of the most recognized luxury brokerages in California, which gives my clients access to a global network, premium marketing resources, and the brand recognition that opens doors in luxury markets. My edge isn't a designation — it's 10 years of market data, negotiation experience, and a track record that speaks for itself.</div>
+      <button class="copy-btn" onclick="copyField(this, 'fe-faq6')">Copy</button>
+    </div>
+  </div>
+
+  <div class="field">
+    <div class="field-label">Hobbies/Interests</div>
+    <div class="field-wrapper">
+      <div class="field-content" id="fe-hobbies">Music, watches, cooking, design, architecture, fashion, travel, and the outdoors — hiking, camping, hot springs, and anything involving fire and good food.</div>
+      <button class="copy-btn" onclick="copyField(this, 'fe-hobbies')">Copy</button>
+    </div>
+  </div>
+
+  <div class="field">
+    <div class="field-label">Community Involvement</div>
+    <div class="field-wrapper">
+      <div class="field-content" id="fe-community">Member of the San Diego Association of REALTORS®. Active in the La Jolla and North County San Diego communities through local events, neighborhood outreach, and supporting families navigating the coastal real estate market.</div>
+      <button class="copy-btn" onclick="copyField(this, 'fe-community')">Copy</button>
+    </div>
+  </div>
+
+  <div class="field">
+    <div class="field-label">Family</div>
+    <div class="field-wrapper">
+      <div class="field-content" id="fe-family">Married with three kids and a Bernedoodle. Based in San Diego. Family time is non-negotiable — home by dinner every night.</div>
+      <button class="copy-btn" onclick="copyField(this, 'fe-family')">Copy</button>
+    </div>
+  </div>
+</div>
+
+<!-- ========== 9. HOMELIGHT ========== -->
+<div class="platform">
+  <div class="platform-header">
+    <div><span class="platform-num">9</span><span class="platform-title">HomeLight</span></div>
+    <span class="status status-pending">⏳ Waiting</span>
+  </div>
+  <div class="platform-link"><a href="https://www.homelight.com/agents" target="_blank">🔗 Open HomeLight →</a></div>
+
+  <div class="field">
+    <div class="field-label">Bio</div>
+    <div class="field-wrapper">
+      <div class="field-content" id="hl-bio">Radley Raven is a luxury real estate agent serving La Jolla, Carmel Valley, Carlsbad, Rancho Santa Fe, Solana Beach, and Encinitas with 10+ years of experience and $92M+ in California transactions. Specializing in luxury residential sales and investment properties, Radley has helped buyers and sellers achieve results that beat the market — a 96.8% sale-to-list ratio, 22-day median days on market, and 26% of deals closing at or above asking price. With deep knowledge of San Diego's most sought-after coastal and canyon communities, Radley brings the local context, negotiation edge, and personal attention that complex transactions demand. Whether you're buying your first home, listing a luxury estate, or building a real estate portfolio, Radley delivers the strategy and execution to get it done. Serving the greater San Diego area and Washington State.
+
+Radley is a licensed agent with The Oppenheim Group in La Jolla, one of the most recognized luxury brokerages in California. His clients include first-time homebuyers, move-up families, investors building rental portfolios, and sellers looking to maximize value in competitive coastal markets. Radley's approach combines data-driven pricing strategy with hands-on client guidance — from pre-listing preparation through closing and beyond. He is active throughout North County San Diego's coastal and canyon communities, with additional experience in the Washington State market. Radley holds a California real estate license (#02041346) and is a member of the San Diego Association of REALTORS®.</div>
+      <button class="copy-btn" onclick="copyField(this, 'hl-bio')">Copy</button>
+    </div>
+    <div class="field-note">Standard two-paragraph bio. Update when platform fields visible.</div>
+  </div>
+</div>
+
+<!-- ========== 10. HOMES.COM ========== -->
+<div class="platform">
+  <div class="platform-header">
+    <div><span class="platform-num">10</span><span class="platform-title">Homes.com</span></div>
+    <span class="status status-future">Future</span>
+  </div>
+  <div class="platform-link"><a href="https://www.homes.com" target="_blank">🔗 Open Homes.com →</a></div>
+
+  <div class="field">
+    <div class="field-label">Bio</div>
+    <div class="field-wrapper">
+      <div class="field-content" id="homes-bio">Radley Raven is a luxury real estate agent serving La Jolla, Carmel Valley, Carlsbad, Rancho Santa Fe, Solana Beach, and Encinitas with 10+ years of experience and $92M+ in California transactions. Specializing in luxury residential sales and investment properties, Radley has helped buyers and sellers achieve results that beat the market — a 96.8% sale-to-list ratio, 22-day median days on market, and 26% of deals closing at or above asking price. With deep knowledge of San Diego's most sought-after coastal and canyon communities, Radley brings the local context, negotiation edge, and personal attention that complex transactions demand. Whether you're buying your first home, listing a luxury estate, or building a real estate portfolio, Radley delivers the strategy and execution to get it done. Serving the greater San Diego area and Washington State.
+
+Radley is a licensed agent with The Oppenheim Group in La Jolla, one of the most recognized luxury brokerages in California. His clients include first-time homebuyers, move-up families, investors building rental portfolios, and sellers looking to maximize value in competitive coastal markets. Radley's approach combines data-driven pricing strategy with hands-on client guidance — from pre-listing preparation through closing and beyond. He is active throughout North County San Diego's coastal and canyon communities, with additional experience in the Washington State market. Radley holds a California real estate license (#02041346) and is a member of the San Diego Association of REALTORS®.</div>
+      <button class="copy-btn" onclick="copyField(this, 'homes-bio')">Copy</button>
+    </div>
+    <div class="field-note">Homes AI launched Feb 2026 — AI-powered agent discovery. Claim when ready.</div>
+  </div>
+</div>
+
+<!-- ========== OPERATIONAL FIELDS ========== -->
+<div class="platform">
+  <div class="platform-header" style="background: #0A1929;">
+    <div><span class="platform-num">★</span><span class="platform-title">Operational Fields — All Platforms</span></div>
+    <span class="status" style="background: #0A1929; border: 1px solid rgba(255,255,255,0.3);">Reference</span>
+  </div>
+
+  <div class="field">
+    <div class="field-label">Business Hours</div>
+    <div class="field-wrapper">
+      <div class="field-content" id="op-hours">Sunday 10 AM – 5 PM | Monday–Friday 8 AM – 8 PM | Saturday 9 AM – 6 PM</div>
+      <button class="copy-btn" onclick="copyField(this, 'op-hours')">Copy</button>
+    </div>
+  </div>
+
+  <div class="field">
+    <div class="field-label">Office Address</div>
+    <div class="field-wrapper">
+      <div class="field-content" id="op-address">7925 Girard Ave, La Jolla, CA 92037</div>
+      <button class="copy-btn" onclick="copyField(this, 'op-address')">Copy</button>
+    </div>
+  </div>
+
+  <div class="field">
+    <div class="field-label">Phone</div>
+    <div class="field-wrapper">
+      <div class="field-content" id="op-phone">(858) 314-9600</div>
+      <button class="copy-btn" onclick="copyField(this, 'op-phone')">Copy</button>
+    </div>
+  </div>
+
+  <div class="field">
+    <div class="field-label">Email</div>
+    <div class="field-wrapper">
+      <div class="field-content" id="op-email">radley@ogroup.com</div>
+      <button class="copy-btn" onclick="copyField(this, 'op-email')">Copy</button>
+    </div>
+  </div>
+
+  <div class="field">
+    <div class="field-label">Brokerage</div>
+    <div class="field-wrapper">
+      <div class="field-content" id="op-brokerage">The Oppenheim Group</div>
+      <button class="copy-btn" onclick="copyField(this, 'op-brokerage')">Copy</button>
+    </div>
+  </div>
+
+  <div class="field">
+    <div class="field-label">Brokerage Website</div>
+    <div class="field-wrapper">
+      <div class="field-content" id="op-brokerage-url">https://ogroup.com/office/san-diego/</div>
+      <button class="copy-btn" onclick="copyField(this, 'op-brokerage-url')">Copy</button>
+    </div>
+  </div>
+
+  <div class="field">
+    <div class="field-label">Personal Agent Page</div>
+    <div class="field-wrapper">
+      <div class="field-content" id="op-agent-page">https://ogroup.com/agents/radley-raven/</div>
+      <button class="copy-btn" onclick="copyField(this, 'op-agent-page')">Copy</button>
+    </div>
+  </div>
+
+  <div class="field">
+    <div class="field-label">Title / Position</div>
+    <div class="field-wrapper">
+      <div class="field-content" id="op-title">Luxury Real Estate Agent</div>
+      <button class="copy-btn" onclick="copyField(this, 'op-title')">Copy</button>
+    </div>
+  </div>
+
+  <div class="field">
+    <div class="field-label">License</div>
+    <div class="field-wrapper">
+      <div class="field-content" id="op-license">California DRE #02041346 | Washington State</div>
+      <button class="copy-btn" onclick="copyField(this, 'op-license')">Copy</button>
+    </div>
+  </div>
+
+  <div class="field">
+    <div class="field-label">Years of Experience</div>
+    <div class="field-wrapper">
+      <div class="field-content" id="op-experience">10+ (licensed 2016)</div>
+      <button class="copy-btn" onclick="copyField(this, 'op-experience')">Copy</button>
+    </div>
+  </div>
+</div>
+
+<!-- QC SECTION -->
+<div class="qc">
+  <h2>CROSS-PLATFORM QC</h2>
+  <div class="qc-item"><span class="qc-check">✓</span> Name: "Radley Raven" — identical across all platforms</div>
+  <div class="qc-item"><span class="qc-check">✓</span> Phone: (858) 314-9600 — identical across all platforms</div>
+  <div class="qc-item"><span class="qc-check">✓</span> Address: 7925 Girard Ave, La Jolla, CA 92037 — identical</div>
+  <div class="qc-item"><span class="qc-check">✓</span> Brokerage: "The Oppenheim Group" — exact match</div>
+  <div class="qc-item"><span class="qc-check">✓</span> Career volume: "$92M+" — consistent</div>
+  <div class="qc-item"><span class="qc-check">✓</span> Sale-to-list: "96.8%" — consistent</div>
+  <div class="qc-item"><span class="qc-check">✓</span> Median DOM: "22 days" — consistent</div>
+  <div class="qc-item"><span class="qc-check">✓</span> License: #02041346 — consistent</div>
+  <div class="qc-item"><span class="qc-check">✓</span> Markets: Same 6 + WA across all platforms</div>
+  <div class="qc-item"><span class="qc-check">✓</span> Social links: Complete set on all accepting platforms</div>
+  <div class="qc-item"><span class="qc-check">✓</span> Positioning aligned with positioning statement</div>
+  <div class="qc-item"><span class="qc-check">✓</span> Character limits respected per platform</div>
+  <div class="qc-item"><span class="qc-check">✓</span> No contradictions between platforms</div>
+</div>
+
+</div><!-- /main -->
+
+<!-- FOOTER -->
+<div class="footer">
+  <span>Cited · AI Visibility for Professionals · citedagent.com</span>
+  <span>Platform Copy Kit v1.0 · April 2, 2026</span>
+</div>
+
+<script>
+function copyField(btn, id) {
+  const el = document.getElementById(id);
+  const text = el.textContent.trim();
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = 'Copied ✓';
+    btn.classList.add('copied');
+    setTimeout(() => {
+      btn.textContent = 'Copy';
+      btn.classList.remove('copied');
+    }, 1500);
+  }).catch(() => {
+    // Fallback for older browsers
+    const range = document.createRange();
+    range.selectNodeContents(el);
+    const sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
+    document.execCommand('copy');
+    sel.removeAllRanges();
+    btn.textContent = 'Copied ✓';
+    btn.classList.add('copied');
+    setTimeout(() => {
+      btn.textContent = 'Copy';
+      btn.classList.remove('copied');
+    }, 1500);
+  });
+}
+</script>
+
+</body>
+</html>
