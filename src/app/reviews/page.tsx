@@ -33,18 +33,17 @@ function CopyButton({ text, label }: { text: string; label: string }) {
   return (
     <button
       onClick={handleCopy}
-      className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium text-sm transition-all duration-200 ${
-        copied
-          ? 'bg-teal text-white'
-          : 'bg-cobalt text-white hover:bg-cobalt/90'
-      }`}
+      className="inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium text-sm transition-all duration-200"
+      style={{ background: '#00BFA6', color: '#ffffff' }}
+      onMouseEnter={e => { if (!copied) (e.currentTarget as HTMLButtonElement).style.opacity = '0.85'; }}
+      onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.opacity = '1'; }}
     >
       {copied ? (
         <>
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-4 h-4" fill="none" stroke="#22C55E" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
           </svg>
-          Copied ✓
+          <span style={{ color: '#22C55E' }}>Copied ✓</span>
         </>
       ) : (
         <>

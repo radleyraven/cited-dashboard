@@ -3,78 +3,71 @@
 import { useState } from 'react';
 import Link from 'next/link';
 
-const ARTICLE_TITLE = `The Carlsbad Nobody Talks About: La Costa, Aviara, and Where the Real Value Is in 2026`;
+const ARTICLE_TITLE = `San Diego's North County Coast in 2026: What Buyers and Sellers Need to Know About Carmel Valley, Carlsbad & Rancho Santa Fe`;
 
-const ARTICLE_BODY = `Most buyers searching Carlsbad start with 92008 — the Village, the coastline, the name recognition. That's not wrong. But it's an incomplete picture of what Carlsbad actually offers, and it's costing buyers who stop there.
+const ARTICLE_BODY = `San Diego County just recorded its lowest home sales volume in over 35 years — 1,615 closings in January 2026. If you're trying to understand what that means for North County specifically, the picture is more nuanced than the countywide headlines suggest.
 
-I've worked across all three Carlsbad zip codes. Here's what the data shows — and what the data doesn't tell you.
+I've worked Carmel Valley, Carlsbad, and Rancho Santa Fe across dozens of transactions. These three markets behave differently from each other and very differently from the broader county numbers. Here's what's actually happening.
 
-92008: The Village Premium (And What You're Actually Paying For)
+Carmel Valley: The 92130 Standoff
 
-West Carlsbad's Village zip is the most competitive real estate in the market right now. Sales volume up 15.1% year-over-year, inventory down 50%, 1.2 months of supply. When a correctly priced property hits here, it moves.
+Carmel Valley is experiencing what I'd call a motivated seller / patient buyer standoff. Sellers still have 2021-era price expectations baked in. Buyers — many of them tech-adjacent, dual-income households — are rate-sensitive and in no hurry. The result: properties that would have moved in two weeks in 2022 are now sitting 45-75 days.
 
-The Village lifestyle is genuinely exceptional — and I don't say that as a sales pitch. The walkability, the restaurants, the surf culture, the proximity to the beach and the social energy of the commercial strip — that combination is rare in San Diego. You pay for it. Median $1,865,000, with coastal properties commanding meaningfully more.
+What this means for buyers: this is the most negotiating leverage Carmel Valley has offered in four years. A property sitting 60+ days has had the reality conversation with its agent. There's room to negotiate price, credits, and terms that didn't exist 24 months ago.
 
-The buyers who should be here: people who want to walk to dinner, to the farmers market, to the beach on a Sunday morning. For that lifestyle, the premium is justified.
+What this means for sellers: aspirational pricing is the enemy right now. A Carmel Valley home priced correctly from day one still sells — and faster than you'd expect given the headlines. The trap is the 2-3 price reductions that leave value on the table and stigmatize the listing. The data is clear: price it right the first time.
 
-92011: The Coastal Arbitrage That Smart Buyers Are Figuring Out
+Carlsbad: The Coastal Resilience Story
 
-Here's the play most buyers miss: Aviara and the southwest Carlsbad communities in 92011 share the same beach proximity as 92008 — without the Village price tag.
+Carlsbad is holding better than the broader county. The coastal lifestyle premium — beaches, the village feel, the school district — continues to attract buyers who are less rate-sensitive than the typical SD buyer. Inventory remains tight relative to demand, especially in the $1.2M-$2.2M range.
 
-What do you actually give up? Walkability to the village. That's it. If your lifestyle is oriented around the beach and surf rather than the restaurant strip and nightlife, 92011 delivers coastal living at a meaningful discount. Same Pacific. Same sunset. Lower price per square foot.
+The micromarket gap worth knowing: West Carlsbad (beachside, 92008) commands a meaningful premium over East Carlsbad (92009, 92010) on a per-square-foot basis. That gap has actually widened in the current market as lifestyle buyers prioritize walkability and beach access over square footage.
 
-Santalina is worth knowing specifically — it's actually a master-planned community of four distinct gated neighborhoods that are walkable to South Ponto Beach. You get gated privacy, community amenities, and direct beach access in a package that 92008 buyers don't even know exists. It's the kind of address you tell a trusted friend about. By the time everyone knows about it, the arbitrage is gone.
+For buyers in Carlsbad: the window to find well-priced inventory is real but narrow. When a correctly priced property hits in 92008, it moves fast — multiple offers are still happening on the right homes.
 
-For the right buyer — beach-focused, values privacy and community, not dependent on walking to dinner — 92011 is where I'd be looking right now.
+For sellers in Carlsbad: you have more leverage here than in most SD submarkets, but it's not 2022. Buyers are more discerning. Presentation and staging matter more than they did. A well-staged, properly priced Carlsbad home outperforms the market. An overpriced one sits.
 
-92009: The La Costa Unlock for Families
+Rancho Santa Fe: Its Own Universe
 
-La Costa has quietly become one of the best family value propositions in North County San Diego. The data reflects this: median price $1,962,500, up 3.3% year-over-year, inventory collapsed 64%, just 0.5 months of supply. Sellers are holding firm because they can.
+RSF doesn't follow county trends — it follows wealth trends. The buyer pool here is largely insulated from rate sensitivity: executives, multi-property owners, international buyers. What drives RSF is confidence, not rates.
 
-But the price appreciation hasn't closed the lifestyle gap that makes La Costa compelling. You're still getting house size and lot depth that you simply cannot buy closer to the coast. Top-rated schools. Solid amenities nearby. Approximately 10 minutes to the beach — far enough that you pay less, close enough that it doesn't matter.
+Current RSF dynamic: low inventory, selective buyers, and a meaningful quality premium. Homes that are truly special — views, privacy, architectural distinction — are still transacting at strong prices. Generic RSF inventory at top-of-market pricing is sitting.
 
-La Costa Oaks and The Ranch — both in 92009 — are particularly worth understanding. These are established, desirable communities that attract younger-to-middle-aged families who are trading some coastal premium for more space, better schools, and a quieter lifestyle. For buyers who've been priced out of 92008 or who genuinely value the tradeoff, La Costa isn't a consolation prize — it's the right call.
+The RSF insight that most buyers miss: the covenant (the original RSF ranch land governed by the RSF Association) versus surrounding communities (Cielo, The Crosby, Fairbanks Ranch) is not just a prestige distinction — it's a fundamentally different buying experience in terms of architectural review, lot size, and resale liquidity. Buyers who don't know this distinction often overpay in the covenant or underpay elsewhere.
 
-The Carlsbad Framework
+The Through-Line Across All Three
 
-If you're evaluating Carlsbad, here's how I think about it for buyers:
+In all three markets, the theme is the same: quality wins, aspirational pricing loses. Buyers have more options and more patience than they did two years ago. Sellers who accept this reality are transacting. Those who don't are waiting.
 
-→ You walk to dinner more than you surf: 92008, accept the premium
-→ You surf more than you walk to dinner, and value is important: 92011, look at Santalina specifically
-→ You have kids, want space, and can do 10 minutes to the beach: 92009, La Costa Oaks or The Ranch
+If you're evaluating a move in any of these markets — whether buying, selling, or just tracking values — I'm happy to pull current comps and walk you through what the data actually shows for your specific neighborhood or price range.
 
-All three zip codes are undersupplied relative to demand. None of them are bad choices. But they're different choices — and most buyers only consider one of them.
+Radley Raven is a real estate agent with the Oppenheim Group specializing in Carmel Valley, Carlsbad, Rancho Santa Fe, and San Diego's North County coastal communities.`;
 
-If you'd like a current comp analysis for any of these specific communities, I'm happy to pull the data and walk you through what's actually transacting right now.`;
+const ARTICLE_HASHTAGS = `#CarmelValley #Carlsbad #RanchoSantaFe #SanDiegoRealEstate #NorthCountySanDiego #RealEstateMarket2026`;
 
-const ARTICLE_HASHTAGS = `#Carlsbad #CarlsbadRealEstate #LaCosta #NorthCountySanDiego #SanDiegoRealEstate #RealEstateMarket2026 #CoastalLiving`;
+const FEED_TEASER = `San Diego's broader market numbers are masking what's actually happening in North County. Here's a ground-level look at Carmel Valley, Carlsbad, and Rancho Santa Fe — what's different in each market and what it means if you're buying or selling in 2026.`;
 
-const FEED_TEASER = `Most Carlsbad buyers only look at 92008. Here's what they're missing in 92011 and 92009 — and why the zip code you overlook might be the one you should buy in.`;
+const POST_COPY = `Just published: what's actually happening in Carmel Valley, Carlsbad, and Rancho Santa Fe right now — and why the countywide headlines are missing the real story. North County data + ground-level insight. Link below 👇
 
-const POST_COPY = `Just published: the three Carlsbad zip codes most buyers don't compare — and why the one you overlook might be the smartest buy. Data + local knowledge from 10+ years in North County. Link below 👇
+https://www.linkedin.com/pulse/san-diegos-north-county-coast-2026-what-buyers-sellers-radley-raven-4zu6c`;
 
-https://www.linkedin.com/pulse/carlsbad-nobody-talks-la-costa-aviara-where-real-value-radley-raven-kb6ke`;
+const POST_COMMENT = `Happy to pull current comps for any of these markets if you're evaluating a move — just drop a comment or reach out directly.`;
 
-const POST_COMMENT = `Happy to answer any questions about specific communities — feel free to drop a comment or reach out directly.`;
+const GBP_POST = `North County San Diego market update — Carmel Valley, Carlsbad & Rancho Santa Fe in 2026.
 
-const GBP_POST = `Thinking about buying in Carlsbad? Most buyers start — and stop — at 92008 (the Village). Here's what they're missing:
+San Diego County hit its lowest sales volume in 35+ years. But North County tells a more nuanced story.
 
-📍 92008 (Village): Walk to dinner, walk to the beach, walk to everything. Median $1,865,000. Most competitive zip in the market — 50% inventory drop, 1.2 months supply.
+📍 Carmel Valley (92130): Buyers have the most negotiating leverage in four years. Properties priced right still sell. Aspirational pricing = price reductions + stigmatized listings.
 
-📍 92011 (Aviara/SW Carlsbad): Same beach proximity, without the Village premium. Santalina — four gated neighborhoods walkable to South Ponto Beach — is the address most buyers don't know exists yet.
+📍 Carlsbad: Holding stronger than the county. Coastal lifestyle premium persists. 92008 (Village/beach) remains competitive with tight inventory. 92009/92011 offer value for buyers willing to look east.
 
-📍 92009 (La Costa): Best family value in North County. Top schools, bigger lots, 10 minutes to the beach. Median $1,962,500 with just 0.5 months supply.
+📍 Rancho Santa Fe: Follows wealth, not rates. Truly exceptional homes are still transacting. Generic inventory at top-of-market pricing is sitting.
 
-The framework:
-→ Walk to dinner > surf? → 92008
-→ Surf > walk to dinner? → 92011
-→ Kids + space + value? → 92009
+The theme across all three: quality wins, aspirational pricing loses.
 
-All three zips are undersupplied. None are bad choices. But they're different choices — and most buyers only consider one.
+Thinking about buying or selling in North County? I can pull current comps for your specific neighborhood and price range.
 
-Full breakdown: linkedin.com/in/radleyraven
-
-#Carlsbad #CarlsbadRealEstate #NorthCountySanDiego #SanDiegoRealEstate`;
+Radley Raven | Oppenheim Group | North County San Diego`;
 
 function CopyButton({ text, label }: { text: string; label: string }) {
   const [copied, setCopied] = useState(false);
@@ -112,8 +105,8 @@ function CopyButton({ text, label }: { text: string; label: string }) {
   );
 }
 
-export default function ArticlesPage() {
-  const fullArticle = `${ARTICLE_TITLE}\n\n${ARTICLE_BODY}\n\n${ARTICLE_HASHTAGS}`;
+export default function NorthCountyCoastPage() {
+  const fullArticle = `${ARTICLE_TITLE}\n\nBy Radley Raven, Real Estate Agent | Oppenheim Group\n\n${ARTICLE_BODY}\n\n${ARTICLE_HASHTAGS}`;
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -126,6 +119,7 @@ export default function ArticlesPage() {
           </div>
           <div className="flex items-center gap-4">
             <Link href="/" className="text-sm text-gray-400 hover:text-white transition-colors">← Dashboard</Link>
+            <Link href="/articles" className="text-sm text-gray-400 hover:text-white transition-colors">All Articles</Link>
             <Link href="/reviews" className="text-sm text-gray-400 hover:text-white transition-colors">Reviews</Link>
           </div>
         </div>
@@ -133,29 +127,6 @@ export default function ArticlesPage() {
 
       {/* Main Content */}
       <main className="max-w-4xl mx-auto px-6 py-8">
-
-        {/* Article Index */}
-        <div className="rounded-xl mb-6 overflow-hidden" style={{ background: '#0A1929', border: '1px solid rgba(255,255,255,0.08)' }}>
-          <div className="px-6 py-4 border-b" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>
-            <h2 className="text-xs font-bold uppercase tracking-widest" style={{ color: '#D4A830' }}>All Articles</h2>
-          </div>
-          <div className="divide-y" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>
-            <Link href="/articles/north-county-coast" className="flex items-center justify-between px-6 py-4 transition-all hover:bg-white/5">
-              <div>
-                <span className="text-xs font-semibold uppercase tracking-wide mr-2" style={{ color: '#00BFA6' }}>Article 1</span>
-                <span className="text-sm text-gray-300">San Diego's North County Coast in 2026: Carmel Valley, Carlsbad & Rancho Santa Fe</span>
-              </div>
-              <span className="text-xs ml-4 flex-shrink-0" style={{ color: '#00BFA6' }}>Open →</span>
-            </Link>
-            <div className="flex items-center justify-between px-6 py-4" style={{ background: 'rgba(0,191,166,0.06)' }}>
-              <div>
-                <span className="text-xs font-semibold uppercase tracking-wide mr-2" style={{ color: '#00BFA6' }}>Article 2</span>
-                <span className="text-sm text-white font-medium">The Carlsbad Nobody Talks About: La Costa, Aviara, and Where the Real Value Is in 2026</span>
-              </div>
-              <span className="text-xs ml-4 flex-shrink-0 text-gray-500">Viewing</span>
-            </div>
-          </div>
-        </div>
 
         {/* LinkedIn Publishing Instructions */}
         <div className="rounded-xl mb-8 overflow-hidden" style={{ background: '#0A1929', border: '1px solid rgba(255,255,255,0.08)' }}>
@@ -172,8 +143,8 @@ export default function ArticlesPage() {
               {[
                 <>Copy the <span className="font-semibold text-white">Title</span> using the button below, then open LinkedIn → click <span className="font-semibold text-white">"Write article"</span> <span className="text-gray-400">(not "Start a post")</span> and paste it in</>,
                 <>Click <span className="font-semibold text-white">"Copy Full Article"</span> and paste the body into the article editor <span className="text-gray-400">(hashtags are included at the bottom)</span></>,
-                <>Add a cover image <span className="text-gray-400">(download from below or use your own)</span></>,
-                <>Click <span className="font-semibold text-white">Publish</span> → LinkedIn will show <span className="font-semibold" style={{ color: '#D4A830' }}>"Tell your network what your article is about…"</span> — paste the <span className="font-semibold text-white">Feed Teaser</span> there <span className="text-gray-400">(copy button provided below)</span></>,
+                <>Add a cover image <span className="text-gray-400">(aerial or street-level shot of Carlsbad coastline, Carmel Valley, or RSF estate — 1200x644px)</span></>,
+                <>Click <span className="font-semibold text-white">Publish</span> → LinkedIn will show <span className="font-semibold" style={{ color: '#D4A830' }}>"Tell your network what your article is about…"</span> — paste the <span className="font-semibold text-white">Feed Teaser</span> there <span className="text-gray-400">(copy button below)</span></>,
                 <>Copy the published article URL → send to your <span className="font-semibold text-white">Cited team</span> for PRISM tracking</>,
               ].map((step, i) => (
                 <li key={i} className="flex items-start gap-3">
@@ -205,66 +176,6 @@ export default function ArticlesPage() {
               <CopyButton text={fullArticle} label="Copy Full Article" />
               <CopyButton text={FEED_TEASER} label="Copy Feed Teaser" />
             </div>
-          </div>
-
-          {/* Feed Teaser */}
-          <div className="px-6 py-4 border-b border-gray-100" style={{ background: '#f8f9fa' }}>
-            <p className="text-sm font-semibold uppercase tracking-wide mb-1" style={{ color: '#D4A830' }}>Feed Teaser</p>
-            <p className="text-gray-700 italic">{FEED_TEASER}</p>
-          </div>
-
-          {/* Article Body */}
-          <div className="px-6 py-6">
-            <div className="prose prose-gray max-w-none">
-              {ARTICLE_BODY.split('\n\n').map((paragraph, i) => {
-                // Check if it's a section header (short line, no period at end)
-                const isHeader = paragraph.length < 80 && !paragraph.endsWith('.') && !paragraph.startsWith('→') && !paragraph.startsWith('Most') && !paragraph.startsWith('I\'ve') && !paragraph.startsWith('Here\'s') && !paragraph.startsWith('What') && !paragraph.startsWith('The buyers') && !paragraph.startsWith('For the') && !paragraph.startsWith('But') && !paragraph.startsWith('La Costa') && !paragraph.startsWith('Santalina') && !paragraph.startsWith('All') && !paragraph.startsWith('If you');
-                const isFrameworkItem = paragraph.startsWith('→');
-
-                if (isHeader) {
-                  return <h3 key={i} className="text-lg font-bold text-black mt-8 mb-3">{paragraph}</h3>;
-                }
-                if (isFrameworkItem) {
-                  return (
-                    <div key={i} className="pl-4 border-l-4 my-2" style={{ borderColor: '#D4A830' }}>
-                      <p className="text-gray-800 font-medium">{paragraph}</p>
-                    </div>
-                  );
-                }
-                return <p key={i} className="text-gray-700 leading-relaxed mb-4">{paragraph}</p>;
-              })}
-            </div>
-          </div>
-
-          {/* Hashtags */}
-          <div className="px-6 py-4 border-t border-gray-100" style={{ background: '#f8f9fa' }}>
-            <p className="text-sm font-semibold uppercase tracking-wide mb-2" style={{ color: '#D4A830' }}>Hashtags</p>
-            <div className="flex flex-wrap gap-2">
-              {ARTICLE_HASHTAGS.split(' ').map((tag, i) => (
-                <span key={i} className="inline-block px-3 py-1 text-sm rounded-full bg-cobalt/10 text-cobalt font-medium">
-                  {tag}
-                </span>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Step 2: Share to LinkedIn Feed */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden mt-8">
-          {/* Header */}
-          <div className="p-6 border-b border-gray-100">
-            <div className="flex items-center gap-2 mb-1">
-              <svg className="w-5 h-5" style={{ color: '#D4A830' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
-              </svg>
-              <h2 className="text-lg font-bold" style={{ color: '#D4A830' }}>Step 2: Share to Your LinkedIn Feed</h2>
-            </div>
-            <p className="text-sm text-gray-500 mt-1">After publishing the article, share it as a post to push it into your connections' feeds.</p>
-            {/* Copy Buttons Row */}
-            <div className="flex flex-wrap gap-3 mt-4">
-              <CopyButton text={POST_COPY} label="Copy Post" />
-              <CopyButton text={POST_COMMENT} label="Copy Comment" />
-            </div>
             {/* Open LinkedIn — right under copy buttons */}
             <div className="mt-3">
               <a
@@ -282,7 +193,86 @@ export default function ArticlesPage() {
             </div>
           </div>
 
-          {/* Post Copy Content */}
+          {/* Feed Teaser */}
+          <div className="px-6 py-4 border-b border-gray-100" style={{ background: '#f8f9fa' }}>
+            <p className="text-sm font-semibold uppercase tracking-wide mb-1" style={{ color: '#D4A830' }}>Feed Teaser</p>
+            <p className="text-gray-700 italic">{FEED_TEASER}</p>
+          </div>
+
+          {/* Article Body */}
+          <div className="px-6 py-6">
+            <div className="prose prose-gray max-w-none">
+              {ARTICLE_BODY.split('\n\n').map((paragraph, i) => {
+                const trimmed = paragraph.trim();
+                // Section headers: short, no trailing period, not a byline/narrative sentence
+                const isHeader = trimmed.length < 80 &&
+                  !trimmed.endsWith('.') &&
+                  !trimmed.startsWith('San Diego') &&
+                  !trimmed.startsWith('I\'ve') &&
+                  !trimmed.startsWith('Carmel Valley is') &&
+                  !trimmed.startsWith('What this') &&
+                  !trimmed.startsWith('Carlsbad is') &&
+                  !trimmed.startsWith('The micromarket') &&
+                  !trimmed.startsWith('For buyers') &&
+                  !trimmed.startsWith('For sellers') &&
+                  !trimmed.startsWith('RSF doesn') &&
+                  !trimmed.startsWith('Current RSF') &&
+                  !trimmed.startsWith('The RSF') &&
+                  !trimmed.startsWith('In all three') &&
+                  !trimmed.startsWith('If you') &&
+                  !trimmed.startsWith('Radley Raven is');
+
+                if (isHeader) {
+                  return <h3 key={i} className="text-lg font-bold text-black mt-8 mb-3">{trimmed}</h3>;
+                }
+                return <p key={i} className="text-gray-700 leading-relaxed mb-4">{trimmed}</p>;
+              })}
+            </div>
+          </div>
+
+          {/* Hashtags */}
+          <div className="px-6 py-4 border-t border-gray-100" style={{ background: '#f8f9fa' }}>
+            <p className="text-sm font-semibold uppercase tracking-wide mb-2" style={{ color: '#D4A830' }}>Hashtags</p>
+            <div className="flex flex-wrap gap-2">
+              {ARTICLE_HASHTAGS.split(' ').map((tag, i) => (
+                <span key={i} className="inline-block px-3 py-1 text-sm rounded-full font-medium" style={{ background: 'rgba(0,191,166,0.1)', color: '#00BFA6' }}>
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Step 2: Share to LinkedIn Feed */}
+        <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden mt-8">
+          <div className="p-6 border-b border-gray-100">
+            <div className="flex items-center gap-2 mb-1">
+              <svg className="w-5 h-5" style={{ color: '#D4A830' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+              </svg>
+              <h2 className="text-lg font-bold" style={{ color: '#D4A830' }}>Step 2: Share to Your LinkedIn Feed</h2>
+            </div>
+            <p className="text-sm text-gray-500 mt-1">After publishing the article, share it as a post to push it into your connections' feeds.</p>
+            <div className="flex flex-wrap gap-3 mt-4">
+              <CopyButton text={POST_COPY} label="Copy Post" />
+              <CopyButton text={POST_COMMENT} label="Copy Comment" />
+            </div>
+            <div className="mt-3">
+              <a
+                href="https://www.linkedin.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg font-semibold text-sm transition-all duration-200 hover:opacity-90"
+                style={{ background: '#0A66C2', color: '#ffffff' }}
+              >
+                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                </svg>
+                Open LinkedIn
+              </a>
+            </div>
+          </div>
+
           <div className="px-6 py-5 border-b border-gray-100">
             <p className="text-sm font-semibold uppercase tracking-wide mb-3" style={{ color: '#D4A830' }}>Post Copy</p>
             <div className="rounded-lg p-4 text-sm text-gray-700 leading-relaxed whitespace-pre-line" style={{ background: '#f8f9fa', border: '1px solid #e5e7eb' }}>
@@ -290,7 +280,6 @@ export default function ArticlesPage() {
             </div>
           </div>
 
-          {/* Post Comment Content */}
           <div className="px-6 py-5">
             <p className="text-sm font-semibold uppercase tracking-wide mb-3" style={{ color: '#D4A830' }}>Post Comment</p>
             <div className="rounded-lg p-4 text-sm text-gray-700 leading-relaxed" style={{ background: '#f8f9fa', border: '1px solid #e5e7eb' }}>
@@ -301,7 +290,6 @@ export default function ArticlesPage() {
 
         {/* Step 3: Google Business Profile */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden mt-8">
-          {/* Header */}
           <div className="p-6 border-b border-gray-100">
             <div className="flex items-center gap-2 mb-1">
               <svg className="w-5 h-5" style={{ color: '#D4A830' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -311,7 +299,6 @@ export default function ArticlesPage() {
               <h2 className="text-lg font-bold" style={{ color: '#D4A830' }}>Step 3: Post to Google Business Profile</h2>
             </div>
             <p className="text-sm text-gray-500 mt-1">GBP posts are short-form (max 1,500 characters). This is a condensed version of the article optimized for Google's AI. Post it as an Update on your Google Business Profile.</p>
-            {/* Open GBP link — under header, before copy button */}
             <div className="mt-4">
               <a
                 href="https://business.google.com"
@@ -323,13 +310,11 @@ export default function ArticlesPage() {
                 Open Google Business Profile →
               </a>
             </div>
-            {/* Copy button — right under the link */}
             <div className="mt-3">
               <CopyButton text={GBP_POST} label="Copy Post" />
             </div>
           </div>
 
-          {/* GBP Post Content */}
           <div className="px-6 py-5">
             <p className="text-sm font-semibold uppercase tracking-wide mb-3" style={{ color: '#D4A830' }}>GBP Post</p>
             <div className="rounded-lg p-4 text-sm text-gray-700 leading-relaxed whitespace-pre-line" style={{ background: '#f8f9fa', border: '1px solid #e5e7eb' }}>

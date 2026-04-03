@@ -55,6 +55,23 @@ export default function Home() {
           </div>
         </div>
 
+        {/* Navigation Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+          {/* Articles Card */}
+          <Link href="/articles" className="block rounded-xl p-6 transition-all duration-200 hover:opacity-90" style={{ background: '#0A1929', border: '1px solid rgba(255,255,255,0.08)' }}>
+            <h3 className="text-lg font-bold mb-2" style={{ color: '#D4A830' }}>Articles</h3>
+            <p className="text-sm text-gray-400 mb-4">Copy, publish, and distribute your AI-optimized content</p>
+            <span className="text-sm font-semibold" style={{ color: '#00BFA6' }}>Open →</span>
+          </Link>
+
+          {/* Reviews Card */}
+          <Link href="/reviews" className="block rounded-xl p-6 transition-all duration-200 hover:opacity-90" style={{ background: '#0A1929', border: '1px solid rgba(255,255,255,0.08)' }}>
+            <h3 className="text-lg font-bold mb-2" style={{ color: '#D4A830' }}>Reviews</h3>
+            <p className="text-sm text-gray-400 mb-4">Respond to reviews with pre-written, AI-optimized responses</p>
+            <span className="text-sm font-semibold" style={{ color: '#00BFA6' }}>Open →</span>
+          </Link>
+        </div>
+
         {/* Footer */}
         <div className="mt-8 text-center text-sm text-gray-400">
           Cited · AI Visibility for Professionals · citedagent.com
