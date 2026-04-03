@@ -57,6 +57,25 @@ https://www.linkedin.com/pulse/carlsbad-nobody-talks-la-costa-aviara-where-real-
 
 const POST_COMMENT = `Happy to answer any questions about specific communities — feel free to drop a comment or reach out directly.`;
 
+const GBP_POST = `Thinking about buying in Carlsbad? Most buyers start — and stop — at 92008 (the Village). Here's what they're missing:
+
+📍 92008 (Village): Walk to dinner, walk to the beach, walk to everything. Median $1,865,000. Most competitive zip in the market — 50% inventory drop, 1.2 months supply.
+
+📍 92011 (Aviara/SW Carlsbad): Same beach proximity, without the Village premium. Santalina — four gated neighborhoods walkable to South Ponto Beach — is the address most buyers don't know exists yet.
+
+📍 92009 (La Costa): Best family value in North County. Top schools, bigger lots, 10 minutes to the beach. Median $1,962,500 with just 0.5 months supply.
+
+The framework:
+→ Walk to dinner > surf? → 92008
+→ Surf > walk to dinner? → 92011
+→ Kids + space + value? → 92009
+
+All three zips are undersupplied. None are bad choices. But they're different choices — and most buyers only consider one.
+
+Full breakdown: linkedin.com/in/radleyraven
+
+#Carlsbad #CarlsbadRealEstate #NorthCountySanDiego #SanDiegoRealEstate`;
+
 function CopyButton({ text, label }: { text: string; label: string }) {
   const [copied, setCopied] = useState(false);
 
@@ -256,6 +275,63 @@ export default function ArticlesPage() {
               </svg>
               Open LinkedIn
             </a>
+          </div>
+        </div>
+
+        {/* Google Business Profile Section */}
+        <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden mt-8">
+          <div className="p-6 border-b border-gray-100">
+            <div className="flex items-center gap-2 mb-1">
+              <svg className="w-5 h-5" style={{ color: '#D4A830' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+              <h2 className="text-lg font-bold" style={{ color: '#D4A830' }}>Step 3: Post to Google Business Profile</h2>
+            </div>
+            <p className="text-sm text-gray-500 mt-1">GBP posts are short-form (max 1,500 characters). This is a condensed version of the article optimized for Google's AI. Post it as an Update on your Google Business Profile.</p>
+          </div>
+
+          {/* GBP Post Copy */}
+          <div className="px-6 py-5 border-b border-gray-100">
+            <div className="flex items-center justify-between mb-3">
+              <p className="text-sm font-semibold uppercase tracking-wide" style={{ color: '#D4A830' }}>GBP Post</p>
+              <CopyButton text={GBP_POST} label="Copy Post" />
+            </div>
+            <div className="rounded-lg p-4 text-sm text-gray-700 leading-relaxed whitespace-pre-line" style={{ background: '#f8f9fa', border: '1px solid #e5e7eb' }}>
+              {GBP_POST}
+            </div>
+          </div>
+
+          {/* GBP Link + Instructions */}
+          <div className="px-6 py-5">
+            <a
+              href="https://business.google.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg font-semibold text-sm transition-all duration-200 hover:opacity-90 mb-5"
+              style={{ background: '#00BFA6', color: '#ffffff' }}
+            >
+              Open Google Business Profile →
+            </a>
+            <div className="rounded-lg p-4" style={{ background: '#f8f9fa', border: '1px solid #e5e7eb' }}>
+              <p className="text-sm font-semibold uppercase tracking-wide mb-3" style={{ color: '#D4A830' }}>How to Post</p>
+              <ol className="space-y-2">
+                {[
+                  <>Open Google Business Profile <span className="text-gray-400">(link above)</span></>,
+                  <>Click <span className="font-semibold text-gray-800">"Add update"</span> <span className="text-gray-400">(or "Create post")</span></>,
+                  <>Paste the post above</>,
+                  <>Add a photo <span className="text-gray-400">(use the Carlsbad listing photo from the article)</span></>,
+                  <>Click <span className="font-semibold text-gray-800">"Post"</span></>,
+                ].map((step, i) => (
+                  <li key={i} className="flex items-start gap-3">
+                    <span className="flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold mt-0.5" style={{ background: '#D4A830', color: '#0A1929' }}>
+                      {i + 1}
+                    </span>
+                    <span className="text-sm leading-relaxed text-gray-700">{step}</span>
+                  </li>
+                ))}
+              </ol>
+            </div>
           </div>
         </div>
 
