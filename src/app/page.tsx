@@ -3,9 +3,14 @@ import PlatformStatus from '@/components/PlatformStatus';
 import DeliverablesChecklist from '@/components/DeliverablesChecklist';
 import ScoreHistory from '@/components/ScoreHistory';
 import PlatformCompletionTracker from '@/components/PlatformCompletionTracker';
+import SignOutButton from '@/components/SignOutButton';
 import Link from 'next/link';
+import { getPrismScans } from '@/lib/prism-data';
 
 export default function Home() {
+  const prism = getPrismScans();
+  const displayScore = Math.round(prism.latest * 10);
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
@@ -23,6 +28,7 @@ export default function Home() {
             <div className="text-right">
               <div className="font-semibold">Radley Raven</div>
               <div className="text-sm text-gray-400">The Oppenheim Group · La Jolla</div>
+              <SignOutButton />
             </div>
           </div>
         </div>
@@ -34,7 +40,7 @@ export default function Home() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
           {/* Citation Score */}
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex items-center justify-center">
-            <CitationScore score={42} />
+            <CitationScore score={displayScore} />
           </div>
 
           {/* Platform Status */}
@@ -52,7 +58,7 @@ export default function Home() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Score History */}
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <ScoreHistory />
+            <ScoreHistory history={prism.history} />
           </div>
 
           {/* Deliverables */}

@@ -1,22 +1,22 @@
 'use client';
 
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Area, AreaChart } from 'recharts';
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
-const data = [
-  { date: 'Mar 1', score: 12 },
-  { date: 'Mar 8', score: 18 },
-  { date: 'Mar 15', score: 25 },
-  { date: 'Mar 22', score: 31 },
-  { date: 'Mar 29', score: 38 },
-  { date: 'Apr 2', score: 42 },
-];
+interface ScoreHistoryProps {
+  history: { date: string; score: number }[];
+}
 
-export default function ScoreHistory() {
+export default function ScoreHistory({ history }: ScoreHistoryProps) {
+  const data = history.map((h) => ({
+    date: new Date(h.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+    score: Math.round(h.score * 10),
+  }));
+
   return (
     <div>
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-lg font-semibold" style={{ color: '#0A1929' }}>Score History</h3>
-        <span className="text-sm text-gray-500">Last 30 days</span>
+        <span className="text-sm text-gray-500">PRISM scans</span>
       </div>
       <div className="w-full h-64">
         <ResponsiveContainer width="100%" height="100%">
