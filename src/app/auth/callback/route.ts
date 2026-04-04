@@ -1,29 +1,44 @@
+import { createClient } from "@supabase/supabase-js";
 import { NextResponse } from "next/server";
+import { cookies } from "next/headers";
 
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
-  
-  // Supabase magic link sends token_hash + type as query params
-  // We need to redirect to a page where the client-side Supabase JS
-  // can pick these up and exchange them for a session
+
   const token_hash = searchParams.get("token_hash");
-  const type = searchParams.get("type");
+  const type = searchParams.get("type") as "magiclink" | "signup" | "recovery" | "invite" | "email" | null;
   const code = searchParams.get("code");
+  const next = searchParams.get("next") ?? "/";
 
-  // Build redirect URL that preserves all params for client-side handling
-  if (token_hash && type) {
-    // Redirect to login page with params — it will handle the verification
-    const redirectUrl = new URL("/login", origin);
-    redirectUrl.searchParams.set("token_hash", token_hash);
-    redirectUrl.searchParams.set("type", type);
-    return NextResponse.redirect(redirectUrl);
-  }
-
+  // Supabase PKCE flow (newer versions)
   if (code) {
-    const redirectUrl = new URL("/login", origin);
-    redirectUrl.searchParams.set("code", code);
-    return NextResponse.redirect(redirectUrl);
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    );
+    const { error } = await supabase.auth.exchangeCodeForSession(code);
+    if (!error) {
+      return NextResponse.redirect(`${origin}${next}`);
+    }
   }
 
+  // Token hash flow (email magic links)
+  if (token_hash && type) {
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    );
+    const { error } = await supabase.auth.verifyOtp({ token_hash, type });
+    if (!error) {
+      return NextResponse.redirect(`${origin}${next}`);
+    }
+    // If server-side verify fails, try client-side (redirect with params)
+    const loginUrl = new URL("/login", origin);
+    loginUrl.searchParams.set("token_hash", token_hash);
+    loginUrl.searchParams.set("type", type);
+    return NextResponse.redirect(loginUrl);
+  }
+
+  // Fallback
   return NextResponse.redirect(`${origin}/login`);
 }
