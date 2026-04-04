@@ -4,13 +4,13 @@ import type { NextRequest } from "next/server";
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  if (pathname.startsWith("/login") || pathname.startsWith("/auth")) {
+  if (pathname.startsWith("/login") || pathname.startsWith("/auth") || pathname.startsWith("/intake") || pathname.startsWith("/api/intake")) {
     return NextResponse.next();
   }
 
-  // Check for supabase session cookie
+  // Check for supabase session cookie (Cited project)
   const hasSession =
-    request.cookies.has("sb-voneibpmbnigsykdnwby-auth-token") ||
+    request.cookies.has("sb-oxipzgkcmnsulgywsjbq-auth-token") ||
     request.cookies
       .getAll()
       .some((c) => c.name.startsWith("sb-") && c.name.includes("auth"));
