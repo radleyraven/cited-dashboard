@@ -1,13 +1,46 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { Suspense } from 'react';
 
-export default function LoginPage() {
+function LoginContent() {
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
   const [sent, setSent] = useState(false);
   const [error, setError] = useState('');
+  const [verifying, setVerifying] = useState(false);
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const token_hash = searchParams.get('token_hash');
+    const type = searchParams.get('type');
+
+    if (token_hash && type) {
+      setVerifying(true);
+      supabase.auth.verifyOtp({
+        token_hash,
+        type: type as 'signup' | 'magiclink' | 'recovery' | 'invite' | 'email',
+      }).then(({ data, error }) => {
+        if (error) {
+          setError('Verification failed: ' + error.message);
+          setVerifying(false);
+        } else if (data.session) {
+          // Session is set — redirect to dashboard
+          router.push('/');
+        }
+      });
+    }
+
+    // Also check if already logged in
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session) {
+        router.push('/');
+      }
+    });
+  }, [searchParams, router]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -17,7 +50,7 @@ export default function LoginPage() {
     const { error } = await supabase.auth.signInWithOtp({
       email,
       options: {
-        emailRedirectTo: process.env.NEXT_PUBLIC_APP_URL + '/auth/callback',
+        emailRedirectTo: (process.env.NEXT_PUBLIC_APP_URL || window.location.origin) + '/auth/callback',
       },
     });
 
@@ -27,6 +60,18 @@ export default function LoginPage() {
     } else {
       setSent(true);
     }
+  }
+
+  if (verifying) {
+    return (
+      <div className="min-h-screen flex items-center justify-center" style={{ background: '#0A1929' }}>
+        <div className="text-center">
+          <div className="text-4xl mb-4">🔐</div>
+          <p className="text-white text-lg font-medium">Verifying your login...</p>
+          <p className="text-gray-400 text-sm mt-2">One moment.</p>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -68,5 +113,17 @@ export default function LoginPage() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center" style={{ background: '#0A1929' }}>
+        <p className="text-gray-400">Loading...</p>
+      </div>
+    }>
+      <LoginContent />
+    </Suspense>
   );
 }
