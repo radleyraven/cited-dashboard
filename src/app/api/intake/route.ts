@@ -64,6 +64,20 @@ export async function POST(request: Request) {
       reviewPlatforms[idx] = `Other: ${body.reviewOther.trim()}`;
     }
 
+    // Check for duplicate email submission
+    const { data: existing } = await supabase
+      .from("cited_intake")
+      .select("id")
+      .eq("email", body.email.trim().toLowerCase())
+      .limit(1);
+
+    if (existing && existing.length > 0) {
+      return NextResponse.json(
+        { error: "An intake form has already been submitted with this email address. If you need to update your information, please contact us at hello@citedagent.com." },
+        { status: 409 }
+      );
+    }
+
     const { error } = await supabase.from("cited_intake").insert({
       full_name: body.fullName.trim(),
       email: body.email.trim(),
@@ -86,7 +100,7 @@ export async function POST(request: Request) {
       fastexpert_url: body.fastexpertUrl?.trim() || null,
       homelight_url: body.homelightUrl?.trim() || null,
       other_platforms: body.otherPlatforms?.trim() || null,
-      gbp_manager_added: body.gbpStatus === "added",
+      gbp_manager_added: body.gbpStatus === "added" || body.gbpManagerAdded === true,
     });
 
     if (error) {
