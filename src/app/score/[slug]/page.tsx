@@ -17,6 +17,7 @@ type ProspectData = {
 };
 
 // Score page prospects — add each prospect before sending cold email
+// Projected score protocol: current score + platform gap points. Target range 62-68. Never show 80+.
 const prospects: Record<string, ProspectData> = {
   'maria-santos': {
     name: 'Maria Santos',
@@ -28,6 +29,12 @@ const prospects: Record<string, ProspectData> = {
       { platform: 'Google Business Profile', status: 'missing', impact: 'High', points: 14 },
       { platform: 'FastExpert', status: 'missing', impact: 'High', points: 10 },
       { platform: 'LinkedIn Articles', status: 'missing', impact: 'Medium', points: 7 },
+      { platform: 'Zillow Bio Optimization', status: 'unoptimized', impact: 'Medium', points: 5 },
+      { platform: 'Google Reviews (keyword-rich)', status: 'missing', impact: 'Medium', points: 5 },
+      { platform: 'Bing Places', status: 'missing', impact: 'Low', points: 4 },
+      { platform: 'Apple Business Connect', status: 'missing', impact: 'Low', points: 3 },
+      { platform: 'Realtor.com Profile', status: 'unoptimized', impact: 'Low', points: 3 },
+      { platform: 'GBP Posts (freshness)', status: 'missing', impact: 'Low', points: 2 },
     ],
   },
 };
@@ -62,7 +69,9 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
 
   const { name, brokerage, market, score, competitorScore, gaps } = prospect;
   const firstName = name.split(' ')[0];
-  const projected90 = Math.min(score + gaps.reduce((acc, g) => acc + g.points, 0), 99);
+  // Projected score protocol: floor at current+3, cap at 68, target 62-68 range
+  const rawProjected = score + gaps.reduce((acc, g) => acc + g.points, 0);
+  const projected90 = Math.min(Math.max(rawProjected, score + 3), 68);
 
   return (
     <div style={{ minHeight: '100vh', background: '#f0f4f8', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif' }}>
@@ -162,16 +171,17 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
             What&apos;s Holding Your Score Back
           </div>
 
-          {gaps.map((gap, i) => (
+          {/* Show top 3 gaps prominently */}
+          {gaps.filter(g => g.impact === 'High' || g.impact === 'Medium').slice(0, 3).map((gap, i, arr) => (
             <div key={i} style={{
               display: 'flex', alignItems: 'center', justifyContent: 'space-between',
               padding: '13px 0',
-              borderBottom: i < gaps.length - 1 ? '1px solid #f1f5f9' : 'none'
+              borderBottom: i < arr.length - 1 ? '1px solid #f1f5f9' : 'none'
             }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                 <div style={{
                   width: '8px', height: '8px', borderRadius: '50%', flexShrink: 0,
-                  background: gap.impact === 'High' ? '#dc2626' : gap.impact === 'Medium' ? '#f59e0b' : '#94a3b8'
+                  background: gap.impact === 'High' ? '#dc2626' : '#f59e0b'
                 }} />
                 <span style={{ fontSize: '14px', color: '#1a1a2e', fontWeight: 500 }}>{gap.platform}</span>
               </div>
@@ -187,6 +197,20 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
               </div>
             </div>
           ))}
+          {/* Additional gaps summary */}
+          {gaps.filter(g => g.impact === 'Low').length > 0 && (
+            <div style={{ padding: '12px 0 0', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <div style={{ width: '8px', height: '8px', borderRadius: '50%', flexShrink: 0, background: '#94a3b8' }} />
+                <span style={{ fontSize: '13px', color: '#64748b' }}>
+                  +{gaps.filter(g => g.impact === 'Low').length} additional optimizations
+                </span>
+              </div>
+              <span style={{ fontSize: '13px', color: '#00BFA6', fontWeight: 700 }}>
+                +{gaps.filter(g => g.impact === 'Low').reduce((a, g) => a + g.points, 0)} pts
+              </span>
+            </div>
+          )}
 
           {/* Projected math */}
           <div style={{ marginTop: '16px', padding: '14px 16px', background: '#f0fdf9', borderRadius: '8px', border: '1px solid #99f6e4' }}>
