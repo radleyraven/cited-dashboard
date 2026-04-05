@@ -1,26 +1,10 @@
 import { notFound } from 'next/navigation';
 
-// Score page prospects — add each prospect here before sending cold email
-const prospects: Record<string, ProspectData> = {
-  'maria-santos': {
-    name: 'Maria Santos',
-    brokerage: 'Compass',
-    market: 'Carlsbad',
-    score: 18,
-    competitorScore: 47,
-    gaps: [
-      { platform: 'Google Business Profile', status: 'missing', impact: 'High' },
-      { platform: 'FastExpert', status: 'missing', impact: 'High' },
-      { platform: 'LinkedIn Articles', status: 'missing', impact: 'Medium' },
-    ],
-    projected90: 52,
-  },
-};
-
 type Gap = {
   platform: string;
   status: string;
-  impact: string;
+  impact: 'High' | 'Medium' | 'Low';
+  points: number;
 };
 
 type ProspectData = {
@@ -30,127 +14,237 @@ type ProspectData = {
   score: number;
   competitorScore: number;
   gaps: Gap[];
-  projected90: number;
 };
+
+// Score page prospects — add each prospect before sending cold email
+const prospects: Record<string, ProspectData> = {
+  'maria-santos': {
+    name: 'Maria Santos',
+    brokerage: 'Compass',
+    market: 'Carlsbad',
+    score: 18,
+    competitorScore: 47,
+    gaps: [
+      { platform: 'Google Business Profile', status: 'missing', impact: 'High', points: 14 },
+      { platform: 'FastExpert', status: 'missing', impact: 'High', points: 10 },
+      { platform: 'LinkedIn Articles', status: 'missing', impact: 'Medium', points: 7 },
+    ],
+  },
+};
+
+function ScoreCircle({ score, color, size = 100 }: { score: number; color: string; size?: number }) {
+  const r = (size / 2) - 8;
+  const circumference = 2 * Math.PI * r;
+  const filled = (score / 100) * circumference;
+  const gap = circumference - filled;
+
+  return (
+    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} style={{ transform: 'rotate(-90deg)' }}>
+      {/* Track */}
+      <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke="#e2e8f0" strokeWidth="8" />
+      {/* Progress */}
+      <circle
+        cx={size / 2} cy={size / 2} r={r}
+        fill="none"
+        stroke={color}
+        strokeWidth="8"
+        strokeLinecap="round"
+        strokeDasharray={`${filled} ${gap}`}
+      />
+    </svg>
+  );
+}
 
 export default async function ScorePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const prospect = prospects[slug];
   if (!prospect) notFound();
 
-  const { name, brokerage, market, score, competitorScore, gaps, projected90 } = prospect;
+  const { name, brokerage, market, score, competitorScore, gaps } = prospect;
   const firstName = name.split(' ')[0];
-  const scoreWidth = Math.round((score / 100) * 100);
-  const competitorWidth = Math.round((competitorScore / 100) * 100);
-  const projectedWidth = Math.round((projected90 / 100) * 100);
+  const projected90 = Math.min(score + gaps.reduce((acc, g) => acc + g.points, 0), 99);
 
   return (
     <div style={{ minHeight: '100vh', background: '#f0f4f8', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif' }}>
+
       {/* Header */}
-      <header style={{ background: '#0A1929', padding: '20px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+      <header style={{ background: '#0A1929', padding: '20px 28px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <div>
-          <div style={{ fontSize: '18px', fontWeight: 800, letterSpacing: '4px', color: '#00BFA6' }}>CITED</div>
-          <div style={{ fontSize: '10px', color: '#6b8aaa', letterSpacing: '1px', textTransform: 'uppercase', marginTop: '2px' }}>AI Visibility for Real Estate Professionals</div>
+          <div style={{ fontSize: '20px', fontWeight: 800, letterSpacing: '5px', color: '#00BFA6' }}>CITED</div>
+          <div style={{ fontSize: '10px', color: '#4a6380', letterSpacing: '1.5px', textTransform: 'uppercase', marginTop: '3px' }}>AI Visibility for Real Estate Professionals</div>
+        </div>
+        <div style={{ fontSize: '11px', color: '#4a6380', textAlign: 'right' }}>
+          Powered by <span style={{ color: '#00BFA6', fontWeight: 700 }}>PRISM</span>
         </div>
       </header>
 
-      <main style={{ maxWidth: '640px', margin: '0 auto', padding: '32px 20px' }}>
+      {/* Gold accent line */}
+      <div style={{ height: '3px', background: 'linear-gradient(90deg, #D4A830 0%, #00BFA6 100%)' }} />
+
+      <main style={{ maxWidth: '660px', margin: '0 auto', padding: '36px 20px 48px' }}>
 
         {/* Intro */}
-        <div style={{ marginBottom: '24px' }}>
-          <h1 style={{ fontSize: '22px', fontWeight: 700, color: '#0A1929', margin: '0 0 8px' }}>
+        <div style={{ marginBottom: '28px' }}>
+          <h1 style={{ fontSize: '24px', fontWeight: 700, color: '#0A1929', margin: '0 0 6px', lineHeight: 1.3 }}>
             {firstName}, here&apos;s your AI Visibility Score for {market}.
           </h1>
-          <p style={{ fontSize: '14px', color: '#64748b', margin: 0 }}>
+          <p style={{ fontSize: '13px', color: '#94a3b8', margin: 0 }}>
             {brokerage} · {market} · Generated {new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
           </p>
         </div>
 
-        {/* Score Card */}
-        <div style={{ background: '#fff', borderRadius: '12px', padding: '28px', marginBottom: '20px', boxShadow: '0 1px 4px rgba(0,0,0,0.08)' }}>
-          <h2 style={{ fontSize: '13px', fontWeight: 700, color: '#94a3b8', letterSpacing: '1px', textTransform: 'uppercase', margin: '0 0 20px' }}>Citation Score — {market}</h2>
-
-          {/* Your score */}
-          <div style={{ marginBottom: '20px' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
-              <span style={{ fontSize: '14px', fontWeight: 600, color: '#1a1a2e' }}>You ({name})</span>
-              <span style={{ fontSize: '24px', fontWeight: 800, color: '#e53e3e' }}>{score}<span style={{ fontSize: '14px', color: '#94a3b8', fontWeight: 400 }}>/100</span></span>
-            </div>
-            <div style={{ height: '8px', background: '#f1f5f9', borderRadius: '4px' }}>
-              <div style={{ height: '8px', background: '#e53e3e', borderRadius: '4px', width: `${scoreWidth}%` }} />
-            </div>
+        {/* Score Circles */}
+        <div style={{ background: '#fff', borderRadius: '14px', padding: '32px 28px', marginBottom: '20px', boxShadow: '0 1px 6px rgba(0,0,0,0.07)', border: '1px solid #e8edf2' }}>
+          <div style={{ fontSize: '11px', fontWeight: 700, color: '#94a3b8', letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: '28px' }}>
+            Citation Score — {market}
           </div>
 
-          {/* Competitor */}
-          <div style={{ marginBottom: '20px' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
-              <span style={{ fontSize: '14px', fontWeight: 600, color: '#1a1a2e' }}>Top {market} Competitor</span>
-              <span style={{ fontSize: '24px', fontWeight: 800, color: '#64748b' }}>{competitorScore}<span style={{ fontSize: '14px', color: '#94a3b8', fontWeight: 400 }}>/100</span></span>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px', textAlign: 'center' }}>
+
+            {/* Your score */}
+            <div>
+              <div style={{ position: 'relative', display: 'inline-block' }}>
+                <ScoreCircle score={score} color="#dc2626" size={110} />
+                <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', textAlign: 'center' }}>
+                  <div style={{ fontSize: '28px', fontWeight: 800, color: '#dc2626', lineHeight: 1 }}>{score}</div>
+                  <div style={{ fontSize: '10px', color: '#94a3b8', marginTop: '2px' }}>of 100</div>
+                </div>
+              </div>
+              <div style={{ marginTop: '10px' }}>
+                <div style={{ fontSize: '13px', fontWeight: 700, color: '#0A1929' }}>You</div>
+                <div style={{ fontSize: '11px', color: '#94a3b8', marginTop: '2px' }}>{name}</div>
+              </div>
             </div>
-            <div style={{ height: '8px', background: '#f1f5f9', borderRadius: '4px' }}>
-              <div style={{ height: '8px', background: '#94a3b8', borderRadius: '4px', width: `${competitorWidth}%` }} />
+
+            {/* Competitor */}
+            <div>
+              <div style={{ position: 'relative', display: 'inline-block' }}>
+                <ScoreCircle score={competitorScore} color="#64748b" size={110} />
+                <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', textAlign: 'center' }}>
+                  <div style={{ fontSize: '28px', fontWeight: 800, color: '#64748b', lineHeight: 1 }}>{competitorScore}</div>
+                  <div style={{ fontSize: '10px', color: '#94a3b8', marginTop: '2px' }}>of 100</div>
+                </div>
+              </div>
+              <div style={{ marginTop: '10px' }}>
+                <div style={{ fontSize: '13px', fontWeight: 700, color: '#0A1929' }}>Competitor</div>
+                <div style={{ fontSize: '11px', color: '#94a3b8', marginTop: '2px' }}>Top {market} Agent</div>
+              </div>
             </div>
+
+            {/* Projected */}
+            <div>
+              <div style={{ position: 'relative', display: 'inline-block' }}>
+                <ScoreCircle score={projected90} color="#00BFA6" size={110} />
+                <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', textAlign: 'center' }}>
+                  <div style={{ fontSize: '28px', fontWeight: 800, color: '#00BFA6', lineHeight: 1 }}>{projected90}</div>
+                  <div style={{ fontSize: '10px', color: '#94a3b8', marginTop: '2px' }}>of 100</div>
+                </div>
+              </div>
+              <div style={{ marginTop: '10px' }}>
+                <div style={{ fontSize: '13px', fontWeight: 700, color: '#00BFA6' }}>90-Day Target</div>
+                <div style={{ fontSize: '11px', color: '#94a3b8', marginTop: '2px' }}>With Cited</div>
+              </div>
+            </div>
+
           </div>
 
-          {/* Projected */}
-          <div style={{ paddingTop: '16px', borderTop: '1px solid #f1f5f9' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
-              <span style={{ fontSize: '14px', fontWeight: 600, color: '#00BFA6' }}>Your Projected Score (90 days)</span>
-              <span style={{ fontSize: '24px', fontWeight: 800, color: '#00BFA6' }}>{projected90}<span style={{ fontSize: '14px', color: '#94a3b8', fontWeight: 400 }}>/100</span></span>
-            </div>
-            <div style={{ height: '8px', background: '#f1f5f9', borderRadius: '4px' }}>
-              <div style={{ height: '8px', background: '#00BFA6', borderRadius: '4px', width: `${projectedWidth}%` }} />
-            </div>
+          {/* Gap between current and competitor */}
+          <div style={{ marginTop: '24px', padding: '12px 16px', background: '#fef2f2', borderRadius: '8px', border: '1px solid #fecaca', textAlign: 'center' }}>
+            <span style={{ fontSize: '13px', color: '#dc2626', fontWeight: 600 }}>
+              You&apos;re {competitorScore - score} points behind the top competitor in {market}.
+            </span>
           </div>
         </div>
 
-        {/* Gaps */}
-        <div style={{ background: '#fff', borderRadius: '12px', padding: '28px', marginBottom: '20px', boxShadow: '0 1px 4px rgba(0,0,0,0.08)' }}>
-          <h2 style={{ fontSize: '13px', fontWeight: 700, color: '#94a3b8', letterSpacing: '1px', textTransform: 'uppercase', margin: '0 0 16px' }}>What&apos;s Holding Your Score Back</h2>
+        {/* Gaps + Projected breakdown */}
+        <div style={{ background: '#fff', borderRadius: '14px', padding: '28px', marginBottom: '20px', boxShadow: '0 1px 6px rgba(0,0,0,0.07)', border: '1px solid #e8edf2' }}>
+          <div style={{ fontSize: '11px', fontWeight: 700, color: '#94a3b8', letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: '16px' }}>
+            What&apos;s Holding Your Score Back
+          </div>
+
           {gaps.map((gap, i) => (
-            <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 0', borderBottom: i < gaps.length - 1 ? '1px solid #f1f5f9' : 'none' }}>
+            <div key={i} style={{
+              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+              padding: '13px 0',
+              borderBottom: i < gaps.length - 1 ? '1px solid #f1f5f9' : 'none'
+            }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: gap.impact === 'High' ? '#e53e3e' : '#f59e0b', flexShrink: 0 }} />
+                <div style={{
+                  width: '8px', height: '8px', borderRadius: '50%', flexShrink: 0,
+                  background: gap.impact === 'High' ? '#dc2626' : gap.impact === 'Medium' ? '#f59e0b' : '#94a3b8'
+                }} />
                 <span style={{ fontSize: '14px', color: '#1a1a2e', fontWeight: 500 }}>{gap.platform}</span>
               </div>
-              <span style={{ fontSize: '12px', fontWeight: 600, color: gap.impact === 'High' ? '#e53e3e' : '#f59e0b', background: gap.impact === 'High' ? '#fff5f5' : '#fffbeb', padding: '3px 10px', borderRadius: '20px' }}>
-                {gap.impact} Impact
-              </span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <span style={{ fontSize: '13px', color: '#00BFA6', fontWeight: 700 }}>+{gap.points} pts</span>
+                <span style={{
+                  fontSize: '11px', fontWeight: 700, padding: '3px 10px', borderRadius: '20px',
+                  color: gap.impact === 'High' ? '#dc2626' : '#f59e0b',
+                  background: gap.impact === 'High' ? '#fef2f2' : '#fffbeb'
+                }}>
+                  {gap.impact} Impact
+                </span>
+              </div>
             </div>
           ))}
+
+          {/* Projected math */}
+          <div style={{ marginTop: '16px', padding: '14px 16px', background: '#f0fdf9', borderRadius: '8px', border: '1px solid #99f6e4' }}>
+            <div style={{ fontSize: '12px', color: '#0f766e', fontWeight: 600 }}>
+              Your score: {score} + {gaps.reduce((a, g) => a + g.points, 0)} points from closing these gaps = <strong>{projected90}/100 in 90 days</strong>
+            </div>
+          </div>
         </div>
 
-        {/* What Cited Does */}
-        <div style={{ background: '#0A1929', borderRadius: '12px', padding: '28px', marginBottom: '20px' }}>
-          <h2 style={{ fontSize: '13px', fontWeight: 700, color: '#00BFA6', letterSpacing: '1px', textTransform: 'uppercase', margin: '0 0 16px' }}>How Cited Closes the Gap</h2>
+        {/* How Cited Works */}
+        <div style={{ background: '#0A1929', borderRadius: '14px', padding: '28px', marginBottom: '20px' }}>
+          <div style={{ fontSize: '11px', fontWeight: 700, color: '#D4A830', letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: '16px' }}>
+            How Cited Closes the Gap
+          </div>
           {[
-            'We handle 87% of the work. You provide 15 minutes a month.',
-            'Full platform optimization — GBP, FastExpert, LinkedIn, and more.',
-            'Monthly AI-optimized articles published in your name.',
-            'PRISM re-scans every 30 days to track your score.',
+            { icon: '→', text: 'We handle 87% of the work. You provide 15 minutes a month.' },
+            { icon: '→', text: 'Full platform optimization — GBP, FastExpert, LinkedIn, and more.' },
+            { icon: '→', text: 'Monthly AI-optimized articles published under your name.' },
+            { icon: '→', text: 'PRISM re-scans every 30 days so you can see the score move.' },
           ].map((item, i) => (
-            <div key={i} style={{ display: 'flex', gap: '12px', marginBottom: '12px', alignItems: 'flex-start' }}>
-              <span style={{ color: '#00BFA6', fontWeight: 700, flexShrink: 0 }}>→</span>
-              <span style={{ fontSize: '14px', color: '#cbd5e1', lineHeight: 1.6 }}>{item}</span>
+            <div key={i} style={{ display: 'flex', gap: '12px', marginBottom: i < 3 ? '12px' : 0, alignItems: 'flex-start' }}>
+              <span style={{ color: '#00BFA6', fontWeight: 700, flexShrink: 0 }}>{item.icon}</span>
+              <span style={{ fontSize: '14px', color: '#94a3b8', lineHeight: 1.6 }}>{item.text}</span>
             </div>
           ))}
         </div>
 
         {/* CTA */}
-        <div style={{ background: '#fff', borderRadius: '12px', padding: '28px', textAlign: 'center', boxShadow: '0 1px 4px rgba(0,0,0,0.08)' }}>
-          <h2 style={{ fontSize: '18px', fontWeight: 700, color: '#0A1929', margin: '0 0 8px' }}>Ready to close the gap?</h2>
-          <p style={{ fontSize: '14px', color: '#64748b', margin: '0 0 24px' }}>First 90 days free for founding clients. No commitment.</p>
+        <div style={{ background: '#fff', borderRadius: '14px', padding: '32px 28px', textAlign: 'center', boxShadow: '0 1px 6px rgba(0,0,0,0.07)', border: '1px solid #e8edf2' }}>
+          <div style={{ fontSize: '11px', fontWeight: 700, color: '#D4A830', letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: '12px' }}>
+            Founding Client Offer
+          </div>
+          <h2 style={{ fontSize: '20px', fontWeight: 700, color: '#0A1929', margin: '0 0 8px' }}>
+            First 90 days free. No commitment.
+          </h2>
+          <p style={{ fontSize: '14px', color: '#64748b', margin: '0 0 24px', lineHeight: 1.6 }}>
+            We&apos;re taking on 3–5 founding clients in {market}.<br />
+            After 90 days, you&apos;ll have the data to decide if it&apos;s working.
+          </p>
           <a
             href="https://calendly.com/radleyraven/cited"
-            style={{ display: 'inline-block', background: '#00BFA6', color: '#fff', fontWeight: 700, fontSize: '15px', padding: '14px 36px', borderRadius: '8px', textDecoration: 'none', letterSpacing: '0.3px' }}
+            style={{
+              display: 'inline-block', background: '#00BFA6', color: '#fff',
+              fontWeight: 700, fontSize: '15px', padding: '15px 40px',
+              borderRadius: '8px', textDecoration: 'none', letterSpacing: '0.3px'
+            }}
           >
             Book a 15-Min Call →
           </a>
-          <p style={{ fontSize: '12px', color: '#94a3b8', marginTop: '12px' }}>Or reply to Radley&apos;s email — we&apos;ll take it from there.</p>
+          <p style={{ fontSize: '12px', color: '#94a3b8', marginTop: '14px' }}>
+            Or reply directly to Radley&apos;s email — we&apos;ll take it from there.
+          </p>
         </div>
 
-        <div style={{ textAlign: 'center', marginTop: '24px', fontSize: '12px', color: '#94a3b8' }}>
+        <div style={{ textAlign: 'center', marginTop: '28px', fontSize: '11px', color: '#94a3b8' }}>
           Cited · AI Visibility for Real Estate Professionals · citedagent.com
+          <br />
+          <span style={{ color: '#cbd5e1' }}>Powered by PRISM · Professional Recognition Index for Search Models</span>
         </div>
       </main>
     </div>
