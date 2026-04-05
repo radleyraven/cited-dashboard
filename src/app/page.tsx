@@ -27,7 +27,7 @@ export default function Home() {
             </div>
             <div className="text-right">
               <div className="font-semibold">Radley Raven</div>
-              <div className="text-sm text-gray-400">The Oppenheim Group · La Jolla</div>
+              <div className="text-sm text-gray-400">The Oppenheim Group · Carlsbad</div>
               <SignOutButton />
             </div>
           </div>
