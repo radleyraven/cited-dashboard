@@ -1,27 +1,70 @@
-import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
+import { createServerClient } from '@supabase/ssr'
+import { NextResponse } from 'next/server'
+import type { NextRequest } from 'next/server'
 
-export function proxy(request: NextRequest) {
-  const { pathname } = request.nextUrl;
+// Public routes — no auth required
+const PUBLIC_ROUTES = [
+  '/login',
+  '/auth',
+  '/score',
+  '/how-it-works',
+  '/30-days',
+  '/intake',
+  '/api/intake',
+]
 
-  if (pathname.startsWith("/login") || pathname.startsWith("/auth") || pathname.startsWith("/api/intake") || pathname.startsWith("/intake") || pathname.startsWith("/score") || pathname.startsWith("/30-days") || pathname.startsWith("/how-it-works")) {
-    return NextResponse.next();
+export async function proxy(request: NextRequest) {
+  const { pathname } = request.nextUrl
+
+  // Allow public routes
+  if (PUBLIC_ROUTES.some(route => pathname.startsWith(route))) {
+    return NextResponse.next()
   }
 
-  // Check for supabase session cookie (Cited project)
-  const hasSession =
-    request.cookies.has("sb-oxipzgkcmnsulgywsjbq-auth-token") ||
-    request.cookies
-      .getAll()
-      .some((c) => c.name.startsWith("sb-") && c.name.includes("auth"));
-
-  if (!hasSession) {
-    return NextResponse.redirect(new URL("/login", request.url));
+  // Allow static files
+  if (pathname.startsWith('/_next') || pathname.startsWith('/favicon')) {
+    return NextResponse.next()
   }
 
-  return NextResponse.next();
+  let response = NextResponse.next({
+    request: { headers: request.headers },
+  })
+
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        getAll() {
+          return request.cookies.getAll()
+        },
+        setAll(cookiesToSet) {
+          cookiesToSet.forEach(({ name, value }) =>
+            request.cookies.set(name, value)
+          )
+          response = NextResponse.next({
+            request: { headers: request.headers },
+          })
+          cookiesToSet.forEach(({ name, value, options }) =>
+            response.cookies.set(name, value, options)
+          )
+        },
+      },
+    }
+  )
+
+  const { data: { user } } = await supabase.auth.getUser()
+
+  // Not authenticated — redirect to login
+  if (!user) {
+    const url = request.nextUrl.clone()
+    url.pathname = '/login'
+    return NextResponse.redirect(url)
+  }
+
+  return response
 }
 
 export const config = {
-  matcher: ["/((?!_next/static|_next/image|favicon.ico|client/).*)"],
-};
+  matcher: ['/((?!_next/static|_next/image|favicon.ico|client/).*)'],
+}
