@@ -1,25 +1,36 @@
 export default function HowItWorksPage() {
   const faqs = [
     {
-      q: 'I already have a Zillow profile and Instagram. Isn\'t that enough?',
-      a: 'Those platforms are great for human discovery — but AI models don\'t read Instagram and largely ignore Zillow\'s unstructured content. AI builds recommendations from Google Business Profile, FastExpert, LinkedIn, and structured directory data. Most agents with strong social presence are still invisible to AI.',
+      q: 'I don\'t actually believe AI recommends specific agents. Does this really happen?',
+      a: 'Yes — and you can test it right now. Open ChatGPT or Perplexity and type "who are the best luxury real estate agents in [your market]?" You\'ll get a specific list of names. The agents on that list didn\'t get there by accident — they have the right platform signals in place. The agents not on the list (likely including you) are invisible to that buyer before they ever pick up the phone.',
     },
     {
-      q: 'How much time does this actually take?',
-      a: 'About 30 minutes in month 1. You fill out an intake form (10 min), review your profile copy before it goes live (10 min), and answer a 5-question article brief (10 min). After that, roughly 10-15 minutes per month to review and approve.',
+      q: 'I already have a Google Business Profile. Doesn\'t that cover it?',
+      a: 'Claiming a GBP is step one. Optimizing it for AI citation is different — it requires a specific structure in your description, consistent NAP data across all platforms, active posts, and keyword-specific reviews. Most claimed GBPs score in the low range because claiming ≠ optimizing. We handle the optimization.',
     },
     {
-      q: 'How do I know my score will actually move?',
-      a: 'We run a PRISM re-scan every 30 days and show you the exact data. If the score doesn\'t move by Day 90, you walk away having paid nothing. No contracts, no pressure.',
+      q: 'Why hasn\'t my current marketing company done this?',
+      a: 'Because it didn\'t exist 18 months ago. Traditional marketing companies optimize for Google rankings and social engagement. AI citation is a different system with different signals — most marketing companies are still catching up. This is where SEO was in 2005: the people who moved first owned the next decade. Cited is built specifically for this shift.',
     },
     {
-      q: 'What\'s the difference between this and SEO?',
-      a: 'SEO optimizes for Google search rankings. Cited optimizes for AI recommendations — ChatGPT, Claude, Perplexity, Gemini. These are different systems with different signals. An agent can rank #1 on Google and be completely invisible to AI. We fix the AI side.',
+      q: 'What happens at Day 91 if I\'m not thrilled?',
+      a: 'Nothing. You walk away, you keep everything we\'ve built (all profile optimizations, all content, all platform setups — it\'s yours). There\'s no invoice, no awkward call. If your score didn\'t move by at least 20 points, you don\'t owe us anything. If it did move and you want to continue, it\'s $800/month — and you\'ll have the data to decide if it\'s worth it.',
     },
     {
-      q: 'Do you publish content under my name without my approval?',
-      a: 'Never. Every piece of content — bios, articles, platform copy — goes to you for review before it goes anywhere. You approve, we publish. If you want changes, we make them. Your name, your voice, your approval.',
+      q: 'Who else in North County San Diego is doing this?',
+      a: 'Fewer than 5% of agents in any North County market are actively optimizing for AI visibility right now. We\'re currently working with a small founding cohort — we don\'t publish their names publicly while they\'re building their competitive advantage. That\'s the point of moving first.',
     },
+  ];
+
+  const valueStack = [
+    { item: 'Citation Score Audit + PRISM Baseline Scan', value: 250 },
+    { item: 'Google Business Profile claim + full optimization', value: 400 },
+    { item: 'LinkedIn profile rewrite — location, markets, expertise signals', value: 350 },
+    { item: 'Zillow bio rewrite for AI keyword structure', value: 200 },
+    { item: 'FastExpert + Bing Places + Apple Business profile builds', value: 300 },
+    { item: 'Month 1 authority article (written in your voice, published)', value: 500 },
+    { item: 'Monthly PRISM re-scans across 4 AI models (3 months)', value: 450 },
+    { item: 'Monthly performance reports — score, platform, next steps (3 months)', value: 300 },
   ];
 
   const weeks = [
@@ -173,28 +184,67 @@ export default function HowItWorksPage() {
           </div>
         </div>
 
-        {/* ── SECTION 6: Pricing ── */}
-        <div style={{ marginBottom: '56px', background: '#0A1929', borderRadius: '14px', padding: '36px 32px' }}>
-          <div style={{ display: 'inline-block', background: 'rgba(212,168,48,0.15)', color: '#D4A830', fontSize: '11px', fontWeight: 700, letterSpacing: '2px', textTransform: 'uppercase', padding: '6px 16px', borderRadius: '20px', marginBottom: '20px' }}>
+        {/* ── SECTION 6: Pricing + Value Stack ── */}
+        <div style={{ marginBottom: '56px' }}>
+          <div style={{ display: 'inline-block', background: '#0A1929', color: '#D4A830', fontSize: '11px', fontWeight: 700, letterSpacing: '2px', textTransform: 'uppercase', padding: '6px 16px', borderRadius: '20px', marginBottom: '20px' }}>
             Founding Offer
           </div>
-          <h2 style={{ fontSize: '26px', fontWeight: 700, color: '#fff', margin: '0 0 8px' }}>
-            First 90 days free.<br />No contracts. No commitment.
+          <h2 style={{ fontSize: '26px', fontWeight: 700, color: '#0A1929', margin: '0 0 8px' }}>
+            Here&apos;s everything you get. Here&apos;s what it&apos;s worth.
           </h2>
           <p style={{ fontSize: '15px', color: '#64748b', margin: '0 0 24px', lineHeight: 1.7 }}>
-            We&apos;re taking on 3–5 founding clients in North County San Diego. After 90 days, you&apos;ll have the data. If your score moved and you felt the value — continue at $800/month. If not, walk away. No invoice, no awkward conversation.
+            3–5 founding spots in North County San Diego. First 90 days free.
           </p>
-          {[
-            'No setup fees. No contracts.',
-            'Monthly PRISM re-scans included.',
-            'One article per month, written and published for you.',
-            'Cancel anytime after the founding period.',
-          ].map((item, i) => (
-            <div key={i} style={{ display: 'flex', gap: '10px', marginBottom: '10px', alignItems: 'center' }}>
-              <span style={{ color: '#00BFA6', fontWeight: 700 }}>✓</span>
-              <span style={{ fontSize: '14px', color: '#94a3b8' }}>{item}</span>
+
+          {/* Value stack */}
+          <div style={{ background: '#fff', borderRadius: '12px', border: '1px solid #e8edf2', overflow: 'hidden', marginBottom: '16px', boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
+            {valueStack.map((row, i) => (
+              <div key={i} style={{
+                display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                padding: '14px 20px',
+                borderBottom: i < valueStack.length - 1 ? '1px solid #f1f5f9' : 'none',
+                background: i % 2 === 0 ? '#fff' : '#fafbfc'
+              }}>
+                <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                  <span style={{ color: '#00BFA6', fontWeight: 700, flexShrink: 0 }}>→</span>
+                  <span style={{ fontSize: '13px', color: '#374151' }}>{row.item}</span>
+                </div>
+                <span style={{ fontSize: '13px', fontWeight: 700, color: '#94a3b8', flexShrink: 0, marginLeft: '16px' }}>${row.value.toLocaleString()}</span>
+              </div>
+            ))}
+            {/* Total */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 20px', background: '#0A1929' }}>
+              <span style={{ fontSize: '14px', fontWeight: 700, color: '#fff' }}>Total value (90 days)</span>
+              <span style={{ fontSize: '18px', fontWeight: 800, color: '#D4A830' }}>
+                ${valueStack.reduce((a, r) => a + r.value, 0).toLocaleString()}
+              </span>
             </div>
-          ))}
+          </div>
+
+          {/* Price + guarantee */}
+          <div style={{ background: '#0A1929', borderRadius: '12px', padding: '24px 28px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+              <div>
+                <div style={{ fontSize: '11px', color: '#D4A830', fontWeight: 700, letterSpacing: '1px', textTransform: 'uppercase', marginBottom: '4px' }}>Your Price</div>
+                <div style={{ fontSize: '32px', fontWeight: 900, color: '#fff' }}>$0 <span style={{ fontSize: '16px', color: '#64748b', fontWeight: 400 }}>for 90 days</span></div>
+                <div style={{ fontSize: '13px', color: '#64748b', marginTop: '4px' }}>Then $800/month — only if your score moved.</div>
+              </div>
+              <div style={{ textAlign: 'right' }}>
+                <div style={{ fontSize: '11px', color: '#00BFA6', fontWeight: 700, letterSpacing: '1px', textTransform: 'uppercase', marginBottom: '4px' }}>The Guarantee</div>
+                <div style={{ fontSize: '14px', color: '#fff', fontWeight: 600, maxWidth: '200px', lineHeight: 1.5 }}>20 points in 90 days or you owe nothing. Ever.</div>
+              </div>
+            </div>
+            {[
+              'No setup fees. No contracts. No awkward conversations.',
+              'All profile optimizations are yours to keep, regardless.',
+              'Cancel anytime after the founding period.',
+            ].map((item, i) => (
+              <div key={i} style={{ display: 'flex', gap: '10px', marginBottom: '8px', alignItems: 'center' }}>
+                <span style={{ color: '#00BFA6', fontWeight: 700 }}>✓</span>
+                <span style={{ fontSize: '13px', color: '#64748b' }}>{item}</span>
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* ── SECTION 7: FAQ ── */}
@@ -221,7 +271,7 @@ export default function HowItWorksPage() {
           </p>
 
           <a href="https://citedagent.com/intake" style={{ display: 'block', background: '#00BFA6', color: '#fff', fontWeight: 700, fontSize: '16px', padding: '16px 36px', borderRadius: '8px', textDecoration: 'none', letterSpacing: '0.3px', marginBottom: '12px' }}>
-            Claim Your Founding Spot →
+            Claim My Founding Spot →
           </a>
 
           <p style={{ fontSize: '13px', color: '#94a3b8', margin: 0 }}>

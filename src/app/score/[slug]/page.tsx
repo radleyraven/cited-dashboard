@@ -256,7 +256,7 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
 
           {/* Primary */}
           <a href="https://citedagent.com/intake" style={{ display: 'block', background: '#00BFA6', color: '#fff', fontWeight: 700, fontSize: '15px', padding: '15px 36px', borderRadius: '8px', textDecoration: 'none', letterSpacing: '0.3px', marginBottom: '10px' }}>
-            Claim Your Founding Spot →
+            Claim My Founding Spot →
           </a>
 
           {/* Secondary */}
