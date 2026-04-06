@@ -26,15 +26,18 @@ const prospects: Record<string, ProspectData> = {
     score: 18,
     competitorScore: 47,
     gaps: [
+      // Standard top 3: GBP + LinkedIn Profile + Zillow — always the core for RE agents
       { platform: 'Google Business Profile', status: 'missing', impact: 'High', points: 14 },
-      { platform: 'FastExpert', status: 'missing', impact: 'High', points: 10 },
+      { platform: 'LinkedIn Profile Optimization', status: 'unoptimized', impact: 'High', points: 10 },
+      { platform: 'Zillow Bio Optimization', status: 'unoptimized', impact: 'Medium', points: 8 },
+      // Wildcard: highest-impact item from audit (varies by prospect)
       { platform: 'LinkedIn Articles', status: 'missing', impact: 'Medium', points: 7 },
-      { platform: 'Zillow Bio Optimization', status: 'unoptimized', impact: 'Medium', points: 5 },
-      { platform: 'Google Reviews (keyword-rich)', status: 'missing', impact: 'Medium', points: 5 },
+      // Additional optimizations (shown as summary)
+      { platform: 'Google Reviews (keyword-rich)', status: 'missing', impact: 'Low', points: 5 },
+      { platform: 'FastExpert', status: 'missing', impact: 'Low', points: 4 },
       { platform: 'Bing Places', status: 'missing', impact: 'Low', points: 4 },
       { platform: 'Apple Business Connect', status: 'missing', impact: 'Low', points: 3 },
-      { platform: 'Realtor.com Profile', status: 'unoptimized', impact: 'Low', points: 3 },
-      { platform: 'GBP Posts (freshness)', status: 'missing', impact: 'Low', points: 2 },
+      { platform: 'GBP Posts (freshness)', status: 'missing', impact: 'Low', points: 3 },
     ],
   },
 };
@@ -171,8 +174,8 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
             What&apos;s Holding Your Score Back
           </div>
 
-          {/* Show top 3 gaps prominently */}
-          {gaps.filter(g => g.impact === 'High' || g.impact === 'Medium').slice(0, 3).map((gap, i, arr) => (
+          {/* Show top 4 gaps prominently: GBP + LinkedIn Profile + Zillow + wildcard */}
+          {gaps.filter(g => g.impact === 'High' || g.impact === 'Medium').slice(0, 4).map((gap, i, arr) => (
             <div key={i} style={{
               display: 'flex', alignItems: 'center', justifyContent: 'space-between',
               padding: '13px 0',
