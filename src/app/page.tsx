@@ -2,7 +2,6 @@ import CitationScore from '@/components/CitationScore';
 import PlatformStatus from '@/components/PlatformStatus';
 import DeliverablesChecklist from '@/components/DeliverablesChecklist';
 import ScoreHistory from '@/components/ScoreHistory';
-import PlatformCompletionTracker from '@/components/PlatformCompletionTracker';
 import SignOutButton from '@/components/SignOutButton';
 import Link from 'next/link';
 import { getPrismScans } from '@/lib/prism-data';
@@ -50,11 +49,6 @@ export default function Home() {
           <div className="lg:col-span-2 bg-white rounded-xl shadow-sm border border-gray-100 p-6">
             <PlatformStatus />
           </div>
-        </div>
-
-        {/* Platform Completion Tracker */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
-          <PlatformCompletionTracker />
         </div>
 
         {/* Bottom Row: Score History + Deliverables */}
