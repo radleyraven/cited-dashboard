@@ -96,12 +96,19 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
       <main style={{ maxWidth: '660px', margin: '0 auto', padding: '36px 20px 48px' }}>
 
         {/* Intro */}
-        <div style={{ marginBottom: '28px' }}>
+        <div style={{ marginBottom: '20px' }}>
           <h1 style={{ fontSize: '24px', fontWeight: 700, color: '#0A1929', margin: '0 0 6px', lineHeight: 1.3 }}>
             {firstName}, here&apos;s your AI Visibility Score for {market}.
           </h1>
           <p style={{ fontSize: '13px', color: '#94a3b8', margin: 0 }}>
             {brokerage} · {market} · Generated {new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+          </p>
+        </div>
+
+        {/* Context block — sets up the score reveal */}
+        <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '10px', padding: '16px 20px', marginBottom: '20px' }}>
+          <p style={{ fontSize: '13px', color: '#4a5568', lineHeight: 1.8, margin: 0 }}>
+            Sellers and buyers in your market are increasingly using AI — ChatGPT, Perplexity, Google AI Overviews — to find and vet real estate agents before making contact. Unlike Google, AI doesn&apos;t rank websites. It cites agents it already knows, from structured signals across 14+ platforms. Your Citation Score measures how visible and citable you are in those AI searches — and where the gaps are.
           </p>
         </div>
 
@@ -259,14 +266,14 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
             Claim My Founding Spot →
           </a>
 
-          {/* Secondary */}
-          <a href="https://calendly.com/radleyraven/cited" style={{ display: 'block', background: '#fff', color: '#0A1929', fontWeight: 600, fontSize: '14px', padding: '13px 36px', borderRadius: '8px', textDecoration: 'none', border: '1.5px solid #e2e8f0', marginBottom: '10px' }}>
-            Book a 15-Min Call First
+          {/* Secondary — Learn More (swapped) */}
+          <a href="/how-it-works" style={{ display: 'block', background: '#fff', color: '#0A1929', fontWeight: 600, fontSize: '14px', padding: '13px 36px', borderRadius: '8px', textDecoration: 'none', border: '1.5px solid #e2e8f0', marginBottom: '10px' }}>
+            Learn More About How Cited Works
           </a>
 
-          {/* Tertiary */}
-          <a href="/how-it-works" style={{ display: 'block', fontSize: '13px', color: '#00BFA6', fontWeight: 600, textDecoration: 'none', padding: '6px 0' }}>
-            Learn more about how Cited works →
+          {/* Tertiary — Book a Call (demoted to text link) */}
+          <a href="https://calendly.com/radleyraven/cited" style={{ display: 'block', fontSize: '13px', color: '#64748b', fontWeight: 600, textDecoration: 'none', padding: '6px 0' }}>
+            Prefer to talk first? Book a 15-min call →
           </a>
 
           <p style={{ fontSize: '12px', color: '#94a3b8', margin: '12px 0 0' }}>Questions? Reply directly to Radley&apos;s email.</p>

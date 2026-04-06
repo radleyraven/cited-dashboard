@@ -2,7 +2,7 @@ export default function HowItWorksPage() {
   const faqs = [
     {
       q: 'I don\'t actually believe AI recommends specific agents. Does this really happen?',
-      a: 'Yes — and you can test it right now. Open ChatGPT or Perplexity and type "who are the best luxury real estate agents in [your market]?" You\'ll get a specific list of names. The agents on that list didn\'t get there by accident — they have the right platform signals in place. The agents not on the list (likely including you) are invisible to that buyer before they ever pick up the phone.',
+      a: 'Yes — and you can test it right now. Open ChatGPT or Perplexity and type "who are the best luxury real estate agents in [your market]?" You\'ll get a specific list of names. The agents on that list didn\'t get there by accident — they have the right platform signals in place. The agents not on the list (likely including you) are invisible to that seller or buyer before they ever pick up the phone.',
     },
     {
       q: 'I already have a Google Business Profile. Doesn\'t that cover it?',
@@ -63,10 +63,10 @@ export default function HowItWorksPage() {
             The Problem
           </div>
           <h1 style={{ fontSize: '32px', fontWeight: 800, color: '#0A1929', margin: '0 0 16px', lineHeight: 1.25 }}>
-            AI is changing how buyers find agents.<br />Most agents are invisible to it.
+            AI is changing how sellers and buyers find agents.<br />Most agents are invisible to it.
           </h1>
           <p style={{ fontSize: '16px', color: '#4a5568', lineHeight: 1.8, margin: '0 0 20px' }}>
-            Buyers used to Google "best real estate agent in Carlsbad" and scroll through results. Now they ask ChatGPT, Claude, and Perplexity — and those AI models give one answer. Not a list. One recommendation.
+            Sellers and buyers used to Google "best real estate agent in Carlsbad" and scroll through results. Now they ask ChatGPT, Claude, and Perplexity — and those AI models give one answer. Not a list. One recommendation.
           </p>
           <p style={{ fontSize: '16px', color: '#4a5568', lineHeight: 1.8, margin: 0 }}>
             The agents who get recommended have something in common: their information exists in the right places, in the right format, for AI to read and cite. It has nothing to do with how good they are. It&apos;s a data problem — and it&apos;s fixable.
