@@ -27,11 +27,11 @@ export default function Home() {
               <SignOutButton />
             </div>
           </div>
-          {/* Nav row */}
+          {/* Nav row — order: My Platforms | Articles | Reviews */}
           <div className="flex items-center gap-4 md:gap-6 border-t border-white/10 pt-3 md:border-0 md:pt-0 md:absolute md:top-6 md:left-1/2 md:-translate-x-1/2">
+            <Link href="/copy-kit" className="text-xs md:text-sm text-gray-400 hover:text-white transition-colors">My Platforms</Link>
             <Link href="/articles" className="text-xs md:text-sm text-gray-400 hover:text-white transition-colors">Articles</Link>
             <Link href="/reviews" className="text-xs md:text-sm text-gray-400 hover:text-white transition-colors">Reviews</Link>
-            <Link href="/copy-kit" className="text-xs md:text-sm text-gray-400 hover:text-white transition-colors">Copy Kit</Link>
           </div>
         </div>
       </header>
@@ -49,6 +49,14 @@ export default function Home() {
           <div className="lg:col-span-2 bg-white rounded-xl shadow-sm border border-gray-100 p-6">
             <PlatformStatus />
           </div>
+        </div>
+
+        {/* Next Milestone Banner */}
+        <div style={{ background: '#fff', borderRadius: '10px', padding: '12px 20px', marginBottom: '16px', border: '1px solid #e8edf2', display: 'flex', alignItems: 'center', justifyContent: 'space-between', boxShadow: '0 1px 3px rgba(0,0,0,0.06)' }}>
+          <div style={{ fontSize: '13px', color: '#64748b' }}>
+            🎯 <strong style={{ color: '#0A1929' }}>Next milestone:</strong> Score 75 — you pass the top competitor in Carlsbad
+          </div>
+          <div style={{ fontSize: '12px', color: '#00BFA6', fontWeight: 600 }}>Month 2 target</div>
         </div>
 
         {/* Bottom Row: Score History + Deliverables */}
@@ -70,8 +78,16 @@ export default function Home() {
           <p className="text-sm text-gray-500 mt-1">Jump to your most-used tools</p>
         </div>
 
-        {/* Navigation Cards */}
+        {/* Navigation Cards — order: My Platforms | Articles | Reviews */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {/* My Platforms Card */}
+          <Link href="/copy-kit" className="block rounded-xl p-6 transition-all duration-200 hover:opacity-90 hover:scale-[1.02]" style={{ background: '#0A1929', border: '2px solid #D4A830' }}>
+            <div className="text-3xl mb-3">🏠</div>
+            <h3 className="text-lg font-bold mb-2" style={{ color: '#D4A830' }}>My Platforms</h3>
+            <p className="text-sm text-gray-400 mb-4">Your optimized bios, ready to paste into each platform profile</p>
+            <span className="text-sm font-semibold" style={{ color: '#00BFA6' }}>Open →</span>
+          </Link>
+
           {/* Articles Card */}
           <Link href="/articles" className="block rounded-xl p-6 transition-all duration-200 hover:opacity-90 hover:scale-[1.02]" style={{ background: '#0A1929', border: '2px solid #D4A830' }}>
             <div className="text-3xl mb-3">📝</div>
@@ -85,14 +101,6 @@ export default function Home() {
             <div className="text-3xl mb-3">⭐</div>
             <h3 className="text-lg font-bold mb-2" style={{ color: '#D4A830' }}>Reviews</h3>
             <p className="text-sm text-gray-400 mb-4">Respond to reviews with pre-written, AI-optimized responses</p>
-            <span className="text-sm font-semibold" style={{ color: '#00BFA6' }}>Open →</span>
-          </Link>
-
-          {/* Copy Kit Card */}
-          <Link href="/copy-kit" className="block rounded-xl p-6 transition-all duration-200 hover:opacity-90 hover:scale-[1.02]" style={{ background: '#0A1929', border: '2px solid #D4A830' }}>
-            <div className="text-3xl mb-3">📋</div>
-            <h3 className="text-lg font-bold mb-2" style={{ color: '#D4A830' }}>Copy Kit</h3>
-            <p className="text-sm text-gray-400 mb-4">Your complete copy kit with bios, descriptions, and platform content</p>
             <span className="text-sm font-semibold" style={{ color: '#00BFA6' }}>Open →</span>
           </Link>
         </div>

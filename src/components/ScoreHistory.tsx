@@ -7,10 +7,18 @@ interface ScoreHistoryProps {
 }
 
 export default function ScoreHistory({ history }: ScoreHistoryProps) {
-  const data = history.map((h) => ({
-    date: new Date(h.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
-    score: Math.round(h.score * 10),
-  }));
+  // Always label the first data point "Start" (Day 0 baseline), rest as Month 1, Month 2, etc.
+  const data = history.map((h, i) => {
+    if (i === 0) {
+      return { date: 'Start', score: Math.round(h.score * 10) };
+    }
+    return {
+      date: `Month ${i}`,
+      score: Math.round(h.score * 10),
+    };
+  });
+
+  const singlePoint = data.length === 1;
 
   return (
     <div>
@@ -18,6 +26,11 @@ export default function ScoreHistory({ history }: ScoreHistoryProps) {
         <h3 className="text-lg font-semibold" style={{ color: '#0A1929' }}>Score History</h3>
         <span className="text-sm text-gray-500">PRISM scans</span>
       </div>
+
+      {singlePoint && (
+        <p className="text-xs text-gray-400 mb-3">(re-scan in ~30 days)</p>
+      )}
+
       <div className="w-full h-64">
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart data={data} margin={{ top: 5, right: 20, left: 0, bottom: 5 }}>
