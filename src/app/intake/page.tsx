@@ -18,14 +18,17 @@ type FormData = {
   differentiator: string;
   reviewPlatforms: string[];
   reviewOther: string;
-  websiteUrl: string;
+  // Platforms ordered by PRISM priority
   linkedinUrl: string;
-  instagramHandle: string;
-  youtubeUrl: string;
   zillowUrl: string;
+  yelpUrl: string;
   realtorUrl: string;
   fastexpertUrl: string;
   homelightUrl: string;
+  websiteUrl: string;
+  youtubeUrl: string;
+  // Optional channels
+  instagramHandle: string;
   otherPlatforms: string;
   gbpStatus: "" | "added" | "no-gbp";
 };
@@ -44,14 +47,15 @@ const initialForm: FormData = {
   differentiator: "",
   reviewPlatforms: [],
   reviewOther: "",
-  websiteUrl: "",
   linkedinUrl: "",
-  instagramHandle: "",
-  youtubeUrl: "",
   zillowUrl: "",
+  yelpUrl: "",
   realtorUrl: "",
   fastexpertUrl: "",
   homelightUrl: "",
+  websiteUrl: "",
+  youtubeUrl: "",
+  instagramHandle: "",
   otherPlatforms: "",
   gbpStatus: "",
 };
@@ -59,9 +63,10 @@ const initialForm: FormData = {
 const REVIEW_OPTIONS = [
   "Google Business Profile",
   "Zillow",
-  "HomeLight",
-  "Realtor.com",
   "Yelp",
+  "Realtor.com",
+  "FastExpert",
+  "HomeLight",
 ];
 
 function IntakeForm() {
@@ -71,9 +76,16 @@ function IntakeForm() {
     return {
       ...initialForm,
       fullName: searchParams.get('fullName') || '',
+      email: searchParams.get('email') || '',
       brokerage: searchParams.get('brokerage') || '',
       primaryMarkets: searchParams.get('primaryMarkets') || '',
       zillowUrl: searchParams.get('zillowUrl') || '',
+      linkedinUrl: searchParams.get('linkedinUrl') || '',
+      yelpUrl: searchParams.get('yelpUrl') || '',
+      realtorUrl: searchParams.get('realtorUrl') || '',
+      fastexpertUrl: searchParams.get('fastexpertUrl') || '',
+      websiteUrl: searchParams.get('websiteUrl') || '',
+      youtubeUrl: searchParams.get('youtubeUrl') || '',
       yearsInMarket: searchParams.get('yearsInMarket') || '',
       topTransactions: searchParams.get('topTransactions') || '',
     };
@@ -347,97 +359,46 @@ function IntakeForm() {
             </div>
           </Section>
 
-          {/* Section 5 */}
+          {/* Section 5 — Platforms ordered by PRISM priority */}
           <Section number={5} title="Existing Platform Presence">
-            <Field label="Personal website URL">
-              <input
-                type="url"
-                value={form.websiteUrl}
-                onChange={(e) => set("websiteUrl", e.target.value)}
-                className={`${inputClass} ${inputFocusRing}`}
-                style={inputStyle}
-                placeholder="https://"
-              />
-            </Field>
+            <p className="text-sm mb-4" style={{ color: "#64748b" }}>
+              Share any profiles you already have. We&apos;ll optimize them — or build them from scratch if they&apos;re missing.
+            </p>
             <Field label="LinkedIn profile URL">
-              <input
-                type="url"
-                value={form.linkedinUrl}
-                onChange={(e) => set("linkedinUrl", e.target.value)}
-                className={`${inputClass} ${inputFocusRing}`}
-                style={inputStyle}
-                placeholder="https://linkedin.com/in/..."
-              />
-            </Field>
-            <Field label="Instagram handle">
-              <input
-                type="text"
-                value={form.instagramHandle}
-                onChange={(e) => set("instagramHandle", e.target.value)}
-                className={`${inputClass} ${inputFocusRing}`}
-                style={inputStyle}
-                placeholder="@"
-              />
-            </Field>
-            <Field label="YouTube channel URL">
-              <input
-                type="url"
-                value={form.youtubeUrl}
-                onChange={(e) => set("youtubeUrl", e.target.value)}
-                className={`${inputClass} ${inputFocusRing}`}
-                style={inputStyle}
-                placeholder="https://"
-              />
+              <input type="url" value={form.linkedinUrl} onChange={(e) => set("linkedinUrl", e.target.value)} className={`${inputClass} ${inputFocusRing}`} style={inputStyle} placeholder="https://linkedin.com/in/..." />
             </Field>
             <Field label="Zillow profile URL">
-              <input
-                type="url"
-                value={form.zillowUrl}
-                onChange={(e) => set("zillowUrl", e.target.value)}
-                className={`${inputClass} ${inputFocusRing}`}
-                style={inputStyle}
-                placeholder="https://"
-              />
+              <input type="url" value={form.zillowUrl} onChange={(e) => set("zillowUrl", e.target.value)} className={`${inputClass} ${inputFocusRing}`} style={inputStyle} placeholder="https://zillow.com/profile/..." />
+            </Field>
+            <Field label="Yelp profile URL">
+              <input type="url" value={form.yelpUrl} onChange={(e) => set("yelpUrl", e.target.value)} className={`${inputClass} ${inputFocusRing}`} style={inputStyle} placeholder="https://yelp.com/biz/..." />
             </Field>
             <Field label="Realtor.com profile URL">
-              <input
-                type="url"
-                value={form.realtorUrl}
-                onChange={(e) => set("realtorUrl", e.target.value)}
-                className={`${inputClass} ${inputFocusRing}`}
-                style={inputStyle}
-                placeholder="https://"
-              />
+              <input type="url" value={form.realtorUrl} onChange={(e) => set("realtorUrl", e.target.value)} className={`${inputClass} ${inputFocusRing}`} style={inputStyle} placeholder="https://realtor.com/realestateagents/..." />
             </Field>
             <Field label="FastExpert profile URL">
-              <input
-                type="url"
-                value={form.fastexpertUrl}
-                onChange={(e) => set("fastexpertUrl", e.target.value)}
-                className={`${inputClass} ${inputFocusRing}`}
-                style={inputStyle}
-                placeholder="https://"
-              />
+              <input type="url" value={form.fastexpertUrl} onChange={(e) => set("fastexpertUrl", e.target.value)} className={`${inputClass} ${inputFocusRing}`} style={inputStyle} placeholder="https://fastexpert.com/agents/..." />
             </Field>
             <Field label="HomeLight profile URL">
-              <input
-                type="url"
-                value={form.homelightUrl}
-                onChange={(e) => set("homelightUrl", e.target.value)}
-                className={`${inputClass} ${inputFocusRing}`}
-                style={inputStyle}
-                placeholder="https://"
-              />
+              <input type="url" value={form.homelightUrl} onChange={(e) => set("homelightUrl", e.target.value)} className={`${inputClass} ${inputFocusRing}`} style={inputStyle} placeholder="https://homelight.com/..." />
             </Field>
-            <Field label="Any other platforms">
-              <textarea
-                rows={2}
-                value={form.otherPlatforms}
-                onChange={(e) => set("otherPlatforms", e.target.value)}
-                className={`${inputClass} ${inputFocusRing}`}
-                style={inputStyle}
-              />
+            <Field label="Personal website URL">
+              <input type="url" value={form.websiteUrl} onChange={(e) => set("websiteUrl", e.target.value)} className={`${inputClass} ${inputFocusRing}`} style={inputStyle} placeholder="https://" />
             </Field>
+            <Field label="YouTube channel URL">
+              <input type="url" value={form.youtubeUrl} onChange={(e) => set("youtubeUrl", e.target.value)} className={`${inputClass} ${inputFocusRing}`} style={inputStyle} placeholder="https://" />
+            </Field>
+
+            {/* Optional channels */}
+            <div style={{ marginTop: '16px', paddingTop: '16px', borderTop: '1px solid #f1f5f9' }}>
+              <p className="text-xs font-semibold mb-3" style={{ color: '#94a3b8', letterSpacing: '1px', textTransform: 'uppercase' }}>Optional — Additional Channels</p>
+              <Field label="Instagram handle">
+                <input type="text" value={form.instagramHandle} onChange={(e) => set("instagramHandle", e.target.value)} className={`${inputClass} ${inputFocusRing}`} style={inputStyle} placeholder="@yourhandle" />
+              </Field>
+              <Field label="Any other platforms or profiles">
+                <textarea rows={2} value={form.otherPlatforms} onChange={(e) => set("otherPlatforms", e.target.value)} className={`${inputClass} ${inputFocusRing}`} style={inputStyle} placeholder="Bing Places, Apple Business, Expertise.com, etc." />
+              </Field>
+            </div>
           </Section>
 
           {/* Section 6 */}

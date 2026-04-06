@@ -25,9 +25,12 @@ type ProspectData = {
 const prefillData: Record<string, Record<string, string>> = {
   'maria-santos': {
     fullName: 'Maria Santos',
+    email: 'rrmacmini@gmail.com',
     brokerage: 'Compass',
     primaryMarkets: 'Carlsbad, Encinitas, Solana Beach',
-    zillowUrl: 'zillow.com/profile/mariasantos',
+    zillowUrl: 'https://zillow.com/profile/mariasantos',
+    linkedinUrl: 'https://linkedin.com/in/maria-santos-realtor',
+    realtorUrl: 'https://realtor.com/realestateagents/maria-santos',
     yearsInMarket: '7',
     topTransactions: 'Approx. $48M career volume across Carlsbad/Encinitas',
   },
