@@ -113,17 +113,9 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
             </div>
             <div style={{ flex: 1 }}>
               <div style={{ fontSize: '11px', fontWeight: 700, color: '#D4A830', letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: '8px' }}>Why This Matters</div>
-              <p style={{ fontSize: '12px', color: '#94a3b8', lineHeight: 1.7, margin: '0 0 14px' }}>
-                Sellers and buyers are increasingly using AI to find and vet agents before making contact. Unlike Google, AI doesn&apos;t rank websites — it <span style={{ color: '#fff', fontWeight: 600 }}>cites agents it already knows</span> from structured signals across 14+ platforms.
+              <p style={{ fontSize: '12px', color: '#94a3b8', lineHeight: 1.7, margin: 0 }}>
+                Sellers and buyers in your market are increasingly using AI — ChatGPT, Perplexity, Google AI Overviews — to find and vet agents before making contact. Unlike Google, AI doesn&apos;t rank websites. It <span style={{ color: '#fff', fontWeight: 600 }}>cites agents it already knows</span>, from structured signals across 14+ platforms. Your Citation Score measures how visible and citable you are in those AI searches — and where the gaps are.
               </p>
-              {/* AI model chips */}
-              <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-                {['ChatGPT', 'Perplexity', 'Google AI', 'Claude'].map((model) => (
-                  <span key={model} style={{ fontSize: '11px', fontWeight: 600, color: '#00BFA6', background: 'rgba(0,191,166,0.1)', border: '1px solid rgba(0,191,166,0.2)', borderRadius: '20px', padding: '3px 10px' }}>
-                    {model}
-                  </span>
-                ))}
-              </div>
             </div>
           </div>
         </div>
