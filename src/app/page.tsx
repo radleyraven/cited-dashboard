@@ -24,6 +24,7 @@ export default function Home() {
             <div className="flex items-center gap-4">
               <Link href="/articles" className="text-sm text-gray-400 hover:text-white transition-colors">Articles</Link>
               <Link href="/reviews" className="text-sm text-gray-400 hover:text-white transition-colors">Reviews</Link>
+              <Link href="/copy-kit" className="text-sm text-gray-400 hover:text-white transition-colors">Copy Kit</Link>
             </div>
             <div className="text-right">
               <div className="font-semibold">Radley Raven</div>
@@ -92,7 +93,7 @@ export default function Home() {
           </Link>
 
           {/* Copy Kit Card */}
-          <Link href="/client/radley-raven.html" className="block rounded-xl p-6 transition-all duration-200 hover:opacity-90 hover:scale-[1.02]" style={{ background: '#0A1929', border: '2px solid #D4A830' }}>
+          <Link href="/copy-kit" className="block rounded-xl p-6 transition-all duration-200 hover:opacity-90 hover:scale-[1.02]" style={{ background: '#0A1929', border: '2px solid #D4A830' }}>
             <div className="text-3xl mb-3">📋</div>
             <h3 className="text-lg font-bold mb-2" style={{ color: '#D4A830' }}>Copy Kit</h3>
             <p className="text-sm text-gray-400 mb-4">Your complete copy kit with bios, descriptions, and platform content</p>

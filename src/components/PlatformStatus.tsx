@@ -15,10 +15,10 @@ const platforms: Platform[] = [
   { name: 'Realtor.com', status: 'green', note: '95% complete' },
   { name: 'Apple Business Connect', status: 'yellow', note: 'Verification pending' },
   { name: 'Bing Places', status: 'green', note: 'Claimed & verified' },
-  { name: 'Yelp', status: 'red', note: 'Not yet claimed' },
+  { name: 'Yelp', status: 'red', note: 'Ready to boost your score' },
   { name: 'FastExpert', status: 'green', note: 'Profile complete' },
   { name: 'HomeLight', status: 'yellow', note: 'Waiting on support' },
-  { name: 'Homes.com', status: 'red', note: 'Not yet claimed' },
+  { name: 'Homes.com', status: 'red', note: 'Ready to boost your score' },
 ];
 
 const statusColors: Record<Status, string> = {
@@ -39,7 +39,7 @@ export default function PlatformStatus() {
   return (
     <div>
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-lg font-semibold" style={{ color: '#0A1929' }}>Platform Status</h3>
+        <h3 className="text-lg font-semibold" style={{ color: '#0A1929' }}>Platforms Powering Your Score</h3>
         <span className="text-sm text-gray-500">{liveCount}/{platforms.length} live</span>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">

@@ -3,9 +3,10 @@
 interface CitationScoreProps {
   score: number;
   maxScore?: number;
+  delta?: number;
 }
 
-export default function CitationScore({ score, maxScore = 100 }: CitationScoreProps) {
+export default function CitationScore({ score, maxScore = 100, delta = 47 }: CitationScoreProps) {
   const percentage = (score / maxScore) * 100;
   const radius = 80;
   const circumference = 2 * Math.PI * radius;
@@ -34,6 +35,11 @@ export default function CitationScore({ score, maxScore = 100 }: CitationScorePr
         <div className="absolute inset-0 flex flex-col items-center justify-center">
           <span className="text-5xl font-bold" style={{ color: '#DC2626' }}>{score}</span>
           <span className="text-sm text-gray-400 mt-1">/ {maxScore}</span>
+          {delta !== undefined && (
+            <span className="text-sm font-semibold mt-1" style={{ color: '#00BFA6' }}>
+              +{delta} this month
+            </span>
+          )}
         </div>
       </div>
       <h3 className="mt-4 text-lg font-semibold" style={{ color: '#0A1929' }}>Citation Score</h3>
