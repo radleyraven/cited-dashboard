@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
+import { supabase } from "@/lib/supabase";
 
 type FormData = {
   fullName: string;
@@ -18,6 +19,7 @@ type FormData = {
   differentiator: string;
   reviewPlatforms: string[];
   reviewOther: string;
+  termsAccepted: boolean;
   // Platforms ordered by PRISM priority
   linkedinUrl: string;
   zillowUrl: string;
@@ -47,6 +49,7 @@ const initialForm: FormData = {
   differentiator: "",
   reviewPlatforms: [],
   reviewOther: "",
+  termsAccepted: false,
   linkedinUrl: "",
   zillowUrl: "",
   yelpUrl: "",
@@ -124,6 +127,19 @@ function IntakeForm() {
         throw new Error(data.error || "Submission failed");
       }
 
+      // Send magic link — non-blocking. Intake is already saved above.
+      try {
+        await supabase.auth.signInWithOtp({
+          email: form.email.trim(),
+          options: {
+            emailRedirectTo: "https://citedagent.com/auth/callback?next=/dashboard",
+          },
+        });
+      } catch {
+        // Auth failure is non-fatal — intake was saved, user can log in later.
+        console.warn("Magic link send failed — intake was still saved.");
+      }
+
       setSubmitted(true);
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Something went wrong");
@@ -145,13 +161,13 @@ function IntakeForm() {
             </svg>
           </div>
           <h1 className="text-3xl font-bold mb-4" style={{ color: "#0A1929" }}>
-            Thank You!
+            You&apos;re in.
           </h1>
           <p className="text-lg mb-2" style={{ color: "#0A1929" }}>
-            Your intake is complete.
+            Check your email for your dashboard access link — it&apos;ll arrive in the next few minutes.
           </p>
           <p className="mb-6" style={{ color: "#555" }}>
-            Your full Citation Score audit begins now and will be delivered within 24–72 hours. We will be in touch.
+            Your bios will be ready within 72 hours.
           </p>
           <div className="rounded-lg p-4 inline-block" style={{ background: "#F0FDF9", border: "1px solid #00BFA6" }}>
             <p className="text-sm font-medium" style={{ color: "#00BFA6" }}>
@@ -407,14 +423,33 @@ function IntakeForm() {
 
           {/* GBP Access — removed from intake. Requested separately after Day 1 affirm text. */}
 
+          {/* Terms of Service */}
+          <label className="flex items-start gap-3 cursor-pointer">
+            <input
+              type="checkbox"
+              required
+              checked={form.termsAccepted}
+              onChange={(e) => set("termsAccepted", e.target.checked)}
+              className="w-4 h-4 rounded mt-0.5 shrink-0"
+              style={{ accentColor: "#00BFA6" }}
+            />
+            <span className="text-sm" style={{ color: "#0A1929" }}>
+              I agree to Cited&apos;s{" "}
+              <a href="#" style={{ color: "#00BFA6", textDecoration: "underline" }}>
+                Terms of Service
+              </a>{" "}
+              and understand this is a free 90-day founding membership.
+            </span>
+          </label>
+
           {/* Submit */}
           <button
             type="submit"
-            disabled={submitting}
+            disabled={submitting || !form.termsAccepted}
             className="w-full rounded-lg py-4 text-white font-semibold text-base transition-opacity disabled:opacity-60"
             style={{ background: "#00BFA6" }}
           >
-            {submitting ? "Submitting..." : "Submit Intake Form"}
+            {submitting ? "Submitting..." : "Submit & Create My Account"}
           </button>
         </form>
       </main>
