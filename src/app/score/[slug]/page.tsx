@@ -106,10 +106,26 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
         </div>
 
         {/* Context block — sets up the score reveal */}
-        <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '10px', padding: '16px 20px', marginBottom: '20px' }}>
-          <p style={{ fontSize: '13px', color: '#4a5568', lineHeight: 1.8, margin: 0 }}>
-            Sellers and buyers in your market are increasingly using AI — ChatGPT, Perplexity, Google AI Overviews — to find and vet real estate agents before making contact. Unlike Google, AI doesn&apos;t rank websites. It cites agents it already knows, from structured signals across 14+ platforms. Your Citation Score measures how visible and citable you are in those AI searches — and where the gaps are.
-          </p>
+        <div style={{ background: '#0A1929', borderRadius: '12px', padding: '22px 24px', marginBottom: '20px' }}>
+          <div style={{ display: 'flex', alignItems: 'flex-start', gap: '16px' }}>
+            <div style={{ flexShrink: 0, marginTop: '2px' }}>
+              <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: 'rgba(0,191,166,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '16px' }}>⚡</div>
+            </div>
+            <div style={{ flex: 1 }}>
+              <div style={{ fontSize: '11px', fontWeight: 700, color: '#D4A830', letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: '8px' }}>Why This Matters</div>
+              <p style={{ fontSize: '13px', color: '#94a3b8', lineHeight: 1.8, margin: '0 0 14px' }}>
+                Sellers and buyers are increasingly using AI to find and vet agents before making contact. Unlike Google, AI doesn&apos;t rank websites — it <span style={{ color: '#fff', fontWeight: 600 }}>cites agents it already knows</span> from structured signals across 14+ platforms.
+              </p>
+              {/* AI model chips */}
+              <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                {['ChatGPT', 'Perplexity', 'Google AI', 'Claude'].map((model) => (
+                  <span key={model} style={{ fontSize: '11px', fontWeight: 600, color: '#00BFA6', background: 'rgba(0,191,166,0.1)', border: '1px solid rgba(0,191,166,0.2)', borderRadius: '20px', padding: '3px 10px' }}>
+                    {model}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Score Circles */}
