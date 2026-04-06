@@ -150,30 +150,50 @@ function IntakeForm() {
 
   if (submitted) {
     return (
-      <div className="min-h-screen flex items-center justify-center px-4" style={{ background: "#fff" }}>
+      <div className="min-h-screen flex items-center justify-center px-4" style={{ background: "#0A1929" }}>
         <div className="max-w-lg w-full text-center">
+          {/* Teal check circle */}
           <div
-            className="w-20 h-20 rounded-full mx-auto mb-6 flex items-center justify-center"
-            style={{ background: "#00BFA6" }}
+            className="w-20 h-20 rounded-full mx-auto mb-8 flex items-center justify-center"
+            style={{ background: "rgba(0,191,166,0.15)", border: "2px solid #00BFA6" }}
           >
-            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#00BFA6" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <polyline points="20 6 9 17 4 12" />
             </svg>
           </div>
-          <h1 className="text-3xl font-bold mb-4" style={{ color: "#0A1929" }}>
-            You&apos;re in.
+
+          <h1 style={{ fontSize: "32px", fontWeight: 800, color: "#fff", margin: "0 0 12px", letterSpacing: "-0.5px" }}>
+            You&apos;re in. 🎉
           </h1>
-          <p className="text-lg mb-2" style={{ color: "#0A1929" }}>
-            Check your email for your dashboard access link — it&apos;ll arrive in the next few minutes.
+
+          <p style={{ fontSize: "16px", color: "#00BFA6", fontWeight: 600, margin: "0 0 24px" }}>
+            Welcome to Cited.
           </p>
-          <p className="mb-6" style={{ color: "#555" }}>
-            Your bios will be ready within 72 hours.
-          </p>
-          <div className="rounded-lg p-4 inline-block" style={{ background: "#F0FDF9", border: "1px solid #00BFA6" }}>
-            <p className="text-sm font-medium" style={{ color: "#00BFA6" }}>
-              Submission received
-            </p>
+
+          <div style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "10px", padding: "24px", marginBottom: "24px", textAlign: "left" }}>
+            <div style={{ display: "flex", gap: "12px", marginBottom: "14px", alignItems: "flex-start" }}>
+              <span style={{ color: "#00BFA6", fontWeight: 700, flexShrink: 0 }}>→</span>
+              <p style={{ fontSize: "14px", color: "#cbd5e1", lineHeight: 1.7, margin: 0 }}>
+                <strong style={{ color: "#fff" }}>Your bios are being built now.</strong> Optimized profiles for Google, LinkedIn, Zillow, Yelp, and Realtor.com — ready within 72 hours.
+              </p>
+            </div>
+            <div style={{ display: "flex", gap: "12px", marginBottom: "14px", alignItems: "flex-start" }}>
+              <span style={{ color: "#00BFA6", fontWeight: 700, flexShrink: 0 }}>→</span>
+              <p style={{ fontSize: "14px", color: "#cbd5e1", lineHeight: 1.7, margin: 0 }}>
+                <strong style={{ color: "#fff" }}>Check your email</strong> — your dashboard access link is on its way.
+              </p>
+            </div>
+            <div style={{ display: "flex", gap: "12px", alignItems: "flex-start" }}>
+              <span style={{ color: "#00BFA6", fontWeight: 700, flexShrink: 0 }}>→</span>
+              <p style={{ fontSize: "14px", color: "#cbd5e1", lineHeight: 1.7, margin: 0 }}>
+                We&apos;ll be in touch personally within 24 hours.
+              </p>
+            </div>
           </div>
+
+          <p style={{ fontSize: "12px", color: "#4a6380" }}>
+            Cited · AI Visibility for Real Estate Professionals · citedagent.com
+          </p>
         </div>
       </div>
     );
@@ -438,7 +458,7 @@ function IntakeForm() {
               <a href="#" style={{ color: "#00BFA6", textDecoration: "underline" }}>
                 Terms of Service
               </a>{" "}
-              and understand this is a free 90-day founding membership.
+              and understand the first 90 days are free.
             </span>
           </label>
 
