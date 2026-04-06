@@ -250,22 +250,26 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
             First 90 days free. No commitment.
           </h2>
           <p style={{ fontSize: '14px', color: '#64748b', margin: '0 0 24px', lineHeight: 1.6 }}>
-            We&apos;re taking on 3–5 founding clients in {market}.<br />
-            After 90 days, you&apos;ll have the data to decide if it&apos;s working.
+            3–5 founding spots available in {market}.<br />
+            After 90 days, continue at $800/month — only if the score moved.
           </p>
-          <a
-            href="https://calendly.com/radleyraven/cited"
-            style={{
-              display: 'inline-block', background: '#00BFA6', color: '#fff',
-              fontWeight: 700, fontSize: '15px', padding: '15px 40px',
-              borderRadius: '8px', textDecoration: 'none', letterSpacing: '0.3px'
-            }}
-          >
-            Book a 15-Min Call →
+
+          {/* Primary */}
+          <a href="https://citedagent.com/intake" style={{ display: 'block', background: '#00BFA6', color: '#fff', fontWeight: 700, fontSize: '15px', padding: '15px 36px', borderRadius: '8px', textDecoration: 'none', letterSpacing: '0.3px', marginBottom: '10px' }}>
+            Claim Your Founding Spot →
           </a>
-          <p style={{ fontSize: '12px', color: '#94a3b8', marginTop: '14px' }}>
-            Or reply directly to Radley&apos;s email — we&apos;ll take it from there.
-          </p>
+
+          {/* Secondary */}
+          <a href="https://calendly.com/radleyraven/cited" style={{ display: 'block', background: '#fff', color: '#0A1929', fontWeight: 600, fontSize: '14px', padding: '13px 36px', borderRadius: '8px', textDecoration: 'none', border: '1.5px solid #e2e8f0', marginBottom: '10px' }}>
+            Book a 15-Min Call First
+          </a>
+
+          {/* Tertiary */}
+          <a href="/30-days" style={{ display: 'block', fontSize: '13px', color: '#00BFA6', fontWeight: 600, textDecoration: 'none', padding: '6px 0' }}>
+            See what happens in your first 30 days →
+          </a>
+
+          <p style={{ fontSize: '12px', color: '#94a3b8', margin: '12px 0 0' }}>Questions? Reply directly to Radley&apos;s email.</p>
         </div>
 
         <div style={{ textAlign: 'center', marginTop: '28px', fontSize: '11px', color: '#94a3b8' }}>
