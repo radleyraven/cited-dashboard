@@ -1,5 +1,4 @@
 import { createServerClient } from '@supabase/ssr'
-import { cookies } from 'next/headers'
 import { NextResponse } from 'next/server'
 
 export async function GET(request: Request) {
@@ -9,7 +8,9 @@ export async function GET(request: Request) {
   const type = searchParams.get('type') as 'magiclink' | 'signup' | 'recovery' | 'email' | null
   const next = searchParams.get('next') ?? '/dashboard'
 
-  const cookieStore = await cookies()
+  // Create the redirect response FIRST — cookies must be set on THIS response
+  const redirectResponse = NextResponse.redirect(`${origin}${next}`)
+  const errorResponse = NextResponse.redirect(`${origin}/login`)
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -17,11 +18,13 @@ export async function GET(request: Request) {
     {
       cookies: {
         getAll() {
-          return cookieStore.getAll()
+          // Read cookies from the incoming request
+          return request.cookies.getAll()
         },
         setAll(cookiesToSet) {
+          // Write cookies to the redirect response
           cookiesToSet.forEach(({ name, value, options }) => {
-            cookieStore.set(name, value, options)
+            redirectResponse.cookies.set(name, value, options)
           })
         },
       },
@@ -31,16 +34,16 @@ export async function GET(request: Request) {
   if (code) {
     const { error } = await supabase.auth.exchangeCodeForSession(code)
     if (!error) {
-      return NextResponse.redirect(`${origin}${next}`)
+      return redirectResponse
     }
   }
 
   if (token_hash && type) {
     const { error } = await supabase.auth.verifyOtp({ token_hash, type })
     if (!error) {
-      return NextResponse.redirect(`${origin}${next}`)
+      return redirectResponse
     }
   }
 
-  return NextResponse.redirect(`${origin}/login`)
+  return errorResponse
 }
