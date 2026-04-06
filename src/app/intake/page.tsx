@@ -133,7 +133,7 @@ function IntakeForm() {
         await supabase.auth.signInWithOtp({
           email: form.email.trim(),
           options: {
-            emailRedirectTo: "https://citedagent.com/auth/callback?next=/dashboard",
+            emailRedirectTo: "https://citedagent.com/auth/callback?next=/",
           },
         });
       } catch {

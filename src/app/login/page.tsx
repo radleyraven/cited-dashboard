@@ -30,7 +30,7 @@ function LoginContent() {
           setVerifying(false);
         } else if (data.session) {
           // Session is set — redirect to next param or dashboard
-          const next = searchParams.get('next') ?? '/dashboard';
+          const next = searchParams.get('next') ?? '/';
           router.push(next);
         }
       });
@@ -39,7 +39,7 @@ function LoginContent() {
     // Also check if already logged in
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session) {
-        const next = searchParams.get('next') ?? '/dashboard';
+        const next = searchParams.get('next') ?? '/';
         router.push(next);
       }
     });

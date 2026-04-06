@@ -11,7 +11,7 @@ function CallbackHandler() {
       try {
         // Get next destination from query params
         const searchParams = new URLSearchParams(window.location.search);
-        const next = searchParams.get('next') ?? '/dashboard';
+        const next = searchParams.get('next') ?? '/';
 
         // Parse hash fragment — Supabase puts session here after verification
         const hash = window.location.hash.substring(1);
