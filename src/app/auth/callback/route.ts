@@ -8,7 +8,7 @@ export async function GET(request: Request) {
   const token_hash = searchParams.get("token_hash");
   const type = searchParams.get("type") as "magiclink" | "signup" | "recovery" | "invite" | "email" | null;
   const code = searchParams.get("code");
-  const next = searchParams.get("next") ?? "/";
+  const next = searchParams.get("next") ?? "/dashboard";
 
   // Supabase PKCE flow (newer versions)
   if (code) {
