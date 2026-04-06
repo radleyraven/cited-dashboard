@@ -18,6 +18,7 @@ type FormData = {
   yearsInMarket: string;
   topTransactions: string;
   differentiator: string;
+  mlsFile: File | null;
   reviewPlatforms: string[];
   reviewOther: string;
   termsAccepted: boolean;
@@ -48,6 +49,7 @@ const initialForm: FormData = {
   yearsInMarket: "",
   topTransactions: "",
   differentiator: "",
+  mlsFile: null,
   reviewPlatforms: [],
   reviewOther: "",
   termsAccepted: false,
@@ -126,6 +128,21 @@ function IntakeForm() {
       if (!res.ok) {
         const data = await res.json();
         throw new Error(data.error || "Submission failed");
+      }
+
+      // Upload MLS file to Supabase Storage — non-blocking, intake already saved.
+      if (form.mlsFile) {
+        try {
+          const supabaseStorage = createSupabaseBrowserClient();
+          const fileName = `${form.email}/${Date.now()}-${form.mlsFile.name}`;
+          await supabaseStorage.storage.from('mls-uploads').upload(fileName, form.mlsFile, {
+            cacheControl: '3600',
+            upsert: false,
+          });
+        } catch {
+          // Don't block on upload error — intake is already saved
+          console.warn('MLS file upload failed — intake was still saved.');
+        }
       }
 
       // Send magic link — non-blocking. Intake is already saved above.
@@ -345,6 +362,25 @@ function IntakeForm() {
                 className={`${inputClass} ${inputFocusRing}`}
                 style={inputStyle}
               />
+            </Field>
+            <Field label="Upload your MLS transaction history" hint="CSV, PDF, or Excel from your MLS. We'll extract DOM, deal concentration, volume trends, and positioning data — no formatting needed.">
+              <label style={{
+                display: 'flex', alignItems: 'center', gap: '12px',
+                border: '1px solid #D1D5DB', borderRadius: '8px',
+                padding: '12px 16px', cursor: 'pointer',
+                background: '#FAFAFA', transition: 'border-color 0.15s'
+              }}>
+                <input
+                  type="file"
+                  accept=".csv,.pdf,.xlsx,.xls"
+                  style={{ display: 'none' }}
+                  onChange={(e) => set('mlsFile', e.target.files?.[0] ?? null)}
+                />
+                <span style={{ fontSize: '20px' }}>📎</span>
+                <span style={{ fontSize: '14px', color: form.mlsFile ? '#0A1929' : '#94a3b8' }}>
+                  {form.mlsFile ? form.mlsFile.name : 'Choose file or drag and drop'}
+                </span>
+              </label>
             </Field>
             <Field label="What makes you different from other agents in your market?" required hint="2–3 sentences is perfect. Think: your specialty, your market knowledge, or how you work with clients.">
               <textarea
