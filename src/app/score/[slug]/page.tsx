@@ -33,6 +33,7 @@ const prefillData: Record<string, Record<string, string>> = {
     realtorUrl: 'https://realtor.com/realestateagents/maria-santos',
     yearsInMarket: '7',
     topTransactions: 'Approx. $48M career volume across Carlsbad/Encinitas',
+    hideMLSUpload: 'true', // CA agent — Radley pulls MLS data directly from SDMLS/CRMLS
   },
 };
 

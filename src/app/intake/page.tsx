@@ -77,6 +77,9 @@ const REVIEW_OPTIONS = [
 
 function IntakeForm() {
   const searchParams = useSearchParams();
+  // Hide MLS upload for CA/WA RE agents — Radley pulls MLS data directly
+  const hideMLSUpload = searchParams.get('hideMLSUpload') === 'true';
+
   const [form, setForm] = useState<FormData>(() => {
     // Pre-fill from URL params (passed from score page audit data)
     return {
@@ -363,25 +366,27 @@ function IntakeForm() {
                 style={inputStyle}
               />
             </Field>
-            <Field label="Upload your MLS transaction history" hint="CSV, PDF, or Excel from your MLS. We'll extract DOM, deal concentration, volume trends, and positioning data — no formatting needed.">
-              <label style={{
-                display: 'flex', alignItems: 'center', gap: '12px',
-                border: '1px solid #D1D5DB', borderRadius: '8px',
-                padding: '12px 16px', cursor: 'pointer',
-                background: '#FAFAFA', transition: 'border-color 0.15s'
-              }}>
-                <input
-                  type="file"
-                  accept=".csv,.pdf,.xlsx,.xls"
-                  style={{ display: 'none' }}
-                  onChange={(e) => set('mlsFile', e.target.files?.[0] ?? null)}
-                />
-                <span style={{ fontSize: '20px' }}>📎</span>
-                <span style={{ fontSize: '14px', color: form.mlsFile ? '#0A1929' : '#94a3b8' }}>
-                  {form.mlsFile ? form.mlsFile.name : 'Choose file or drag and drop'}
-                </span>
-              </label>
-            </Field>
+            {!hideMLSUpload && (
+              <Field label="Upload your MLS transaction history" hint="CSV, PDF, or Excel from your MLS. We'll extract DOM, deal concentration, volume trends, and positioning data — no formatting needed.">
+                <label style={{
+                  display: 'flex', alignItems: 'center', gap: '12px',
+                  border: '1px solid #D1D5DB', borderRadius: '8px',
+                  padding: '12px 16px', cursor: 'pointer',
+                  background: '#FAFAFA', transition: 'border-color 0.15s'
+                }}>
+                  <input
+                    type="file"
+                    accept=".csv,.pdf,.xlsx,.xls"
+                    style={{ display: 'none' }}
+                    onChange={(e) => set('mlsFile', e.target.files?.[0] ?? null)}
+                  />
+                  <span style={{ fontSize: '20px' }}>📎</span>
+                  <span style={{ fontSize: '14px', color: form.mlsFile ? '#0A1929' : '#94a3b8' }}>
+                    {form.mlsFile ? form.mlsFile.name : 'Choose file or drag and drop'}
+                  </span>
+                </label>
+              </Field>
+            )}
             <Field label="What makes you different from other agents in your market?" required hint="2–3 sentences is perfect. Think: your specialty, your market knowledge, or how you work with clients.">
               <textarea
                 required
