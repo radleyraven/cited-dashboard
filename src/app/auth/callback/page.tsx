@@ -1,52 +1,83 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { createSupabaseBrowserClient } from '@/lib/supabase-browser';
 import { Suspense } from 'react';
 
-const supabase = createSupabaseBrowserClient();
-
 function CallbackHandler() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
   const [msg, setMsg] = useState('Signing you in...');
 
   useEffect(() => {
-    const next = searchParams.get('next') ?? '/dashboard';
+    async function handleCallback() {
+      try {
+        // Get next destination from query params
+        const searchParams = new URLSearchParams(window.location.search);
+        const next = searchParams.get('next') ?? '/dashboard';
 
-    // onAuthStateChange fires when Supabase processes hash fragment
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      if ((event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') && session) {
-        subscription.unsubscribe();
-        // Small delay to allow cookie to be written before middleware checks it
-        setTimeout(() => {
-          window.location.href = next; // Hard redirect — not router.replace — ensures fresh cookie is sent
-        }, 200);
+        // Parse hash fragment — Supabase puts session here after verification
+        const hash = window.location.hash.substring(1);
+        const hashParams = new URLSearchParams(hash);
+        const access_token = hashParams.get('access_token');
+        const refresh_token = hashParams.get('refresh_token');
+
+        if (access_token && refresh_token) {
+          // Import dynamically to avoid SSR issues
+          const { createSupabaseBrowserClient } = await import('@/lib/supabase-browser');
+          const supabase = createSupabaseBrowserClient();
+          
+          const { error } = await supabase.auth.setSession({
+            access_token,
+            refresh_token,
+          });
+
+          if (error) throw error;
+
+          // Hard redirect to ensure fresh request with cookie
+          window.location.replace(next);
+          return;
+        }
+
+        // No hash — check for token_hash in query params (email confirmation flow)
+        const token_hash = searchParams.get('token_hash');
+        const type = searchParams.get('type');
+
+        if (token_hash && type) {
+          const { createSupabaseBrowserClient } = await import('@/lib/supabase-browser');
+          const supabase = createSupabaseBrowserClient();
+
+          const { error } = await supabase.auth.verifyOtp({
+            token_hash,
+            type: type as 'magiclink' | 'signup' | 'recovery' | 'email',
+          });
+
+          if (error) throw error;
+
+          window.location.replace(next);
+          return;
+        }
+
+        // Check if already logged in
+        const { createSupabaseBrowserClient } = await import('@/lib/supabase-browser');
+        const supabase = createSupabaseBrowserClient();
+        const { data: { session } } = await supabase.auth.getSession();
+
+        if (session) {
+          window.location.replace(next);
+          return;
+        }
+
+        // Nothing worked
+        setMsg('Could not sign in. Please try again.');
+        setTimeout(() => { window.location.replace('/login'); }, 2000);
+
+      } catch (err) {
+        console.error('Auth callback error:', err);
+        setMsg('Something went wrong. Redirecting...');
+        setTimeout(() => { window.location.replace('/login'); }, 2000);
       }
-    });
+    }
 
-    // Check if already signed in
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session) {
-        subscription.unsubscribe();
-        setTimeout(() => {
-          window.location.href = next;
-        }, 200);
-      }
-    });
-
-    const timeout = setTimeout(() => {
-      subscription.unsubscribe();
-      setMsg('Could not sign in. Try again.');
-      setTimeout(() => { window.location.href = '/login'; }, 1500);
-    }, 8000);
-
-    return () => {
-      subscription.unsubscribe();
-      clearTimeout(timeout);
-    };
-  }, [searchParams]);
+    handleCallback();
+  }, []);
 
   return (
     <div style={{
