@@ -28,8 +28,9 @@ function LoginContent() {
           setError('Verification failed: ' + error.message);
           setVerifying(false);
         } else if (data.session) {
-          // Session is set — redirect to dashboard
-          router.push('/');
+          // Session is set — redirect to next param or dashboard
+          const next = searchParams.get('next') ?? '/dashboard';
+          router.push(next);
         }
       });
     }
@@ -37,7 +38,8 @@ function LoginContent() {
     // Also check if already logged in
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session) {
-        router.push('/');
+        const next = searchParams.get('next') ?? '/dashboard';
+        router.push(next);
       }
     });
   }, [searchParams, router]);
