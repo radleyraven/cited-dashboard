@@ -306,10 +306,11 @@ function IntakeForm() {
                 style={inputStyle}
               />
             </Field>
-            <Field label="What makes you different from other agents in your market?" required>
+            <Field label="What makes you different from other agents in your market?" required hint="2–3 sentences is perfect. Think: your specialty, your market knowledge, or how you work with clients.">
               <textarea
                 required
-                rows={4}
+                rows={3}
+                placeholder="e.g., I specialize in luxury listings in Carlsbad and La Costa. I've lived here for 15 years and know every neighborhood intimately. Clients tell me I'm calm under pressure and always available."
                 value={form.differentiator}
                 onChange={(e) => set("differentiator", e.target.value)}
                 className={`${inputClass} ${inputFocusRing}`}
@@ -447,13 +448,14 @@ function Section({ number, title, children }: { number: number; title: string; c
   );
 }
 
-function Field({ label, required, children }: { label: string; required?: boolean; children: React.ReactNode }) {
+function Field({ label, required, hint, children }: { label: string; required?: boolean; hint?: string; children: React.ReactNode }) {
   return (
     <label className="block">
       <span className="block text-sm font-medium mb-1" style={{ color: "#0A1929" }}>
         {label}
         {required && <span style={{ color: "#DC2626" }}> *</span>}
       </span>
+      {hint && <span className="block text-xs mb-2" style={{ color: "#94a3b8" }}>{hint}</span>}
       {children}
     </label>
   );
