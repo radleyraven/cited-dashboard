@@ -264,20 +264,21 @@ function IntakeForm() {
 
           {/* Section 2 */}
           <Section number={2} title="Markets & Neighborhoods">
-            <Field label="Primary markets you serve — cities" required>
+            <Field label="Primary markets you serve — cities" required hint="List the cities or areas where you actively work. This is how we target your AI visibility.">
               <textarea
                 required
-                rows={3}
+                rows={2}
+                placeholder="e.g., Carlsbad, Encinitas, Solana Beach"
                 value={form.primaryMarkets}
                 onChange={(e) => set("primaryMarkets", e.target.value)}
                 className={`${inputClass} ${inputFocusRing}`}
                 style={inputStyle}
               />
             </Field>
-            <Field label="Specific neighborhoods within those markets">
+            <Field label="Specific neighborhoods within those markets" hint="The more specific, the better. These feed directly into your AI query targeting.">
               <textarea
-                rows={3}
-                placeholder="e.g., Rancho Pacifica, La Costa Oaks, Bird Rock"
+                rows={2}
+                placeholder="e.g., Rancho Pacifica, La Costa Oaks, Bird Rock, Aviara"
                 value={form.neighborhoods}
                 onChange={(e) => set("neighborhoods", e.target.value)}
                 className={`${inputClass} ${inputFocusRing}`}
@@ -287,6 +288,7 @@ function IntakeForm() {
             <Field label="How many years in your market?">
               <input
                 type="text"
+                placeholder="e.g., 7"
                 value={form.yearsInMarket}
                 onChange={(e) => set("yearsInMarket", e.target.value)}
                 className={`${inputClass} ${inputFocusRing}`}
@@ -297,9 +299,10 @@ function IntakeForm() {
 
           {/* Section 3 */}
           <Section number={3} title="Your Story">
-            <Field label="Top 3–5 transactions you are most proud of">
+            <Field label="Top 3–5 transactions you are most proud of" hint="Address, sale price, and one sentence on why it was notable. These become the proof points in your AI-optimized bio.">
               <textarea
                 rows={4}
+                placeholder="e.g., 4656 Whispering Woods Ct, Carlsbad — $2.1M, multiple offers, sold in 6 days&#10;7452 Neptune Ave, Carlsbad — $3.4M luxury listing, represented seller&#10;14473 Emerald Ridge, RSF — $4.8M, off-market deal"
                 value={form.topTransactions}
                 onChange={(e) => set("topTransactions", e.target.value)}
                 className={`${inputClass} ${inputFocusRing}`}
