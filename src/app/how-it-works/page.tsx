@@ -267,7 +267,7 @@ export default function HowItWorksPage() {
           <div style={{ fontSize: '11px', fontWeight: 700, color: '#D4A830', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '12px' }}>Ready to start?</div>
           <h2 style={{ fontSize: '24px', fontWeight: 800, color: '#0A1929', margin: '0 0 8px' }}>Claim your founding spot.</h2>
           <p style={{ fontSize: '14px', color: '#64748b', margin: '0 0 28px', lineHeight: 1.6 }}>
-            3–5 spots available. First 90 days free.<br />Takes 10 minutes to get started.
+            3–5 spots available. First 90 days free.<br />Takes 5 minutes or less to get started.
           </p>
 
           <a href="https://citedagent.com/intake" style={{ display: 'block', background: '#00BFA6', color: '#fff', fontWeight: 700, fontSize: '16px', padding: '16px 36px', borderRadius: '8px', textDecoration: 'none', letterSpacing: '0.3px', marginBottom: '12px' }}>

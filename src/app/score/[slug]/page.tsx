@@ -122,14 +122,22 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
 
       <main style={{ maxWidth: '660px', margin: '0 auto', padding: '36px 20px 48px' }}>
 
-        {/* Intro */}
+        {/* Intro + top CTA (convenience catch for already-converted visitors) */}
         <div style={{ marginBottom: '20px' }}>
-          <h1 style={{ fontSize: '24px', fontWeight: 700, color: '#0A1929', margin: '0 0 6px', lineHeight: 1.3 }}>
-            {firstName}, here&apos;s your AI Visibility Score for {market}.
-          </h1>
-          <p style={{ fontSize: '13px', color: '#94a3b8', margin: 0 }}>
-            {brokerage} · {market} · Generated {new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
-          </p>
+          <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap' }}>
+            <div style={{ flex: 1, minWidth: '200px' }}>
+              <h1 style={{ fontSize: '24px', fontWeight: 700, color: '#0A1929', margin: '0 0 6px', lineHeight: 1.3 }}>
+                {firstName}, here&apos;s your AI Visibility Score for {market}.
+              </h1>
+              <p style={{ fontSize: '13px', color: '#94a3b8', margin: 0 }}>
+                {brokerage} · {market} · Generated {new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+              </p>
+            </div>
+            {/* Top CTA — smaller, convenience catch per Ash/Blanks research */}
+            <a href={intakeUrl} style={{ flexShrink: 0, display: 'inline-block', background: '#00BFA6', color: '#fff', fontWeight: 700, fontSize: '13px', padding: '10px 20px', borderRadius: '6px', textDecoration: 'none', letterSpacing: '0.2px', alignSelf: 'center' }}>
+              Claim My Spot →
+            </a>
+          </div>
         </div>
 
         {/* Context block — sets up the score reveal */}
