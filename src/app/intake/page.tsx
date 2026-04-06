@@ -401,47 +401,7 @@ function IntakeForm() {
             </div>
           </Section>
 
-          {/* Section 6 */}
-          <Section number={6} title="Google Business Profile Access">
-            <div
-              className="rounded-lg p-4 mb-4 text-sm leading-relaxed"
-              style={{ background: "#F8FAFC", border: "1px solid #E2E8F0", color: "#334155" }}
-            >
-              To optimize your GBP, please add{" "}
-              <strong>radley@citedagent.com</strong> as a Manager.
-              <br /><br />
-              Go to{" "}
-              <strong>business.google.com</strong> &rarr; Your Business &rarr;
-              Settings &rarr; Managers &rarr; Invite &rarr;{" "}
-              <strong>radley@citedagent.com</strong> &rarr; Manager role
-            </div>
-            <div className="space-y-2">
-              <label className="flex items-center gap-3 cursor-pointer">
-                <input
-                  type="radio"
-                  name="gbpStatus"
-                  checked={form.gbpStatus === "added"}
-                  onChange={() => set("gbpStatus", "added")}
-                  style={{ accentColor: "#00BFA6" }}
-                />
-                <span className="text-sm" style={{ color: "#0A1929" }}>
-                  I have added radley@citedagent.com as a GBP Manager
-                </span>
-              </label>
-              <label className="flex items-center gap-3 cursor-pointer">
-                <input
-                  type="radio"
-                  name="gbpStatus"
-                  checked={form.gbpStatus === "no-gbp"}
-                  onChange={() => set("gbpStatus", "no-gbp")}
-                  style={{ accentColor: "#00BFA6" }}
-                />
-                <span className="text-sm" style={{ color: "#0A1929" }}>
-                  I do not have a GBP yet
-                </span>
-              </label>
-            </div>
-          </Section>
+          {/* GBP Access — removed from intake. Requested separately after Day 1 affirm text. */}
 
           {/* Submit */}
           <button
