@@ -1,6 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 
 type FormData = {
   fullName: string;
@@ -62,8 +64,20 @@ const REVIEW_OPTIONS = [
   "Yelp",
 ];
 
-export default function IntakePage() {
-  const [form, setForm] = useState<FormData>(initialForm);
+function IntakeForm() {
+  const searchParams = useSearchParams();
+  const [form, setForm] = useState<FormData>(() => {
+    // Pre-fill from URL params (passed from score page audit data)
+    return {
+      ...initialForm,
+      fullName: searchParams.get('fullName') || '',
+      brokerage: searchParams.get('brokerage') || '',
+      primaryMarkets: searchParams.get('primaryMarkets') || '',
+      zillowUrl: searchParams.get('zillowUrl') || '',
+      yearsInMarket: searchParams.get('yearsInMarket') || '',
+      topTransactions: searchParams.get('topTransactions') || '',
+    };
+  });
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState("");
@@ -480,6 +494,14 @@ export default function IntakePage() {
         </form>
       </main>
     </div>
+  );
+}
+
+export default function IntakePage() {
+  return (
+    <Suspense fallback={<div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'sans-serif', color: '#64748b' }}>Loading...</div>}>
+      <IntakeForm />
+    </Suspense>
   );
 }
 

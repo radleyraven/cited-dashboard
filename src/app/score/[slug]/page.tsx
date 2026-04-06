@@ -18,6 +18,21 @@ type ProspectData = {
 
 // Score page prospects — add each prospect before sending cold email
 // Projected score protocol: current score + platform gap points. Target range 62-68. Never show 80+.
+// A/B test: [slug] = Version A ("AI visibility"), [slug]-b = Version B ("AI Citation Optimization")
+// Track via Vercel Analytics — whichever slug gets more intake form clicks wins.
+
+// Pre-fill data — what we know from the audit before Maria ever fills the form
+const prefillData: Record<string, Record<string, string>> = {
+  'maria-santos': {
+    fullName: 'Maria Santos',
+    brokerage: 'Compass',
+    primaryMarkets: 'Carlsbad, Encinitas, Solana Beach',
+    zillowUrl: 'zillow.com/profile/mariasantos',
+    yearsInMarket: '7',
+    topTransactions: 'Approx. $48M career volume across Carlsbad/Encinitas',
+  },
+};
+
 const prospects: Record<string, ProspectData> = {
   'maria-santos': {
     name: 'Maria Santos',
@@ -33,6 +48,7 @@ const prospects: Record<string, ProspectData> = {
       // Wildcard: highest-impact item from audit (varies by prospect)
       { platform: 'LinkedIn Articles', status: 'missing', impact: 'Medium', points: 7 },
       // Additional optimizations (shown as summary)
+      { platform: 'Yelp Profile (Tier 1 — AI citation driver)', status: 'missing', impact: 'Low', points: 8 },
       { platform: 'Google Reviews (keyword-rich)', status: 'missing', impact: 'Low', points: 5 },
       { platform: 'FastExpert', status: 'missing', impact: 'Low', points: 4 },
       { platform: 'Bing Places', status: 'missing', impact: 'Low', points: 4 },
@@ -67,8 +83,16 @@ function ScoreCircle({ score, color, size = 100 }: { score: number; color: strin
 
 export default async function ScorePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const prospect = prospects[slug];
+  // Support A/B test: strip '-b' suffix to get prospect data
+  const baseSlug = slug.endsWith('-b') ? slug.slice(0, -2) : slug;
+  const isVariantB = slug.endsWith('-b');
+  const prospect = prospects[baseSlug];
   if (!prospect) notFound();
+
+  // Pre-fill URL params for intake form
+  const prefill = prefillData[baseSlug] || {};
+  const prefillParams = new URLSearchParams(prefill).toString();
+  const intakeUrl = `https://citedagent.com/intake${prefillParams ? '?' + prefillParams : ''}`;
 
   const { name, brokerage, market, score, competitorScore, gaps } = prospect;
   const firstName = name.split(' ')[0];
@@ -83,7 +107,7 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
       <header style={{ background: '#0A1929', padding: '20px 28px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <div>
           <div style={{ fontSize: '20px', fontWeight: 800, letterSpacing: '5px', color: '#00BFA6' }}>CITED</div>
-          <div style={{ fontSize: '10px', color: '#4a6380', letterSpacing: '1.5px', textTransform: 'uppercase', marginTop: '3px' }}>AI Visibility for Real Estate Professionals</div>
+          <div style={{ fontSize: '10px', color: '#4a6380', letterSpacing: '1.5px', textTransform: 'uppercase', marginTop: '3px' }}>{isVariantB ? 'AI Citation Optimization for Real Estate Professionals' : 'AI Visibility for Real Estate Professionals'}</div>
         </div>
         <div style={{ fontSize: '11px', color: '#4a6380', textAlign: 'right' }}>
           Powered by <span style={{ color: '#00BFA6', fontWeight: 700 }}>PRISM</span>
@@ -269,8 +293,8 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
             After 90 days, continue at $800/month — only if the score moved.
           </p>
 
-          {/* Primary */}
-          <a href="https://citedagent.com/intake" style={{ display: 'block', background: '#00BFA6', color: '#fff', fontWeight: 700, fontSize: '15px', padding: '15px 36px', borderRadius: '8px', textDecoration: 'none', letterSpacing: '0.3px', marginBottom: '10px' }}>
+          {/* Primary — pre-filled with audit data */}
+          <a href={intakeUrl} style={{ display: 'block', background: '#00BFA6', color: '#fff', fontWeight: 700, fontSize: '15px', padding: '15px 36px', borderRadius: '8px', textDecoration: 'none', letterSpacing: '0.3px', marginBottom: '10px' }}>
             Claim My Founding Spot →
           </a>
 
