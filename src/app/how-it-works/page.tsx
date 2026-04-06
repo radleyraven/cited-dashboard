@@ -63,10 +63,10 @@ export default function HowItWorksPage() {
             The Problem
           </div>
           <h1 style={{ fontSize: '32px', fontWeight: 800, color: '#0A1929', margin: '0 0 16px', lineHeight: 1.25 }}>
-            AI is changing how sellers and buyers find agents.<br />Most agents are invisible to it.
+            Traditional Google rankings are no longer enough.<br />AI is now the first stop — and most agents are invisible to it.
           </h1>
           <p style={{ fontSize: '16px', color: '#4a5568', lineHeight: 1.8, margin: '0 0 20px' }}>
-            Sellers and buyers used to Google "best real estate agent in Carlsbad" and scroll through results. Now they ask ChatGPT, Claude, and Perplexity — and those AI models give one answer. Not a list. One recommendation.
+            Sellers and buyers used to Google an agent&apos;s name and scroll through results. Now they ask ChatGPT, Perplexity, Google AI Overviews, and Gemini — and those systems give one answer. Not a list. One recommendation. And traditional SEO doesn&apos;t move the needle on any of them.
           </p>
           <p style={{ fontSize: '16px', color: '#4a5568', lineHeight: 1.8, margin: 0 }}>
             The agents who get recommended have something in common: their information exists in the right places, in the right format, for AI to read and cite. It has nothing to do with how good they are. It&apos;s a data problem — and it&apos;s fixable.

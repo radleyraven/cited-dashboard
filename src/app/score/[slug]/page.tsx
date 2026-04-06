@@ -114,7 +114,7 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
             <div style={{ flex: 1 }}>
               <div style={{ fontSize: '11px', fontWeight: 700, color: '#D4A830', letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: '8px' }}>Why This Matters</div>
               <p style={{ fontSize: '12px', color: '#94a3b8', lineHeight: 1.7, margin: 0 }}>
-                Sellers and buyers in your market are increasingly using AI — ChatGPT, Perplexity, Google AI Overviews — to find and vet agents before making contact. Unlike Google, AI doesn&apos;t rank websites. It <span style={{ color: '#fff', fontWeight: 600 }}>cites agents it already knows</span>, from structured signals across 14+ platforms. Your Citation Score measures how visible and citable you are in those AI searches — and where the gaps are.
+                Traditional Google rankings are no longer enough. AI tools — ChatGPT, Perplexity, Google AI Overviews, Gemini — are now the first stop for sellers and buyers researching agents in {market}. These systems don&apos;t rank websites the way Google used to. They <span style={{ color: '#fff', fontWeight: 600 }}>cite agents they already know</span>, from structured signals across 14+ platforms. Your Citation Score measures how visible and citable you are across all of them — and where the gaps are.
               </p>
             </div>
           </div>
