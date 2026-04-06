@@ -113,7 +113,7 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
             </div>
             <div style={{ flex: 1 }}>
               <div style={{ fontSize: '11px', fontWeight: 700, color: '#D4A830', letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: '8px' }}>Why This Matters</div>
-              <p style={{ fontSize: '13px', color: '#94a3b8', lineHeight: 1.8, margin: '0 0 14px' }}>
+              <p style={{ fontSize: '12px', color: '#94a3b8', lineHeight: 1.7, margin: '0 0 14px' }}>
                 Sellers and buyers are increasingly using AI to find and vet agents before making contact. Unlike Google, AI doesn&apos;t rank websites — it <span style={{ color: '#fff', fontWeight: 600 }}>cites agents it already knows</span> from structured signals across 14+ platforms.
               </p>
               {/* AI model chips */}
