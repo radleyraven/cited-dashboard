@@ -5,7 +5,6 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { createSupabaseBrowserClient } from '@/lib/supabase-browser';
 import { Suspense } from 'react';
 
-// CRITICAL: initialize at module level so hash fragment is captured on page load
 const supabase = createSupabaseBrowserClient();
 
 function CallbackHandler() {
@@ -16,44 +15,44 @@ function CallbackHandler() {
   useEffect(() => {
     const next = searchParams.get('next') ?? '/dashboard';
 
-    // Listen for SIGNED_IN — fires when session is set from hash or code
+    // onAuthStateChange fires when Supabase processes hash fragment
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       if ((event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') && session) {
         subscription.unsubscribe();
-        router.replace(next);
+        // Small delay to allow cookie to be written before middleware checks it
+        setTimeout(() => {
+          window.location.href = next; // Hard redirect — not router.replace — ensures fresh cookie is sent
+        }, 200);
       }
     });
 
-    // Also check immediately — session may already be set
+    // Check if already signed in
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session) {
         subscription.unsubscribe();
-        router.replace(next);
+        setTimeout(() => {
+          window.location.href = next;
+        }, 200);
       }
     });
 
-    // 6 second fallback
     const timeout = setTimeout(() => {
       subscription.unsubscribe();
-      setMsg('Something went wrong. Redirecting...');
-      router.replace('/login');
-    }, 6000);
+      setMsg('Could not sign in. Try again.');
+      setTimeout(() => { window.location.href = '/login'; }, 1500);
+    }, 8000);
 
     return () => {
       subscription.unsubscribe();
       clearTimeout(timeout);
     };
-  }, [router, searchParams]);
+  }, [searchParams]);
 
   return (
     <div style={{
-      minHeight: '100vh',
-      background: '#0A1929',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      flexDirection: 'column',
-      gap: '16px',
+      minHeight: '100vh', background: '#0A1929',
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      flexDirection: 'column', gap: '16px',
       fontFamily: '-apple-system, BlinkMacSystemFont, sans-serif'
     }}>
       <div style={{ fontSize: '22px', fontWeight: 800, letterSpacing: '5px', color: '#00BFA6' }}>CITED</div>
@@ -65,10 +64,7 @@ function CallbackHandler() {
 export default function CallbackPage() {
   return (
     <Suspense fallback={
-      <div style={{
-        minHeight: '100vh', background: '#0A1929',
-        display: 'flex', alignItems: 'center', justifyContent: 'center'
-      }}>
+      <div style={{ minHeight: '100vh', background: '#0A1929', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <div style={{ fontSize: '22px', fontWeight: 800, letterSpacing: '5px', color: '#00BFA6' }}>CITED</div>
       </div>
     }>
