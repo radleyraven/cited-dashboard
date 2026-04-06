@@ -15,22 +15,24 @@ export default function Home() {
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <header className="text-white" style={{ background: '#0A1929' }}>
-        <div className="max-w-6xl mx-auto px-6 py-6 flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-bold tracking-widest" style={{ color: '#00BFA6' }}>CITED</h1>
-            <p className="text-sm text-gray-400 mt-1">AI Visibility Dashboard</p>
-          </div>
-          <div className="flex items-center gap-6">
-            <div className="flex items-center gap-4">
-              <Link href="/articles" className="text-sm text-gray-400 hover:text-white transition-colors">Articles</Link>
-              <Link href="/reviews" className="text-sm text-gray-400 hover:text-white transition-colors">Reviews</Link>
-              <Link href="/copy-kit" className="text-sm text-gray-400 hover:text-white transition-colors">Copy Kit</Link>
+        <div className="max-w-6xl mx-auto px-4 py-4 md:px-6 md:py-6">
+          {/* Top row: logo + sign out */}
+          <div className="flex items-center justify-between mb-3 md:mb-0">
+            <div>
+              <h1 className="text-xl md:text-2xl font-bold tracking-widest" style={{ color: '#00BFA6' }}>CITED</h1>
+              <p className="text-xs md:text-sm text-gray-400 mt-0.5">AI Visibility Dashboard</p>
             </div>
             <div className="text-right">
-              <div className="font-semibold">Radley Raven</div>
-              <div className="text-sm text-gray-400">The Oppenheim Group · Carlsbad</div>
+              <div className="font-semibold text-sm md:text-base">Radley Raven</div>
+              <div className="text-xs text-gray-400">Oppenheim Group · Carlsbad</div>
               <SignOutButton />
             </div>
+          </div>
+          {/* Nav row */}
+          <div className="flex items-center gap-4 md:gap-6 border-t border-white/10 pt-3 md:border-0 md:pt-0 md:absolute md:top-6 md:left-1/2 md:-translate-x-1/2">
+            <Link href="/articles" className="text-xs md:text-sm text-gray-400 hover:text-white transition-colors">Articles</Link>
+            <Link href="/reviews" className="text-xs md:text-sm text-gray-400 hover:text-white transition-colors">Reviews</Link>
+            <Link href="/copy-kit" className="text-xs md:text-sm text-gray-400 hover:text-white transition-colors">Copy Kit</Link>
           </div>
         </div>
       </header>
