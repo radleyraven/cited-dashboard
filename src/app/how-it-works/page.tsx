@@ -1,0 +1,240 @@
+export default function HowItWorksPage() {
+  const faqs = [
+    {
+      q: 'I already have a Zillow profile and Instagram. Isn\'t that enough?',
+      a: 'Those platforms are great for human discovery — but AI models don\'t read Instagram and largely ignore Zillow\'s unstructured content. AI builds recommendations from Google Business Profile, FastExpert, LinkedIn, and structured directory data. Most agents with strong social presence are still invisible to AI.',
+    },
+    {
+      q: 'How much time does this actually take?',
+      a: 'About 30 minutes in month 1. You fill out an intake form (10 min), review your profile copy before it goes live (10 min), and answer a 5-question article brief (10 min). After that, roughly 10-15 minutes per month to review and approve.',
+    },
+    {
+      q: 'How do I know my score will actually move?',
+      a: 'We run a PRISM re-scan every 30 days and show you the exact data. If the score doesn\'t move by Day 90, you walk away having paid nothing. No contracts, no pressure.',
+    },
+    {
+      q: 'What\'s the difference between this and SEO?',
+      a: 'SEO optimizes for Google search rankings. Cited optimizes for AI recommendations — ChatGPT, Claude, Perplexity, Gemini. These are different systems with different signals. An agent can rank #1 on Google and be completely invisible to AI. We fix the AI side.',
+    },
+    {
+      q: 'Do you publish content under my name without my approval?',
+      a: 'Never. Every piece of content — bios, articles, platform copy — goes to you for review before it goes anywhere. You approve, we publish. If you want changes, we make them. Your name, your voice, your approval.',
+    },
+  ];
+
+  const weeks = [
+    { week: 'Week 1', title: 'We audit. You do nothing.', time: '0 min', color: '#D4A830', detail: 'Full PRISM scan across 4 AI models. Every platform audited. Optimization plan built.' },
+    { week: 'Week 2', title: 'Profiles optimized. You review.', time: '15 min', color: '#00BFA6', detail: 'GBP claimed, LinkedIn rewritten, Zillow bio updated. You approve before anything goes live.' },
+    { week: 'Week 3', title: 'Article written. You answer 5 questions.', time: '10 min', color: '#00BFA6', detail: 'We write a full authority article in your voice. You review one draft and approve.' },
+    { week: 'Week 4', title: 'Article live. Score moves. You see it.', time: '5 min', color: '#D4A830', detail: 'Published to LinkedIn and distributed. PRISM re-scan run. Month 1 report delivered.' },
+  ];
+
+  return (
+    <div style={{ minHeight: '100vh', background: '#f0f4f8', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif' }}>
+
+      {/* Header */}
+      <header style={{ background: '#0A1929', padding: '20px 28px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <div>
+          <a href="/" style={{ textDecoration: 'none' }}>
+            <div style={{ fontSize: '20px', fontWeight: 800, letterSpacing: '5px', color: '#00BFA6' }}>CITED</div>
+          </a>
+          <div style={{ fontSize: '10px', color: '#4a6380', letterSpacing: '1.5px', textTransform: 'uppercase', marginTop: '3px' }}>AI Visibility for Real Estate Professionals</div>
+        </div>
+        <div style={{ fontSize: '11px', color: '#4a6380' }}>Powered by <span style={{ color: '#00BFA6', fontWeight: 700 }}>PRISM</span></div>
+      </header>
+      <div style={{ height: '3px', background: 'linear-gradient(90deg, #D4A830 0%, #00BFA6 100%)' }} />
+
+      <main style={{ maxWidth: '720px', margin: '0 auto', padding: '48px 20px 64px' }}>
+
+        {/* ── SECTION 1: The Problem ── */}
+        <div style={{ marginBottom: '56px' }}>
+          <div style={{ display: 'inline-block', background: '#0A1929', color: '#D4A830', fontSize: '11px', fontWeight: 700, letterSpacing: '2px', textTransform: 'uppercase', padding: '6px 16px', borderRadius: '20px', marginBottom: '20px' }}>
+            The Problem
+          </div>
+          <h1 style={{ fontSize: '32px', fontWeight: 800, color: '#0A1929', margin: '0 0 16px', lineHeight: 1.25 }}>
+            AI is changing how buyers find agents.<br />Most agents are invisible to it.
+          </h1>
+          <p style={{ fontSize: '16px', color: '#4a5568', lineHeight: 1.8, margin: '0 0 20px' }}>
+            Buyers used to Google "best real estate agent in Carlsbad" and scroll through results. Now they ask ChatGPT, Claude, and Perplexity — and those AI models give one answer. Not a list. One recommendation.
+          </p>
+          <p style={{ fontSize: '16px', color: '#4a5568', lineHeight: 1.8, margin: 0 }}>
+            The agents who get recommended have something in common: their information exists in the right places, in the right format, for AI to read and cite. It has nothing to do with how good they are. It&apos;s a data problem — and it&apos;s fixable.
+          </p>
+        </div>
+
+        {/* ── SECTION 2: What Cited Does ── */}
+        <div style={{ marginBottom: '56px' }}>
+          <div style={{ display: 'inline-block', background: '#0A1929', color: '#D4A830', fontSize: '11px', fontWeight: 700, letterSpacing: '2px', textTransform: 'uppercase', padding: '6px 16px', borderRadius: '20px', marginBottom: '20px' }}>
+            What Cited Does
+          </div>
+          <h2 style={{ fontSize: '26px', fontWeight: 700, color: '#0A1929', margin: '0 0 24px' }}>
+            Three things. That&apos;s the whole system.
+          </h2>
+
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px', marginBottom: '16px' }}>
+            {[
+              { num: '01', title: 'Optimize', desc: 'We fix every platform AI reads — GBP, LinkedIn, Zillow, FastExpert, Bing, Apple. Each one structured for AI citation.' },
+              { num: '02', title: 'Create', desc: 'One AI-optimized article per month, written in your voice, targeting your markets. Published under your name after you approve.' },
+              { num: '03', title: 'Monitor', desc: 'Monthly PRISM re-scans across 4 AI models. You see exactly what moved, what\'s next, and how you compare to competitors.' },
+            ].map((item, i) => (
+              <div key={i} style={{ background: '#0A1929', borderRadius: '12px', padding: '24px 20px' }}>
+                <div style={{ fontSize: '28px', fontWeight: 800, color: '#D4A830', marginBottom: '8px' }}>{item.num}</div>
+                <div style={{ fontSize: '15px', fontWeight: 700, color: '#fff', marginBottom: '8px' }}>{item.title}</div>
+                <div style={{ fontSize: '13px', color: '#64748b', lineHeight: 1.6 }}>{item.desc}</div>
+              </div>
+            ))}
+          </div>
+
+          <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '10px', padding: '16px 20px', textAlign: 'center' }}>
+            <span style={{ fontSize: '15px', fontWeight: 700, color: '#0A1929' }}>
+              &ldquo;We handle 87% of the work. You provide 15 minutes a month.&rdquo;
+            </span>
+          </div>
+        </div>
+
+        {/* ── SECTION 3: How We Do It (30-day timeline) ── */}
+        <div style={{ marginBottom: '56px' }}>
+          <div style={{ display: 'inline-block', background: '#0A1929', color: '#D4A830', fontSize: '11px', fontWeight: 700, letterSpacing: '2px', textTransform: 'uppercase', padding: '6px 16px', borderRadius: '20px', marginBottom: '20px' }}>
+            How It Works
+          </div>
+          <h2 style={{ fontSize: '26px', fontWeight: 700, color: '#0A1929', margin: '0 0 8px' }}>Your first 30 days.</h2>
+          <p style={{ fontSize: '15px', color: '#64748b', margin: '0 0 28px' }}>Week by week — what we do, and what we need from you.</p>
+
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
+            {weeks.map((w, i) => (
+              <div key={i} style={{ background: '#fff', borderRadius: '12px', padding: '20px', border: '1px solid #e8edf2', boxShadow: '0 1px 3px rgba(0,0,0,0.06)' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '10px' }}>
+                  <div style={{ fontSize: '11px', fontWeight: 700, color: w.color, letterSpacing: '1px', textTransform: 'uppercase' }}>{w.week}</div>
+                  <div style={{ textAlign: 'right' }}>
+                    <div style={{ fontSize: '10px', color: '#94a3b8' }}>Your time</div>
+                    <div style={{ fontSize: '14px', fontWeight: 800, color: w.time === '0 min' ? '#dc2626' : '#0A1929' }}>{w.time}</div>
+                  </div>
+                </div>
+                <div style={{ fontSize: '14px', fontWeight: 700, color: '#0A1929', marginBottom: '6px' }}>{w.title}</div>
+                <div style={{ fontSize: '12px', color: '#64748b', lineHeight: 1.6 }}>{w.detail}</div>
+              </div>
+            ))}
+          </div>
+
+          <div style={{ background: '#0A1929', borderRadius: '10px', padding: '18px 24px', marginTop: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div>
+              <div style={{ fontSize: '11px', color: '#D4A830', fontWeight: 700, letterSpacing: '1px', textTransform: 'uppercase', marginBottom: '4px' }}>Total — Month 1</div>
+              <div style={{ fontSize: '22px', fontWeight: 800, color: '#fff' }}>~30 minutes</div>
+            </div>
+            <div style={{ fontSize: '13px', color: '#64748b', textAlign: 'right', lineHeight: 1.7 }}>
+              Optimized profiles<br />1 published article<br />PRISM re-scan + report
+            </div>
+          </div>
+        </div>
+
+        {/* ── SECTION 4: Why Now ── */}
+        <div style={{ marginBottom: '56px', background: '#fff', borderRadius: '14px', padding: '36px 32px', border: '1px solid #e8edf2', boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
+          <div style={{ display: 'inline-block', background: '#0A1929', color: '#D4A830', fontSize: '11px', fontWeight: 700, letterSpacing: '2px', textTransform: 'uppercase', padding: '6px 16px', borderRadius: '20px', marginBottom: '20px' }}>
+            Why Now
+          </div>
+          <h2 style={{ fontSize: '24px', fontWeight: 700, color: '#0A1929', margin: '0 0 14px' }}>
+            This is where SEO was in 2005.
+          </h2>
+          <p style={{ fontSize: '15px', color: '#4a5568', lineHeight: 1.8, margin: '0 0 14px' }}>
+            In 2005, most businesses didn&apos;t have a website. The ones that built them early dominated search results for years before competitors caught up. The same shift is happening now with AI.
+          </p>
+          <p style={{ fontSize: '15px', color: '#4a5568', lineHeight: 1.8, margin: 0 }}>
+            Right now, fewer than 5% of agents in any market have AI-optimized visibility. The window to be the agent AI recommends — before every other agent in your market figures this out — is open. It won&apos;t stay open.
+          </p>
+        </div>
+
+        {/* ── SECTION 5: Proof ── */}
+        <div style={{ marginBottom: '56px' }}>
+          <div style={{ display: 'inline-block', background: '#0A1929', color: '#D4A830', fontSize: '11px', fontWeight: 700, letterSpacing: '2px', textTransform: 'uppercase', padding: '6px 16px', borderRadius: '20px', marginBottom: '20px' }}>
+            Proof
+          </div>
+          <h2 style={{ fontSize: '26px', fontWeight: 700, color: '#0A1929', margin: '0 0 8px' }}>Client Zero — Radley Raven.</h2>
+          <p style={{ fontSize: '15px', color: '#64748b', margin: '0 0 24px' }}>Before building Cited for others, we built it for ourselves.</p>
+
+          <div style={{ background: '#fff', borderRadius: '12px', padding: '28px', border: '1px solid #e8edf2', boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr', gap: '20px', alignItems: 'center', marginBottom: '20px' }}>
+              <div style={{ textAlign: 'center' }}>
+                <div style={{ fontSize: '11px', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '6px' }}>Before</div>
+                <div style={{ fontSize: '48px', fontWeight: 800, color: '#dc2626' }}>3</div>
+                <div style={{ fontSize: '13px', color: '#94a3b8' }}>/ 100</div>
+                <div style={{ fontSize: '12px', color: '#64748b', marginTop: '4px' }}>Not mentioned in any<br />AI query for Carlsbad</div>
+              </div>
+              <div style={{ fontSize: '24px', color: '#D4A830', fontWeight: 700 }}>→</div>
+              <div style={{ textAlign: 'center' }}>
+                <div style={{ fontSize: '11px', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '6px' }}>Target (90 days)</div>
+                <div style={{ fontSize: '48px', fontWeight: 800, color: '#00BFA6' }}>65+</div>
+                <div style={{ fontSize: '13px', color: '#94a3b8' }}>/ 100</div>
+                <div style={{ fontSize: '12px', color: '#64748b', marginTop: '4px' }}>Ranking above all<br />competitors in market</div>
+              </div>
+            </div>
+            <div style={{ background: '#f8fafc', borderRadius: '8px', padding: '14px 16px', fontSize: '13px', color: '#4a5568', lineHeight: 1.6, textAlign: 'center' }}>
+              Radley Raven · The Oppenheim Group · Carlsbad, CA · 10 years · $91M+ career volume
+            </div>
+          </div>
+        </div>
+
+        {/* ── SECTION 6: Pricing ── */}
+        <div style={{ marginBottom: '56px', background: '#0A1929', borderRadius: '14px', padding: '36px 32px' }}>
+          <div style={{ display: 'inline-block', background: 'rgba(212,168,48,0.15)', color: '#D4A830', fontSize: '11px', fontWeight: 700, letterSpacing: '2px', textTransform: 'uppercase', padding: '6px 16px', borderRadius: '20px', marginBottom: '20px' }}>
+            Founding Offer
+          </div>
+          <h2 style={{ fontSize: '26px', fontWeight: 700, color: '#fff', margin: '0 0 8px' }}>
+            First 90 days free.<br />No contracts. No commitment.
+          </h2>
+          <p style={{ fontSize: '15px', color: '#64748b', margin: '0 0 24px', lineHeight: 1.7 }}>
+            We&apos;re taking on 3–5 founding clients in North County San Diego. After 90 days, you&apos;ll have the data. If your score moved and you felt the value — continue at $800/month. If not, walk away. No invoice, no awkward conversation.
+          </p>
+          {[
+            'No setup fees. No contracts.',
+            'Monthly PRISM re-scans included.',
+            'One article per month, written and published for you.',
+            'Cancel anytime after the founding period.',
+          ].map((item, i) => (
+            <div key={i} style={{ display: 'flex', gap: '10px', marginBottom: '10px', alignItems: 'center' }}>
+              <span style={{ color: '#00BFA6', fontWeight: 700 }}>✓</span>
+              <span style={{ fontSize: '14px', color: '#94a3b8' }}>{item}</span>
+            </div>
+          ))}
+        </div>
+
+        {/* ── SECTION 7: FAQ ── */}
+        <div style={{ marginBottom: '56px' }}>
+          <div style={{ display: 'inline-block', background: '#0A1929', color: '#D4A830', fontSize: '11px', fontWeight: 700, letterSpacing: '2px', textTransform: 'uppercase', padding: '6px 16px', borderRadius: '20px', marginBottom: '20px' }}>
+            Common Questions
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            {faqs.map((faq, i) => (
+              <div key={i} style={{ background: '#fff', borderRadius: '10px', padding: '20px 22px', border: '1px solid #e8edf2', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
+                <div style={{ fontSize: '14px', fontWeight: 700, color: '#0A1929', marginBottom: '8px' }}>{faq.q}</div>
+                <div style={{ fontSize: '13px', color: '#4a5568', lineHeight: 1.7 }}>{faq.a}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* ── FINAL CTA ── */}
+        <div style={{ background: '#fff', borderRadius: '14px', padding: '40px 32px', textAlign: 'center', boxShadow: '0 2px 8px rgba(0,0,0,0.08)', border: '1px solid #e8edf2' }}>
+          <div style={{ fontSize: '11px', fontWeight: 700, color: '#D4A830', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '12px' }}>Ready to start?</div>
+          <h2 style={{ fontSize: '24px', fontWeight: 800, color: '#0A1929', margin: '0 0 8px' }}>Claim your founding spot.</h2>
+          <p style={{ fontSize: '14px', color: '#64748b', margin: '0 0 28px', lineHeight: 1.6 }}>
+            3–5 spots available. First 90 days free.<br />Takes 10 minutes to get started.
+          </p>
+
+          <a href="https://citedagent.com/intake" style={{ display: 'block', background: '#00BFA6', color: '#fff', fontWeight: 700, fontSize: '16px', padding: '16px 36px', borderRadius: '8px', textDecoration: 'none', letterSpacing: '0.3px', marginBottom: '12px' }}>
+            Claim Your Founding Spot →
+          </a>
+
+          <p style={{ fontSize: '13px', color: '#94a3b8', margin: 0 }}>
+            Prefer to talk first? Reply directly to Radley&apos;s email.
+          </p>
+        </div>
+
+        <div style={{ textAlign: 'center', marginTop: '32px', fontSize: '11px', color: '#94a3b8' }}>
+          Cited · AI Visibility for Real Estate Professionals · citedagent.com<br />
+          <span style={{ color: '#cbd5e1' }}>Powered by PRISM · Professional Recognition Index for Search Models</span>
+        </div>
+
+      </main>
+    </div>
+  );
+}

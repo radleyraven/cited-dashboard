@@ -265,8 +265,8 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
           </a>
 
           {/* Tertiary */}
-          <a href="/30-days" style={{ display: 'block', fontSize: '13px', color: '#00BFA6', fontWeight: 600, textDecoration: 'none', padding: '6px 0' }}>
-            See what happens in your first 30 days →
+          <a href="/how-it-works" style={{ display: 'block', fontSize: '13px', color: '#00BFA6', fontWeight: 600, textDecoration: 'none', padding: '6px 0' }}>
+            Learn more about how Cited works →
           </a>
 
           <p style={{ fontSize: '12px', color: '#94a3b8', margin: '12px 0 0' }}>Questions? Reply directly to Radley&apos;s email.</p>
