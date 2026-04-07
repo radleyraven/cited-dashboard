@@ -287,7 +287,7 @@ export default function HowItWorksPage() {
             <a href="/privacy" style={{ color: '#64748b', textDecoration: 'none', marginRight: '16px' }}>Privacy Policy</a>
             <a href="/terms" style={{ color: '#64748b', textDecoration: 'none' }}>Terms of Service</a>
           </div>
-          Cited · AI Visibility for Professionals · citedagent.com<br />
+          Cited · AI Visibility for Professionals · citedagent.com · Powered by PRISM<br />
           <span style={{ color: '#cbd5e1' }}>Powered by PRISM · Professional Recognition Index for Search Models</span>
         </div>
 
