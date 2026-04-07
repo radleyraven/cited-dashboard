@@ -171,7 +171,7 @@ export default function HowItWorksPage() {
                 <div style={{ fontSize: '11px', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '6px' }}>Before</div>
                 <div style={{ fontSize: '48px', fontWeight: 800, color: '#dc2626' }}>3</div>
                 <div style={{ fontSize: '13px', color: '#94a3b8' }}>/ 100</div>
-                <div style={{ fontSize: '12px', color: '#64748b', marginTop: '4px' }}>Not mentioned in any<br />AI query for Carlsbad</div>
+                <div style={{ fontSize: '12px', color: '#64748b', marginTop: '4px' }}>Not mentioned in any<br />AI query for Carmel Valley</div>
               </div>
               <div style={{ fontSize: '24px', color: '#D4A830', fontWeight: 700 }}>→</div>
               <div style={{ textAlign: 'center' }}>
