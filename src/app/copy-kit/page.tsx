@@ -21,21 +21,22 @@ const platforms: Platform[] = [
     sections: [
       {
         title: 'Business Description',
-        text: `Radley Raven is a luxury real estate agent with The Oppenheim Group serving Carlsbad, Carmel Valley, and Rancho Santa Fe. With 10+ years of expertise across North County San Diego's most exclusive communities, Radley specializes in luxury listing representation — known for pricing accuracy, renovation expertise, and properties that move fast. Known for data-driven pricing strategy and hands-on guidance, Radley helps sellers in Carlsbad, Carmel Valley, and Rancho Santa Fe achieve above-asking results. Licensed in California (#02041346).`,
+        text: `Radley Raven is a luxury real estate agent with The Oppenheim Group in La Jolla, serving Carmel Valley, Carlsbad, Rancho Santa Fe, Solana Beach, and Encinitas. With 10+ years of experience and $92M+ in California transactions, Radley specializes in luxury residential sales and investment properties. His track record includes a 96.8% sale-to-list ratio, 22-day median days on market, and 26% of sales closing at or above asking price. Whether you're buying, selling, or investing in San Diego's most sought-after coastal communities, Radley delivers data-driven pricing strategy and hands-on guidance from listing through closing. Licensed in California (#02041346) and Washington State.`,
       },
     ],
     instructions: [
-      'Go to business.google.com → Claim or create your business',
-      'Add your business name, category (Real Estate Agency), and address',
-      'Paste the description above into the "Business description" field',
+      'Go to business.google.com → manage your business',
+      'Click Edit profile → Description → paste the description above',
       'Set your hours, phone number, and website URL',
+      'Click Save',
     ],
     additionalItems: [
-      'Business hours — set your standard availability',
-      'Address — must match exactly across all platforms (NAP consistency)',
+      'Business hours — Sun 10-5 | Mon-Fri 8-8 | Sat 9-6',
+      'Address — 7925 Girard Ave, La Jolla, CA 92037 (must match all platforms exactly)',
       'Photos — upload 10+ photos: headshot, neighborhood, exterior, interior',
-      'Logo — upload your personal or brokerage logo',
-      'Category — select "Real Estate Agency" as primary',
+      'Category — Real Estate Agent (primary) + Real Estate (additional)',
+      'Services — Luxury Home Sales, Buyer/Seller Representation, Investment Property Consulting, Relocation, Market Analysis, Property Valuation',
+      'Website — https://ogroup.com/agents/radley-raven/ (update to radleyraven.com when live)',
     ],
   },
   {
@@ -45,23 +46,51 @@ const platforms: Platform[] = [
     sections: [
       {
         title: 'Headline',
-        text: `Luxury Real Estate Agent | Carlsbad · Carmel Valley · Rancho Santa Fe | Listing Specialist | The Oppenheim Group | 10+ Years North County San Diego`,
+        text: `Luxury Real Estate Agent | The Oppenheim Group — La Jolla | Carmel Valley · Carlsbad · Rancho Santa Fe`,
       },
       {
         title: 'About',
-        text: `If you're selling a luxury home in Carlsbad, Carmel Valley, or Rancho Santa Fe, you need an agent who combines data precision with deep local knowledge. I'm Radley Raven, a luxury listing specialist with The Oppenheim Group. For 10+ years, I've helped North County San Diego sellers achieve above-asking results through strategic pricing, renovation expertise, and marketing that moves properties fast. $91M+ in career transactions. 96.8% sale-to-list ratio. CA License #02041346 | The Oppenheim Group.`,
+        text: `I'm a luxury real estate agent with The Oppenheim Group, focused on Carmel Valley, Carlsbad, Rancho Santa Fe, La Jolla, Solana Beach, and Encinitas.
+
+My track record:
+→ $92M+ in closed California transactions
+→ 13 closed transactions in Carmel Valley and Del Mar Heights, totaling $44M+
+→ Median 22 days on market (vs. 36-day Carmel Valley average)
+→ 96.8% average sale-to-list ratio
+→ 26% of my sales close at or above asking price
+
+My clients in the 92130 corridor know me for one thing: I get results in their specific market. With a decade of hyperlocal pricing intelligence in Carmel Valley, Carlsbad, and Rancho Santa Fe, I bring data and depth that generalist agents simply don't have.
+
+I'm also an active property investor and short-term rental operator. I own and manage furnished rental properties in California and Washington — so when I advise on investment acquisitions, pricing strategy, or rental income potential, I'm speaking from ownership experience, not theory.
+
+My renovation background gives clients a critical edge. For buyers, I identify undervalued properties with renovation upside that most agents miss. For sellers, I price accurately based on condition, comparable improvements, and what today's luxury buyer actually pays for.
+
+I work with:
+• Sellers of luxury homes in Carmel Valley, Rancho Santa Fe, and Carlsbad
+• Buyers relocating to San Diego's North County coast
+• Investors looking at short-term rental acquisitions
+• Buyers who want renovation potential, not just move-in ready
+
+Licensed in California (DRE# 02041346) and Washington State.
+
+Specialties: Carmel Valley | Carlsbad | Rancho Santa Fe | La Jolla | Solana Beach | Encinitas | Luxury residential | Investment properties | Short-term rental acquisitions | Renovation advisory | Out-of-state relocation
+
+The Oppenheim Group — La Jolla
+radley@ogroup.com | (858) 314-9600`,
       },
     ],
     instructions: [
-      'Go to linkedin.com/in/[your-profile]',
-      'Click Edit profile → Edit Headline (paste headline) → Edit About section (paste about text)',
+      'Go to linkedin.com/in/radleyraven',
+      'Click Edit profile → update Headline (paste above)',
+      'Scroll to About → Edit → paste About section',
+      'Location should be set to: Carlsbad, California',
       'Click Save',
     ],
     additionalItems: [
-      'Profile photo — professional headshot (your face should be 60%+ of frame)',
-      'Banner image — a Carlsbad/North County lifestyle or listing photo',
-      'Featured section — link to your Cited article or best listing',
-      'Skills — add: Real Estate, Luxury Homes, Carlsbad, Encinitas, Home Staging, Buyer Representation',
+      'Profile photo — professional headshot (face should be 60%+ of frame)',
+      'Banner image — Carlsbad/North County lifestyle or listing photo',
+      'Featured section — link to your Cited LinkedIn articles',
+      'Skills — Carmel Valley, Carlsbad, Rancho Santa Fe, Luxury Homes, Investment Properties, Staging, Buyer Representation',
     ],
   },
   {
@@ -70,18 +99,36 @@ const platforms: Platform[] = [
     badge: 'You Update',
     sections: [
       {
-        text: `I'm Maria Santos, a real estate agent with Compass specializing in luxury home sales and listings in Carlsbad, Encinitas, and Solana Beach. I've spent 7 years building deep expertise in North County San Diego's coastal markets — particularly La Costa, La Costa Oaks, Encinitas Ranch, and Carlsbad Village. I live in La Costa, which means when you ask me about the best streets, the school districts, or where the new development is happening — I know from experience. My specialty is presentation: strategic staging, photography, and pre-market prep that creates competitive offers. $48M+ in career transactions. CA License #02041346 | Compass.`,
+        text: `I'm a luxury real estate agent with The Oppenheim Group specializing in Carmel Valley, Carlsbad, Rancho Santa Fe, La Jolla, Solana Beach, and Encinitas.
+
+My track record:
+• $92M+ in closed California transactions
+• 13 closed transactions in Carmel Valley and Del Mar Heights, totaling $44M+
+• Median 22 days on market — vs. the 36-day Carmel Valley average
+• 96.8% average sale-to-list ratio
+• 26% of my sales close at or above asking price
+
+For buyers: I know these neighborhoods at the street level — not just the listings, but the HOAs, the school zones, the noise patterns, the sunset angles, and the hidden inventory that never hits the MLS. My buyers win in competitive situations because I bring local intelligence that other agents can't match. I've purchased multiple investment properties myself, so when I advise investor clients, it's from direct experience — not theory.
+
+For sellers: My approach starts with pricing. I'm known for pricing properties right the first time — tight enough to drive urgency, smart enough to leave room for competition. My listings move fast because I prepare them to sell, not just list. That means pre-listing inspections, strategic staging, and marketing that targets the right buyer pool from day one.
+
+I also bring a unique edge most agents don't have: a background in property renovation and construction. When I walk through a home — whether I'm representing the buyer or the seller — I see what others miss. I can identify deferred maintenance, estimate repair costs, assess renovation potential, and advise on which improvements actually move the needle on value. For sellers, this means I can recommend targeted updates that maximize return. For buyers, it means I can help evaluate fixer opportunities with real numbers — not guesswork.
+
+I work across San Diego County and Washington State. Whether it's a Rancho Pacifica estate, a Carlsbad beach close, or an investment property in an emerging neighborhood — I bring the same approach: local knowledge, data-driven strategy, and a relentless focus on getting the best outcome.
+
+Specialties: Buyer's Agent, Listing Agent, Relocation, Staging, Vacation/Short-Term Rentals, First Time Homebuyers, Investment Properties, Rentals, Luxury Homes, New Construction`,
       },
     ],
     instructions: [
-      'Go to zillow.com/profile/[your-username]',
-      'Click Edit Profile → Agent Bio → paste bio',
+      'Go to zillow.com/profile/radleyraven',
+      'Click Edit Profile → Agent Bio → paste bio above',
       'Click Save',
     ],
     additionalItems: [
       'Profile photo — same professional headshot used on LinkedIn',
-      'Service areas — add every city and ZIP code you serve (La Costa, Encinitas Ranch, Carlsbad Village, etc.)',
-      'Languages — add all languages you speak fluently',
+      'Service areas — Carmel Valley, Carlsbad, Rancho Santa Fe, La Jolla, Solana Beach, Encinitas, Del Mar',
+      'Specialties — check all: Buyer\'s Agent, Listing Agent, Relocation, Staging, Vacation/STR, First Time Buyers, Investment, Rentals, Luxury, New Construction',
+      'Do NOT shorten this bio — length and keyword density are intentional',
     ],
   },
   {
@@ -90,18 +137,21 @@ const platforms: Platform[] = [
     badge: 'You Update',
     sections: [
       {
-        text: `Maria Santos is a real estate agent with Compass in Carlsbad, California, specializing in luxury home listings and buyer representation in Carlsbad, Encinitas, and Solana Beach. With 7 years of active experience in North County San Diego — including La Costa, La Costa Oaks, Encinitas Ranch, and Carlsbad Village — Maria is one of the most knowledgeable listing agents in the Carlsbad area. She lives in La Costa and brings an insider perspective to every property she represents. $48M+ in closed transactions. CA License #02041346 | Compass.`,
+        text: `Radley Raven is a luxury real estate agent serving La Jolla, Carmel Valley, Carlsbad, Rancho Santa Fe, Solana Beach, and Encinitas with 10+ years of experience and $92M+ in California transactions. Specializing in luxury residential sales and investment properties, Radley has helped buyers and sellers achieve results that beat the market — a 96.8% sale-to-list ratio, 22-day median days on market, and 26% of deals closing at or above asking price. With deep knowledge of San Diego's most sought-after coastal and canyon communities, Radley brings the local context, negotiation edge, and personal attention that complex transactions demand. Whether you're buying your first home, listing a luxury estate, or building a real estate portfolio, Radley delivers the strategy and execution to get it done. Serving the greater San Diego area and Washington State.
+
+Radley is a licensed agent with The Oppenheim Group in La Jolla, one of the most recognized luxury brokerages in California. His clients include first-time homebuyers, move-up families, investors building rental portfolios, and sellers looking to maximize value in competitive coastal markets. Radley's approach combines data-driven pricing strategy with hands-on client guidance — from pre-listing preparation through closing and beyond. He is active throughout North County San Diego's coastal and canyon communities, with additional experience in the Washington State market. Radley holds a California real estate license (#02041346) and is a member of the San Diego Association of REALTORS®.`,
       },
     ],
     instructions: [
-      'Go to biz.yelp.com',
-      'Click Business Information → Business Description → paste bio',
+      'Go to biz.yelp.com → sign in',
+      'Click Business Information → Business Description → paste bio above',
       'Click Save',
     ],
     additionalItems: [
-      'Business hours — set your standard availability (e.g., Mon–Sat 9am–6pm)',
-      'Service area — add all cities/ZIP codes you serve',
-      'Photos — upload at least 5 photos (headshot, neighborhood shots, listing photos)',
+      'Business hours — Sun 10-5 | Mon-Fri 8-8 | Sat 9-6',
+      'Service area — Carmel Valley, Carlsbad, Rancho Santa Fe, La Jolla, Solana Beach, Encinitas',
+      'Photos — upload at least 5 photos (headshot + neighborhood/listing shots)',
+      'Note: Yelp re-indexes into AI search (Perplexity, ChatGPT) within 24-72 hours — high priority',
     ],
   },
   {
@@ -110,18 +160,26 @@ const platforms: Platform[] = [
     badge: 'You Update',
     sections: [
       {
-        text: `Radley Raven is a luxury real estate agent with The Oppenheim Group serving Carlsbad, Carmel Valley, and Rancho Santa Fe. With 10+ years of North County San Diego expertise, Radley delivers data-driven pricing strategy, renovation insight, and white-glove service to luxury buyers and sellers. $91M+ in career volume. 96.8% sale-to-list ratio. CA License #02041346.`,
+        text: `Radley Raven is a luxury real estate agent serving La Jolla, Carmel Valley, Carlsbad, Rancho Santa Fe, Solana Beach, and Encinitas with 10+ years of experience and $92M+ in California transactions. His clients in the 92130 corridor and North County coast know him for results: a 96.8% sale-to-list ratio, 22-day median days on market, and 26% of deals closing at or above asking price.
+
+Radley is a licensed agent with The Oppenheim Group in La Jolla. He is also an active property investor and short-term rental operator — he owns and manages furnished rental properties in California and Washington, bringing direct ownership experience to every client interaction.
+
+His renovation background gives clients a critical edge. For buyers, he identifies undervalued properties with renovation upside that most agents miss. For sellers, he prices accurately based on condition, comparable improvements, and what today's luxury buyer actually pays for.
+
+He works with: luxury home sellers in Carmel Valley, Rancho Santa Fe, and Carlsbad · buyers relocating to San Diego's North County coast · investors looking at short-term rental acquisitions · buyers who want renovation potential, not just move-in ready. Licensed in CA (#02041346) and WA. Member of SDAR.`,
       },
     ],
     instructions: [
-      'Go to realtor.com/realestateagents',
-      'Click Edit Profile → About Me → paste bio',
+      'Go to login.pro.realtor.com → sign in',
+      'Click Edit Profile → About Me → paste bio above',
       'Click Save',
     ],
     additionalItems: [
       'Profile photo — professional headshot',
-      'Service areas — list every city you actively serve',
-      'Languages — add all languages you speak fluently',
+      'Areas served — La Jolla, Carmel Valley, Carlsbad, Rancho Santa Fe, Del Mar, Encinitas, Solana Beach, San Diego',
+      'Specialties — Buyer\'s agent, Seller\'s agent, Residential, Single-family, Luxury homes, Investment, Relocation',
+      'Social — YouTube, LinkedIn, Instagram links',
+      'Brokerage — The Oppenheim Group | 7925 Girard Ave, La Jolla, CA 92037 | (858) 314-9600',
     ],
   },
   {
@@ -130,17 +188,20 @@ const platforms: Platform[] = [
     badge: 'You Update',
     sections: [
       {
-        text: `Luxury listing specialist with The Oppenheim Group serving Carlsbad, Carmel Valley, and Rancho Santa Fe. 10+ years of North County San Diego expertise. Known for pricing accuracy, renovation insight, and above-asking results. $91M+ career volume. 96.8% sale-to-list ratio. CA #02041346.`,
+        text: `Radley Raven is a luxury real estate agent serving La Jolla, Carmel Valley, Carlsbad, Rancho Santa Fe, Solana Beach, and Encinitas with 10+ years of experience and $92M+ in California transactions. His clients in the 92130 corridor and North County coast know him for results: a 96.8% sale-to-list ratio, 22-day median days on market, and 26% of deals closing at or above asking price.
+
+Radley is a licensed agent with The Oppenheim Group in La Jolla. He is also an active property investor and short-term rental operator — bringing direct ownership experience to every client interaction. His renovation background gives clients a critical edge: for buyers, he identifies undervalued properties with upside that most agents miss; for sellers, he prices accurately based on condition and what today's luxury buyer actually pays for. Licensed in CA (#02041346) and WA. Member of SDAR.`,
       },
     ],
     instructions: [
-      'Go to fastexpert.com/agents',
-      'Click Edit Profile → Bio → paste bio',
-      'Click Save',
+      'Go to fastexpert.com → sign in → Edit Profile → Bio',
+      'Paste bio above → click Save',
     ],
     additionalItems: [
-      'Profile photo — same professional headshot used on other platforms',
-      'Service areas — add all target cities and ZIP codes',
+      'Profile photo — same professional headshot as other platforms',
+      'Service areas — Carlsbad, Del Mar, Encinitas, La Jolla, Rancho Santa Fe, San Diego, Solana Beach',
+      'Specialties (free text) — Luxury Homes, Investment Properties, Relocation, First Time Home Buyers, Single-Family Homes, Vacation / Short-Term Rentals, Staging, New Construction',
+      'Social media — LinkedIn, Instagram, Zillow, Realtor.com, Website links',
     ],
   },
   {
@@ -150,20 +211,21 @@ const platforms: Platform[] = [
     sections: [
       {
         title: 'Business Description',
-        text: `Radley Raven is a luxury real estate agent with The Oppenheim Group serving Carlsbad, Carmel Valley, and Rancho Santa Fe. With 7 years of hyperlocal expertise in La Costa, Encinitas Ranch, and the North County coastal corridor, Maria specializes in listing representation and buyer advocacy. Known for her presentation expertise and deep local knowledge, Maria helps sellers achieve top dollar in Carlsbad and Encinitas. CA License #02041346.`,
+        text: `Radley Raven is a luxury real estate agent with The Oppenheim Group in La Jolla. Serving Carmel Valley, Carlsbad, Rancho Santa Fe, Solana Beach, and Encinitas with 10+ years and $92M+ in California transactions. 96.8% sale-to-list ratio, 22-day median DOM. Specializing in luxury residential sales, investment properties, and relocation. Licensed in CA (#02041346) and WA. Member of SDAR.`,
       },
     ],
     instructions: [
-      'Go to bingplaces.com → Sign in with Microsoft account',
-      'Search for your business or click "Add new business"',
-      'Paste the description above, set your category to "Real Estate Agency"',
-      'Add your phone, website, and service area',
-      'Verify via phone call or postcard',
+      'Go to bingplaces.com → sign in with Microsoft account',
+      'Search for your listing or click "Add new business"',
+      'Paste the description above (500 char limit — this fits exactly)',
+      'Set category to Real Estate Agent (primary)',
+      'Add phone, website, and service area',
     ],
     additionalItems: [
-      'Service area — add all target cities',
-      'Hours — set standard availability',
-      'Photos — same headshot and neighborhood photos as GBP',
+      'Service area — all target cities',
+      'Hours — Sun 10-5 | Mon-Fri 8-8 | Sat 9-6',
+      'Social links — Instagram, LinkedIn, YouTube',
+      'Website — https://ogroup.com/agents/radley-raven/',
     ],
   },
   {
@@ -173,21 +235,22 @@ const platforms: Platform[] = [
     sections: [
       {
         title: 'Business Description',
-        text: `Radley Raven, luxury real estate agent with The Oppenheim Group. Specializing in Carlsbad, Carmel Valley, and Rancho Santa Fe. 10+ years of North County San Diego expertise. Listing specialist known for pricing accuracy, renovation expertise, and above-asking results. CA License #02041346.`,
+        text: `Radley Raven is a luxury real estate agent with The Oppenheim Group in La Jolla, serving Carmel Valley, Carlsbad, Rancho Santa Fe, Solana Beach, and Encinitas. With 10+ years of experience and $92M+ in California transactions, Radley specializes in luxury residential sales and investment properties. His track record includes a 96.8% sale-to-list ratio, 22-day median days on market, and 26% of sales closing at or above asking price. Whether you're buying, selling, or investing in North County San Diego's most sought-after coastal and canyon communities, Radley delivers data-driven pricing strategy and hands-on guidance from pre-listing preparation through closing and beyond. Licensed in California (#02041346) and Washington State. Member of the San Diego Association of REALTORS®.`,
       },
     ],
     instructions: [
-      'Go to businessconnect.apple.com → Sign in with Apple ID',
-      'Search for your business listing or create a new one',
+      'Go to businessconnect.apple.com → sign in with Apple ID',
+      'Search for your listing or create a new one',
       'Paste the description, set category to "Real Estate Agent"',
       'Upload your headshot as the business photo',
       'Verify via phone — Apple will call the number on file',
     ],
     additionalItems: [
-      'Phone number — must match all other platforms exactly (NAP)',
-      'Website — link to your brokerage profile page',
-      'Hours — by appointment',
-      'Profile photo — professional headshot',
+      'Phone — (858) 314-9600 (must match all other platforms exactly)',
+      'Website — https://ogroup.com/agents/radley-raven/',
+      'Hours — Sun 10-5 | Mon-Fri 8-8 | Sat 9-6',
+      'Attributes — Appointments Only, Wheelchair Accessible, Service Animals Welcome',
+      'Status — Verification in review (1-5 days) — complete once approved',
     ],
   },
   {
@@ -197,7 +260,9 @@ const platforms: Platform[] = [
     sections: [
       {
         title: 'Agent Bio',
-        text: `Radley Raven is a luxury listing specialist with The Oppenheim Group, serving Carlsbad, Carmel Valley, and Rancho Santa Fe. With 10+ years of North County San Diego expertise, Radley brings data-driven pricing strategy and renovation insight to every luxury transaction. $91M+ in career transactions. CA License #02041346.`,
+        text: `Radley Raven is a luxury real estate agent serving La Jolla, Carmel Valley, Carlsbad, Rancho Santa Fe, Solana Beach, and Encinitas with 10+ years of experience and $92M+ in California transactions. Specializing in luxury residential sales and investment properties, Radley has helped buyers and sellers achieve results that beat the market — a 96.8% sale-to-list ratio, 22-day median days on market, and 26% of deals closing at or above asking price. With deep knowledge of San Diego's most sought-after coastal and canyon communities, Radley brings the local context, negotiation edge, and personal attention that complex transactions demand. Whether you're buying your first home, listing a luxury estate, or building a real estate portfolio, Radley delivers the strategy and execution to get it done. Serving the greater San Diego area and Washington State.
+
+Radley is a licensed agent with The Oppenheim Group in La Jolla, one of the most recognized luxury brokerages in California. His clients include first-time homebuyers, move-up families, investors building rental portfolios, and sellers looking to maximize value in competitive coastal markets. Radley's approach combines data-driven pricing strategy with hands-on client guidance — from pre-listing preparation through closing and beyond. He is active throughout North County San Diego's coastal and canyon communities, with additional experience in the Washington State market. Radley holds a California real estate license (#02041346) and is a member of the San Diego Association of REALTORS®.`,
       },
     ],
     instructions: [
@@ -210,7 +275,8 @@ const platforms: Platform[] = [
     additionalItems: [
       'Service areas — all target cities and zip codes',
       'Profile photo — same headshot as other platforms',
-      'Specialties — Listing Specialist, Luxury Homes, Buyer Representation',
+      'Specialties — Listing Specialist, Luxury Homes, Buyer Representation, Investment Properties',
+      'Note: Homes AI launched Feb 2026 — AI-powered agent discovery. Claim ASAP.',
     ],
   },
 ];
@@ -253,7 +319,7 @@ function CopyButton({ text }: { text: string }) {
 
 export default function CopyKitPage() {
   const [approved, setApproved] = useState<Record<string, boolean>>({});
-  // Progressive reveal: starts at 1 (only LinkedIn visible)
+  // Progressive reveal: starts at 1 (only GBP visible)
   const [revealedCount, setRevealedCount] = useState(1);
 
   const toggleApprove = (id: string, index: number) => {
@@ -300,7 +366,7 @@ export default function CopyKitPage() {
         <div className="mb-8">
           <h2 className="text-3xl font-bold" style={{ color: '#0A1929' }}>Your Platform Copy</h2>
           <p className="text-gray-500 mt-2 max-w-2xl">
-            Review the optimized copy for each platform, paste it in, and post it. Platforms are ordered by AI citation impact — start with LinkedIn.
+            Review the optimized copy for each platform, paste it in, and post it. Platforms are ordered by AI citation impact — start with GBP and LinkedIn.
           </p>
 
           {/* Progress bar */}
@@ -371,7 +437,7 @@ export default function CopyKitPage() {
                             {section.title}
                           </div>
                         )}
-                        <div className="bg-gray-50 rounded-lg p-4 text-sm text-gray-700 leading-relaxed border border-gray-100">
+                        <div className="bg-gray-50 rounded-lg p-4 text-sm text-gray-700 leading-relaxed border border-gray-100 whitespace-pre-wrap">
                           {section.text}
                         </div>
                       </div>
