@@ -31,6 +31,10 @@ type FormData = {
   homelightUrl: string;
   websiteUrl: string;
   youtubeUrl: string;
+  // Additional platforms
+  bingUrl: string;
+  appleBusinessUrl: string;
+  homesComUrl: string;
   // Optional channels
   instagramHandle: string;
   otherPlatforms: string;
@@ -61,6 +65,9 @@ const initialForm: FormData = {
   homelightUrl: "",
   websiteUrl: "",
   youtubeUrl: "",
+  bingUrl: "",
+  appleBusinessUrl: "",
+  homesComUrl: "",
   instagramHandle: "",
   otherPlatforms: "",
   gbpStatus: "",
@@ -126,6 +133,9 @@ function IntakeForm() {
       fastexpertUrl: searchParams.get('fastexpertUrl') || '',
       websiteUrl: searchParams.get('websiteUrl') || '',
       youtubeUrl: searchParams.get('youtubeUrl') || '',
+      bingUrl: searchParams.get('bingUrl') || '',
+      appleBusinessUrl: searchParams.get('appleBusinessUrl') || '',
+      homesComUrl: searchParams.get('homesComUrl') || '',
       yearsInMarket: searchParams.get('yearsInMarket') || '',
       topTransactions: searchParams.get('topTransactions') || '',
     };
@@ -512,6 +522,16 @@ function IntakeForm() {
             </Field>
             <Field label="YouTube channel URL">
               <input type="url" value={form.youtubeUrl} onChange={(e) => set("youtubeUrl", e.target.value)} className={`${inputClass} ${inputFocusRing}`} style={inputStyle} placeholder="https://" />
+            </Field>
+
+            <Field label="Bing Places URL">
+              <input type="url" value={form.bingUrl} onChange={(e) => set("bingUrl", e.target.value)} className={`${inputClass} ${inputFocusRing}`} style={inputStyle} placeholder="https://bingplaces.com/..." />
+            </Field>
+            <Field label="Apple Business Connect URL">
+              <input type="url" value={form.appleBusinessUrl} onChange={(e) => set("appleBusinessUrl", e.target.value)} className={`${inputClass} ${inputFocusRing}`} style={inputStyle} placeholder="https://businessconnect.apple.com/..." />
+            </Field>
+            <Field label="Homes.com Profile URL">
+              <input type="url" value={form.homesComUrl} onChange={(e) => set("homesComUrl", e.target.value)} className={`${inputClass} ${inputFocusRing}`} style={inputStyle} placeholder="https://homes.com/real-estate-agents/..." />
             </Field>
 
             {/* Optional channels */}
