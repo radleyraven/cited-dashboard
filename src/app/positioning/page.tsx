@@ -201,7 +201,7 @@ export default function PositioningPage() {
                 </div>
                 <div>
                   <p className="font-semibold" style={{ color: '#00BFA6' }}>Approved — we&rsquo;re writing your platform copy now</p>
-                  <p className="text-sm text-gray-500 mt-0.5">We&rsquo;ll have your platform copy ready within 72 hours.</p>
+                  <p className="text-sm text-gray-500 mt-0.5">We&rsquo;ll have your platform copy ready within 48 hours.</p>
                 </div>
               </div>
             ) : (
@@ -260,7 +260,7 @@ export default function PositioningPage() {
           className="rounded-xl px-6 py-4 text-sm text-gray-600 border border-gray-100"
           style={{ background: '#F8F9FA' }}
         >
-          Once you approve, we&rsquo;ll have your platform copy ready within 72 hours. Questions? Reply to any of our emails or reach out at{' '}
+          Once you approve, we&rsquo;ll have your platform copy ready within 48 hours. Questions? Reply to any of our emails or reach out at{' '}
           <a href="mailto:hello@citedagent.com" className="font-semibold" style={{ color: '#00BFA6' }}>
             hello@citedagent.com
           </a>
