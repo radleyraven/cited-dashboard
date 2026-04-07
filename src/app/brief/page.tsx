@@ -33,12 +33,22 @@ const QUESTIONS = [
   },
 ];
 
+const VOICE_STYLE_OPTIONS = [
+  'Warm and conversational',
+  'Authoritative and data-driven',
+  'Direct and no-nonsense',
+  'Approachable and educational',
+  'Bold and opinionated',
+];
+
 const ARTICLE_NUMBER = 1;
 
 export default function BriefPage() {
   const [answers, setAnswers] = useState<Record<string, string>>({
     q1: '', q2: '', q3: '', q4: '', q5: '',
   });
+  const [voiceStyle, setVoiceStyle] = useState<string[]>([]);
+  const [voiceStyleOther, setVoiceStyleOther] = useState('');
   const [currentQuestion, setCurrentQuestion] = useState(1);
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -74,10 +84,10 @@ export default function BriefPage() {
     e.preventDefault();
     setError(null);
 
-    // Basic validation — all 5 questions required
-    for (const q of QUESTIONS) {
+    // Basic validation — first 3 questions required
+    for (const q of QUESTIONS.slice(0, 3)) {
       if (!answers[q.id]?.trim()) {
-        setError(`Please answer all 5 questions before submitting.`);
+        setError('Please answer the first 3 questions before submitting.');
         return;
       }
     }
@@ -91,6 +101,7 @@ export default function BriefPage() {
           clientEmail: (await createSupabaseBrowserClient().auth.getUser()).data.user?.email ?? 'unknown@citedagent.com',
           articleNumber: ARTICLE_NUMBER,
           ...answers,
+          voice_style: [...voiceStyle, ...(voiceStyleOther.trim() ? [voiceStyleOther.trim()] : [])],
         }),
       });
 
@@ -163,7 +174,7 @@ export default function BriefPage() {
                 Article {ARTICLE_NUMBER} Brief
               </h2>
               <p className="text-gray-500 mt-2 text-base leading-relaxed">
-                5 questions — 10 minutes. Your answers are the raw material. We write the article.
+                3 questions — 3 minutes. Your answers are the raw material. We write the article.
               </p>
             </div>
 
@@ -280,6 +291,50 @@ export default function BriefPage() {
                   </div>
                 );
               })}
+            {/* Voice style — optional, outside sequential flow */}
+            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+              <label className="block">
+                <span className="text-xs font-bold uppercase tracking-widest block mb-1" style={{ color: '#00BFA6' }}>
+                  Optional
+                </span>
+                <span className="text-base font-semibold text-gray-900 leading-snug block mb-1">
+                  How would you describe your communication style? (select up to 2)
+                </span>
+              </label>
+              <div className="flex flex-wrap gap-2 mt-3">
+                {VOICE_STYLE_OPTIONS.map((opt) => {
+                  const isSelected = voiceStyle.includes(opt);
+                  const isDisabled = !isSelected && voiceStyle.length >= 2;
+                  return (
+                    <button
+                      key={opt}
+                      type="button"
+                      disabled={isDisabled}
+                      onClick={() => setVoiceStyle(prev =>
+                        prev.includes(opt) ? prev.filter(o => o !== opt) : prev.length < 2 ? [...prev, opt] : prev
+                      )}
+                      className="px-3 py-1.5 rounded-full text-sm font-medium transition-all"
+                      style={{
+                        background: isSelected ? '#00BFA6' : '#f1f5f9',
+                        color: isSelected ? '#fff' : '#374151',
+                        border: `1.5px solid ${isSelected ? '#00BFA6' : '#e2e8f0'}`,
+                        opacity: isDisabled ? 0.4 : 1,
+                        cursor: isDisabled ? 'not-allowed' : 'pointer',
+                      }}
+                    >
+                      {opt}
+                    </button>
+                  );
+                })}
+              </div>
+              <input
+                type="text"
+                placeholder="Other communication style…"
+                value={voiceStyleOther}
+                onChange={e => setVoiceStyleOther(e.target.value)}
+                className="mt-3 w-full resize-none rounded-lg border border-gray-200 bg-gray-50 px-4 py-2 text-sm text-gray-800 placeholder-gray-300 outline-none focus:border-teal-400 focus:ring-2 focus:ring-teal-100"
+              />
+            </div>
             </form>
           </>
         )}
