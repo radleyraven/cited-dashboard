@@ -323,7 +323,11 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
           <p style={{ fontSize: '12px', color: '#94a3b8', margin: '12px 0 0' }}>Questions? Reply directly to Radley&apos;s email.</p>
         </div>
 
-        <div style={{ textAlign: 'center', marginTop: '28px', fontSize: '11px', color: '#94a3b8' }}>
+        <div style={{ textAlign: 'center', marginTop: '28px', fontSize: '11px', color: '#94a3b8', lineHeight: 2 }}>
+          <div style={{ marginBottom: '6px' }}>
+            <a href="/privacy" style={{ color: '#64748b', textDecoration: 'none', marginRight: '16px' }}>Privacy Policy</a>
+            <a href="/terms" style={{ color: '#64748b', textDecoration: 'none' }}>Terms of Service</a>
+          </div>
           Cited · AI Visibility for Real Estate Professionals · citedagent.com
           <br />
           <span style={{ color: '#cbd5e1' }}>Powered by PRISM · Professional Recognition Index for Search Models</span>

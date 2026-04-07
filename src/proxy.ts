@@ -12,6 +12,8 @@ const PUBLIC_ROUTES = [
   "/api/intake",
   "/copy-kit",
   "/guides",
+  "/privacy",
+  "/terms",
 ];
 
 export function proxy(request: NextRequest) {

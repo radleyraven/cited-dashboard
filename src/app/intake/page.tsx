@@ -485,6 +485,12 @@ function IntakeForm() {
 
           {/* GBP Access — removed from intake. Requested separately after Day 1 affirm text. */}
 
+          {/* Legal footer links */}
+          <div style={{ textAlign: 'center', fontSize: '12px', color: '#94a3b8', paddingBottom: '4px' }}>
+            <a href="/privacy" style={{ color: '#64748b', textDecoration: 'none', marginRight: '16px' }}>Privacy Policy</a>
+            <a href="/terms" style={{ color: '#64748b', textDecoration: 'none' }}>Terms of Service</a>
+          </div>
+
           {/* Terms of Service */}
           <label className="flex items-start gap-3 cursor-pointer">
             <input
@@ -497,10 +503,14 @@ function IntakeForm() {
             />
             <span className="text-sm" style={{ color: "#0A1929" }}>
               I agree to Cited&apos;s{" "}
-              <a href="#" style={{ color: "#00BFA6", textDecoration: "underline" }}>
+              <a href="/terms" style={{ color: "#00BFA6", textDecoration: "underline" }}>
                 Terms of Service
               </a>{" "}
-              and understand the first 90 days are free.
+              and{" "}
+              <a href="/privacy" style={{ color: "#00BFA6", textDecoration: "underline" }}>
+                Privacy Policy
+              </a>
+              , and understand the first 90 days are free.
             </span>
           </label>
 
