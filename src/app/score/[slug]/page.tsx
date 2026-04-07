@@ -301,7 +301,7 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
             Founding Client Offer
           </div>
           <h2 style={{ fontSize: '20px', fontWeight: 700, color: '#0A1929', margin: '0 0 8px' }}>
-            First 90 days free. No commitment.
+            First 90 days free. Protected by The Citation Guarantee™.
           </h2>
           <p style={{ fontSize: '14px', color: '#64748b', margin: '0 0 24px', lineHeight: 1.6 }}>
             3–5 founding spots available in {market}.<br />

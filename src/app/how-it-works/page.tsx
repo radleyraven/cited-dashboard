@@ -234,7 +234,7 @@ export default function HowItWorksPage() {
               </div>
               <div style={{ textAlign: 'right' }}>
                 <div style={{ fontSize: '11px', color: '#00BFA6', fontWeight: 700, letterSpacing: '1px', textTransform: 'uppercase', marginBottom: '4px' }}>The Guarantee</div>
-                <div style={{ fontSize: '14px', color: '#fff', fontWeight: 600, maxWidth: '200px', lineHeight: 1.5 }}>20 points in 90 days or you owe nothing. Ever.</div>
+                <div style={{ fontSize: '14px', color: '#fff', fontWeight: 600, maxWidth: '200px', lineHeight: 1.5 }}>The Citation Guarantee™ — 20 points in 90 days or you owe nothing. Ever.</div>
               </div>
             </div>
             {[
