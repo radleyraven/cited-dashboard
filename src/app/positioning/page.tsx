@@ -81,6 +81,7 @@ export default function PositioningPage() {
         </div>
       </header>
 
+      {/* Stats Bar */}
       <div style={{ background: "#0D2137", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
         <div className="max-w-3xl mx-auto px-6 py-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -109,65 +110,37 @@ export default function PositioningPage() {
       </div>
 
       <main className="max-w-3xl mx-auto px-6 py-10">
+
         {/* Page Header */}
-        <div className="mb-6">
+        <div className="mb-8">
           <h2 className="text-3xl font-bold" style={{ color: '#0A1929' }}>Your Positioning Statement</h2>
           <p className="text-gray-500 mt-2">
-            Review what we found in your audit, then approve the positioning statement that will guide everything we write for you.
+            This is the foundation of everything we write for you — your bios, articles, and platform copy. Read it, then approve it or tell us what to change.
           </p>
         </div>
 
-        {/* Compact top approve button — transforms same as bottom on click */}
-        <div className="mb-6 rounded-lg px-4 py-3 border shadow-sm" style={{ borderColor: approved ? '#00BFA6' : '#e5e7eb', background: approved ? '#f0fdf9' : '#fff' }}>
-          {approved ? (
-            <div className="flex items-center gap-3">
-              <span style={{ color: '#00BFA6', fontSize: '20px' }}>✓</span>
-              <p className="text-sm font-semibold" style={{ color: '#00BFA6' }}>Approved — we&apos;re writing your platform copy now</p>
-            </div>
-          ) : (
-            <div className="flex items-center justify-between">
-              <p className="text-sm text-gray-600">Looks right already? Approve it now and we&apos;ll get started.</p>
-              <button
-                onClick={handleApprove}
-                className="ml-4 shrink-0 px-4 py-2 rounded-lg text-xs font-bold text-white transition-opacity hover:opacity-90"
-                style={{ background: '#00BFA6' }}
-              >
-                Approve →
-              </button>
-            </div>
-          )}
-        </div>
-
-        {/* Section 1 — Business Analysis */}
-        <section className="mb-8">
-          <h3 className="text-lg font-bold mb-4" style={{ color: '#0A1929' }}>Your Business Analysis</h3>
-          <div className="space-y-3">
-            {AUDIT_FINDINGS.map((finding, i) => (
-              <div key={i} className="bg-white rounded-xl p-5 shadow-sm border border-gray-100 flex items-start gap-4"
-                style={{ borderLeft: `4px solid ${i === 0 ? "#00BFA6" : i === 1 ? "#D4A830" : i === 2 ? "#00BFA6" : "#EF4444"}` }}>
-                <span className="text-xl shrink-0">{finding.icon}</span>
-                <div>
-                  <div className="text-xs font-bold uppercase tracking-wider mb-1.5 text-gray-400">{finding.label}</div>
-                  <p className="text-sm text-gray-700 leading-relaxed">{finding.value}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Section 2 — Positioning Statement */}
-        <section className="mb-8">
-          <h3 className="text-lg font-bold mb-4" style={{ color: '#0A1929' }}>Your Positioning Statement</h3>
+        {/* SECTION 1 — POSITIONING STATEMENT (first) */}
+        <section className="mb-6">
           <div className="rounded-xl p-6 shadow-sm" style={{ background: '#0A1929' }}>
-            <div
-              className="inline-block text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full mb-5"
-              style={{ background: '#D4A830', color: '#0A1929' }}
-            >
-              DRAFT — Awaiting Your Approval
-            </div>
+            {!approved && (
+              <div
+                className="inline-block text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full mb-5"
+                style={{ background: '#D4A830', color: '#0A1929' }}
+              >
+                DRAFT — Awaiting Your Approval
+              </div>
+            )}
+            {approved && (
+              <div
+                className="inline-block text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full mb-5"
+                style={{ background: '#00BFA6', color: '#fff' }}
+              >
+                ✓ APPROVED
+              </div>
+            )}
             <blockquote
               className="text-lg italic leading-relaxed mb-5"
-              style={{ color: '#F0F4F8', fontStyle: 'italic' }}
+              style={{ color: '#F0F4F8' }}
             >
               &ldquo;{POSITIONING_STATEMENT}&rdquo;
             </blockquote>
@@ -177,9 +150,8 @@ export default function PositioningPage() {
           </div>
         </section>
 
-        {/* Section 3 — Actions */}
-        <section className="mb-8 space-y-5">
-          {/* Action A — Approve */}
+        {/* SECTION 2 — APPROVE / FEEDBACK (immediately after statement) */}
+        <section className="mb-10 space-y-4">
           <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
             {approved ? (
               <div className="flex items-center gap-3">
@@ -193,26 +165,25 @@ export default function PositioningPage() {
                 </div>
                 <div>
                   <p className="font-semibold" style={{ color: '#00BFA6' }}>Approved — we&rsquo;re writing your platform copy now</p>
-                  <p className="text-sm text-gray-500 mt-0.5">We&rsquo;ll have your platform copy ready within 48 hours.</p>
+                  <p className="text-sm text-gray-500 mt-0.5">Your platform copy will be ready within 48 hours.</p>
                 </div>
               </div>
             ) : (
               <div>
                 <p className="text-sm font-medium text-gray-700 mb-4">
-                  Does this statement feel right? If it sounds like you — approve it and we&rsquo;ll get to work.
+                  Does this sound like you? If it does — approve it and we&rsquo;ll start writing your platform copy.
                 </p>
                 <button
                   onClick={handleApprove}
                   className="w-full sm:w-auto px-6 py-3 rounded-lg text-sm font-bold text-white transition-opacity hover:opacity-90"
                   style={{ background: '#00BFA6' }}
                 >
-                  This looks right — approve it
+                  This looks right — approve it →
                 </button>
               </div>
             )}
           </div>
 
-          {/* Action B — Request a change */}
           {!approved && (
             <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
               {feedbackSent ? (
@@ -222,14 +193,14 @@ export default function PositioningPage() {
               ) : (
                 <form onSubmit={handleFeedbackSubmit}>
                   <label className="block text-sm font-semibold mb-2" style={{ color: '#0A1929' }}>
-                    I&rsquo;d change this:
+                    Something feels off? Tell us what to change:
                   </label>
                   <textarea
                     className="w-full rounded-lg border border-gray-200 p-3 text-sm text-gray-700 resize-none focus:outline-none focus:ring-2 focus:ring-teal-300"
                     rows={3}
                     value={feedbackText}
                     onChange={(e) => setFeedbackText(e.target.value)}
-                    placeholder="e.g., 'I'd emphasize my listing experience more' or 'The Encinitas Ranch reference should be more specific'"
+                    placeholder="e.g., 'I'd emphasize my Carlsbad experience more' or 'This doesn't mention my renovation background enough'"
                   />
                   <div className="mt-3">
                     <button
@@ -247,18 +218,49 @@ export default function PositioningPage() {
           )}
         </section>
 
+        {/* SECTION 3 — BUSINESS ANALYSIS (why we positioned you this way) */}
+        <section className="mb-8">
+          <h3 className="text-base font-bold mb-1" style={{ color: '#0A1929' }}>Why we positioned you this way</h3>
+          <p className="text-sm text-gray-500 mb-4">Here&apos;s what the audit found — the data behind the statement.</p>
+          <div className="space-y-3">
+            {AUDIT_FINDINGS.map((finding, i) => (
+              <div key={i} className="bg-white rounded-xl p-5 shadow-sm border border-gray-100 flex items-start gap-4"
+                style={{ borderLeft: `4px solid ${i === 0 ? "#00BFA6" : i === 1 ? "#D4A830" : i === 2 ? "#00BFA6" : "#EF4444"}` }}>
+                <span className="text-xl shrink-0">{finding.icon}</span>
+                <div>
+                  <div className="text-xs font-bold uppercase tracking-wider mb-1.5 text-gray-400">{finding.label}</div>
+                  <p className="text-sm text-gray-700 leading-relaxed">{finding.value}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Second approve CTA for scrollers */}
+        {!approved && (
+          <div className="mb-8 rounded-xl p-5 border-2 text-center" style={{ borderColor: '#00BFA6', background: '#f0fdf9' }}>
+            <p className="text-sm font-medium text-gray-700 mb-3">Ready to approve?</p>
+            <button
+              onClick={handleApprove}
+              className="px-6 py-3 rounded-lg text-sm font-bold text-white transition-opacity hover:opacity-90"
+              style={{ background: '#00BFA6' }}
+            >
+              Approve positioning statement →
+            </button>
+          </div>
+        )}
+
         {/* Bottom note */}
         <div
           className="rounded-xl px-6 py-4 text-sm text-gray-600 border border-gray-100"
           style={{ background: '#F8F9FA' }}
         >
-          Once you approve, we&rsquo;ll have your platform copy ready within 48 hours. Questions? Reply to any of our emails or reach out at{' '}
+          Once approved, your platform copy will be ready within 48 hours. Questions? Reply to any of our emails or reach out at{' '}
           <a href="mailto:hello@citedagent.com" className="font-semibold" style={{ color: '#00BFA6' }}>
             hello@citedagent.com
           </a>
         </div>
 
-        {/* Footer */}
         <div className="mt-10 text-center text-sm text-gray-400">
           Cited · AI Visibility for Professionals · citedagent.com
         </div>
