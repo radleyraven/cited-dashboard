@@ -6,7 +6,7 @@ export default function HowItWorksPage() {
     },
     {
       q: 'I already have a Google Business Profile. Doesn\'t that cover it?',
-      a: 'Claiming a GBP is step one. Optimizing it for AI citation is different — it requires a specific structure in your description, consistent NAP data across all platforms, active posts, and keyword-specific reviews. Most claimed GBPs score in the low range because claiming ≠ optimizing. We handle the optimization.',
+      a: 'Claiming a GBP is step one. Optimizing it for AI citation is different — it requires a specific structure in your description, consistent NAP data across all platforms, active posts, and keyword-specific reviews. Most claimed GBPs score in the low range because claiming ≠ optimizing. We write the optimized copy — you paste it in.',
     },
     {
       q: 'Why hasn\'t my current marketing company done this?',
@@ -35,7 +35,7 @@ export default function HowItWorksPage() {
 
   const weeks = [
     { week: 'Week 1', title: 'We audit. You do nothing.', time: '0 min', color: '#D4A830', detail: 'Full PRISM scan across 4 AI models. Every platform audited. Optimization plan built.' },
-    { week: 'Week 2', title: 'Profiles optimized. You review.', time: '15 min', color: '#00BFA6', detail: 'GBP claimed, LinkedIn rewritten, Zillow bio updated. You approve before anything goes live.' },
+    { week: 'Week 2', title: 'Profiles optimized. You review.', time: '15 min', color: '#00BFA6', detail: 'GBP copy written, LinkedIn rewritten, Zillow bio updated. You review and paste each one into your profiles.' },
     { week: 'Week 3', title: 'Article written. You answer 5 questions.', time: '10 min', color: '#00BFA6', detail: 'We write a full authority article in your voice. You review one draft and approve.' },
     { week: 'Week 4', title: 'Article live. Score moves. You see it.', time: '5 min', color: '#D4A830', detail: 'Published to LinkedIn and distributed. PRISM re-scan run. Month 1 report delivered.' },
   ];
