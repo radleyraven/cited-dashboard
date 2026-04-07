@@ -156,6 +156,8 @@ export default function ArticlesPage() {
     const next = !postedLinkedIn;
     setPostedLinkedIn(next);
     localStorage.setItem('cited_article2_linkedin', String(next));
+    // Sync to dashboard checklist — marks "Review + post Article 1" as done
+    if (next) localStorage.setItem('cited_checklist_article1', 'true');
     if (next && step2Ref.current) {
       setTimeout(() => step2Ref.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 350);
     }

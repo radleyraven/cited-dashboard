@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 interface CitedItem {
   label: string;
@@ -32,11 +32,28 @@ const clientTodoItems: ClientItem[] = [
   { label: 'Paste your optimized platform copy', href: '/copy-kit' },
 ];
 
+// localStorage keys that sync with other pages
+const CLIENT_ITEM_KEYS = [
+  'cited_checklist_positioning',
+  'cited_checklist_article1',   // set by /articles when LinkedIn posted
+  'cited_checklist_reviews',
+  'cited_checklist_platforms',
+];
+
 export default function DeliverablesChecklist() {
   const [clientDone, setClientDone] = useState<boolean[]>(clientTodoItems.map(() => false));
 
+  // Load persisted state from localStorage (including cross-page sync)
+  useEffect(() => {
+    setClientDone(CLIENT_ITEM_KEYS.map(key => localStorage.getItem(key) === 'true'));
+  }, []);
+
   const toggleClient = (i: number) => {
-    setClientDone(prev => prev.map((v, idx) => idx === i ? !v : v));
+    setClientDone(prev => {
+      const next = prev.map((v, idx) => idx === i ? !v : v);
+      localStorage.setItem(CLIENT_ITEM_KEYS[i], String(next[i]));
+      return next;
+    });
   };
 
   return (
