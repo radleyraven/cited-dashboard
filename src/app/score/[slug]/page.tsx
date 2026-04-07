@@ -145,7 +145,7 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
           <div style={{ fontSize: '10px', color: '#4a6380', letterSpacing: '1.5px', textTransform: 'uppercase', marginTop: '3px' }}>{isVariantB ? 'AI Citation Optimization for Professionals' : 'AI Visibility for Professionals'}</div>
         </div>
         <div style={{ fontSize: '11px', color: '#4a6380', textAlign: 'right' }}>
-          Powered by <span style={{ color: '#00BFA6', fontWeight: 700 }}>PRISM</span>
+          Powered by <span style={{ color: '#00BFA6', fontWeight: 700 }}>PRISM™</span>
         </div>
       </header>
 
@@ -314,7 +314,7 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
             How Cited Closes the Gap
           </div>
           {[
-            { icon: '→', text: 'We handle 87% of the work. You provide 15 minutes a month.' },
+            { icon: '→', text: 'We handle 87% of the work. You provide ~30 minutes to get started, 15 minutes per month after that.' },
             { icon: '→', text: 'Full platform optimization — GBP, FastExpert, LinkedIn, and more.' },
             { icon: '→', text: 'Monthly AI-optimized articles published under your name.' },
             { icon: '→', text: 'PRISM re-scans every 30 days so you can see the score move.' },
@@ -364,7 +364,7 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
           </div>
           Cited · AI Visibility for Professionals · citedagent.com
           <br />
-          <span style={{ color: '#cbd5e1' }}>Powered by PRISM · Professional Recognition Index for Search Models</span>
+          <span style={{ color: '#cbd5e1' }}>Powered by PRISM™ · Professional Recognition Index for Search Models</span>
         </div>
       </main>
     </div>
