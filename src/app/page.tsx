@@ -6,9 +6,19 @@ import SignOutButton from '@/components/SignOutButton';
 import Link from 'next/link';
 import { getPrismScans } from '@/lib/prism-data';
 
+function getNextMilestone(score: number): { target: number; label: string; description: string } {
+  if (score < 21) return { target: 21, label: 'AI is learning you exist', description: 'First citations appearing' };
+  if (score < 36) return { target: 36, label: 'Appearing in local searches', description: 'AI mentions you in target markets' };
+  if (score < 51) return { target: 51, label: 'Competing with top agents', description: "You're in the consideration set" };
+  if (score < 66) return { target: 66, label: 'Leading your market', description: 'AI recommends you first' };
+  if (score < 76) return { target: 76, label: 'Dominant', description: 'Top recommendation across all markets' };
+  return { target: 86, label: 'Category authority', description: 'The definitive expert in your market' };
+}
+
 export default function Home() {
   const prism = getPrismScans();
   const displayScore = Math.round(prism.latest * 10);
+  const nextMilestone = getNextMilestone(displayScore);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -54,9 +64,9 @@ export default function Home() {
         {/* Next Milestone Banner */}
         <div style={{ background: '#fff', borderRadius: '10px', padding: '12px 20px', marginBottom: '16px', border: '1px solid #e8edf2', display: 'flex', alignItems: 'center', justifyContent: 'space-between', boxShadow: '0 1px 3px rgba(0,0,0,0.06)' }}>
           <div style={{ fontSize: '13px', color: '#64748b' }}>
-            🎯 <strong style={{ color: '#0A1929' }}>Next milestone:</strong> Score 75 — you pass the top competitor in Carlsbad
+            🎯 <strong style={{ color: '#0A1929' }}>Next milestone:</strong> Score {nextMilestone.target} — {nextMilestone.label}
           </div>
-          <div style={{ fontSize: '12px', color: '#00BFA6', fontWeight: 600 }}>Month 2 target</div>
+          <div style={{ fontSize: '12px', color: '#00BFA6', fontWeight: 600 }}>{nextMilestone.description}</div>
         </div>
 
         {/* Bottom Row: Score History + Deliverables */}

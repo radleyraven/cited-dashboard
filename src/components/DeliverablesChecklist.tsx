@@ -22,13 +22,14 @@ const citedCompletedItems: CitedItem[] = [
   { label: 'Zillow bio rewritten', note: '(copy in My Platforms — you paste)' },
   { label: 'Yelp profile created', note: '(copy in My Platforms — you paste)' },
   { label: 'Realtor.com bio updated', note: '(copy in My Platforms — you paste)' },
-  { label: 'Month 1 article written and published' },
+  { label: 'Article 1 written and published' },
 ];
 
 const clientTodoItems: ClientItem[] = [
-  { label: 'Review + post your article', href: '/articles' },
+  { label: 'Approve your positioning statement', href: '/positioning' },
+  { label: 'Review + post Article 1', href: '/articles' },
   { label: 'Request 5 GBP reviews from past clients', href: '/reviews' },
-  { label: 'Paste bios into your platform profiles', href: '/copy-kit' },
+  { label: 'Paste your optimized platform copy', href: '/copy-kit' },
 ];
 
 export default function DeliverablesChecklist() {
@@ -72,7 +73,7 @@ export default function DeliverablesChecklist() {
       {/* Section B: Client to-do */}
       <div>
         <div className="flex items-center gap-2 mb-2">
-          <span className="text-sm font-semibold" style={{ color: '#0A1929' }}>Your Turn (3 items)</span>
+          <span className="text-sm font-semibold" style={{ color: '#0A1929' }}>Your Turn</span>
           <span className="text-xs px-2 py-0.5 rounded-full font-medium" style={{ background: '#FFF3CD', color: '#D4A830' }}>
             {clientTodoItems.length - clientDone.filter(Boolean).length} left
           </span>

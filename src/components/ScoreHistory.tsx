@@ -7,8 +7,11 @@ interface ScoreHistoryProps {
 }
 
 export default function ScoreHistory({ history }: ScoreHistoryProps) {
+  // Ensure there's always at least a baseline starting point
+  const safeHistory = history.length > 0 ? history : [{ date: 'Start', score: 0 }];
+
   // Always label the first data point "Start" (Day 0 baseline), rest as Month 1, Month 2, etc.
-  const data = history.map((h, i) => {
+  const data = safeHistory.map((h, i) => {
     if (i === 0) {
       return { date: 'Start', score: Math.round(h.score * 10) };
     }
@@ -18,7 +21,7 @@ export default function ScoreHistory({ history }: ScoreHistoryProps) {
     };
   });
 
-  const singlePoint = data.length === 1;
+  const singlePoint = safeHistory.length === 1;
 
   return (
     <div>
@@ -28,7 +31,7 @@ export default function ScoreHistory({ history }: ScoreHistoryProps) {
       </div>
 
       {singlePoint && (
-        <p className="text-xs text-gray-400 mb-3">(re-scan in ~30 days)</p>
+        <p className="text-xs text-gray-400 mb-3">(next re-scan in ~30 days)</p>
       )}
 
       <div className="w-full h-64">
