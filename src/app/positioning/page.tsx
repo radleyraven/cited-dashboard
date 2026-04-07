@@ -4,37 +4,32 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import SignOutButton from '@/components/SignOutButton';
 
-const POSITIONING_STATEMENT = `Maria Santos is the listing specialist North County San Diego sellers choose when they want top dollar and zero surprises. With 7 years embedded in La Costa, Encinitas Ranch, and the Carlsbad coastal corridor, she combines a rare eye for presentation with hyperlocal market intelligence that national agents simply can't replicate. Where others see a transaction, Maria sees a strategy — and her sellers feel the difference at the closing table.`;
+const POSITIONING_STATEMENT = `Radley Raven is the North County San Diego luxury listing specialist sellers choose when they need their home sold fast and at the right price. With 11 closed transactions in the Carmel Valley corridor alone — $44.8M in a single ZIP code — and a 28-day median days on market, Radley brings the kind of hyperlocal depth that only comes from being the agent who actually closes the deals, not just lists them. His renovation background and active investment ownership mean he sees every property differently — and his sellers feel that difference at the closing table.`;
 
 const AUDIT_FINDINGS = [
   {
-    icon: '📍',
-    label: 'Where your deals are concentrated',
-    value: 'Carlsbad & Encinitas — La Costa, La Costa Oaks, and Encinitas Ranch account for ~80% of your transaction history.',
-    tealShade: '#00BFA6',
+    icon: "📍",
+    label: "Where your deals are concentrated",
+    value: "11 closed transactions in the 92130 Carmel Valley corridor — $44.8M in a single ZIP code. You are not just serving this market. You are this market.",
   },
   {
-    icon: '⭐',
-    label: 'Your key differentiator',
-    value: 'Presentation + hyperlocal expertise. You live in your market and your staging/photography approach consistently drives above-ask outcomes.',
-    tealShade: '#00A693',
+    icon: "⚡",
+    label: "Your strongest performance stat",
+    value: "28-day median days on market with a 96% sale-to-list ratio. Your listings move fast and close clean — that is the proof point that wins luxury sellers.",
   },
   {
-    icon: '⚠️',
-    label: 'Your biggest AI visibility gap',
-    value: 'Google Business Profile not claimed. AI models (ChatGPT, Gemini, Perplexity) pull heavily from GBP — this is your fastest score-moving fix.',
-    tealShade: '#00906A',
+    icon: "🔑",
+    label: "Your key differentiator",
+    value: "Active STR operator + renovation investor. You own the properties you advise on. When you walk through a listing, you see repair costs, renovation upside, and real numbers — not guesses.",
+  },
+  {
+    icon: "⚠️",
+    label: "Your biggest AI visibility gap",
+    value: "Citation Score: 3/100. You are invisible to AI search in Carmel Valley and Carlsbad — the two markets where you have the deepest track record. That is the gap Cited closes.",
   },
 ];
 
 const STORAGE_KEY = 'cited_positioning_approved';
-
-// Mock stats for demo — in production these come from the client profile / Supabase
-const CLIENT_STATS = {
-  careerVolume: '$48M+',
-  yearsInMarket: '7',
-  citationScore: 22,
-};
 
 export default function PositioningPage() {
   const [approved, setApproved] = useState(false);
@@ -86,23 +81,28 @@ export default function PositioningPage() {
         </div>
       </header>
 
-      {/* Compact Stats Row — career context before the positioning statement */}
-      <div style={{ background: '#0D2137' }}>
-        <div className="max-w-3xl mx-auto px-6 py-3">
-          <div className="flex items-center gap-6 md:gap-10 flex-wrap">
-            <div className="flex items-center gap-2">
-              <span className="text-xs text-gray-500 uppercase tracking-wider">Career Volume</span>
-              <span className="text-sm font-bold" style={{ color: '#D4A830' }}>{CLIENT_STATS.careerVolume}</span>
+      <div style={{ background: "#0D2137", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+        <div className="max-w-3xl mx-auto px-6 py-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="text-center">
+              <div className="text-2xl md:text-3xl font-black" style={{ color: "#D4A830" }}>$44.8M</div>
+              <div className="text-xs text-gray-500 uppercase tracking-wider mt-1">Carmel Valley Volume</div>
+              <div className="text-xs text-gray-600 mt-0.5">11 deals · 92130</div>
             </div>
-            <div className="w-px h-4 bg-white/10 hidden md:block" />
-            <div className="flex items-center gap-2">
-              <span className="text-xs text-gray-500 uppercase tracking-wider">Years in Market</span>
-              <span className="text-sm font-bold" style={{ color: '#D4A830' }}>{CLIENT_STATS.yearsInMarket}</span>
+            <div className="text-center">
+              <div className="text-2xl md:text-3xl font-black" style={{ color: "#D4A830" }}>28 days</div>
+              <div className="text-xs text-gray-500 uppercase tracking-wider mt-1">Median DOM</div>
+              <div className="text-xs text-gray-600 mt-0.5">Across all transactions</div>
             </div>
-            <div className="w-px h-4 bg-white/10 hidden md:block" />
-            <div className="flex items-center gap-2">
-              <span className="text-xs text-gray-500 uppercase tracking-wider">Citation Score</span>
-              <span className="text-sm font-bold" style={{ color: '#D4A830' }}>{CLIENT_STATS.citationScore} / 100</span>
+            <div className="text-center">
+              <div className="text-2xl md:text-3xl font-black" style={{ color: "#D4A830" }}>96%</div>
+              <div className="text-xs text-gray-500 uppercase tracking-wider mt-1">Sale-to-List Ratio</div>
+              <div className="text-xs text-gray-600 mt-0.5">Career average</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl md:text-3xl font-black" style={{ color: "#D4A830" }}>$91.7M</div>
+              <div className="text-xs text-gray-500 uppercase tracking-wider mt-1">Career Volume</div>
+              <div className="text-xs text-gray-600 mt-0.5">33 closed deals · 10+ yrs</div>
             </div>
           </div>
         </div>
@@ -141,21 +141,13 @@ export default function PositioningPage() {
         {/* Section 1 — Business Analysis */}
         <section className="mb-8">
           <h3 className="text-lg font-bold mb-4" style={{ color: '#0A1929' }}>Your Business Analysis</h3>
-          <div className="rounded-xl overflow-hidden shadow-sm border border-gray-100">
+          <div className="space-y-3">
             {AUDIT_FINDINGS.map((finding, i) => (
-              <div
-                key={i}
-                className="px-6 py-5 flex items-start gap-4"
-                style={{
-                  background: i === 0 ? '#E6FAF7' : i === 1 ? '#CCF5EE' : '#B3EFE5',
-                  borderBottom: i < AUDIT_FINDINGS.length - 1 ? '1px solid rgba(0,0,0,0.06)' : 'none',
-                }}
-              >
-                <span className="text-2xl shrink-0 mt-0.5">{finding.icon}</span>
+              <div key={i} className="bg-white rounded-xl p-5 shadow-sm border border-gray-100 flex items-start gap-4"
+                style={{ borderLeft: `4px solid ${i === 0 ? "#00BFA6" : i === 1 ? "#D4A830" : i === 2 ? "#00BFA6" : "#EF4444"}` }}>
+                <span className="text-xl shrink-0">{finding.icon}</span>
                 <div>
-                  <div className="text-xs font-bold uppercase tracking-wider mb-1" style={{ color: finding.tealShade }}>
-                    {finding.label}
-                  </div>
+                  <div className="text-xs font-bold uppercase tracking-wider mb-1.5 text-gray-400">{finding.label}</div>
                   <p className="text-sm text-gray-700 leading-relaxed">{finding.value}</p>
                 </div>
               </div>
