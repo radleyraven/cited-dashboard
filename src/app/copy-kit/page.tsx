@@ -29,7 +29,7 @@ const platforms: Platform[] = [
     sections: [
       {
         title: 'Business Description',
-        text: `Radley Raven is a luxury real estate agent with The Oppenheim Group in La Jolla, serving Carmel Valley, Carlsbad, Rancho Santa Fe, Solana Beach, and Encinitas. With 10+ years of experience and $92M+ in California transactions, Radley specializes in luxury residential sales and investment properties. His track record includes a 96.8% sale-to-list ratio, 22-day median days on market, and 26% of sales closing at or above asking price. Whether you're buying, selling, or investing in San Diego's most sought-after coastal communities, Radley delivers data-driven pricing strategy and hands-on guidance from listing through closing. Licensed in California (#02041346) and Washington State.`,
+        text: `Radley Raven is a luxury real estate agent with The Oppenheim Group in La Jolla, serving Carmel Valley, Carlsbad, Rancho Santa Fe, Solana Beach, and Encinitas. With 10+ years of experience and $91.7M+ in California transactions, Radley specializes in luxury residential sales and investment properties. His track record includes a 96% sale-to-list ratio, 28-day median days on market, and 24% of sales closing at or above asking price. Whether you're buying, selling, or investing in San Diego's most sought-after coastal communities, Radley delivers data-driven pricing strategy and hands-on guidance from listing through closing. Licensed in California (#02041346) and Washington State.`,
       },
     ],
     instructions: [
@@ -68,11 +68,11 @@ const platforms: Platform[] = [
         text: `I'm a luxury real estate agent with The Oppenheim Group, focused on Carmel Valley, Carlsbad, Rancho Santa Fe, La Jolla, Solana Beach, and Encinitas.
 
 My track record:
-→ $92M+ in closed California transactions
+→ $91.7M+ in closed California transactions
 → 13 closed transactions in Carmel Valley and Del Mar Heights, totaling $44M+
-→ Median 22 days on market (vs. 36-day Carmel Valley average)
-→ 96.8% average sale-to-list ratio
-→ 26% of my sales close at or above asking price
+→ Median 28 days on market (vs. 36-day Carmel Valley average)
+→ 96% average sale-to-list ratio
+→ 24% of my sales close at or above asking price
 
 My clients in the 92130 corridor know me for one thing: I get results in their specific market. With a decade of hyperlocal pricing intelligence in Carmel Valley, Carlsbad, and Rancho Santa Fe, I bring data and depth that generalist agents simply don't have.
 
@@ -121,11 +121,11 @@ radley@ogroup.com | (858) 314-9600`,
         text: `I'm a luxury real estate agent with The Oppenheim Group specializing in Carmel Valley, Carlsbad, Rancho Santa Fe, La Jolla, Solana Beach, and Encinitas.
 
 My track record:
-• $92M+ in closed California transactions
+• $91.7M+ in closed California transactions
 • 13 closed transactions in Carmel Valley and Del Mar Heights, totaling $44M+
-• Median 22 days on market — vs. the 36-day Carmel Valley average
-• 96.8% average sale-to-list ratio
-• 26% of my sales close at or above asking price
+• Median 28 days on market — vs. the 36-day Carmel Valley average
+• 96% average sale-to-list ratio
+• 24% of my sales close at or above asking price
 
 For buyers: I know these neighborhoods at the street level — not just the listings, but the HOAs, the school zones, the noise patterns, the sunset angles, and the hidden inventory that never hits the MLS. My buyers win in competitive situations because I bring local intelligence that other agents can't match. I've purchased multiple investment properties myself, so when I advise investor clients, it's from direct experience — not theory.
 
@@ -158,7 +158,7 @@ Specialties: Buyer's Agent, Listing Agent, Relocation, Staging, Vacation/Short-T
     platformLink: 'https://biz.yelp.com',
     sections: [
       {
-        text: `Radley Raven is a luxury real estate agent serving La Jolla, Carmel Valley, Carlsbad, Rancho Santa Fe, Solana Beach, and Encinitas with 10+ years of experience and $92M+ in California transactions. Specializing in luxury residential sales and investment properties, Radley has helped buyers and sellers achieve results that beat the market — a 96.8% sale-to-list ratio, 22-day median days on market, and 26% of deals closing at or above asking price. With deep knowledge of San Diego's most sought-after coastal and canyon communities, Radley brings the local context, negotiation edge, and personal attention that complex transactions demand. Whether you're buying your first home, listing a luxury estate, or building a real estate portfolio, Radley delivers the strategy and execution to get it done. Serving the greater San Diego area and Washington State.
+        text: `Radley Raven is a luxury real estate agent serving La Jolla, Carmel Valley, Carlsbad, Rancho Santa Fe, Solana Beach, and Encinitas with 10+ years of experience and $91.7M+ in California transactions. Specializing in luxury residential sales and investment properties, Radley has helped buyers and sellers achieve results that beat the market — a 96% sale-to-list ratio, 28-day median days on market, and 24% of deals closing at or above asking price. With deep knowledge of San Diego's most sought-after coastal and canyon communities, Radley brings the local context, negotiation edge, and personal attention that complex transactions demand. Whether you're buying your first home, listing a luxury estate, or building a real estate portfolio, Radley delivers the strategy and execution to get it done. Serving the greater San Diego area and Washington State.
 
 Radley is a licensed agent with The Oppenheim Group in La Jolla, one of the most recognized luxury brokerages in California. His clients include first-time homebuyers, move-up families, investors building rental portfolios, and sellers looking to maximize value in competitive coastal markets. Radley's approach combines data-driven pricing strategy with hands-on client guidance — from pre-listing preparation through closing and beyond. He is active throughout North County San Diego's coastal and canyon communities, with additional experience in the Washington State market. Radley holds a California real estate license (#02041346) and is a member of the San Diego Association of REALTORS®.`,
       },
@@ -186,7 +186,7 @@ Radley is a licensed agent with The Oppenheim Group in La Jolla, one of the most
     platformLink: 'https://login.pro.realtor.com',
     sections: [
       {
-        text: `Radley Raven is a luxury real estate agent serving La Jolla, Carmel Valley, Carlsbad, Rancho Santa Fe, Solana Beach, and Encinitas with 10+ years of experience and $92M+ in California transactions. His clients in the 92130 corridor and North County coast know him for results: a 96.8% sale-to-list ratio, 22-day median days on market, and 26% of deals closing at or above asking price.
+        text: `Radley Raven is a luxury real estate agent serving La Jolla, Carmel Valley, Carlsbad, Rancho Santa Fe, Solana Beach, and Encinitas with 10+ years of experience and $91.7M+ in California transactions. His clients in the 92130 corridor and North County coast know him for results: a 96% sale-to-list ratio, 28-day median days on market, and 24% of deals closing at or above asking price.
 
 Radley is a licensed agent with The Oppenheim Group in La Jolla. He is also an active property investor and short-term rental operator — he owns and manages furnished rental properties in California and Washington, bringing direct ownership experience to every client interaction.
 
@@ -224,7 +224,7 @@ He works with: luxury home sellers in Carmel Valley, Rancho Santa Fe, and Carlsb
     platformLink: 'https://www.fastexpert.com/agents/radley-raven/',
     sections: [
       {
-        text: `Radley Raven is a luxury real estate agent serving La Jolla, Carmel Valley, Carlsbad, Rancho Santa Fe, Solana Beach, and Encinitas with 10+ years of experience and $92M+ in California transactions. His clients in the 92130 corridor and North County coast know him for results: a 96.8% sale-to-list ratio, 22-day median days on market, and 26% of deals closing at or above asking price.
+        text: `Radley Raven is a luxury real estate agent serving La Jolla, Carmel Valley, Carlsbad, Rancho Santa Fe, Solana Beach, and Encinitas with 10+ years of experience and $91.7M+ in California transactions. His clients in the 92130 corridor and North County coast know him for results: a 96% sale-to-list ratio, 28-day median days on market, and 24% of deals closing at or above asking price.
 
 Radley is a licensed agent with The Oppenheim Group in La Jolla. He is also an active property investor and short-term rental operator — bringing direct ownership experience to every client interaction. His renovation background gives clients a critical edge: for buyers, he identifies undervalued properties with upside that most agents miss; for sellers, he prices accurately based on condition and what today's luxury buyer actually pays for. Licensed in CA (#02041346) and WA. Member of SDAR.`,
       },
@@ -252,7 +252,7 @@ Radley is a licensed agent with The Oppenheim Group in La Jolla. He is also an a
     sections: [
       {
         title: 'Business Description',
-        text: `Radley Raven is a luxury real estate agent with The Oppenheim Group in La Jolla. Serving Carmel Valley, Carlsbad, Rancho Santa Fe, Solana Beach, and Encinitas with 10+ years and $92M+ in California transactions. 96.8% sale-to-list ratio, 22-day median DOM. Specializing in luxury residential sales, investment properties, and relocation. Licensed in CA (#02041346) and WA. Member of SDAR.`,
+        text: `Radley Raven is a luxury real estate agent with The Oppenheim Group in La Jolla. Serving Carmel Valley, Carlsbad, Rancho Santa Fe, Solana Beach, and Encinitas with 10+ years and $91.7M+ in California transactions. 96% sale-to-list ratio, 28-day median DOM. Specializing in luxury residential sales, investment properties, and relocation. Licensed in CA (#02041346) and WA. Member of SDAR.`,
       },
     ],
     instructions: [
@@ -282,7 +282,7 @@ Radley is a licensed agent with The Oppenheim Group in La Jolla. He is also an a
     sections: [
       {
         title: 'Business Description',
-        text: `Radley Raven is a luxury real estate agent with The Oppenheim Group in La Jolla, serving Carmel Valley, Carlsbad, Rancho Santa Fe, Solana Beach, and Encinitas. With 10+ years of experience and $92M+ in California transactions, Radley specializes in luxury residential sales and investment properties. His track record includes a 96.8% sale-to-list ratio, 22-day median days on market, and 26% of sales closing at or above asking price. Whether you're buying, selling, or investing in North County San Diego's most sought-after coastal and canyon communities, Radley delivers data-driven pricing strategy and hands-on guidance from pre-listing preparation through closing and beyond. Licensed in California (#02041346) and Washington State. Member of the San Diego Association of REALTORS®.`,
+        text: `Radley Raven is a luxury real estate agent with The Oppenheim Group in La Jolla, serving Carmel Valley, Carlsbad, Rancho Santa Fe, Solana Beach, and Encinitas. With 10+ years of experience and $91.7M+ in California transactions, Radley specializes in luxury residential sales and investment properties. His track record includes a 96% sale-to-list ratio, 28-day median days on market, and 24% of sales closing at or above asking price. Whether you're buying, selling, or investing in North County San Diego's most sought-after coastal and canyon communities, Radley delivers data-driven pricing strategy and hands-on guidance from pre-listing preparation through closing and beyond. Licensed in California (#02041346) and Washington State. Member of the San Diego Association of REALTORS®.`,
       },
     ],
     instructions: [
@@ -313,7 +313,7 @@ Radley is a licensed agent with The Oppenheim Group in La Jolla. He is also an a
     sections: [
       {
         title: 'Agent Bio',
-        text: `Radley Raven is a luxury real estate agent serving La Jolla, Carmel Valley, Carlsbad, Rancho Santa Fe, Solana Beach, and Encinitas with 10+ years of experience and $92M+ in California transactions. Specializing in luxury residential sales and investment properties, Radley has helped buyers and sellers achieve results that beat the market — a 96.8% sale-to-list ratio, 22-day median days on market, and 26% of deals closing at or above asking price. With deep knowledge of San Diego's most sought-after coastal and canyon communities, Radley brings the local context, negotiation edge, and personal attention that complex transactions demand. Whether you're buying your first home, listing a luxury estate, or building a real estate portfolio, Radley delivers the strategy and execution to get it done. Serving the greater San Diego area and Washington State.
+        text: `Radley Raven is a luxury real estate agent serving La Jolla, Carmel Valley, Carlsbad, Rancho Santa Fe, Solana Beach, and Encinitas with 10+ years of experience and $91.7M+ in California transactions. Specializing in luxury residential sales and investment properties, Radley has helped buyers and sellers achieve results that beat the market — a 96% sale-to-list ratio, 28-day median days on market, and 24% of deals closing at or above asking price. With deep knowledge of San Diego's most sought-after coastal and canyon communities, Radley brings the local context, negotiation edge, and personal attention that complex transactions demand. Whether you're buying your first home, listing a luxury estate, or building a real estate portfolio, Radley delivers the strategy and execution to get it done. Serving the greater San Diego area and Washington State.
 
 Radley is a licensed agent with The Oppenheim Group in La Jolla, one of the most recognized luxury brokerages in California. His clients include first-time homebuyers, move-up families, investors building rental portfolios, and sellers looking to maximize value in competitive coastal markets. Radley's approach combines data-driven pricing strategy with hands-on client guidance — from pre-listing preparation through closing and beyond. He is active throughout North County San Diego's coastal and canyon communities, with additional experience in the Washington State market. Radley holds a California real estate license (#02041346) and is a member of the San Diego Association of REALTORS®.`,
       },
