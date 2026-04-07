@@ -212,14 +212,14 @@ export default function ArticlesPage() {
           </div>
         </div>
 
-        {/* ── STEP 1: Read + Post to LinkedIn ─────────────────────────────── */}
+        {/* ── STEP 1: Review + Post to LinkedIn ─────────────────────────────── */}
         <div className={`bg-white rounded-xl shadow-sm border overflow-hidden transition-all duration-300 ${postedLinkedIn ? 'border-green-200' : 'border-gray-100'}`}>
           {/* Step header */}
           <div className="px-6 py-4 flex items-center gap-4" style={{ background: '#0A1929' }}>
             <StepBadge n={1} done={postedLinkedIn} />
             <div className="flex-1 min-w-0">
               <p className="text-xs font-semibold uppercase tracking-widest mb-0.5" style={{ color: '#00BFA6' }}>Step 1</p>
-              <h2 className="text-white font-bold text-base leading-tight">Read + Post to LinkedIn</h2>
+              <h2 className="text-white font-bold text-base leading-tight">Review + Post to LinkedIn</h2>
             </div>
             {postedLinkedIn && (
               <span className="text-xs font-semibold px-2.5 py-1 rounded-full shrink-0" style={{ background: '#d1fae5', color: '#059669' }}>
@@ -233,27 +233,33 @@ export default function ArticlesPage() {
             {/* Article title */}
             <div className="px-6 pt-6 pb-4 border-b border-gray-100">
               <h3 className="text-xl font-bold text-gray-900 leading-tight mb-4">{ARTICLE_TITLE}</h3>
-              <CopyButton text={FULL_ARTICLE} label="Copy Article" />
+              <div className="flex items-center gap-3 flex-wrap">
+                <CopyButton text={ARTICLE_TITLE} label="Copy Title" size="sm" />
+                <CopyButton text={FULL_ARTICLE} label="Copy Article" />
+              </div>
             </div>
 
             {/* Article body */}
             <div className="px-6 py-6 border-b border-gray-100">
               <div className="prose prose-gray max-w-none">
-                {ARTICLE_BODY.split('\n\n').map((paragraph, i) => {
-                  const isHeader = paragraph.length < 80 && !paragraph.endsWith('.') && !paragraph.startsWith('→') && !paragraph.startsWith('Most') && !paragraph.startsWith("I've") && !paragraph.startsWith("Here's") && !paragraph.startsWith('What') && !paragraph.startsWith('The buyers') && !paragraph.startsWith('For the') && !paragraph.startsWith('But') && !paragraph.startsWith('La Costa') && !paragraph.startsWith('Santalina') && !paragraph.startsWith('All') && !paragraph.startsWith('If you');
-                  const isArrow = paragraph.startsWith('→');
-
-                  if (isHeader) {
-                    return <h4 key={i} className="text-base font-bold text-gray-900 mt-6 mb-2">{paragraph}</h4>;
+                {ARTICLE_BODY.split('\n\n').flatMap((paragraph, i) => {
+                  // If paragraph contains multiple arrow items, split them individually
+                  if (paragraph.includes('\n→') || paragraph.startsWith('→')) {
+                    return paragraph.split('\n').map((line, j) => {
+                      if (!line.trim()) return null;
+                      if (line.startsWith('→')) {
+                        return (
+                          <div key={`${i}-${j}`} className="pl-4 border-l-4 my-1.5" style={{ borderColor: '#00BFA6' }}>
+                            <p className="text-gray-700 font-medium text-sm">{line}</p>
+                          </div>
+                        );
+                      }
+                      return <p key={`${i}-${j}`} className="text-gray-700 font-medium text-sm mb-1">{line}</p>;
+                    }).filter(Boolean);
                   }
-                  if (isArrow) {
-                    return (
-                      <div key={i} className="pl-4 border-l-4 my-1.5" style={{ borderColor: '#00BFA6' }}>
-                        <p className="text-gray-700 font-medium text-sm">{paragraph}</p>
-                      </div>
-                    );
-                  }
-                  return <p key={i} className="text-gray-700 leading-relaxed mb-4 text-sm">{paragraph}</p>;
+                  const isHeader = paragraph.length < 80 && !paragraph.endsWith('.') && !paragraph.startsWith('Most') && !paragraph.startsWith("I've") && !paragraph.startsWith("Here's") && !paragraph.startsWith('What') && !paragraph.startsWith('The buyers') && !paragraph.startsWith('For the') && !paragraph.startsWith('But') && !paragraph.startsWith('La Costa') && !paragraph.startsWith('Santalina') && !paragraph.startsWith('All') && !paragraph.startsWith('If you');
+                  if (isHeader) return [<h4 key={i} className="text-base font-bold text-gray-900 mt-6 mb-2">{paragraph}</h4>];
+                  return [<p key={i} className="text-gray-700 leading-relaxed mb-4 text-sm">{paragraph}</p>];
                 })}
               </div>
             </div>
