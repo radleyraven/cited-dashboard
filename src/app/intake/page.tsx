@@ -75,6 +75,37 @@ const REVIEW_OPTIONS = [
   "HomeLight",
 ];
 
+function GoogleSignInButton({ redirectTo }: { redirectTo: string }) {
+  const handleGoogleSignIn = async () => {
+    const { createSupabaseBrowserClient } = await import('@/lib/supabase-browser');
+    const supabase = createSupabaseBrowserClient();
+    await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: { redirectTo },
+    });
+  };
+
+  return (
+    <button
+      onClick={handleGoogleSignIn}
+      style={{
+        display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px',
+        width: '100%', padding: '14px 24px',
+        background: '#00BFA6', border: 'none', borderRadius: '8px',
+        fontSize: '15px', fontWeight: 700, color: '#fff', cursor: 'pointer',
+      }}
+    >
+      <svg width="20" height="20" viewBox="0 0 24 24">
+        <path fill="rgba(255,255,255,0.9)" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+        <path fill="rgba(255,255,255,0.9)" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+        <path fill="rgba(255,255,255,0.9)" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+        <path fill="rgba(255,255,255,0.9)" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+      </svg>
+      Continue to Dashboard with Google
+    </button>
+  );
+}
+
 function IntakeForm() {
   const searchParams = useSearchParams();
   // Hide MLS upload for CA/WA RE agents — Radley pulls MLS data directly
@@ -191,17 +222,11 @@ function IntakeForm() {
             Welcome to Cited.
           </p>
 
-          <div style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "10px", padding: "24px", marginBottom: "24px", textAlign: "left" }}>
+          <div style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "10px", padding: "24px", marginBottom: "28px", textAlign: "left" }}>
             <div style={{ display: "flex", gap: "12px", marginBottom: "14px", alignItems: "flex-start" }}>
               <span style={{ color: "#00BFA6", fontWeight: 700, flexShrink: 0 }}>→</span>
               <p style={{ fontSize: "14px", color: "#cbd5e1", lineHeight: 1.7, margin: 0 }}>
                 <strong style={{ color: "#fff" }}>Your bios are being built now.</strong> Optimized profiles for Google, LinkedIn, Zillow, Yelp, and Realtor.com — ready within 72 hours.
-              </p>
-            </div>
-            <div style={{ display: "flex", gap: "12px", marginBottom: "14px", alignItems: "flex-start" }}>
-              <span style={{ color: "#00BFA6", fontWeight: 700, flexShrink: 0 }}>→</span>
-              <p style={{ fontSize: "14px", color: "#cbd5e1", lineHeight: 1.7, margin: 0 }}>
-                <strong style={{ color: "#fff" }}>Check your email</strong> — your dashboard access link is on its way.
               </p>
             </div>
             <div style={{ display: "flex", gap: "12px", alignItems: "flex-start" }}>
@@ -211,6 +236,24 @@ function IntakeForm() {
               </p>
             </div>
           </div>
+
+          {/* Primary CTA — Google OAuth */}
+          <GoogleSignInButton redirectTo="https://citedagent.com/auth/callback?next=/" />
+
+          {/* Divider */}
+          <div style={{ display: "flex", alignItems: "center", gap: "12px", margin: "16px 0" }}>
+            <div style={{ flex: 1, height: "1px", background: "rgba(255,255,255,0.1)" }} />
+            <span style={{ fontSize: "12px", color: "#4a6380" }}>or</span>
+            <div style={{ flex: 1, height: "1px", background: "rgba(255,255,255,0.1)" }} />
+          </div>
+
+          {/* Fallback */}
+          <p style={{ fontSize: "13px", color: "#4a6380", margin: "0 0 20px" }}>
+            Check your email for a dashboard access link, or{" "}
+            <a href="/login" style={{ color: "#00BFA6", textDecoration: "none", fontWeight: 600 }}>
+              go to the login page →
+            </a>
+          </p>
 
           <p style={{ fontSize: "12px", color: "#4a6380" }}>
             Cited · AI Visibility for Real Estate Professionals · citedagent.com
