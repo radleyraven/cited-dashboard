@@ -103,9 +103,14 @@ radley@ogroup.com | (858) 314-9600`,
       'Banner image — Carlsbad/North County lifestyle or listing photo',
       'Featured section — link to your Cited LinkedIn articles',
       'Skills — Carmel Valley, Carlsbad, Rancho Santa Fe, Luxury Homes, Investment Properties, Staging, Buyer Representation',
+      'Featured section — add links to your published LinkedIn articles (boosts AI citation)',
+      'Education — complete your education section (profile completeness signal)',
     ],
     copyFields: [
       { label: 'Location', value: 'Carlsbad, California' },
+      { label: 'Current Position — Title', value: 'Luxury Real Estate Agent' },
+      { label: 'Current Position — Company', value: 'The Oppenheim Group' },
+      { label: 'Skills (paste into Skills section)', value: 'Luxury Real Estate, Carmel Valley Real Estate, Carlsbad Real Estate, Rancho Santa Fe Real Estate, North County San Diego, Investment Properties, Short-Term Rentals, Property Renovation, Luxury Home Sales, Relocation' },
     ],
   },
   {
@@ -261,9 +266,8 @@ Radley is a licensed agent with The Oppenheim Group in La Jolla. He is also an a
     ],
     additionalItems: [
       'Service area — all target cities',
-      'Hours — Sun 10-5 | Mon-Fri 8-8 | Sat 9-6',
       'Social links — Instagram, LinkedIn, YouTube',
-      'Website — https://ogroup.com/agents/radley-raven/',
+      'Categories — Real Estate Agent (primary)',
     ],
     copyFields: [
       { label: 'Phone', value: '(858) 314-9600' },
@@ -290,10 +294,8 @@ Radley is a licensed agent with The Oppenheim Group in La Jolla. He is also an a
       'Verify via phone — Apple will call the number on file',
     ],
     additionalItems: [
-      'Phone — (858) 314-9600 (must match all other platforms exactly)',
-      'Website — https://ogroup.com/agents/radley-raven/',
-      'Hours — Sun 10-5 | Mon-Fri 8-8 | Sat 9-6',
       'Attributes — Appointments Only, Wheelchair Accessible, Service Animals Welcome',
+      'Categories — Real Estate Agent (primary)',
       'Status — Verification in review (1-5 days) — complete once approved',
     ],
     copyFields: [
@@ -330,6 +332,63 @@ Radley is a licensed agent with The Oppenheim Group in La Jolla, one of the most
     ],
     copyFields: [
       { label: 'Service Areas', value: 'Carmel Valley, Carlsbad, Rancho Santa Fe, La Jolla, Solana Beach, Encinitas, Del Mar' },
+      { label: 'Website', value: 'https://ogroup.com/agents/radley-raven/' },
+    ],
+  },
+  {
+    id: 'foursquare',
+    name: 'Foursquare',
+    badge: 'You Update',
+    platformLink: 'https://foursquare.com/add-place',
+    sections: [
+      {
+        title: 'Business Description (300 chars)',
+        text: `11 closed transactions in Carmel Valley — $44.8M in a single ZIP code. Luxury real estate agent with The Oppenheim Group in La Jolla. Serving Carmel Valley, Carlsbad, Rancho Santa Fe. 28-day median DOM. 96% sale-to-list ratio. Licensed CA #02041346.`,
+      },
+    ],
+    instructions: [
+      'Go to foursquare.com/add-place or search for your existing listing first',
+      'If you have an existing listing: Jett will run the optimization script automatically — no action needed',
+      'If no listing found: click Add a Place, fill in the fields using the copy above',
+      'Why this matters: Foursquare feeds 60-70% of ChatGPT local results directly',
+    ],
+    additionalItems: [
+      'Business name: Radley Raven — Real Estate Agent',
+      'Category: Real Estate Agent',
+      'Address: 7925 Girard Ave, La Jolla, CA 92037',
+      'Phone: (858) 314-9600',
+      'Website: https://ogroup.com/agents/radley-raven/',
+    ],
+    copyFields: [
+      { label: 'Business Name', value: 'Radley Raven — Real Estate Agent' },
+      { label: 'Phone', value: '(858) 314-9600' },
+      { label: 'Website', value: 'https://ogroup.com/agents/radley-raven/' },
+      { label: 'Address', value: '7925 Girard Ave, La Jolla, CA 92037' },
+    ],
+  },
+  {
+    id: 'homelight',
+    name: 'HomeLight',
+    badge: 'You Update',
+    platformLink: 'https://www.homelight.com/agents/radley-raven-ca-02041346',
+    sections: [
+      {
+        title: 'Bio',
+        text: `Radley Raven is a luxury listing specialist with The Oppenheim Group in La Jolla — with 11 closed transactions in the Carmel Valley 92130 corridor, $44.8M in a single ZIP code, and a 28-day median days on market. He serves Carmel Valley, Carlsbad, Rancho Santa Fe, La Jolla, Solana Beach, and Encinitas — providing buyers and sellers across North County San Diego with data-driven pricing and hands-on representation that consistently outperforms the market.`,
+      },
+    ],
+    instructions: [
+      'Go to your HomeLight profile and update the bio above',
+      'Sign the referral agreement to activate lead generation (required)',
+      'Upload your professional headshot',
+    ],
+    additionalItems: [
+      'Referral Agreement — UNSIGNED (required to receive referrals — sign at homelight.com portal)',
+      'Specialties: Luxury Specialist, Investment Properties, Relocations, Vacation Home, Coastal Properties',
+      'Min price: $500,000',
+    ],
+    copyFields: [
+      { label: 'Review Request URL', value: 'https://www.homelight.com/reviews/new/radley-raven-ca-02041346' },
     ],
   },
 ];
@@ -465,7 +524,7 @@ export default function CopyKitPage() {
         <div className="mb-8">
           <h2 className="text-3xl font-bold" style={{ color: '#0A1929' }}>Your Platform Copy</h2>
           <p className="text-gray-500 mt-2 max-w-2xl">
-            Review the optimized copy for each platform, paste it in, and post it. Platforms are ordered by AI citation impact — start with GBP and LinkedIn.
+            Review the optimized copy for each platform, paste it in, and post it. Each card has a direct link to open the platform, a copy button at the top, and paste-ready fields for everything you need. Platforms are ordered by AI citation impact — start with GBP and LinkedIn.
           </p>
 
           {/* Progress bar */}
@@ -614,27 +673,30 @@ export default function CopyKitPage() {
 
                     {/* Actions */}
                     <div className="pt-2 space-y-2">
-                      <div className="flex items-center justify-end">
-                        <label className="flex items-center gap-2 cursor-pointer select-none">
-                          <div
-                            className="w-5 h-5 rounded flex items-center justify-center shrink-0 transition-colors"
-                            style={isApproved ? { background: '#00BFA6' } : { border: '2px solid #D1D5DB' }}
-                            onClick={() => toggleApprove(platform.id, index)}
-                          >
-                            {isApproved && (
-                              <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                              </svg>
-                            )}
-                          </div>
-                          <span
-                            className="text-sm font-medium"
-                            style={{ color: isApproved ? '#00BFA6' : '#6B7280' }}
-                            onClick={() => toggleApprove(platform.id, index)}
-                          >
-                            I&apos;ve reviewed and posted this ✓
-                          </span>
-                        </label>
+                      <div
+                        className={`flex items-center gap-3 rounded-lg p-3 cursor-pointer select-none transition-colors ${isApproved ? 'bg-teal-50' : 'bg-gray-50'}`}
+                        onClick={() => toggleApprove(platform.id, index)}
+                      >
+                        <div
+                          className="flex items-center justify-center shrink-0 transition-colors"
+                          style={{
+                            width: 28,
+                            height: 28,
+                            borderRadius: 6,
+                            ...(isApproved
+                              ? { background: '#00BFA6' }
+                              : { border: '2px solid #D4A830', background: 'white' }),
+                          }}
+                        >
+                          {isApproved && (
+                            <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                            </svg>
+                          )}
+                        </div>
+                        <span className="font-semibold text-base" style={{ color: isApproved ? '#00BFA6' : '#374151' }}>
+                          {isApproved ? 'Posted ✓' : 'Mark as posted to this platform'}
+                        </span>
                       </div>
                       <div className="flex items-center justify-end">
                         <button
