@@ -39,12 +39,9 @@ const platforms: Platform[] = [
       'Click Save',
     ],
     additionalItems: [
-      'Business hours — Sun 10-5 | Mon-Fri 8-8 | Sat 9-6',
-      'Address — 7925 Girard Ave, La Jolla, CA 92037 (must match all platforms exactly)',
-      'Photos — upload 10+ photos: headshot, neighborhood, exterior, interior',
+      'Photos — upload 10+ photos: headshot, neighborhood, exterior, interior (multi-modal = +317% AI citation probability)',
       'Category — Real Estate Agent (primary) + Real Estate (additional)',
       'Services — Luxury Home Sales, Buyer/Seller Representation, Investment Property Consulting, Relocation, Market Analysis, Property Valuation',
-      'Website — https://ogroup.com/agents/radley-raven/ (update to radleyraven.com when live)',
     ],
     copyFields: [
       { label: 'Office Address', value: '7925 Girard Ave, La Jolla, CA 92037' },
