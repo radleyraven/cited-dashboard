@@ -750,7 +750,7 @@ export default function CopyKitPage() {
 
         {/* Footer */}
         <div className="mt-10 text-center text-sm text-gray-400">
-          Cited · AI Visibility for Professionals · citedagent.com · Powered by PRISM
+          Cited · AI Visibility for Professionals · citedagent.com · Powered by PRISM™
         </div>
       </main>
     </div>
