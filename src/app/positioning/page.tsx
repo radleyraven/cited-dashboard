@@ -27,6 +27,11 @@ const AUDIT_FINDINGS = [
     label: "Your biggest AI visibility gap",
     value: "Citation Score: 3/100. You are invisible to AI search in Carmel Valley and Carlsbad — the two markets where you have the deepest track record. That is the gap Cited closes.",
   },
+  {
+    icon: "⚡",
+    label: "Needs immediate attention",
+    value: "Three platforms are blocking your AI visibility right now: Foursquare (not found — feeds 60-70% of ChatGPT local results), Yelp (unclaimed — Perplexity cites Yelp in 100% of industries), and Google Business Profile (not optimized — primary signal for Google AI Overviews). These move first.",
+  },
 ];
 
 const STORAGE_KEY = 'cited_positioning_approved';
@@ -81,34 +86,6 @@ export default function PositioningPage() {
         </div>
       </header>
 
-      {/* Stats Bar */}
-      <div style={{ background: "#0D2137", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
-        <div className="max-w-3xl mx-auto px-6 py-6">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="text-center">
-              <div className="text-2xl md:text-3xl font-black" style={{ color: "#D4A830" }}>$44.8M</div>
-              <div className="text-xs text-gray-500 uppercase tracking-wider mt-1">Carmel Valley Volume</div>
-              <div className="text-xs text-gray-600 mt-0.5">11 deals · 92130</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl md:text-3xl font-black" style={{ color: "#D4A830" }}>28 days</div>
-              <div className="text-xs text-gray-500 uppercase tracking-wider mt-1">Median DOM</div>
-              <div className="text-xs text-gray-600 mt-0.5">Across all transactions</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl md:text-3xl font-black" style={{ color: "#D4A830" }}>96%</div>
-              <div className="text-xs text-gray-500 uppercase tracking-wider mt-1">Sale-to-List Ratio</div>
-              <div className="text-xs text-gray-600 mt-0.5">Career average</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl md:text-3xl font-black" style={{ color: "#D4A830" }}>$91.7M</div>
-              <div className="text-xs text-gray-500 uppercase tracking-wider mt-1">Career Volume</div>
-              <div className="text-xs text-gray-600 mt-0.5">33 closed deals · 10+ yrs</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
       <main className="max-w-3xl mx-auto px-6 py-10">
 
         {/* Page Header */}
@@ -151,7 +128,7 @@ export default function PositioningPage() {
         </section>
 
         {/* SECTION 2 — APPROVE / FEEDBACK (immediately after statement) */}
-        <section className="mb-10 space-y-4">
+        <section className="mb-6 space-y-4">
           <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
             {approved ? (
               <div className="flex items-center gap-3">
@@ -218,9 +195,37 @@ export default function PositioningPage() {
           )}
         </section>
 
-        {/* SECTION 3 — BUSINESS ANALYSIS (why we positioned you this way) */}
+        {/* Stats Bar — moved below approve/feedback */}
+        <div className="rounded-xl mb-10" style={{ background: "#0D2137", border: "1px solid rgba(255,255,255,0.06)" }}>
+          <div className="px-6 py-6">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="text-center">
+                <div className="text-2xl md:text-3xl font-black" style={{ color: "#D4A830" }}>$44.8M</div>
+                <div className="text-xs text-gray-500 uppercase tracking-wider mt-1">Carmel Valley Volume</div>
+                <div className="text-xs text-gray-600 mt-0.5">11 deals · 92130</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl md:text-3xl font-black" style={{ color: "#D4A830" }}>28 days</div>
+                <div className="text-xs text-gray-500 uppercase tracking-wider mt-1">Median DOM</div>
+                <div className="text-xs text-gray-600 mt-0.5">Across all transactions</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl md:text-3xl font-black" style={{ color: "#D4A830" }}>96%</div>
+                <div className="text-xs text-gray-500 uppercase tracking-wider mt-1">Sale-to-List Ratio</div>
+                <div className="text-xs text-gray-600 mt-0.5">Career average</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl md:text-3xl font-black" style={{ color: "#D4A830" }}>$91.7M</div>
+                <div className="text-xs text-gray-500 uppercase tracking-wider mt-1">Career Volume</div>
+                <div className="text-xs text-gray-600 mt-0.5">33 closed deals · 10+ yrs</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* SECTION 3 — BUSINESS ANALYSIS (what we found) */}
         <section className="mb-8">
-          <h3 className="text-base font-bold mb-1" style={{ color: '#0A1929' }}>Why we positioned you this way</h3>
+          <h3 className="text-base font-bold mb-1" style={{ color: '#0A1929' }}>What we found — and what needs attention first</h3>
           <p className="text-sm text-gray-500 mb-4">Here&apos;s what the audit found — the data behind the statement.</p>
           <div className="space-y-3">
             {AUDIT_FINDINGS.map((finding, i) => (
@@ -238,7 +243,7 @@ export default function PositioningPage() {
 
         {/* Second approve CTA for scrollers */}
         {!approved && (
-          <div className="mb-8 rounded-xl p-5 border-2 text-center" style={{ borderColor: '#00BFA6', background: '#f0fdf9' }}>
+          <div className="mb-4 rounded-xl p-5 border-2 text-center" style={{ borderColor: '#00BFA6', background: '#f0fdf9' }}>
             <p className="text-sm font-medium text-gray-700 mb-3">Ready to approve?</p>
             <button
               onClick={handleApprove}
@@ -249,6 +254,13 @@ export default function PositioningPage() {
             </button>
           </div>
         )}
+
+        {/* View full report link */}
+        <div className="text-center mt-4 mb-8">
+          <a href="/" className="text-sm font-semibold" style={{ color: '#00BFA6', textDecoration: 'none' }}>
+            View full report in dashboard →
+          </a>
+        </div>
 
         {/* Bottom note */}
         <div
