@@ -51,7 +51,7 @@ export default function HowItWorksPage() {
           </a>
           <div style={{ fontSize: '10px', color: '#4a6380', letterSpacing: '1.5px', textTransform: 'uppercase', marginTop: '3px' }}>AI Visibility for Professionals</div>
         </div>
-        <div style={{ fontSize: '11px', color: '#4a6380' }}>Powered by <span style={{ color: '#00BFA6', fontWeight: 700 }}>PRISM</span></div>
+        <div style={{ fontSize: '11px', color: '#4a6380' }}>Powered by <span style={{ color: '#00BFA6', fontWeight: 700 }}>PRISM™</span></div>
       </header>
       <div style={{ height: '3px', background: 'linear-gradient(90deg, #D4A830 0%, #00BFA6 100%)' }} />
 
@@ -287,8 +287,8 @@ export default function HowItWorksPage() {
             <a href="/privacy" style={{ color: '#64748b', textDecoration: 'none', marginRight: '16px' }}>Privacy Policy</a>
             <a href="/terms" style={{ color: '#64748b', textDecoration: 'none' }}>Terms of Service</a>
           </div>
-          Cited · AI Visibility for Professionals · citedagent.com · Powered by PRISM<br />
-          <span style={{ color: '#cbd5e1' }}>Powered by PRISM · Professional Recognition Index for Search Models</span>
+          Cited · AI Visibility for Professionals · citedagent.com · Powered by PRISM™<br />
+          <span style={{ color: '#cbd5e1' }}>Powered by PRISM™ · Professional Recognition Index for Search Models</span>
         </div>
 
       </main>
