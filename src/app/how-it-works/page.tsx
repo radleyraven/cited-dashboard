@@ -6,7 +6,7 @@ export default function HowItWorksPage() {
     },
     {
       q: 'I already have a Google Business Profile. Doesn\'t that cover it?',
-      a: 'Claiming a GBP is step one. Optimizing it for AI citation is different — it requires a specific structure in your description, consistent NAP data across all platforms, active posts, and keyword-specific reviews. Most claimed GBPs score in the low range because claiming ≠ optimizing. We write the optimized copy — you paste it in.',
+      a: 'Claiming a Google Business Profile is step one. Optimizing it for AI citation is different — it requires a specific structure in your description, consistent NAP data across all platforms, active posts, and keyword-specific reviews. Most claimed GBPs score in the low range because claiming ≠ optimizing. We write the optimized copy — you paste it in.',
     },
     {
       q: 'Why hasn\'t my current marketing company done this?',
@@ -34,10 +34,10 @@ export default function HowItWorksPage() {
   ];
 
   const weeks = [
-    { week: 'Week 1', title: 'We audit. You do nothing.', time: '0 min', color: '#D4A830', detail: 'Full PRISM scan across 4 AI models. Every platform audited. Optimization plan built.' },
-    { week: 'Week 2', title: 'Profiles optimized. You review.', time: '15 min', color: '#00BFA6', detail: 'GBP copy written, LinkedIn rewritten, Zillow bio updated. You review and paste each one into your profiles.' },
-    { week: 'Week 3', title: 'Article written. You answer 5 questions.', time: '10 min', color: '#00BFA6', detail: 'We write a full authority article in your voice. You review one draft and approve.' },
-    { week: 'Week 4', title: 'Article live. Score moves. You see it.', time: '5 min', color: '#D4A830', detail: 'Published to LinkedIn and distributed. PRISM re-scan run. Month 1 report delivered.' },
+    { week: 'Week 1', title: 'We audit. You do nothing.', time: '0 min', color: '#D4A830', detail: 'Full business and visibility audit — we examine where you close deals, your AI footprint across 11 platforms, and where your market opportunity gaps are. Optimization plan built.' },
+    { week: 'Week 2', title: 'Profiles optimized. You review.', time: '15 min', color: '#00BFA6', detail: 'Profiles optimized across all platforms. You review your copy kit and paste each one in — one click per platform, paste-ready fields included. Your positioning approval triggers this step.' },
+    { week: 'Week 3', title: 'Article written. You answer 5 questions.', time: '10 min', color: '#00BFA6', detail: 'Article brief sent — 5 questions, 10 minutes. We write the article in your voice. Posting it to LinkedIn IS your approval — no separate step needed.' },
+    { week: 'Week 4', title: 'Article live. Score moves. You see it.', time: '5 min', color: '#D4A830', detail: 'Article live and indexing. First AI signals visible within 7-14 days on Perplexity. Full PRISM re-scan at Day 30 — your Month 1 report shows exactly what moved.' },
   ];
 
   return (
@@ -182,7 +182,7 @@ export default function HowItWorksPage() {
               </div>
             </div>
             <div style={{ background: '#f8fafc', borderRadius: '8px', padding: '14px 16px', fontSize: '13px', color: '#4a5568', lineHeight: 1.6, textAlign: 'center' }}>
-              Radley Raven · The Oppenheim Group · Carlsbad, CA · 10 years · $91M+ career volume
+              Radley Raven · The Oppenheim Group · Carmel Valley, CA · 10 years · $91M+ career volume
             </div>
           </div>
         </div>
@@ -233,7 +233,7 @@ export default function HowItWorksPage() {
                 <div style={{ fontSize: '13px', color: '#64748b', marginTop: '4px' }}>Then $800/month — only if your score moved.</div>
               </div>
               <div style={{ textAlign: 'right' }}>
-                <div style={{ fontSize: '11px', color: '#00BFA6', fontWeight: 700, letterSpacing: '1px', textTransform: 'uppercase', marginBottom: '4px' }}>The Guarantee</div>
+                <div style={{ fontSize: '11px', color: '#00BFA6', fontWeight: 700, letterSpacing: '1px', textTransform: 'uppercase', marginBottom: '4px' }}>The Citation Guarantee™</div>
                 <div style={{ fontSize: '14px', color: '#fff', fontWeight: 600, maxWidth: '200px', lineHeight: 1.5 }}>The Citation Guarantee™ — 20 points in 90 days or you owe nothing. Ever.</div>
               </div>
             </div>
