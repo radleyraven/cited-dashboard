@@ -101,7 +101,10 @@ export default function PositioningPage() {
 
         {/* SECTION 1 — POSITIONING STATEMENT (first) */}
         <section className="mb-6">
-          <div className="rounded-xl p-6 shadow-sm" style={{ background: '#0A1929' }}>
+          <div
+            className="rounded-xl p-6 shadow-sm"
+            style={approved ? { background: '#f0fdf9', borderLeft: '4px solid #00BFA6', borderRadius: '0 6px 6px 0' } : { background: '#fffdf0', borderLeft: '4px solid #D4A830', borderRadius: '0 6px 6px 0' }}
+          >
             {!approved && (
               <div
                 className="inline-block text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full mb-5"
@@ -120,11 +123,11 @@ export default function PositioningPage() {
             )}
             <blockquote
               className="text-lg italic leading-relaxed mb-5"
-              style={{ color: '#F0F4F8' }}
+              style={{ color: approved ? '#065f46' : '#374151' }}
             >
               &ldquo;{POSITIONING_STATEMENT}&rdquo;
             </blockquote>
-            <p className="text-sm" style={{ color: '#94A3B8' }}>
+            <p className="text-sm" style={{ color: approved ? '#065f46' : '#6B7280' }}>
               This statement guides everything we write — your bios, your articles, your platform copy. It should sound like you.
             </p>
           </div>
