@@ -21,7 +21,7 @@ const platforms: Platform[] = [
     sections: [
       {
         title: 'Business Description',
-        text: `Maria Santos is a luxury real estate agent with Compass serving Carlsbad, Encinitas, and Solana Beach. With 7 years of hyperlocal expertise in La Costa, Encinitas Ranch, and the North County coastal corridor, Maria specializes in listing representation and buyer advocacy across Carlsbad's most sought-after neighborhoods. Known for her eye for presentation and deep knowledge of local market dynamics, Maria helps sellers in Carlsbad and Encinitas achieve top dollar through strategic staging, pricing, and marketing. Licensed in California (#02041346).`,
+        text: `Radley Raven is a luxury real estate agent with The Oppenheim Group serving Carlsbad, Carmel Valley, and Rancho Santa Fe. With 10+ years of expertise across North County San Diego's most exclusive communities, Radley specializes in luxury listing representation — known for pricing accuracy, renovation expertise, and properties that move fast. Known for data-driven pricing strategy and hands-on guidance, Radley helps sellers in Carlsbad, Carmel Valley, and Rancho Santa Fe achieve above-asking results. Licensed in California (#02041346).`,
       },
     ],
     instructions: [
@@ -45,11 +45,11 @@ const platforms: Platform[] = [
     sections: [
       {
         title: 'Headline',
-        text: `Luxury Real Estate Agent | Carlsbad · Encinitas · Solana Beach | Listing Specialist & Buyer Advocate | Compass | La Costa & Encinitas Ranch Expert`,
+        text: `Luxury Real Estate Agent | Carlsbad · Carmel Valley · Rancho Santa Fe | Listing Specialist | The Oppenheim Group | 10+ Years North County San Diego`,
       },
       {
         title: 'About',
-        text: `If you're selling a home in Carlsbad, Encinitas, or Solana Beach, you need an agent who knows exactly how to make your property stand out — because presentation is everything in today's market. I'm Maria Santos, a listing specialist with Compass serving the North County San Diego coastal corridor. For the past 7 years, I've helped sellers in Carlsbad and Encinitas achieve top dollar by combining meticulous presentation strategy with deep hyperlocal market knowledge. I live in La Costa — these aren't just my markets, they're my neighborhood. $48M+ in closed transactions. CA License #02041346 | Compass.`,
+        text: `If you're selling a luxury home in Carlsbad, Carmel Valley, or Rancho Santa Fe, you need an agent who combines data precision with deep local knowledge. I'm Radley Raven, a luxury listing specialist with The Oppenheim Group. For 10+ years, I've helped North County San Diego sellers achieve above-asking results through strategic pricing, renovation expertise, and marketing that moves properties fast. $91M+ in career transactions. 96.8% sale-to-list ratio. CA License #02041346 | The Oppenheim Group.`,
       },
     ],
     instructions: [
@@ -110,7 +110,7 @@ const platforms: Platform[] = [
     badge: 'You Update',
     sections: [
       {
-        text: `Maria Santos is a Carlsbad-based real estate agent with Compass specializing in luxury listings and buyer representation across Carlsbad, Encinitas, and Solana Beach. With 7 years of hyperlocal expertise in La Costa, Encinitas Ranch, and the North County coastal corridor, Maria brings deep neighborhood knowledge and a signature focus on home presentation to every transaction. $48M+ in career volume. CA License #02041346.`,
+        text: `Radley Raven is a luxury real estate agent with The Oppenheim Group serving Carlsbad, Carmel Valley, and Rancho Santa Fe. With 10+ years of North County San Diego expertise, Radley delivers data-driven pricing strategy, renovation insight, and white-glove service to luxury buyers and sellers. $91M+ in career volume. 96.8% sale-to-list ratio. CA License #02041346.`,
       },
     ],
     instructions: [
@@ -130,7 +130,7 @@ const platforms: Platform[] = [
     badge: 'You Update',
     sections: [
       {
-        text: `Carlsbad listing specialist with 7 years of North County San Diego expertise. I help sellers in Carlsbad, Encinitas, and Solana Beach achieve top dollar through strategic home presentation and hyperlocal pricing. My neighborhoods: La Costa, La Costa Oaks, Encinitas Ranch, Carlsbad Village. $48M+ in career transactions. CA License #02041346 | Compass.`,
+        text: `Luxury listing specialist with The Oppenheim Group serving Carlsbad, Carmel Valley, and Rancho Santa Fe. 10+ years of North County San Diego expertise. Known for pricing accuracy, renovation insight, and above-asking results. $91M+ career volume. 96.8% sale-to-list ratio. CA #02041346.`,
       },
     ],
     instructions: [
@@ -150,7 +150,7 @@ const platforms: Platform[] = [
     sections: [
       {
         title: 'Business Description',
-        text: `Maria Santos is a luxury real estate agent with Compass serving Carlsbad, Encinitas, and Solana Beach. With 7 years of hyperlocal expertise in La Costa, Encinitas Ranch, and the North County coastal corridor, Maria specializes in listing representation and buyer advocacy. Known for her presentation expertise and deep local knowledge, Maria helps sellers achieve top dollar in Carlsbad and Encinitas. CA License #02041346.`,
+        text: `Radley Raven is a luxury real estate agent with The Oppenheim Group serving Carlsbad, Carmel Valley, and Rancho Santa Fe. With 7 years of hyperlocal expertise in La Costa, Encinitas Ranch, and the North County coastal corridor, Maria specializes in listing representation and buyer advocacy. Known for her presentation expertise and deep local knowledge, Maria helps sellers achieve top dollar in Carlsbad and Encinitas. CA License #02041346.`,
       },
     ],
     instructions: [
@@ -173,7 +173,7 @@ const platforms: Platform[] = [
     sections: [
       {
         title: 'Business Description',
-        text: `Maria Santos, luxury real estate agent with Compass. Specializing in Carlsbad, Encinitas, and Solana Beach. 7 years of North County San Diego expertise across La Costa, Encinitas Ranch, and the coastal corridor. Listing specialist known for presentation and pricing accuracy. CA License #02041346.`,
+        text: `Radley Raven, luxury real estate agent with The Oppenheim Group. Specializing in Carlsbad, Carmel Valley, and Rancho Santa Fe. 10+ years of North County San Diego expertise. Listing specialist known for pricing accuracy, renovation expertise, and above-asking results. CA License #02041346.`,
       },
     ],
     instructions: [
@@ -197,7 +197,7 @@ const platforms: Platform[] = [
     sections: [
       {
         title: 'Agent Bio',
-        text: `Maria Santos is a Carlsbad-based listing specialist with Compass, serving Carlsbad, Encinitas, and Solana Beach. With 7 years of hyperlocal expertise across La Costa, La Costa Oaks, and Encinitas Ranch, Maria brings deep neighborhood knowledge and a signature focus on presentation to every listing. $48M+ in career transactions. CA License #02041346.`,
+        text: `Radley Raven is a luxury listing specialist with The Oppenheim Group, serving Carlsbad, Carmel Valley, and Rancho Santa Fe. With 10+ years of North County San Diego expertise, Radley brings data-driven pricing strategy and renovation insight to every luxury transaction. $91M+ in career transactions. CA License #02041346.`,
       },
     ],
     instructions: [
