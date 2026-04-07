@@ -12,6 +12,7 @@ interface ClientItem {
   label: string;
   href?: string;
   external?: boolean;
+  storageKey: string;
 }
 
 const citedCompletedItems: CitedItem[] = [
@@ -26,18 +27,13 @@ const citedCompletedItems: CitedItem[] = [
 ];
 
 const clientTodoItems: ClientItem[] = [
-  { label: 'Approve your positioning statement', href: '/positioning' },
-  { label: 'Paste your optimized platform copy', href: '/copy-kit' },
-  { label: 'Review + post Article 1', href: '/articles' },
-  { label: 'Request 5 Google Business Profile reviews from past clients', href: '/reviews' },
-];
-
-// localStorage keys that sync with other pages
-const CLIENT_ITEM_KEYS = [
-  'cited_checklist_positioning',
-  'cited_checklist_article1',   // set by /articles when LinkedIn posted
-  'cited_checklist_reviews',
-  'cited_checklist_platforms',
+  { label: 'Approve your positioning statement', href: '/positioning', storageKey: 'cited_positioning_approved' },
+  { label: 'Post to Google Business Profile', href: '/copy-kit', storageKey: 'cited_checklist_gbp' },
+  { label: 'Post to LinkedIn', href: '/copy-kit', storageKey: 'cited_checklist_linkedin' },
+  { label: 'Post to Yelp', href: '/copy-kit', storageKey: 'cited_checklist_yelp' },
+  { label: 'Complete remaining platforms', href: '/copy-kit', storageKey: 'cited_checklist_platforms_remaining' },
+  { label: 'Review + post Article 1', href: '/articles', storageKey: 'cited_article2_linkedin' },
+  { label: 'Request 5 Google Business Profile reviews from past clients', href: '/reviews', storageKey: 'cited_checklist_reviews' },
 ];
 
 export default function DeliverablesChecklist() {
@@ -45,13 +41,13 @@ export default function DeliverablesChecklist() {
 
   // Load persisted state from localStorage (including cross-page sync)
   useEffect(() => {
-    setClientDone(CLIENT_ITEM_KEYS.map(key => localStorage.getItem(key) === 'true'));
+    setClientDone(clientTodoItems.map(item => localStorage.getItem(item.storageKey) === 'true'));
   }, []);
 
   const toggleClient = (i: number) => {
     setClientDone(prev => {
       const next = prev.map((v, idx) => idx === i ? !v : v);
-      localStorage.setItem(CLIENT_ITEM_KEYS[i], String(next[i]));
+      localStorage.setItem(clientTodoItems[i].storageKey, String(next[i]));
       return next;
     });
   };
