@@ -111,7 +111,7 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
       <header style={{ background: '#0A1929', padding: '20px 28px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <div>
           <div style={{ fontSize: '20px', fontWeight: 800, letterSpacing: '5px', color: '#00BFA6' }}>CITED</div>
-          <div style={{ fontSize: '10px', color: '#4a6380', letterSpacing: '1.5px', textTransform: 'uppercase', marginTop: '3px' }}>{isVariantB ? 'AI Citation Optimization for Real Estate Professionals' : 'AI Visibility for Real Estate Professionals'}</div>
+          <div style={{ fontSize: '10px', color: '#4a6380', letterSpacing: '1.5px', textTransform: 'uppercase', marginTop: '3px' }}>{isVariantB ? 'AI Citation Optimization for Professionals' : 'AI Visibility for Professionals'}</div>
         </div>
         <div style={{ fontSize: '11px', color: '#4a6380', textAlign: 'right' }}>
           Powered by <span style={{ color: '#00BFA6', fontWeight: 700 }}>PRISM</span>
@@ -331,7 +331,7 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
             <a href="/privacy" style={{ color: '#64748b', textDecoration: 'none', marginRight: '16px' }}>Privacy Policy</a>
             <a href="/terms" style={{ color: '#64748b', textDecoration: 'none' }}>Terms of Service</a>
           </div>
-          Cited · AI Visibility for Real Estate Professionals · citedagent.com
+          Cited · AI Visibility for Professionals · citedagent.com
           <br />
           <span style={{ color: '#cbd5e1' }}>Powered by PRISM · Professional Recognition Index for Search Models</span>
         </div>

@@ -49,7 +49,7 @@ export default function HowItWorksPage() {
           <a href="/" style={{ textDecoration: 'none' }}>
             <div style={{ fontSize: '20px', fontWeight: 800, letterSpacing: '5px', color: '#00BFA6' }}>CITED</div>
           </a>
-          <div style={{ fontSize: '10px', color: '#4a6380', letterSpacing: '1.5px', textTransform: 'uppercase', marginTop: '3px' }}>AI Visibility for Real Estate Professionals</div>
+          <div style={{ fontSize: '10px', color: '#4a6380', letterSpacing: '1.5px', textTransform: 'uppercase', marginTop: '3px' }}>AI Visibility for Professionals</div>
         </div>
         <div style={{ fontSize: '11px', color: '#4a6380' }}>Powered by <span style={{ color: '#00BFA6', fontWeight: 700 }}>PRISM</span></div>
       </header>
@@ -287,7 +287,7 @@ export default function HowItWorksPage() {
             <a href="/privacy" style={{ color: '#64748b', textDecoration: 'none', marginRight: '16px' }}>Privacy Policy</a>
             <a href="/terms" style={{ color: '#64748b', textDecoration: 'none' }}>Terms of Service</a>
           </div>
-          Cited · AI Visibility for Real Estate Professionals · citedagent.com<br />
+          Cited · AI Visibility for Professionals · citedagent.com<br />
           <span style={{ color: '#cbd5e1' }}>Powered by PRISM · Professional Recognition Index for Search Models</span>
         </div>
 

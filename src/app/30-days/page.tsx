@@ -57,7 +57,7 @@ export default function ThirtyDaysPage() {
       <header style={{ background: '#0A1929', padding: '20px 28px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <div>
           <div style={{ fontSize: '20px', fontWeight: 800, letterSpacing: '5px', color: '#00BFA6' }}>CITED</div>
-          <div style={{ fontSize: '10px', color: '#4a6380', letterSpacing: '1.5px', textTransform: 'uppercase', marginTop: '3px' }}>AI Visibility for Real Estate Professionals</div>
+          <div style={{ fontSize: '10px', color: '#4a6380', letterSpacing: '1.5px', textTransform: 'uppercase', marginTop: '3px' }}>AI Visibility for Professionals</div>
         </div>
         <div style={{ fontSize: '11px', color: '#4a6380' }}>
           Powered by <span style={{ color: '#00BFA6', fontWeight: 700 }}>PRISM</span>
@@ -200,7 +200,7 @@ export default function ThirtyDaysPage() {
         </div>
 
         <div style={{ textAlign: 'center', marginTop: '28px', fontSize: '11px', color: '#94a3b8' }}>
-          Cited · AI Visibility for Real Estate Professionals · citedagent.com<br />
+          Cited · AI Visibility for Professionals · citedagent.com<br />
           <span style={{ color: '#cbd5e1' }}>Powered by PRISM · Professional Recognition Index for Search Models</span>
         </div>
       </main>

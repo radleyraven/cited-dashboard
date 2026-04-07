@@ -8,7 +8,7 @@ export default function TermsOfServicePage() {
           <a href="/" style={{ textDecoration: 'none' }}>
             <div style={{ fontSize: '20px', fontWeight: 800, letterSpacing: '5px', color: '#00BFA6' }}>CITED</div>
           </a>
-          <div style={{ fontSize: '10px', color: '#4a6380', letterSpacing: '1.5px', textTransform: 'uppercase', marginTop: '3px' }}>AI Visibility for Real Estate Professionals</div>
+          <div style={{ fontSize: '10px', color: '#4a6380', letterSpacing: '1.5px', textTransform: 'uppercase', marginTop: '3px' }}>AI Visibility for Professionals</div>
         </div>
         <div style={{ fontSize: '11px', color: '#4a6380' }}>Powered by <span style={{ color: '#00BFA6', fontWeight: 700 }}>PRISM</span></div>
       </header>
@@ -154,7 +154,7 @@ export default function TermsOfServicePage() {
             <a href="/terms" style={{ color: '#64748b', textDecoration: 'none' }}>Terms of Service</a>
           </div>
           <div style={{ marginTop: '8px' }}>
-            Cited · AI Visibility for Real Estate Professionals · <a href="https://citedagent.com" style={{ color: '#94a3b8' }}>citedagent.com</a>
+            Cited · AI Visibility for Professionals · <a href="https://citedagent.com" style={{ color: '#94a3b8' }}>citedagent.com</a>
           </div>
         </div>
 
