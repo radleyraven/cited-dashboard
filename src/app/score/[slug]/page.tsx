@@ -35,6 +35,18 @@ const prefillData: Record<string, Record<string, string>> = {
     topTransactions: 'Approx. $48M career volume across Carlsbad/Encinitas',
     hideMLSUpload: 'true', // CA agent — Radley pulls MLS data directly from SDMLS/CRMLS
   },
+  'radley-raven': {
+    fullName: 'Radley Raven',
+    email: 'radleyraven@gmail.com',
+    brokerage: 'The Oppenheim Group',
+    primaryMarkets: 'Carmel Valley, Carlsbad, Rancho Santa Fe',
+    zillowUrl: 'https://www.zillow.com/profile/radleyraven',
+    linkedinUrl: 'https://www.linkedin.com/in/radleyraven',
+    realtorUrl: 'https://www.realtor.com/realestateagents/5c7d7904b05f40001240ee53',
+    yearsInMarket: '10',
+    topTransactions: '$91.7M career volume — 11 closed in Carmel Valley 92130',
+    hideMLSUpload: 'true',
+  },
 };
 
 const prospects: Record<string, ProspectData> = {
@@ -57,6 +69,25 @@ const prospects: Record<string, ProspectData> = {
       { platform: 'FastExpert', status: 'missing', impact: 'Low', points: 4 },
       { platform: 'Bing Places', status: 'missing', impact: 'Low', points: 4 },
       { platform: 'Apple Business Connect', status: 'missing', impact: 'Low', points: 3 },
+      { platform: 'GBP Posts (freshness)', status: 'missing', impact: 'Low', points: 3 },
+    ],
+  },
+  'radley-raven': {
+    name: 'Radley Raven',
+    brokerage: 'The Oppenheim Group',
+    market: 'Carmel Valley',
+    score: 3,
+    competitorScore: 65,
+    gaps: [
+      { platform: 'Google Business Profile', status: 'unoptimized', impact: 'High', points: 14 },
+      { platform: 'LinkedIn Profile Optimization', status: 'unoptimized', impact: 'High', points: 10 },
+      { platform: 'Yelp Profile', status: 'missing', impact: 'High', points: 12 },
+      { platform: 'Zillow Bio Optimization', status: 'unoptimized', impact: 'Medium', points: 8 },
+      { platform: 'LinkedIn Articles', status: 'partial', impact: 'Medium', points: 7 },
+      { platform: 'FastExpert Profile', status: 'missing', impact: 'Low', points: 4 },
+      { platform: 'Bing Places', status: 'claimed', impact: 'Low', points: 3 },
+      { platform: 'Apple Business Connect', status: 'pending', impact: 'Low', points: 3 },
+      { platform: 'Foursquare', status: 'missing', impact: 'Low', points: 4 },
       { platform: 'GBP Posts (freshness)', status: 'missing', impact: 'Low', points: 3 },
     ],
   },
