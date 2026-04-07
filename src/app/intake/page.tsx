@@ -236,7 +236,7 @@ function IntakeForm() {
             <div style={{ display: "flex", gap: "12px", marginBottom: "14px", alignItems: "flex-start" }}>
               <span style={{ color: "#00BFA6", fontWeight: 700, flexShrink: 0 }}>→</span>
               <p style={{ fontSize: "14px", color: "#cbd5e1", lineHeight: 1.7, margin: 0 }}>
-                <strong style={{ color: "#fff" }}>Your bios are being built now.</strong> Optimized profiles for Google, LinkedIn, Zillow, Yelp, and Realtor.com — ready within 48 hours.
+                <strong style={{ color: "#fff" }}>Your business &amp; visibility audit starts now.</strong> We'll analyze where you stand, build your positioning statement, and have your optimized platform copy ready within 48 hours.
               </p>
             </div>
             <div style={{ display: "flex", gap: "12px", alignItems: "flex-start" }}>
@@ -298,7 +298,7 @@ function IntakeForm() {
 
       <main className="max-w-2xl mx-auto px-4 py-10">
         <p className="mb-8 text-sm" style={{ color: "#555" }}>
-          Complete the form below so we can build your personalized AI visibility strategy.
+          Complete the form below to start your business &amp; visibility audit. We'll analyze your market, your transaction history, and your current AI footprint — then build everything from there.
           Fields marked with <span style={{ color: "#DC2626" }}>*</span> are required.
         </p>
 
