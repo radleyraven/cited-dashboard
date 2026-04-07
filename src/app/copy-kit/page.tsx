@@ -217,12 +217,12 @@ export default function CopyKitPage() {
       <main className="max-w-4xl mx-auto px-6 py-10">
         {/* Page Header */}
         <div className="mb-8">
-          <h2 className="text-3xl font-bold" style={{ color: '#0A1929' }}>Your Platform Bios</h2>
+          <h2 className="text-3xl font-bold" style={{ color: '#0A1929' }}>Your Platform Copy</h2>
           <p className="text-gray-500 mt-2 max-w-2xl">
-            Review each bio, copy it, and paste it into your platform profile. Platforms are ordered by AI citation impact — start with LinkedIn and work your way down.
+            Review the optimized copy for each platform, paste it in, and post it. Platforms are ordered by AI citation impact — start with LinkedIn.
           </p>
           <div className="mt-3 text-sm font-medium" style={{ color: '#00BFA6' }}>
-            {Object.values(approved).filter(Boolean).length} of {platforms.length} platforms updated
+            {Object.values(approved).filter(Boolean).length} of {platforms.length} platforms reviewed & posted
           </div>
         </div>
 
