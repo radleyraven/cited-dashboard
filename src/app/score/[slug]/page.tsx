@@ -335,7 +335,7 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
             First 90 days free. Protected by The Citation Guarantee™.
           </h2>
           <p style={{ fontSize: '14px', color: '#64748b', margin: '0 0 24px', lineHeight: 1.6 }}>
-            3–5 founding spots available in {market}.<br />
+            3–5 founding spots available in North County San Diego.<br />
             After 90 days, continue at $800/month — only if the score moved.
           </p>
 
