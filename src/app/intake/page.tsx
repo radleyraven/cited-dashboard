@@ -266,7 +266,7 @@ function IntakeForm() {
           </p>
 
           <p style={{ fontSize: "12px", color: "#4a6380" }}>
-            Cited · AI Visibility for Professionals · citedagent.com
+            Cited · AI Visibility for Professionals · citedagent.com · Powered by PRISM
           </p>
         </div>
       </div>
