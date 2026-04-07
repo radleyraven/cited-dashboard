@@ -23,6 +23,8 @@ type FormData = {
   topTransactions: string;
   differentiator: string;
   mlsFile: File | null;
+  headshot_file: File | null;
+  banner_file: File | null;
   reviewPlatforms: string[];
   reviewOther: string;
   termsAccepted: boolean;
@@ -62,6 +64,8 @@ const initialForm: FormData = {
   topTransactions: "",
   differentiator: "",
   mlsFile: null,
+  headshot_file: null,
+  banner_file: null,
   reviewPlatforms: [],
   reviewOther: "",
   termsAccepted: false,
@@ -194,6 +198,34 @@ function IntakeForm() {
         } catch {
           // Don't block on upload error — intake is already saved
           console.warn('MLS file upload failed — intake was still saved.');
+        }
+      }
+
+      // Upload headshot — non-blocking, intake already saved.
+      if (form.headshot_file) {
+        try {
+          const supabaseHeadshot = createSupabaseBrowserClient();
+          const headshotName = `${form.email}/${Date.now()}-headshot-${form.headshot_file.name}`;
+          await supabaseHeadshot.storage.from('headshots').upload(headshotName, form.headshot_file, {
+            cacheControl: '3600',
+            upsert: false,
+          });
+        } catch {
+          console.warn('Headshot upload failed — intake was still saved.');
+        }
+      }
+
+      // Upload banner — non-blocking, intake already saved.
+      if (form.banner_file) {
+        try {
+          const supabaseBanner = createSupabaseBrowserClient();
+          const bannerName = `${form.email}/${Date.now()}-headshot-banner-${form.banner_file.name}`;
+          await supabaseBanner.storage.from('headshots').upload(bannerName, form.banner_file, {
+            cacheControl: '3600',
+            upsert: false,
+          });
+        } catch {
+          console.warn('Banner upload failed — intake was still saved.');
         }
       }
 
@@ -435,6 +467,44 @@ function IntakeForm() {
                 className={`${inputClass} ${inputFocusRing}`}
                 style={inputStyle}
               />
+            </Field>
+            <Field label="Professional headshot (optional)" hint="JPG or PNG, at least 500×500px. We'll resize for every platform. Leave blank if you don't have one ready — we'll follow up.">
+              <label style={{
+                display: 'flex', alignItems: 'center', gap: '12px',
+                border: '1px solid #D1D5DB', borderRadius: '8px',
+                padding: '12px 16px', cursor: 'pointer',
+                background: '#FAFAFA', transition: 'border-color 0.15s'
+              }}>
+                <input
+                  type="file"
+                  accept="image/*"
+                  style={{ display: 'none' }}
+                  onChange={(e) => set('headshot_file', e.target.files?.[0] ?? null)}
+                />
+                <span style={{ fontSize: '20px' }}>🖼</span>
+                <span style={{ fontSize: '14px', color: form.headshot_file ? '#0A1929' : '#94a3b8' }}>
+                  {form.headshot_file ? form.headshot_file.name : 'Choose headshot photo (JPG or PNG)'}
+                </span>
+              </label>
+            </Field>
+            <Field label="LinkedIn banner image (optional)" hint="1584×396px recommended. Leave blank if you don't have one — not required to get started.">
+              <label style={{
+                display: 'flex', alignItems: 'center', gap: '12px',
+                border: '1px solid #D1D5DB', borderRadius: '8px',
+                padding: '12px 16px', cursor: 'pointer',
+                background: '#FAFAFA', transition: 'border-color 0.15s'
+              }}>
+                <input
+                  type="file"
+                  accept="image/*"
+                  style={{ display: 'none' }}
+                  onChange={(e) => set('banner_file', e.target.files?.[0] ?? null)}
+                />
+                <span style={{ fontSize: '20px' }}>🖼</span>
+                <span style={{ fontSize: '14px', color: form.banner_file ? '#0A1929' : '#94a3b8' }}>
+                  {form.banner_file ? form.banner_file.name : 'Choose LinkedIn banner image'}
+                </span>
+              </label>
             </Field>
             <Field label="Specific neighborhoods within those markets" hint="The more specific, the better. These feed directly into your AI query targeting.">
               <textarea
