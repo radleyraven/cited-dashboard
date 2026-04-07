@@ -299,6 +299,9 @@ function IntakeForm() {
       <main className="max-w-2xl mx-auto px-4 py-10">
         <p className="mb-8 text-sm" style={{ color: "#555" }}>
           Complete the form below to start your business &amp; visibility audit. We'll analyze your market, your transaction history, and your current AI footprint — then build everything from there.
+          </p>
+          <p style={{ fontSize: '13px', color: '#00BFA6', background: 'rgba(0,191,166,0.08)', border: '1px solid rgba(0,191,166,0.2)', borderRadius: '6px', padding: '10px 14px', margin: '8px 0 0 0' }}>
+            The more you fill in, the higher your score will go. Leave any field blank if you're not sure — we'll work with what you have.
           Fields marked with <span style={{ color: "#DC2626" }}>*</span> are required.
         </p>
 
@@ -374,7 +377,7 @@ function IntakeForm() {
 
           {/* Section 2 */}
           <Section number={2} title="Markets & Neighborhoods">
-            <Field label="Primary markets you serve — cities" required hint="List the cities or areas where you actively work. This is how we target your AI visibility.">
+            <Field label="Primary markets you serve — cities" required hint="List the cities or areas where you actively work. This is how we target your AI visibility. Leave blank if unsure — you can update later.">
               <textarea
                 required
                 rows={2}
