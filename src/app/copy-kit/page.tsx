@@ -183,10 +183,21 @@ function CopyButton({ text }: { text: string }) {
 
 export default function CopyKitPage() {
   const [approved, setApproved] = useState<Record<string, boolean>>({});
+  // Progressive reveal: starts at 1 (only LinkedIn visible)
+  const [revealedCount, setRevealedCount] = useState(1);
 
-  const toggleApprove = (id: string) => {
-    setApproved(prev => ({ ...prev, [id]: !prev[id] }));
+  const toggleApprove = (id: string, index: number) => {
+    const currentlyApproved = approved[id] || false;
+    const next = !currentlyApproved;
+    setApproved(prev => ({ ...prev, [id]: next }));
+    if (next) {
+      // Reveal the next platform when checking a platform
+      setRevealedCount(prev => Math.max(prev, index + 2));
+    }
   };
+
+  const approvedCount = Object.values(approved).filter(Boolean).length;
+  const progressPercent = Math.round((approvedCount / platforms.length) * 100);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -221,107 +232,135 @@ export default function CopyKitPage() {
           <p className="text-gray-500 mt-2 max-w-2xl">
             Review the optimized copy for each platform, paste it in, and post it. Platforms are ordered by AI citation impact — start with LinkedIn.
           </p>
-          <div className="mt-3 text-sm font-medium" style={{ color: '#00BFA6' }}>
-            {Object.values(approved).filter(Boolean).length} of {platforms.length} platforms reviewed & posted
+
+          {/* Progress bar */}
+          <div className="mt-4">
+            <div className="flex items-center justify-between mb-1.5">
+              <div className="text-sm font-medium" style={{ color: '#00BFA6' }}>
+                {approvedCount} of {platforms.length} platforms reviewed &amp; posted
+              </div>
+              <button
+                onClick={() => setRevealedCount(platforms.length)}
+                className="text-xs text-gray-400 hover:text-gray-600 underline underline-offset-2 transition-colors"
+              >
+                Skip ahead — show all
+              </button>
+            </div>
+            <div className="h-2 rounded-full bg-gray-200 overflow-hidden">
+              <div
+                className="h-full rounded-full transition-all duration-500"
+                style={{ width: `${progressPercent}%`, background: '#00BFA6' }}
+              />
+            </div>
           </div>
         </div>
 
         {/* Platform Cards */}
         <div className="space-y-6">
-          {platforms.map((platform) => {
+          {platforms.map((platform, index) => {
             const isApproved = approved[platform.id] || false;
+            const isVisible = index < revealedCount;
             const allText = platform.sections.map(s => s.text).join('\n\n');
 
             return (
               <div
                 key={platform.id}
-                className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden"
-                style={isApproved ? { borderColor: '#00BFA6', borderWidth: 2 } : {}}
+                className="transition-all duration-500 overflow-hidden"
+                style={{
+                  maxHeight: isVisible ? '2000px' : '0px',
+                  opacity: isVisible ? 1 : 0,
+                  marginBottom: isVisible ? undefined : '0',
+                }}
               >
-                {/* Card Header */}
-                <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
-                  <div className="flex items-center gap-3">
-                    <h3 className="text-lg font-bold" style={{ color: '#0A1929' }}>{platform.name}</h3>
-                    <span
-                      className="text-xs font-semibold px-2.5 py-1 rounded-full"
-                      style={{ background: '#FFF8E6', color: '#D4A830' }}
-                    >
-                      {platform.badge}
-                    </span>
-                  </div>
-                  {isApproved && (
-                    <span className="text-sm font-semibold" style={{ color: '#00BFA6' }}>✓ Reviewed & Posted</span>
-                  )}
-                </div>
-
-                <div className="px-6 py-5 space-y-4">
-                  {/* Bio Sections */}
-                  {platform.sections.map((section, i) => (
-                    <div key={i}>
-                      {section.title && (
-                        <div className="text-xs font-bold uppercase tracking-wider text-gray-400 mb-1">
-                          {section.title}
-                        </div>
-                      )}
-                      <div className="bg-gray-50 rounded-lg p-4 text-sm text-gray-700 leading-relaxed border border-gray-100">
-                        {section.text}
-                      </div>
-                    </div>
-                  ))}
-
-                  {/* How to update instructions */}
-                  {platform.instructions ? (
-                    <div className="rounded-lg p-4 border border-gray-100" style={{ background: '#F8F9FA' }}>
-                      <div className="text-xs font-bold uppercase tracking-wider text-gray-400 mb-2">How to update</div>
-                      <ol className="space-y-1">
-                        {platform.instructions.map((step, i) => (
-                          <li key={i} className="text-sm text-gray-600 flex gap-2">
-                            <span className="font-semibold shrink-0" style={{ color: '#00BFA6' }}>{i + 1}.</span>
-                            <span>{step}</span>
-                          </li>
-                        ))}
-                      </ol>
-                    </div>
-                  ) : null}
-
-                  {/* Additional items to update */}
-                  {platform.additionalItems && platform.additionalItems.length > 0 && (
-                    <div className="rounded-lg p-4 border border-gray-100" style={{ background: '#F8F9FA' }}>
-                      <div className="text-xs font-bold uppercase tracking-wider text-gray-400 mb-2">Additional items to update</div>
-                      <ul className="space-y-1">
-                        {platform.additionalItems.map((item, i) => (
-                          <li key={i} className="text-sm text-gray-600 flex gap-2">
-                            <span className="shrink-0" style={{ color: '#00BFA6' }}>·</span>
-                            <span>{item}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-
-                  {/* Actions */}
-                  <div className="flex items-center justify-between pt-2">
-                    <CopyButton text={allText} />
-                    <label className="flex items-center gap-2 cursor-pointer select-none">
-                      <div
-                        className="w-5 h-5 rounded flex items-center justify-center shrink-0 transition-colors"
-                        style={isApproved ? { background: '#00BFA6' } : { border: '2px solid #D1D5DB' }}
-                        onClick={() => toggleApprove(platform.id)}
-                      >
-                        {isApproved && (
-                          <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                          </svg>
-                        )}
-                      </div>
+                <div
+                  className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden"
+                  style={isApproved ? { borderColor: '#00BFA6', borderWidth: 2 } : {}}
+                >
+                  {/* Card Header */}
+                  <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+                    <div className="flex items-center gap-3">
+                      <h3 className="text-lg font-bold" style={{ color: '#0A1929' }}>{platform.name}</h3>
                       <span
-                        className="text-sm font-medium"
-                        style={{ color: isApproved ? '#00BFA6' : '#6B7280' }}
-                        onClick={() => toggleApprove(platform.id)}
+                        className="text-xs font-semibold px-2.5 py-1 rounded-full"
+                        style={{ background: '#FFF8E6', color: '#D4A830' }}
                       >
-                        I&apos;ve reviewed and posted this ✓
+                        {platform.badge}
                       </span>
-                    </label>
+                    </div>
+                    {isApproved && (
+                      <span className="text-sm font-semibold" style={{ color: '#00BFA6' }}>✓ Reviewed &amp; Posted</span>
+                    )}
+                  </div>
+
+                  <div className="px-6 py-5 space-y-4">
+                    {/* Bio Sections */}
+                    {platform.sections.map((section, i) => (
+                      <div key={i}>
+                        {section.title && (
+                          <div className="text-xs font-bold uppercase tracking-wider text-gray-400 mb-1">
+                            {section.title}
+                          </div>
+                        )}
+                        <div className="bg-gray-50 rounded-lg p-4 text-sm text-gray-700 leading-relaxed border border-gray-100">
+                          {section.text}
+                        </div>
+                      </div>
+                    ))}
+
+                    {/* How to update instructions */}
+                    {platform.instructions ? (
+                      <div className="rounded-lg p-4 border border-gray-100" style={{ background: '#F8F9FA' }}>
+                        <div className="text-xs font-bold uppercase tracking-wider text-gray-400 mb-2">How to update</div>
+                        <ol className="space-y-1">
+                          {platform.instructions.map((step, i) => (
+                            <li key={i} className="text-sm text-gray-600 flex gap-2">
+                              <span className="font-semibold shrink-0" style={{ color: '#00BFA6' }}>{i + 1}.</span>
+                              <span>{step}</span>
+                            </li>
+                          ))}
+                        </ol>
+                      </div>
+                    ) : null}
+
+                    {/* Additional items to update */}
+                    {platform.additionalItems && platform.additionalItems.length > 0 && (
+                      <div className="rounded-lg p-4 border border-gray-100" style={{ background: '#F8F9FA' }}>
+                        <div className="text-xs font-bold uppercase tracking-wider text-gray-400 mb-2">Additional items to update</div>
+                        <ul className="space-y-1">
+                          {platform.additionalItems.map((item, i) => (
+                            <li key={i} className="text-sm text-gray-600 flex gap-2">
+                              <span className="shrink-0" style={{ color: '#00BFA6' }}>·</span>
+                              <span>{item}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+
+                    {/* Actions */}
+                    <div className="flex items-center justify-between pt-2">
+                      <CopyButton text={allText} />
+                      <label className="flex items-center gap-2 cursor-pointer select-none">
+                        <div
+                          className="w-5 h-5 rounded flex items-center justify-center shrink-0 transition-colors"
+                          style={isApproved ? { background: '#00BFA6' } : { border: '2px solid #D1D5DB' }}
+                          onClick={() => toggleApprove(platform.id, index)}
+                        >
+                          {isApproved && (
+                            <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                            </svg>
+                          )}
+                        </div>
+                        <span
+                          className="text-sm font-medium"
+                          style={{ color: isApproved ? '#00BFA6' : '#6B7280' }}
+                          onClick={() => toggleApprove(platform.id, index)}
+                        >
+                          I&apos;ve reviewed and posted this ✓
+                        </span>
+                      </label>
+                    </div>
                   </div>
                 </div>
               </div>
