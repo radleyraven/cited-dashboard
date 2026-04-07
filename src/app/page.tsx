@@ -117,7 +117,7 @@ export default function Home() {
 
         {/* Footer */}
         <div className="mt-8 text-center text-sm text-gray-400">
-          Cited · AI Visibility for Professionals · citedagent.com
+          Cited · AI Visibility for Professionals · citedagent.com · Powered by PRISM
         </div>
       </main>
     </div>
