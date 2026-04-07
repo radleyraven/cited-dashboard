@@ -1,16 +1,23 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import Link from 'next/link';
 import SignOutButton from '@/components/SignOutButton';
+
+interface CopyFieldDef {
+  label: string;
+  value: string;
+}
 
 interface Platform {
   id: string;
   name: string;
   badge: 'You Update';
+  platformLink: string;
   sections: { title?: string; text: string }[];
   instructions?: string[];
   additionalItems?: string[];
+  copyFields?: CopyFieldDef[];
 }
 
 const platforms: Platform[] = [
@@ -18,6 +25,7 @@ const platforms: Platform[] = [
     id: 'gbp',
     name: 'Google Business Profile',
     badge: 'You Update',
+    platformLink: 'https://business.google.com',
     sections: [
       {
         title: 'Business Description',
@@ -38,11 +46,18 @@ const platforms: Platform[] = [
       'Services — Luxury Home Sales, Buyer/Seller Representation, Investment Property Consulting, Relocation, Market Analysis, Property Valuation',
       'Website — https://ogroup.com/agents/radley-raven/ (update to radleyraven.com when live)',
     ],
+    copyFields: [
+      { label: 'Office Address', value: '7925 Girard Ave, La Jolla, CA 92037' },
+      { label: 'Phone', value: '(858) 314-9600' },
+      { label: 'Website', value: 'https://ogroup.com/agents/radley-raven/' },
+      { label: 'Hours', value: 'Sunday 10 AM – 5 PM | Monday–Friday 8 AM – 8 PM | Saturday 9 AM – 6 PM' },
+    ],
   },
   {
     id: 'linkedin',
     name: 'LinkedIn',
     badge: 'You Update',
+    platformLink: 'https://www.linkedin.com/in/radleyraven',
     sections: [
       {
         title: 'Headline',
@@ -92,11 +107,15 @@ radley@ogroup.com | (858) 314-9600`,
       'Featured section — link to your Cited LinkedIn articles',
       'Skills — Carmel Valley, Carlsbad, Rancho Santa Fe, Luxury Homes, Investment Properties, Staging, Buyer Representation',
     ],
+    copyFields: [
+      { label: 'Location', value: 'Carlsbad, California' },
+    ],
   },
   {
     id: 'zillow',
     name: 'Zillow',
     badge: 'You Update',
+    platformLink: 'https://www.zillow.com/profile/radleyraven',
     sections: [
       {
         text: `I'm a luxury real estate agent with The Oppenheim Group specializing in Carmel Valley, Carlsbad, Rancho Santa Fe, La Jolla, Solana Beach, and Encinitas.
@@ -130,11 +149,13 @@ Specialties: Buyer's Agent, Listing Agent, Relocation, Staging, Vacation/Short-T
       'Specialties — check all: Buyer\'s Agent, Listing Agent, Relocation, Staging, Vacation/STR, First Time Buyers, Investment, Rentals, Luxury, New Construction',
       'Do NOT shorten this bio — length and keyword density are intentional',
     ],
+    copyFields: [],
   },
   {
     id: 'yelp',
     name: 'Yelp',
     badge: 'You Update',
+    platformLink: 'https://biz.yelp.com',
     sections: [
       {
         text: `Radley Raven is a luxury real estate agent serving La Jolla, Carmel Valley, Carlsbad, Rancho Santa Fe, Solana Beach, and Encinitas with 10+ years of experience and $92M+ in California transactions. Specializing in luxury residential sales and investment properties, Radley has helped buyers and sellers achieve results that beat the market — a 96.8% sale-to-list ratio, 22-day median days on market, and 26% of deals closing at or above asking price. With deep knowledge of San Diego's most sought-after coastal and canyon communities, Radley brings the local context, negotiation edge, and personal attention that complex transactions demand. Whether you're buying your first home, listing a luxury estate, or building a real estate portfolio, Radley delivers the strategy and execution to get it done. Serving the greater San Diego area and Washington State.
@@ -153,11 +174,16 @@ Radley is a licensed agent with The Oppenheim Group in La Jolla, one of the most
       'Photos — upload at least 5 photos (headshot + neighborhood/listing shots)',
       'Note: Yelp re-indexes into AI search (Perplexity, ChatGPT) within 24-72 hours — high priority',
     ],
+    copyFields: [
+      { label: 'Phone', value: '(858) 314-9600' },
+      { label: 'Website', value: 'https://ogroup.com/agents/radley-raven/' },
+    ],
   },
   {
     id: 'realtordotcom',
     name: 'Realtor.com',
     badge: 'You Update',
+    platformLink: 'https://login.pro.realtor.com',
     sections: [
       {
         text: `Radley Raven is a luxury real estate agent serving La Jolla, Carmel Valley, Carlsbad, Rancho Santa Fe, Solana Beach, and Encinitas with 10+ years of experience and $92M+ in California transactions. His clients in the 92130 corridor and North County coast know him for results: a 96.8% sale-to-list ratio, 22-day median days on market, and 26% of deals closing at or above asking price.
@@ -181,11 +207,21 @@ He works with: luxury home sellers in Carmel Valley, Rancho Santa Fe, and Carlsb
       'Social — YouTube, LinkedIn, Instagram links',
       'Brokerage — The Oppenheim Group | 7925 Girard Ave, La Jolla, CA 92037 | (858) 314-9600',
     ],
+    copyFields: [
+      { label: 'Phone', value: '(858) 314-9600' },
+      { label: 'Email', value: 'radley@ogroup.com' },
+      { label: 'Website', value: 'https://ogroup.com/agents/radley-raven/' },
+      { label: 'Brokerage', value: 'The Oppenheim Group | 7925 Girard Ave, La Jolla, CA 92037 | (858) 314-9600' },
+      { label: 'YouTube', value: 'https://www.youtube.com/@radleyravenoppenheim' },
+      { label: 'LinkedIn', value: 'https://www.linkedin.com/in/radleyraven' },
+      { label: 'Instagram', value: 'https://www.instagram.com/radleyraven' },
+    ],
   },
   {
     id: 'fastexpert',
     name: 'FastExpert',
     badge: 'You Update',
+    platformLink: 'https://www.fastexpert.com/agents/radley-raven/',
     sections: [
       {
         text: `Radley Raven is a luxury real estate agent serving La Jolla, Carmel Valley, Carlsbad, Rancho Santa Fe, Solana Beach, and Encinitas with 10+ years of experience and $92M+ in California transactions. His clients in the 92130 corridor and North County coast know him for results: a 96.8% sale-to-list ratio, 22-day median days on market, and 26% of deals closing at or above asking price.
@@ -203,11 +239,16 @@ Radley is a licensed agent with The Oppenheim Group in La Jolla. He is also an a
       'Specialties (free text) — Luxury Homes, Investment Properties, Relocation, First Time Home Buyers, Single-Family Homes, Vacation / Short-Term Rentals, Staging, New Construction',
       'Social media — LinkedIn, Instagram, Zillow, Realtor.com, Website links',
     ],
+    copyFields: [
+      { label: 'Service Areas', value: 'Carlsbad, Del Mar, Encinitas, La Jolla, Rancho Santa Fe, San Diego, Solana Beach' },
+      { label: 'Website', value: 'https://ogroup.com/agents/radley-raven/' },
+    ],
   },
   {
     id: 'bing',
     name: 'Bing Places',
     badge: 'You Update',
+    platformLink: 'https://www.bing.com/maps/businesscentral',
     sections: [
       {
         title: 'Business Description',
@@ -227,11 +268,17 @@ Radley is a licensed agent with The Oppenheim Group in La Jolla. He is also an a
       'Social links — Instagram, LinkedIn, YouTube',
       'Website — https://ogroup.com/agents/radley-raven/',
     ],
+    copyFields: [
+      { label: 'Phone', value: '(858) 314-9600' },
+      { label: 'Website', value: 'https://ogroup.com/agents/radley-raven/' },
+      { label: 'Hours', value: 'Sunday 10 AM – 5 PM | Monday–Friday 8 AM – 8 PM | Saturday 9 AM – 6 PM' },
+    ],
   },
   {
     id: 'apple',
     name: 'Apple Business Connect',
     badge: 'You Update',
+    platformLink: 'https://businessconnect.apple.com',
     sections: [
       {
         title: 'Business Description',
@@ -252,11 +299,17 @@ Radley is a licensed agent with The Oppenheim Group in La Jolla. He is also an a
       'Attributes — Appointments Only, Wheelchair Accessible, Service Animals Welcome',
       'Status — Verification in review (1-5 days) — complete once approved',
     ],
+    copyFields: [
+      { label: 'Phone', value: '(858) 314-9600' },
+      { label: 'Website', value: 'https://ogroup.com/agents/radley-raven/' },
+      { label: 'Hours', value: 'Sunday 10 AM – 5 PM | Monday–Friday 8 AM – 8 PM | Saturday 9 AM – 6 PM' },
+    ],
   },
   {
     id: 'homes',
     name: 'Homes.com',
     badge: 'You Update',
+    platformLink: 'https://www.homes.com',
     sections: [
       {
         title: 'Agent Bio',
@@ -278,10 +331,13 @@ Radley is a licensed agent with The Oppenheim Group in La Jolla, one of the most
       'Specialties — Listing Specialist, Luxury Homes, Buyer Representation, Investment Properties',
       'Note: Homes AI launched Feb 2026 — AI-powered agent discovery. Claim ASAP.',
     ],
+    copyFields: [
+      { label: 'Service Areas', value: 'Carmel Valley, Carlsbad, Rancho Santa Fe, La Jolla, Solana Beach, Encinitas, Del Mar' },
+    ],
   },
 ];
 
-function CopyButton({ text }: { text: string }) {
+function CopyButton({ text, label = 'Copy Bio' }: { text: string; label?: string }) {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = async () => {
@@ -312,23 +368,69 @@ function CopyButton({ text }: { text: string }) {
         border: `1.5px solid #00BFA6`,
       }}
     >
-      {copied ? '✓ Copied!' : 'Copy Bio'}
+      {copied ? '✓ Copied!' : label}
     </button>
+  );
+}
+
+function CopyField({ label, value }: { label: string; value: string }) {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(value);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      const el = document.createElement('textarea');
+      el.value = value;
+      document.body.appendChild(el);
+      el.select();
+      document.execCommand('copy');
+      document.body.removeChild(el);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
+
+  return (
+    <div className="flex items-center gap-2">
+      <div className="flex-1 bg-gray-50 rounded-lg px-3 py-2 border border-gray-100 flex items-center justify-between gap-3">
+        <div>
+          <div className="text-xs font-bold uppercase tracking-wider text-gray-400 mb-0.5">{label}</div>
+          <div className="text-sm text-gray-700">{value}</div>
+        </div>
+        <button
+          onClick={handleCopy}
+          className="shrink-0 text-xs font-semibold px-2.5 py-1 rounded transition-all duration-200"
+          style={{
+            background: copied ? '#00BFA6' : 'transparent',
+            color: copied ? 'white' : '#00BFA6',
+            border: `1px solid #00BFA6`,
+          }}
+        >
+          {copied ? '✓' : 'Copy'}
+        </button>
+      </div>
+    </div>
   );
 }
 
 export default function CopyKitPage() {
   const [approved, setApproved] = useState<Record<string, boolean>>({});
-  // Progressive reveal: starts at 1 (only GBP visible)
   const [revealedCount, setRevealedCount] = useState(1);
+  const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   const toggleApprove = (id: string, index: number) => {
     const currentlyApproved = approved[id] || false;
     const next = !currentlyApproved;
     setApproved(prev => ({ ...prev, [id]: next }));
     if (next) {
-      // Reveal the next platform when checking a platform
       setRevealedCount(prev => Math.max(prev, index + 2));
+      setTimeout(() => {
+        const nextCard = cardRefs.current[index + 1];
+        if (nextCard) nextCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 300);
     }
   };
 
@@ -401,9 +503,10 @@ export default function CopyKitPage() {
             return (
               <div
                 key={platform.id}
+                ref={el => { cardRefs.current[index] = el; }}
                 className="transition-all duration-500 overflow-hidden"
                 style={{
-                  maxHeight: isVisible ? '2000px' : '0px',
+                  maxHeight: isVisible ? '4000px' : '0px',
                   opacity: isVisible ? 1 : 0,
                   marginBottom: isVisible ? undefined : '0',
                 }}
@@ -422,26 +525,65 @@ export default function CopyKitPage() {
                       >
                         {platform.badge}
                       </span>
+                      <a
+                        href={platform.platformLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-xs text-gray-400 hover:text-teal-400 transition-colors"
+                      >
+                        →
+                      </a>
                     </div>
-                    {isApproved && (
-                      <span className="text-sm font-semibold" style={{ color: '#00BFA6' }}>✓ Reviewed &amp; Posted</span>
-                    )}
+                    <div className="flex items-center gap-3">
+                      {isApproved && (
+                        <span className="text-sm font-semibold" style={{ color: '#00BFA6' }}>✓ Reviewed &amp; Posted</span>
+                      )}
+                      {platform.id !== 'linkedin' && (
+                        <CopyButton text={allText} />
+                      )}
+                      {platform.id === 'linkedin' && (
+                        <CopyButton text={allText} label="Copy All" />
+                      )}
+                    </div>
                   </div>
 
                   <div className="px-6 py-5 space-y-4">
                     {/* Bio Sections */}
                     {platform.sections.map((section, i) => (
                       <div key={i}>
-                        {section.title && (
-                          <div className="text-xs font-bold uppercase tracking-wider text-gray-400 mb-1">
-                            {section.title}
+                        {platform.id === 'linkedin' ? (
+                          <div className="flex items-center justify-between mb-1">
+                            {section.title && (
+                              <div className="text-xs font-bold uppercase tracking-wider text-gray-400">
+                                {section.title}
+                              </div>
+                            )}
+                            <CopyButton
+                              text={section.text}
+                              label={section.title === 'Headline' ? 'Copy Headline' : 'Copy About'}
+                            />
                           </div>
+                        ) : (
+                          section.title && (
+                            <div className="text-xs font-bold uppercase tracking-wider text-gray-400 mb-1">
+                              {section.title}
+                            </div>
+                          )
                         )}
                         <div className="bg-gray-50 rounded-lg p-4 text-sm text-gray-700 leading-relaxed border border-gray-100 whitespace-pre-wrap">
                           {section.text}
                         </div>
                       </div>
                     ))}
+
+                    {/* Paste-ready fields */}
+                    {platform.copyFields && platform.copyFields.length > 0 && (
+                      <div className="space-y-2">
+                        {platform.copyFields.map((field, i) => (
+                          <CopyField key={i} label={field.label} value={field.value} />
+                        ))}
+                      </div>
+                    )}
 
                     {/* How to update instructions */}
                     {platform.instructions ? (
@@ -474,28 +616,37 @@ export default function CopyKitPage() {
                     )}
 
                     {/* Actions */}
-                    <div className="flex items-center justify-between pt-2">
-                      <CopyButton text={allText} />
-                      <label className="flex items-center gap-2 cursor-pointer select-none">
-                        <div
-                          className="w-5 h-5 rounded flex items-center justify-center shrink-0 transition-colors"
-                          style={isApproved ? { background: '#00BFA6' } : { border: '2px solid #D1D5DB' }}
-                          onClick={() => toggleApprove(platform.id, index)}
+                    <div className="pt-2 space-y-2">
+                      <div className="flex items-center justify-end">
+                        <label className="flex items-center gap-2 cursor-pointer select-none">
+                          <div
+                            className="w-5 h-5 rounded flex items-center justify-center shrink-0 transition-colors"
+                            style={isApproved ? { background: '#00BFA6' } : { border: '2px solid #D1D5DB' }}
+                            onClick={() => toggleApprove(platform.id, index)}
+                          >
+                            {isApproved && (
+                              <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                              </svg>
+                            )}
+                          </div>
+                          <span
+                            className="text-sm font-medium"
+                            style={{ color: isApproved ? '#00BFA6' : '#6B7280' }}
+                            onClick={() => toggleApprove(platform.id, index)}
+                          >
+                            I&apos;ve reviewed and posted this ✓
+                          </span>
+                        </label>
+                      </div>
+                      <div className="flex items-center justify-end">
+                        <button
+                          onClick={() => setRevealedCount(prev => Math.max(prev, index + 2))}
+                          className="text-xs text-gray-400 hover:text-gray-600 transition-colors"
                         >
-                          {isApproved && (
-                            <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
-                              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                            </svg>
-                          )}
-                        </div>
-                        <span
-                          className="text-sm font-medium"
-                          style={{ color: isApproved ? '#00BFA6' : '#6B7280' }}
-                          onClick={() => toggleApprove(platform.id, index)}
-                        >
-                          I&apos;ve reviewed and posted this ✓
-                        </span>
-                      </label>
+                          Skip for now →
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
