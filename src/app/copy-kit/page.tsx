@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import SignOutButton from '@/components/SignOutButton';
 
@@ -472,15 +472,49 @@ function CopyField({ label, value }: { label: string; value: string }) {
   );
 }
 
+const PLATFORM_STORAGE_KEYS: Record<string, string> = {
+  gbp: 'cited_checklist_gbp',
+  linkedin: 'cited_checklist_linkedin',
+  yelp: 'cited_checklist_yelp',
+};
+
 export default function CopyKitPage() {
   const [approved, setApproved] = useState<Record<string, boolean>>({});
   const [revealedCount, setRevealedCount] = useState(1);
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
 
+  // Pre-populate approved state from localStorage on mount
+  useEffect(() => {
+    const stored: Record<string, boolean> = {};
+    for (const [id, key] of Object.entries(PLATFORM_STORAGE_KEYS)) {
+      if (localStorage.getItem(key) === 'true') {
+        stored[id] = true;
+      }
+    }
+    if (Object.keys(stored).length > 0) {
+      setApproved(prev => ({ ...prev, ...stored }));
+    }
+  }, []);
+
   const toggleApprove = (id: string, index: number) => {
     const currentlyApproved = approved[id] || false;
     const next = !currentlyApproved;
-    setApproved(prev => ({ ...prev, [id]: next }));
+    setApproved(prev => {
+      const updated = { ...prev, [id]: next };
+
+      // Sync individual platform keys to localStorage
+      if (id in PLATFORM_STORAGE_KEYS) {
+        localStorage.setItem(PLATFORM_STORAGE_KEYS[id], String(next));
+      }
+
+      // When ALL platforms are approved, set the "remaining" key
+      const allApproved = platforms.every(p => updated[p.id]);
+      if (allApproved) {
+        localStorage.setItem('cited_checklist_platforms_remaining', 'true');
+      }
+
+      return updated;
+    });
     if (next) {
       setRevealedCount(prev => Math.max(prev, index + 2));
       setTimeout(() => {
