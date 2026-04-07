@@ -15,6 +15,30 @@ interface Platform {
 
 const platforms: Platform[] = [
   {
+    id: 'gbp',
+    name: 'Google Business Profile',
+    badge: 'You Update',
+    sections: [
+      {
+        title: 'Business Description',
+        text: `Maria Santos is a luxury real estate agent with Compass serving Carlsbad, Encinitas, and Solana Beach. With 7 years of hyperlocal expertise in La Costa, Encinitas Ranch, and the North County coastal corridor, Maria specializes in listing representation and buyer advocacy across Carlsbad's most sought-after neighborhoods. Known for her eye for presentation and deep knowledge of local market dynamics, Maria helps sellers in Carlsbad and Encinitas achieve top dollar through strategic staging, pricing, and marketing. Licensed in California (#02041346).`,
+      },
+    ],
+    instructions: [
+      'Go to business.google.com → Claim or create your business',
+      'Add your business name, category (Real Estate Agency), and address',
+      'Paste the description above into the "Business description" field',
+      'Set your hours, phone number, and website URL',
+    ],
+    additionalItems: [
+      'Business hours — set your standard availability',
+      'Address — must match exactly across all platforms (NAP consistency)',
+      'Photos — upload 10+ photos: headshot, neighborhood, exterior, interior',
+      'Logo — upload your personal or brokerage logo',
+      'Category — select "Real Estate Agency" as primary',
+    ],
+  },
+  {
     id: 'linkedin',
     name: 'LinkedIn',
     badge: 'You Update',
@@ -117,30 +141,6 @@ const platforms: Platform[] = [
     additionalItems: [
       'Profile photo — same professional headshot used on other platforms',
       'Service areas — add all target cities and ZIP codes',
-    ],
-  },
-  {
-    id: 'gbp',
-    name: 'Google Business Profile',
-    badge: 'You Update',
-    sections: [
-      {
-        title: 'Business Description',
-        text: `Maria Santos is a luxury real estate agent with Compass serving Carlsbad, Encinitas, and Solana Beach. With 7 years of hyperlocal expertise in La Costa, Encinitas Ranch, and the North County coastal corridor, Maria specializes in listing representation and buyer advocacy across Carlsbad's most sought-after neighborhoods. Known for her eye for presentation and deep knowledge of local market dynamics, Maria helps sellers in Carlsbad and Encinitas achieve top dollar through strategic staging, pricing, and marketing. Licensed in California (#02041346).`,
-      },
-    ],
-    instructions: [
-      'Go to business.google.com → Claim or create your business',
-      'Add your business name, category (Real Estate Agency), and address',
-      'Paste the description above into the "Business description" field',
-      'Set your hours, phone number, and website URL',
-    ],
-    additionalItems: [
-      'Business hours — set your standard availability',
-      'Address — must match exactly across all platforms (NAP consistency)',
-      'Photos — upload 10+ photos: headshot, neighborhood, exterior, interior',
-      'Logo — upload your personal or brokerage logo',
-      'Category — select "Real Estate Agency" as primary',
     ],
   },
   {
