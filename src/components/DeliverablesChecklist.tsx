@@ -27,9 +27,9 @@ const citedCompletedItems: CitedItem[] = [
 
 const clientTodoItems: ClientItem[] = [
   { label: 'Approve your positioning statement', href: '/positioning' },
-  { label: 'Review + post Article 1', href: '/articles' },
-  { label: 'Request 5 GBP reviews from past clients', href: '/reviews' },
   { label: 'Paste your optimized platform copy', href: '/copy-kit' },
+  { label: 'Review + post Article 1', href: '/articles' },
+  { label: 'Request 5 Google Business Profile reviews from past clients', href: '/reviews' },
 ];
 
 // localStorage keys that sync with other pages
