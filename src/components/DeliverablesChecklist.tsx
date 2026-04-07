@@ -59,7 +59,7 @@ export default function DeliverablesChecklist() {
                 </svg>
               </div>
               <div className="flex-1 min-w-0">
-                <span className="text-sm text-gray-500 line-through">{item.label}</span>
+                <span className="text-sm text-gray-600">{item.label}</span>
                 {item.note && (
                   <div className="text-xs text-gray-400 mt-0.5">{item.note}</div>
                 )}
@@ -94,7 +94,7 @@ export default function DeliverablesChecklist() {
                     </svg>
                   )}
                 </div>
-                <span className={`text-sm flex-1 ${done ? 'text-gray-400 line-through' : 'text-gray-800 font-medium'}`}>
+                <span className={`text-sm flex-1 ${done ? 'text-gray-600' : 'text-gray-800 font-medium'}`}>
                   {item.label}
                 </span>
                 {!done && item.href && (
