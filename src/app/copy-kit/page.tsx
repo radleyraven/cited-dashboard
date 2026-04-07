@@ -40,6 +40,7 @@ const platforms: Platform[] = [
     ],
     additionalItems: [
       'Photos — upload 10+ photos: headshot, neighborhood, exterior, interior (multi-modal = +317% AI citation probability)',
+      'Headshot (720×720px) — upload via dashboard when available',
       'Category — Real Estate Agent (primary) + Real Estate (additional)',
       'Services — Luxury Home Sales, Buyer/Seller Representation, Investment Property Consulting, Relocation, Market Analysis, Property Valuation',
     ],
@@ -99,6 +100,7 @@ radley@ogroup.com | (858) 314-9600`,
       'Click Save',
     ],
     additionalItems: [
+      'Headshot (400×400px) + Banner (1584×396px) — upload via dashboard',
       'Profile photo — professional headshot (face should be 60%+ of frame)',
       'Banner image — Carlsbad/North County lifestyle or listing photo',
       'Featured section — link to your Cited LinkedIn articles',
@@ -146,6 +148,7 @@ Specialties: Buyer's Agent, Listing Agent, Relocation, Staging, Vacation/Short-T
       'Click Save',
     ],
     additionalItems: [
+      'Headshot (200×200px) — same as other platforms',
       'Profile photo — same professional headshot used on LinkedIn',
       'Service areas — Carmel Valley, Carlsbad, Rancho Santa Fe, La Jolla, Solana Beach, Encinitas, Del Mar',
       'Specialties — check all: Buyer\'s Agent, Listing Agent, Relocation, Staging, Vacation/STR, First Time Buyers, Investment, Rentals, Luxury, New Construction',
@@ -171,6 +174,7 @@ Radley is a licensed agent with The Oppenheim Group in La Jolla, one of the most
       'Click Save',
     ],
     additionalItems: [
+      'Headshot (170×170px) — upload when claiming profile',
       'Business hours — Sun 10-5 | Mon-Fri 8-8 | Sat 9-6',
       'Service area — Carmel Valley, Carlsbad, Rancho Santa Fe, La Jolla, Solana Beach, Encinitas',
       'Photos — upload at least 5 photos (headshot + neighborhood/listing shots)',
@@ -203,6 +207,7 @@ He works with: luxury home sellers in Carmel Valley, Rancho Santa Fe, and Carlsb
       'Click Save',
     ],
     additionalItems: [
+      'Headshot (200×200px) — upload via pro.realtor.com',
       'Profile photo — professional headshot',
       'Areas served — La Jolla, Carmel Valley, Carlsbad, Rancho Santa Fe, Del Mar, Encinitas, Solana Beach, San Diego',
       'Specialties — Buyer\'s agent, Seller\'s agent, Residential, Single-family, Luxury homes, Investment, Relocation',
@@ -236,6 +241,7 @@ Radley is a licensed agent with The Oppenheim Group in La Jolla. He is also an a
       'Paste bio above → click Save',
     ],
     additionalItems: [
+      'Headshot (200×200px) — upload via profile editor',
       'Profile photo — same professional headshot as other platforms',
       'Service areas — Carlsbad, Del Mar, Encinitas, La Jolla, Rancho Santa Fe, San Diego, Solana Beach',
       'Specialties (free text) — Luxury Homes, Investment Properties, Relocation, First Time Home Buyers, Single-Family Homes, Vacation / Short-Term Rentals, Staging, New Construction',
@@ -603,7 +609,7 @@ export default function CopyKitPage() {
               >
                 <div
                   className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden"
-                  style={isApproved ? { borderColor: '#00BFA6', borderWidth: 2 } : {}}
+                  style={isApproved ? { borderColor: '#00BFA6', borderWidth: 2, backgroundColor: '#f0fdf9' } : {}}
                 >
                   {/* Card Header */}
                   <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
