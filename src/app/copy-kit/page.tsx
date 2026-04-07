@@ -7,10 +7,9 @@ import SignOutButton from '@/components/SignOutButton';
 interface Platform {
   id: string;
   name: string;
-  badge: 'Cited Updates' | 'You Update' | '60-Day Review Process';
+  badge: 'You Update';
   sections: { title?: string; text: string }[];
   instructions?: string[];
-  gbpNote?: string;
   additionalItems?: string[];
 }
 
@@ -123,18 +122,25 @@ const platforms: Platform[] = [
   {
     id: 'gbp',
     name: 'Google Business Profile',
-    badge: '60-Day Review Process',
+    badge: 'You Update',
     sections: [
       {
+        title: 'Business Description',
         text: `Maria Santos is a luxury real estate agent with Compass serving Carlsbad, Encinitas, and Solana Beach. With 7 years of hyperlocal expertise in La Costa, Encinitas Ranch, and the North County coastal corridor, Maria specializes in listing representation and buyer advocacy across Carlsbad's most sought-after neighborhoods. Known for her eye for presentation and deep knowledge of local market dynamics, Maria helps sellers in Carlsbad and Encinitas achieve top dollar through strategic staging, pricing, and marketing. Licensed in California (#02041346).`,
       },
     ],
-    gbpNote: "Google Business Profile claims take up to 60 days to be reviewed and approved. We'll guide you through the submission — but this one takes time. Start it now so you're not waiting later.",
+    instructions: [
+      'Go to business.google.com → Claim or create your business',
+      'Add your business name, category (Real Estate Agency), and address',
+      'Paste the description above into the "Business description" field',
+      'Set your hours, phone number, and website URL',
+    ],
     additionalItems: [
       'Business hours — set your standard availability',
-      'Address — ensure it matches exactly how it appears on all other platforms (NAP consistency)',
-      'Photos — upload at least 10 photos: interior shots, exterior shots, neighborhood photos, headshot',
-      'Logo — upload your brokerage/personal brand logo',
+      'Address — must match exactly across all platforms (NAP consistency)',
+      'Photos — upload 10+ photos: headshot, neighborhood, exterior, interior',
+      'Logo — upload your personal or brokerage logo',
+      'Category — select "Real Estate Agency" as primary',
     ],
   },
 ];
@@ -238,13 +244,7 @@ export default function CopyKitPage() {
                     <h3 className="text-lg font-bold" style={{ color: '#0A1929' }}>{platform.name}</h3>
                     <span
                       className="text-xs font-semibold px-2.5 py-1 rounded-full"
-                      style={
-                        platform.badge === '60-Day Review Process'
-                          ? { background: '#FFF0F0', color: '#DC2626' }
-                          : platform.badge === 'Cited Updates'
-                          ? { background: '#E6FAF7', color: '#00BFA6' }
-                          : { background: '#FFF8E6', color: '#D4A830' }
-                      }
+                      style={{ background: '#FFF8E6', color: '#D4A830' }}
                     >
                       {platform.badge}
                     </span>
@@ -269,12 +269,8 @@ export default function CopyKitPage() {
                     </div>
                   ))}
 
-                  {/* GBP Note or Instructions */}
-                  {platform.gbpNote ? (
-                    <div className="rounded-lg p-4 text-sm" style={{ background: '#FFF8E6', color: '#92400E', border: '1px solid #FDE68A' }}>
-                      <span className="font-semibold">⏱ Note: </span>{platform.gbpNote}
-                    </div>
-                  ) : platform.instructions ? (
+                  {/* How to update instructions */}
+                  {platform.instructions ? (
                     <div className="rounded-lg p-4 border border-gray-100" style={{ background: '#F8F9FA' }}>
                       <div className="text-xs font-bold uppercase tracking-wider text-gray-400 mb-2">How to update</div>
                       <ol className="space-y-1">

@@ -117,19 +117,26 @@ export default function PositioningPage() {
           </p>
         </div>
 
-        {/* Compact top approve button — for agents who are ready immediately */}
-        {!approved && (
-          <div className="mb-6 flex items-center justify-between rounded-lg px-4 py-3 border border-gray-200 bg-white shadow-sm">
-            <p className="text-sm text-gray-600">Looks right already? Approve it now and we&apos;ll get started.</p>
-            <button
-              onClick={handleApprove}
-              className="ml-4 shrink-0 px-4 py-2 rounded-lg text-xs font-bold text-white transition-opacity hover:opacity-90"
-              style={{ background: '#00BFA6' }}
-            >
-              Approve →
-            </button>
-          </div>
-        )}
+        {/* Compact top approve button — transforms same as bottom on click */}
+        <div className="mb-6 rounded-lg px-4 py-3 border shadow-sm" style={{ borderColor: approved ? '#00BFA6' : '#e5e7eb', background: approved ? '#f0fdf9' : '#fff' }}>
+          {approved ? (
+            <div className="flex items-center gap-3">
+              <span style={{ color: '#00BFA6', fontSize: '20px' }}>✓</span>
+              <p className="text-sm font-semibold" style={{ color: '#00BFA6' }}>Approved — we&apos;re writing your platform copy now</p>
+            </div>
+          ) : (
+            <div className="flex items-center justify-between">
+              <p className="text-sm text-gray-600">Looks right already? Approve it now and we&apos;ll get started.</p>
+              <button
+                onClick={handleApprove}
+                className="ml-4 shrink-0 px-4 py-2 rounded-lg text-xs font-bold text-white transition-opacity hover:opacity-90"
+                style={{ background: '#00BFA6' }}
+              >
+                Approve →
+              </button>
+            </div>
+          )}
+        </div>
 
         {/* Section 1 — Business Analysis */}
         <section className="mb-8">
