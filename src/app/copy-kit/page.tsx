@@ -143,6 +143,76 @@ const platforms: Platform[] = [
       'Category — select "Real Estate Agency" as primary',
     ],
   },
+  {
+    id: 'bing',
+    name: 'Bing Places',
+    badge: 'You Update',
+    sections: [
+      {
+        title: 'Business Description',
+        text: `Maria Santos is a luxury real estate agent with Compass serving Carlsbad, Encinitas, and Solana Beach. With 7 years of hyperlocal expertise in La Costa, Encinitas Ranch, and the North County coastal corridor, Maria specializes in listing representation and buyer advocacy. Known for her presentation expertise and deep local knowledge, Maria helps sellers achieve top dollar in Carlsbad and Encinitas. CA License #02041346.`,
+      },
+    ],
+    instructions: [
+      'Go to bingplaces.com → Sign in with Microsoft account',
+      'Search for your business or click "Add new business"',
+      'Paste the description above, set your category to "Real Estate Agency"',
+      'Add your phone, website, and service area',
+      'Verify via phone call or postcard',
+    ],
+    additionalItems: [
+      'Service area — add all target cities',
+      'Hours — set standard availability',
+      'Photos — same headshot and neighborhood photos as GBP',
+    ],
+  },
+  {
+    id: 'apple',
+    name: 'Apple Business Connect',
+    badge: 'You Update',
+    sections: [
+      {
+        title: 'Business Description',
+        text: `Maria Santos, luxury real estate agent with Compass. Specializing in Carlsbad, Encinitas, and Solana Beach. 7 years of North County San Diego expertise across La Costa, Encinitas Ranch, and the coastal corridor. Listing specialist known for presentation and pricing accuracy. CA License #02041346.`,
+      },
+    ],
+    instructions: [
+      'Go to businessconnect.apple.com → Sign in with Apple ID',
+      'Search for your business listing or create a new one',
+      'Paste the description, set category to "Real Estate Agent"',
+      'Upload your headshot as the business photo',
+      'Verify via phone — Apple will call the number on file',
+    ],
+    additionalItems: [
+      'Phone number — must match all other platforms exactly (NAP)',
+      'Website — link to your brokerage profile page',
+      'Hours — by appointment',
+      'Profile photo — professional headshot',
+    ],
+  },
+  {
+    id: 'homes',
+    name: 'Homes.com',
+    badge: 'You Update',
+    sections: [
+      {
+        title: 'Agent Bio',
+        text: `Maria Santos is a Carlsbad-based listing specialist with Compass, serving Carlsbad, Encinitas, and Solana Beach. With 7 years of hyperlocal expertise across La Costa, La Costa Oaks, and Encinitas Ranch, Maria brings deep neighborhood knowledge and a signature focus on presentation to every listing. $48M+ in career transactions. CA License #02041346.`,
+      },
+    ],
+    instructions: [
+      'Go to homes.com → search your name → click "Claim this profile"',
+      'Or create a new profile at homes.com/real-estate-agents',
+      'Paste the bio above into your profile description',
+      'Add your markets, license number, and contact info',
+      'Upload your professional headshot',
+    ],
+    additionalItems: [
+      'Service areas — all target cities and zip codes',
+      'Profile photo — same headshot as other platforms',
+      'Specialties — Listing Specialist, Luxury Homes, Buyer Representation',
+    ],
+  },
 ];
 
 function CopyButton({ text }: { text: string }) {
