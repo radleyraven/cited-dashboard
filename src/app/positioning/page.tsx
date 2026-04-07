@@ -29,10 +29,13 @@ const AUDIT_FINDINGS = [
   },
   {
     icon: "⚡",
-    label: "Needs immediate attention",
-    value: "Three platforms are blocking your AI visibility right now: Foursquare (not found — feeds 60-70% of ChatGPT local results), Yelp (unclaimed — Perplexity cites Yelp in 100% of industries), and Google Business Profile (not optimized — primary signal for Google AI Overviews). These move first.",
+    label: "Your three fastest wins",
+    value: "Foursquare not found — feeds 60-70% of ChatGPT local results directly. Yelp unclaimed — Perplexity cites Yelp in 100% of industries. Google Business Profile not optimized — primary signal for Google AI Overviews. We handle all three. Your first optimization starts within 48 hours of positioning approval.",
   },
 ];
+
+const cardBorders = ["#00BFA6", "#D4A830", "#00BFA6", "#EF4444", "#EF4444"];
+const cardBgs = ["#f0fdf9", "#fffdf5", "#f0fdf9", "#fff5f5", "#fff5f5"];
 
 const STORAGE_KEY = 'cited_positioning_approved';
 
@@ -223,14 +226,47 @@ export default function PositioningPage() {
           </div>
         </div>
 
-        {/* SECTION 3 — BUSINESS ANALYSIS (what we found) */}
-        <section className="mb-8">
-          <h3 className="text-base font-bold mb-1" style={{ color: '#0A1929' }}>What we found — and what needs attention first</h3>
-          <p className="text-sm text-gray-500 mb-4">Here&apos;s what the audit found — the data behind the statement.</p>
+        {/* SECTION 3A — WHY WE POSITIONED YOU THIS WAY (findings 0, 1, 2) */}
+        <section className="mb-6">
+          <div className="mb-4">
+            <p className="text-xs font-bold uppercase tracking-wider" style={{ color: '#9CA3AF' }}>Why we positioned you this way</p>
+          </div>
           <div className="space-y-3">
-            {AUDIT_FINDINGS.map((finding, i) => (
-              <div key={i} className="bg-white rounded-xl p-5 shadow-sm border border-gray-100 flex items-start gap-4"
-                style={{ borderLeft: `4px solid ${i === 0 ? "#00BFA6" : i === 1 ? "#D4A830" : i === 2 ? "#00BFA6" : "#EF4444"}` }}>
+            {AUDIT_FINDINGS.slice(0, 3).map((finding, i) => (
+              <div
+                key={i}
+                className="rounded-xl p-5 shadow-sm border border-gray-100 flex items-start gap-4"
+                style={{
+                  borderLeft: `4px solid ${cardBorders[i]}`,
+                  background: cardBgs[i],
+                }}
+              >
+                <span className="text-xl shrink-0">{finding.icon}</span>
+                <div>
+                  <div className="text-xs font-bold uppercase tracking-wider mb-1.5 text-gray-400">{finding.label}</div>
+                  <p className="text-sm text-gray-700 leading-relaxed">{finding.value}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* SECTION 3B — WHAT NEEDS IMMEDIATE ATTENTION (findings 3, 4) */}
+        <section className="mb-8">
+          <div className="mb-3">
+            <p className="text-xs font-bold uppercase tracking-wider" style={{ color: '#EF4444' }}>⚡ What needs immediate attention</p>
+            <p className="text-sm text-gray-500 mt-1">These three gaps are limiting your AI visibility right now. We fix all three as part of your onboarding.</p>
+          </div>
+          <div className="space-y-3">
+            {AUDIT_FINDINGS.slice(3).map((finding, i) => (
+              <div
+                key={i}
+                className="rounded-xl p-5 shadow-sm border border-gray-100 flex items-start gap-4"
+                style={{
+                  borderLeft: `4px solid ${cardBorders[3 + i]}`,
+                  background: cardBgs[3 + i],
+                }}
+              >
                 <span className="text-xl shrink-0">{finding.icon}</span>
                 <div>
                   <div className="text-xs font-bold uppercase tracking-wider mb-1.5 text-gray-400">{finding.label}</div>
