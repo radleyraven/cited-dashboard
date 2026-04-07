@@ -127,9 +127,12 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
         <div style={{ marginBottom: '20px' }}>
           <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap' }}>
             <div style={{ flex: 1, minWidth: '200px' }}>
-              <h1 style={{ fontSize: '24px', fontWeight: 700, color: '#0A1929', margin: '0 0 6px', lineHeight: 1.3 }}>
+              <h1 style={{ fontSize: '24px', fontWeight: 700, color: '#0A1929', margin: '0 0 4px', lineHeight: 1.3 }}>
                 {firstName}, here&apos;s your AI Visibility Score for {market}.
               </h1>
+              <p style={{ fontSize: '13px', fontStyle: 'italic', color: '#00BFA6', fontWeight: 600, margin: '0 0 4px' }}>
+                AI cites agents it already knows. We make sure it knows you.
+              </p>
               <p style={{ fontSize: '13px', color: '#94a3b8', margin: 0 }}>
                 {brokerage} · {market} · Generated {new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
               </p>

@@ -29,6 +29,13 @@ const AUDIT_FINDINGS = [
 
 const STORAGE_KEY = 'cited_positioning_approved';
 
+// Mock stats for demo — in production these come from the client profile / Supabase
+const CLIENT_STATS = {
+  careerVolume: '$48M+',
+  yearsInMarket: '7',
+  citationScore: 22,
+};
+
 export default function PositioningPage() {
   const [approved, setApproved] = useState(false);
   const [feedbackText, setFeedbackText] = useState('');
@@ -79,14 +86,50 @@ export default function PositioningPage() {
         </div>
       </header>
 
+      {/* Compact Stats Row — career context before the positioning statement */}
+      <div style={{ background: '#0D2137' }}>
+        <div className="max-w-3xl mx-auto px-6 py-3">
+          <div className="flex items-center gap-6 md:gap-10 flex-wrap">
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-gray-500 uppercase tracking-wider">Career Volume</span>
+              <span className="text-sm font-bold" style={{ color: '#D4A830' }}>{CLIENT_STATS.careerVolume}</span>
+            </div>
+            <div className="w-px h-4 bg-white/10 hidden md:block" />
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-gray-500 uppercase tracking-wider">Years in Market</span>
+              <span className="text-sm font-bold" style={{ color: '#D4A830' }}>{CLIENT_STATS.yearsInMarket}</span>
+            </div>
+            <div className="w-px h-4 bg-white/10 hidden md:block" />
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-gray-500 uppercase tracking-wider">Citation Score</span>
+              <span className="text-sm font-bold" style={{ color: '#D4A830' }}>{CLIENT_STATS.citationScore} / 100</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <main className="max-w-3xl mx-auto px-6 py-10">
         {/* Page Header */}
-        <div className="mb-8">
+        <div className="mb-6">
           <h2 className="text-3xl font-bold" style={{ color: '#0A1929' }}>Your Positioning Statement</h2>
           <p className="text-gray-500 mt-2">
             Review what we found in your audit, then approve the positioning statement that will guide everything we write for you.
           </p>
         </div>
+
+        {/* Compact top approve button — for agents who are ready immediately */}
+        {!approved && (
+          <div className="mb-6 flex items-center justify-between rounded-lg px-4 py-3 border border-gray-200 bg-white shadow-sm">
+            <p className="text-sm text-gray-600">Looks right already? Approve it now and we&apos;ll get started.</p>
+            <button
+              onClick={handleApprove}
+              className="ml-4 shrink-0 px-4 py-2 rounded-lg text-xs font-bold text-white transition-opacity hover:opacity-90"
+              style={{ background: '#00BFA6' }}
+            >
+              Approve →
+            </button>
+          </div>
+        )}
 
         {/* Section 1 — Business Analysis */}
         <section className="mb-8">

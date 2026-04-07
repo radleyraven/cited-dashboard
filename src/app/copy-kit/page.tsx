@@ -7,24 +7,14 @@ import SignOutButton from '@/components/SignOutButton';
 interface Platform {
   id: string;
   name: string;
-  badge: 'Cited Updates' | 'You Update';
+  badge: 'Cited Updates' | 'You Update' | '60-Day Review Process';
   sections: { title?: string; text: string }[];
   instructions?: string[];
   gbpNote?: string;
+  additionalItems?: string[];
 }
 
 const platforms: Platform[] = [
-  {
-    id: 'gbp',
-    name: 'Google Business Profile',
-    badge: 'Cited Updates',
-    sections: [
-      {
-        text: `Maria Santos is a luxury real estate agent with Compass serving Carlsbad, Encinitas, and Solana Beach. With 7 years of hyperlocal expertise in La Costa, Encinitas Ranch, and the North County coastal corridor, Maria specializes in listing representation and buyer advocacy across Carlsbad's most sought-after neighborhoods. Known for her eye for presentation and deep knowledge of local market dynamics, Maria helps sellers in Carlsbad and Encinitas achieve top dollar through strategic staging, pricing, and marketing. Licensed in California (#02041346).`,
-      },
-    ],
-    gbpNote: "We handle this one. Jett will update your GBP directly once you add us as manager (instructions sent separately).",
-  },
   {
     id: 'linkedin',
     name: 'LinkedIn',
@@ -44,6 +34,12 @@ const platforms: Platform[] = [
       'Click Edit profile → Edit Headline (paste headline) → Edit About section (paste about text)',
       'Click Save',
     ],
+    additionalItems: [
+      'Profile photo — professional headshot (your face should be 60%+ of frame)',
+      'Banner image — a Carlsbad/North County lifestyle or listing photo',
+      'Featured section — link to your Cited article or best listing',
+      'Skills — add: Real Estate, Luxury Homes, Carlsbad, Encinitas, Home Staging, Buyer Representation',
+    ],
   },
   {
     id: 'zillow',
@@ -58,6 +54,11 @@ const platforms: Platform[] = [
       'Go to zillow.com/profile/[your-username]',
       'Click Edit Profile → Agent Bio → paste bio',
       'Click Save',
+    ],
+    additionalItems: [
+      'Profile photo — same professional headshot used on LinkedIn',
+      'Service areas — add every city and ZIP code you serve (La Costa, Encinitas Ranch, Carlsbad Village, etc.)',
+      'Languages — add all languages you speak fluently',
     ],
   },
   {
@@ -74,6 +75,11 @@ const platforms: Platform[] = [
       'Click Business Information → Business Description → paste bio',
       'Click Save',
     ],
+    additionalItems: [
+      'Business hours — set your standard availability (e.g., Mon–Sat 9am–6pm)',
+      'Service area — add all cities/ZIP codes you serve',
+      'Photos — upload at least 5 photos (headshot, neighborhood shots, listing photos)',
+    ],
   },
   {
     id: 'realtordotcom',
@@ -89,6 +95,11 @@ const platforms: Platform[] = [
       'Click Edit Profile → About Me → paste bio',
       'Click Save',
     ],
+    additionalItems: [
+      'Profile photo — professional headshot',
+      'Service areas — list every city you actively serve',
+      'Languages — add all languages you speak fluently',
+    ],
   },
   {
     id: 'fastexpert',
@@ -103,6 +114,27 @@ const platforms: Platform[] = [
       'Go to fastexpert.com/agents',
       'Click Edit Profile → Bio → paste bio',
       'Click Save',
+    ],
+    additionalItems: [
+      'Profile photo — same professional headshot used on other platforms',
+      'Service areas — add all target cities and ZIP codes',
+    ],
+  },
+  {
+    id: 'gbp',
+    name: 'Google Business Profile',
+    badge: '60-Day Review Process',
+    sections: [
+      {
+        text: `Maria Santos is a luxury real estate agent with Compass serving Carlsbad, Encinitas, and Solana Beach. With 7 years of hyperlocal expertise in La Costa, Encinitas Ranch, and the North County coastal corridor, Maria specializes in listing representation and buyer advocacy across Carlsbad's most sought-after neighborhoods. Known for her eye for presentation and deep knowledge of local market dynamics, Maria helps sellers in Carlsbad and Encinitas achieve top dollar through strategic staging, pricing, and marketing. Licensed in California (#02041346).`,
+      },
+    ],
+    gbpNote: "Google Business Profile claims take up to 60 days to be reviewed and approved. We'll guide you through the submission — but this one takes time. Start it now so you're not waiting later.",
+    additionalItems: [
+      'Business hours — set your standard availability',
+      'Address — ensure it matches exactly how it appears on all other platforms (NAP consistency)',
+      'Photos — upload at least 10 photos: interior shots, exterior shots, neighborhood photos, headshot',
+      'Logo — upload your brokerage/personal brand logo',
     ],
   },
 ];
@@ -179,13 +211,12 @@ export default function CopyKitPage() {
       <main className="max-w-4xl mx-auto px-6 py-10">
         {/* Page Header */}
         <div className="mb-8">
-          <h2 className="text-3xl font-bold" style={{ color: '#0A1929' }}>Your Optimized Bios</h2>
+          <h2 className="text-3xl font-bold" style={{ color: '#0A1929' }}>Your Platform Bios</h2>
           <p className="text-gray-500 mt-2 max-w-2xl">
-            Review each bio, approve it, then copy and paste it into your platform profile.
-            GBP is the only platform we update directly — you&apos;ll need to update the others yourself.
+            Review each bio, copy it, and paste it into your platform profile. Platforms are ordered by AI citation impact — start with LinkedIn and work your way down.
           </p>
           <div className="mt-3 text-sm font-medium" style={{ color: '#00BFA6' }}>
-            {Object.values(approved).filter(Boolean).length} of {platforms.length} platforms approved
+            {Object.values(approved).filter(Boolean).length} of {platforms.length} platforms updated
           </div>
         </div>
 
@@ -208,7 +239,9 @@ export default function CopyKitPage() {
                     <span
                       className="text-xs font-semibold px-2.5 py-1 rounded-full"
                       style={
-                        platform.badge === 'Cited Updates'
+                        platform.badge === '60-Day Review Process'
+                          ? { background: '#FFF0F0', color: '#DC2626' }
+                          : platform.badge === 'Cited Updates'
                           ? { background: '#E6FAF7', color: '#00BFA6' }
                           : { background: '#FFF8E6', color: '#D4A830' }
                       }
@@ -217,7 +250,7 @@ export default function CopyKitPage() {
                     </span>
                   </div>
                   {isApproved && (
-                    <span className="text-sm font-semibold" style={{ color: '#00BFA6' }}>✓ Updated</span>
+                    <span className="text-sm font-semibold" style={{ color: '#00BFA6' }}>✓ Reviewed & Posted</span>
                   )}
                 </div>
 
@@ -238,8 +271,8 @@ export default function CopyKitPage() {
 
                   {/* GBP Note or Instructions */}
                   {platform.gbpNote ? (
-                    <div className="rounded-lg p-4 text-sm" style={{ background: '#E6FAF7', color: '#00796B' }}>
-                      <span className="font-semibold">ℹ️ Note: </span>{platform.gbpNote}
+                    <div className="rounded-lg p-4 text-sm" style={{ background: '#FFF8E6', color: '#92400E', border: '1px solid #FDE68A' }}>
+                      <span className="font-semibold">⏱ Note: </span>{platform.gbpNote}
                     </div>
                   ) : platform.instructions ? (
                     <div className="rounded-lg p-4 border border-gray-100" style={{ background: '#F8F9FA' }}>
@@ -254,6 +287,21 @@ export default function CopyKitPage() {
                       </ol>
                     </div>
                   ) : null}
+
+                  {/* Additional items to update */}
+                  {platform.additionalItems && platform.additionalItems.length > 0 && (
+                    <div className="rounded-lg p-4 border border-gray-100" style={{ background: '#F8F9FA' }}>
+                      <div className="text-xs font-bold uppercase tracking-wider text-gray-400 mb-2">Additional items to update</div>
+                      <ul className="space-y-1">
+                        {platform.additionalItems.map((item, i) => (
+                          <li key={i} className="text-sm text-gray-600 flex gap-2">
+                            <span className="shrink-0" style={{ color: '#00BFA6' }}>·</span>
+                            <span>{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
 
                   {/* Actions */}
                   <div className="flex items-center justify-between pt-2">
@@ -275,7 +323,7 @@ export default function CopyKitPage() {
                         style={{ color: isApproved ? '#00BFA6' : '#6B7280' }}
                         onClick={() => toggleApprove(platform.id)}
                       >
-                        I&apos;ve updated this platform ✓
+                        I&apos;ve reviewed and posted this ✓
                       </span>
                     </label>
                   </div>

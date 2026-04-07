@@ -62,9 +62,12 @@ export default function HowItWorksPage() {
           <div style={{ display: 'inline-block', background: '#0A1929', color: '#D4A830', fontSize: '11px', fontWeight: 700, letterSpacing: '2px', textTransform: 'uppercase', padding: '6px 16px', borderRadius: '20px', marginBottom: '20px' }}>
             The Problem
           </div>
-          <h1 style={{ fontSize: '32px', fontWeight: 800, color: '#0A1929', margin: '0 0 16px', lineHeight: 1.25 }}>
+          <h1 style={{ fontSize: '32px', fontWeight: 800, color: '#0A1929', margin: '0 0 12px', lineHeight: 1.25 }}>
             Traditional Google rankings are no longer enough.<br />AI is now the first stop — and most agents are invisible to it.
           </h1>
+          <p style={{ fontSize: '17px', fontStyle: 'italic', color: '#00BFA6', fontWeight: 600, margin: '0 0 16px', lineHeight: 1.5 }}>
+            AI cites agents it already knows. We make sure it knows you.
+          </p>
           <p style={{ fontSize: '16px', color: '#4a5568', lineHeight: 1.8, margin: '0 0 20px' }}>
             Sellers and buyers used to Google an agent&apos;s name and scroll through results. Now they ask ChatGPT, Perplexity, Google AI Overviews, and Gemini — and those systems give one answer. Not a list. One recommendation. And traditional SEO doesn&apos;t move the needle on any of them.
           </p>
