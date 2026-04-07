@@ -26,7 +26,7 @@ const citedCompletedItems: CitedItem[] = [
 ];
 
 const clientTodoItems: ClientItem[] = [
-  { label: 'Approve article draft', href: '/articles' },
+  { label: 'Review + post your article', href: '/articles' },
   { label: 'Request 5 GBP reviews from past clients', href: '/reviews' },
   { label: 'Paste bios into your platform profiles', href: '/copy-kit' },
 ];
