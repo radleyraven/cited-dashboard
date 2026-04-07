@@ -14,6 +14,10 @@ type FormData = {
   title: string;
   licenseNumber: string;
   primaryMarkets: string;
+  primary_market_zip: string;
+  brokerage_address: string;
+  brokerage_profile_url: string;
+  personal_website_url: string;
   neighborhoods: string;
   yearsInMarket: string;
   topTransactions: string;
@@ -49,6 +53,10 @@ const initialForm: FormData = {
   title: "",
   licenseNumber: "",
   primaryMarkets: "",
+  primary_market_zip: "",
+  brokerage_address: "",
+  brokerage_profile_url: "",
+  personal_website_url: "",
   neighborhoods: "",
   yearsInMarket: "",
   topTransactions: "",
@@ -301,7 +309,7 @@ function IntakeForm() {
           Complete the form below to start your business &amp; visibility audit. We'll analyze your market, your transaction history, and your current AI footprint — then build everything from there.
           </p>
           <p style={{ fontSize: '13px', color: '#00BFA6', background: 'rgba(0,191,166,0.08)', border: '1px solid rgba(0,191,166,0.2)', borderRadius: '6px', padding: '10px 14px', margin: '8px 0 0 0' }}>
-            The more you fill in, the higher your score will go. Leave any field blank if you're not sure — we'll work with what you have.
+            The more complete your intake, the higher your Citation Score will go. Leave any field blank if you&apos;re not sure — we&apos;ll work with what you have.{" "}
           Fields marked with <span style={{ color: "#DC2626" }}>*</span> are required.
         </p>
 
@@ -384,6 +392,46 @@ function IntakeForm() {
                 placeholder="e.g., Carlsbad, Encinitas, Solana Beach"
                 value={form.primaryMarkets}
                 onChange={(e) => set("primaryMarkets", e.target.value)}
+                className={`${inputClass} ${inputFocusRing}`}
+                style={inputStyle}
+              />
+            </Field>
+            <Field label="Primary market ZIP code" hint="The ZIP code where most of your deals close. Leave blank if unsure — you can update this later.">
+              <input
+                type="text"
+                placeholder="e.g., 92130"
+                value={form.primary_market_zip}
+                onChange={(e) => set("primary_market_zip", e.target.value)}
+                className={`${inputClass} ${inputFocusRing}`}
+                style={inputStyle}
+              />
+            </Field>
+            <Field label="Brokerage office address" hint="Must match exactly across all platforms — AI uses this to verify you as a real business. Leave blank if unsure.">
+              <input
+                type="text"
+                placeholder="e.g., 7925 Girard Ave, La Jolla, CA 92037"
+                value={form.brokerage_address}
+                onChange={(e) => set("brokerage_address", e.target.value)}
+                className={`${inputClass} ${inputFocusRing}`}
+                style={inputStyle}
+              />
+            </Field>
+            <Field label="Your profile page on your brokerage website" hint="Your bio page on your brokerage site. Used on most platforms until your personal site is live. Leave blank if unavailable.">
+              <input
+                type="url"
+                placeholder="https://yourbrokerage.com/agents/your-name"
+                value={form.brokerage_profile_url}
+                onChange={(e) => set("brokerage_profile_url", e.target.value)}
+                className={`${inputClass} ${inputFocusRing}`}
+                style={inputStyle}
+              />
+            </Field>
+            <Field label="Personal agent website (if you have one)" hint="Your own domain — highest AI citation value long-term. Leave blank if not live yet.">
+              <input
+                type="url"
+                placeholder="https://yourname.com"
+                value={form.personal_website_url}
+                onChange={(e) => set("personal_website_url", e.target.value)}
                 className={`${inputClass} ${inputFocusRing}`}
                 style={inputStyle}
               />
