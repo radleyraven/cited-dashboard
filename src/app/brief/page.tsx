@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import SignOutButton from '@/components/SignOutButton';
 
@@ -38,13 +38,36 @@ export default function BriefPage() {
   const [answers, setAnswers] = useState<Record<string, string>>({
     q1: '', q2: '', q3: '', q4: '', q5: '',
   });
+  const [currentQuestion, setCurrentQuestion] = useState(1);
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const activeRef = useRef<HTMLDivElement>(null);
 
   const handleChange = (id: string, value: string) => {
     setAnswers(prev => ({ ...prev, [id]: value }));
   };
+
+  const handleNext = () => {
+    const currentQ = QUESTIONS[currentQuestion - 1];
+    if (!answers[currentQ.id]?.trim()) {
+      setError('Please answer this question before moving on.');
+      return;
+    }
+    setError(null);
+    setCurrentQuestion(prev => prev + 1);
+  };
+
+  const handleEdit = (questionNum: number) => {
+    setCurrentQuestion(questionNum);
+    setError(null);
+  };
+
+  useEffect(() => {
+    if (activeRef.current) {
+      activeRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, [currentQuestion]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -143,45 +166,119 @@ export default function BriefPage() {
               </p>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-6">
-              {QUESTIONS.map((q, i) => (
+            {/* Progress indicator */}
+            <div className="mb-8">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-xs font-bold uppercase tracking-widest" style={{ color: '#00BFA6' }}>
+                  Question {currentQuestion} of {QUESTIONS.length}
+                </span>
+                <span className="text-xs text-gray-400">
+                  {Math.round((currentQuestion / QUESTIONS.length) * 100)}% complete
+                </span>
+              </div>
+              <div className="h-1.5 w-full bg-gray-200 rounded-full overflow-hidden">
                 <div
-                  key={q.id}
-                  className="bg-white rounded-xl shadow-sm border border-gray-100 p-6"
-                >
-                  <label className="block mb-1">
-                    <span className="text-xs font-bold uppercase tracking-widest mb-1 block" style={{ color: '#00BFA6' }}>
-                      Question {i + 1}
-                    </span>
-                    <span className="text-base font-semibold text-gray-900 leading-snug block mb-1">
-                      {q.label}
-                    </span>
-                    <span className="text-sm text-gray-400 block mb-3">{q.hint}</span>
-                  </label>
-                  <textarea
-                    rows={4}
-                    value={answers[q.id]}
-                    onChange={e => handleChange(q.id, e.target.value)}
-                    placeholder="Your answer…"
-                    className="w-full resize-none rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-800 placeholder-gray-300 outline-none transition-all focus:border-teal-400 focus:ring-2 focus:ring-teal-100"
-                  />
-                </div>
-              ))}
+                  className="h-full rounded-full transition-all duration-500"
+                  style={{
+                    width: `${(currentQuestion / QUESTIONS.length) * 100}%`,
+                    background: '#00BFA6',
+                  }}
+                />
+              </div>
+            </div>
 
-              {error && (
-                <div className="rounded-lg px-5 py-4 text-sm font-medium" style={{ background: '#fff0f0', color: '#b91c1c', border: '1px solid #fecaca' }}>
-                  {error}
-                </div>
-              )}
+            <form onSubmit={handleSubmit} className="space-y-4">
+              {QUESTIONS.map((q, i) => {
+                const qNum = i + 1;
+                const isActive = qNum === currentQuestion;
+                const isPast = qNum < currentQuestion;
 
-              <button
-                type="submit"
-                disabled={submitting}
-                className="w-full py-4 rounded-xl font-bold text-white text-base transition-all duration-200 hover:opacity-90 disabled:opacity-60"
-                style={{ background: submitting ? '#9ca3af' : '#00BFA6' }}
-              >
-                {submitting ? 'Submitting…' : 'Submit Brief → We\'ll have your article ready within 48 hours'}
-              </button>
+                // Future questions are hidden
+                if (!isActive && !isPast) return null;
+
+                if (isPast) {
+                  // Read-only previous answer with edit link
+                  return (
+                    <div
+                      key={q.id}
+                      className="bg-white rounded-xl shadow-sm border border-gray-100 p-5 opacity-70 hover:opacity-90 transition-opacity"
+                    >
+                      <div className="flex items-start justify-between gap-3">
+                        <div className="flex-1 min-w-0">
+                          <span className="text-xs font-bold uppercase tracking-widest block mb-1" style={{ color: '#00BFA6' }}>
+                            Question {qNum}
+                          </span>
+                          <p className="text-sm font-semibold text-gray-700 leading-snug mb-2">{q.label}</p>
+                          <p className="text-sm text-gray-500 leading-relaxed line-clamp-3">{answers[q.id]}</p>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => handleEdit(qNum)}
+                          className="flex-shrink-0 text-xs font-medium underline underline-offset-2 text-gray-400 hover:text-teal-500 transition-colors mt-1"
+                        >
+                          edit
+                        </button>
+                      </div>
+                    </div>
+                  );
+                }
+
+                // Active question
+                return (
+                  <div
+                    key={q.id}
+                    ref={activeRef}
+                    className="bg-white rounded-xl shadow-md border-2 p-6 transition-all"
+                    style={{ borderColor: '#00BFA6' }}
+                  >
+                    <label className="block mb-1">
+                      <span className="text-xs font-bold uppercase tracking-widest mb-1 block" style={{ color: '#00BFA6' }}>
+                        Question {qNum}
+                      </span>
+                      <span className="text-base font-semibold text-gray-900 leading-snug block mb-1">
+                        {q.label}
+                      </span>
+                      <span className="text-sm text-gray-400 block mb-3">{q.hint}</span>
+                    </label>
+                    <textarea
+                      rows={4}
+                      value={answers[q.id]}
+                      onChange={e => handleChange(q.id, e.target.value)}
+                      placeholder="Your answer…"
+                      autoFocus
+                      className="w-full resize-none rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-800 placeholder-gray-300 outline-none transition-all focus:border-teal-400 focus:ring-2 focus:ring-teal-100"
+                    />
+
+                    {error && (
+                      <div className="mt-3 rounded-lg px-4 py-3 text-sm font-medium" style={{ background: '#fff0f0', color: '#b91c1c', border: '1px solid #fecaca' }}>
+                        {error}
+                      </div>
+                    )}
+
+                    <div className="mt-4 flex justify-end">
+                      {qNum < QUESTIONS.length ? (
+                        <button
+                          type="button"
+                          onClick={handleNext}
+                          className="px-6 py-3 rounded-xl font-bold text-white text-sm transition-all duration-200 hover:opacity-90"
+                          style={{ background: '#00BFA6' }}
+                        >
+                          Next →
+                        </button>
+                      ) : (
+                        <button
+                          type="submit"
+                          disabled={submitting}
+                          className="px-6 py-3 rounded-xl font-bold text-white text-sm transition-all duration-200 hover:opacity-90 disabled:opacity-60"
+                          style={{ background: submitting ? '#9ca3af' : '#00BFA6' }}
+                        >
+                          {submitting ? 'Submitting…' : 'Submit Brief →'}
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
             </form>
           </>
         )}
