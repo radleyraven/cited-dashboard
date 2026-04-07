@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import SignOutButton from '@/components/SignOutButton';
+import { createSupabaseBrowserClient } from '@/lib/supabase-browser';
 
 const QUESTIONS = [
   {
@@ -87,7 +88,7 @@ export default function BriefPage() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          clientEmail: 'client@citedagent.com', // replaced server-side with session email when auth is wired
+          clientEmail: (await createSupabaseBrowserClient().auth.getUser()).data.user?.email ?? 'unknown@citedagent.com',
           articleNumber: ARTICLE_NUMBER,
           ...answers,
         }),
