@@ -35,7 +35,7 @@ export default function HowItWorksPage() {
 
   const weeks = [
     { week: 'Week 1', title: 'We audit. You do nothing.', time: '0 min', color: '#D4A830', detail: 'Full business and visibility audit — we examine your transaction history, AI footprint across 11 platforms, and market opportunity gaps. Optimization plan built.' },
-    { week: 'Week 2', title: 'Profiles optimized. You review.', time: '15 min', color: '#00BFA6', detail: 'Platform copy written and ready in your dashboard. You review and paste each one — one click per platform, paste-ready fields for everything. Your positioning approval triggers this step.' },
+    { week: 'Week 2', title: 'Profiles optimized. You review.', time: '15 min', color: '#00BFA6', detail: 'Your Citation Profiles written and ready in your dashboard. You review and post your Citation Profiles from your dashboard — one click per platform, paste-ready fields for everything. Your positioning approval triggers this step.' },
     { week: 'Week 3', title: 'Article written. You answer 3 questions.', time: '3 min', color: '#00BFA6', detail: 'Article brief: 3 questions, 3 minutes. We write the article in your voice. Posting it to LinkedIn IS your approval — no separate step needed.' },
     { week: 'Week 4', title: 'Article live. Score moves. You see it.', time: '5 min', color: '#D4A830', detail: 'Article live and indexing. First AI signals visible within 7-14 days on Perplexity. Full PRISM re-scan at Day 30.' },
   ];
