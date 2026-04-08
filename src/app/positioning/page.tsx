@@ -201,49 +201,49 @@ export default function PositioningPage() {
           )}
         </section>
 
-        {/* Stats Bar — moved below approve/feedback */}
-        <div className="rounded-xl mb-10" style={{ background: "#0A1929", border: "1px solid rgba(255,255,255,0.06)" }}>
+        {/* Stats Bar — light gray with teal top border */}
+        <div className="rounded-xl mb-10" style={{ background: "#f8f9fa", border: "1px solid #e8edf2", borderTop: "3px solid #00BFA6" }}>
           <div className="px-6 py-6">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <div className="text-center">
-                <div className="text-2xl md:text-3xl font-black" style={{ color: "#D4A830" }}>$44.8M</div>
-                <div className="text-xs text-gray-400 uppercase tracking-wider mt-1">Carmel Valley Volume</div>
-                <div className="text-xs text-gray-500 mt-0.5">11 deals · 92130</div>
+                <div className="text-2xl md:text-3xl font-black" style={{ color: "#0A1929" }}>$44.8M</div>
+                <div className="text-xs uppercase tracking-wider mt-1" style={{ color: "#9AACB8" }}>Carmel Valley Volume</div>
+                <div className="text-xs mt-0.5" style={{ color: "#9AACB8" }}>11 deals · 92130</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl md:text-3xl font-black" style={{ color: "#D4A830" }}>28 days</div>
-                <div className="text-xs text-gray-400 uppercase tracking-wider mt-1">Median DOM</div>
-                <div className="text-xs text-gray-500 mt-0.5">Career average</div>
+                <div className="text-2xl md:text-3xl font-black" style={{ color: "#0A1929" }}>28 days</div>
+                <div className="text-xs uppercase tracking-wider mt-1" style={{ color: "#9AACB8" }}>Median DOM</div>
+                <div className="text-xs mt-0.5" style={{ color: "#9AACB8" }}>Career average</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl md:text-3xl font-black" style={{ color: "#D4A830" }}>96%</div>
-                <div className="text-xs text-gray-400 uppercase tracking-wider mt-1">Sale-to-List</div>
-                <div className="text-xs text-gray-500 mt-0.5">Career average</div>
+                <div className="text-2xl md:text-3xl font-black" style={{ color: "#0A1929" }}>96%</div>
+                <div className="text-xs uppercase tracking-wider mt-1" style={{ color: "#9AACB8" }}>Sale-to-List</div>
+                <div className="text-xs mt-0.5" style={{ color: "#9AACB8" }}>Career average</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl md:text-3xl font-black" style={{ color: "#D4A830" }}>$91.7M</div>
-                <div className="text-xs text-gray-400 uppercase tracking-wider mt-1">Career Volume</div>
-                <div className="text-xs text-gray-500 mt-0.5">33 deals · 10+ yrs</div>
+                <div className="text-2xl md:text-3xl font-black" style={{ color: "#0A1929" }}>$91.7M</div>
+                <div className="text-xs uppercase tracking-wider mt-1" style={{ color: "#9AACB8" }}>Career Volume</div>
+                <div className="text-xs mt-0.5" style={{ color: "#9AACB8" }}>33 deals · 10+ yrs</div>
               </div>
             </div>
           </div>
-          <div style={{ borderTop: "1px solid rgba(255,255,255,0.08)", background: "#0D2137" }} className="px-6 py-4 rounded-b-xl">
+          <div style={{ borderTop: "1px solid #e8edf2" }} className="px-6 py-4 rounded-b-xl">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <div className="text-center">
-                <div className="text-lg font-bold" style={{ color: "#D4A830" }}>24%</div>
-                <div className="text-xs text-gray-500 uppercase tracking-wider mt-0.5">At or Above Asking</div>
+                <div className="text-lg font-bold" style={{ color: "#0A1929" }}>24%</div>
+                <div className="text-xs uppercase tracking-wider mt-0.5" style={{ color: "#9AACB8" }}>At or Above Asking</div>
               </div>
               <div className="text-center">
-                <div className="text-lg font-bold" style={{ color: "#D4A830" }}>$2.78M</div>
-                <div className="text-xs text-gray-500 uppercase tracking-wider mt-0.5">Avg Deal Size</div>
+                <div className="text-lg font-bold" style={{ color: "#0A1929" }}>$2.78M</div>
+                <div className="text-xs uppercase tracking-wider mt-0.5" style={{ color: "#9AACB8" }}>Avg Deal Size</div>
               </div>
               <div className="text-center">
-                <div className="text-lg font-bold" style={{ color: "#D4A830" }}>10+ yrs</div>
-                <div className="text-xs text-gray-500 uppercase tracking-wider mt-0.5">In Market</div>
+                <div className="text-lg font-bold" style={{ color: "#0A1929" }}>10+ yrs</div>
+                <div className="text-xs uppercase tracking-wider mt-0.5" style={{ color: "#9AACB8" }}>In Market</div>
               </div>
               <div className="text-center">
-                <div className="text-lg font-bold" style={{ color: "#D4A830" }}>33</div>
-                <div className="text-xs text-gray-500 uppercase tracking-wider mt-0.5">Total Transactions</div>
+                <div className="text-lg font-bold" style={{ color: "#0A1929" }}>33</div>
+                <div className="text-xs uppercase tracking-wider mt-0.5" style={{ color: "#9AACB8" }}>Total Transactions</div>
               </div>
             </div>
           </div>
