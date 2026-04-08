@@ -107,6 +107,18 @@ const prefillData: Record<string, Record<string, string>> = {
     topTransactions: 'Luxury sales — The Oppenheim Group San Diego',
     hideMLSUpload: 'true',
   },
+  'raquel-abrams': {
+    fullName: 'Raquel Abrams',
+    email: '',
+    brokerage: 'The Oppenheim Group',
+    primaryMarkets: 'Del Mar, La Jolla, Carmel Valley',
+    zillowUrl: '',
+    linkedinUrl: '',
+    realtorUrl: '',
+    yearsInMarket: '8',
+    topTransactions: 'Del Mar and coastal San Diego specialist — born and raised in Del Mar',
+    hideMLSUpload: 'true',
+  },
 };
 
 const prospects: Record<string, ProspectData> = {
@@ -221,6 +233,23 @@ const prospects: Record<string, ProspectData> = {
     market: 'La Jolla',
     score: 5,
     competitorScore: 42,
+    gaps: [
+      { platform: 'Google Business Profile', status: 'missing', impact: 'High', points: 14 },
+      { platform: 'LinkedIn Profile Optimization', status: 'unoptimized', impact: 'High', points: 10 },
+      { platform: 'Yelp Profile', status: 'missing', impact: 'High', points: 12 },
+      { platform: 'Zillow Bio Optimization', status: 'unoptimized', impact: 'Medium', points: 8 },
+      { platform: 'LinkedIn Articles', status: 'missing', impact: 'Medium', points: 7 },
+      { platform: 'FastExpert', status: 'missing', impact: 'Low', points: 4 },
+      { platform: 'Foursquare', status: 'missing', impact: 'Low', points: 4 },
+      { platform: 'GBP Posts (freshness)', status: 'missing', impact: 'Low', points: 3 },
+    ],
+  },,
+  'raquel-abrams': {
+    name: 'Raquel Abrams',
+    brokerage: 'The Oppenheim Group',
+    market: 'Del Mar',
+    score: 7,
+    competitorScore: 45,
     gaps: [
       { platform: 'Google Business Profile', status: 'missing', impact: 'High', points: 14 },
       { platform: 'LinkedIn Profile Optimization', status: 'unoptimized', impact: 'High', points: 10 },
