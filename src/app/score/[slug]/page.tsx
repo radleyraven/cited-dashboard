@@ -119,6 +119,18 @@ const prefillData: Record<string, Record<string, string>> = {
     topTransactions: 'Del Mar and coastal San Diego specialist — born and raised in Del Mar',
     hideMLSUpload: 'true',
   },
+  'sanjay-solomon': {
+    fullName: 'Sanjay Solomon',
+    email: '',
+    brokerage: 'Exude Luxury Group',
+    primaryMarkets: 'La Jolla, Rancho Santa Fe, Coastal San Diego',
+    zillowUrl: '',
+    linkedinUrl: '',
+    realtorUrl: 'https://www.compass.com/agents/sanjay-solomon/',
+    yearsInMarket: '10',
+    topTransactions: 'International marketing background + luxury RE — La Jolla specialist',
+    hideMLSUpload: 'true',
+  },
 };
 
 const prospects: Record<string, ProspectData> = {
@@ -250,6 +262,23 @@ const prospects: Record<string, ProspectData> = {
     market: 'Del Mar',
     score: 7,
     competitorScore: 45,
+    gaps: [
+      { platform: 'Google Business Profile', status: 'missing', impact: 'High', points: 14 },
+      { platform: 'LinkedIn Profile Optimization', status: 'unoptimized', impact: 'High', points: 10 },
+      { platform: 'Yelp Profile', status: 'missing', impact: 'High', points: 12 },
+      { platform: 'Zillow Bio Optimization', status: 'unoptimized', impact: 'Medium', points: 8 },
+      { platform: 'LinkedIn Articles', status: 'missing', impact: 'Medium', points: 7 },
+      { platform: 'FastExpert', status: 'missing', impact: 'Low', points: 4 },
+      { platform: 'Foursquare', status: 'missing', impact: 'Low', points: 4 },
+      { platform: 'GBP Posts (freshness)', status: 'missing', impact: 'Low', points: 3 },
+    ],
+  },,
+  'sanjay-solomon': {
+    name: 'Sanjay Solomon',
+    brokerage: 'Exude Luxury Group',
+    market: 'La Jolla',
+    score: 12,
+    competitorScore: 48,
     gaps: [
       { platform: 'Google Business Profile', status: 'missing', impact: 'High', points: 14 },
       { platform: 'LinkedIn Profile Optimization', status: 'unoptimized', impact: 'High', points: 10 },
