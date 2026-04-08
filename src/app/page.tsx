@@ -1,3 +1,8 @@
+export const metadata = {
+  title: 'Cited — AI Visibility for Real Estate Agents',
+  description: 'Find out what AI says about you. Cited audits your AI visibility and optimizes your profiles so ChatGPT, Perplexity, and Google AI recommend you to buyers.',
+};
+
 export default function LandingPage() {
   const faqs = [
     {
