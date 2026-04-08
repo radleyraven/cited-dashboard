@@ -154,7 +154,7 @@ export default function PositioningPage() {
             ) : (
               <div>
                 <p className="text-sm font-medium text-gray-700 mb-4">
-                  Does this sound like you? If it does — approve it and we&rsquo;ll start writing your platform copy.
+                  Does this sound like you? If it does — approve it and we&rsquo;ll start writing your Citation Profiles.
                 </p>
                 <button
                   onClick={handleApprove}
