@@ -178,7 +178,7 @@ const prospects: Record<string, ProspectData> = {
     name: 'Travis McClain',
     brokerage: 'HomeSmart',
     market: 'Carlsbad',
-    score: 8,
+    score: 12,
     competitorScore: 52,
     gaps: [
       { platform: 'Google Business Profile', status: 'missing', impact: 'High', points: 14 },
@@ -213,7 +213,7 @@ const prospects: Record<string, ProspectData> = {
     name: 'Bree Bornstein',
     brokerage: 'Compass',
     market: 'Rancho Santa Fe',
-    score: 28,
+    score: 35,
     competitorScore: 62,
     gaps: [
       { platform: 'Yelp Profile', status: 'missing', impact: 'High', points: 12 },
@@ -227,7 +227,7 @@ const prospects: Record<string, ProspectData> = {
     name: 'Ashley Michael',
     brokerage: 'Pointe3 Real Estate',
     market: 'Seattle',
-    score: 12,
+    score: 18,
     competitorScore: 48,
     gaps: [
       { platform: 'Google Business Profile', status: 'missing', impact: 'High', points: 14 },
@@ -260,7 +260,7 @@ const prospects: Record<string, ProspectData> = {
     name: 'Raquel Abrams',
     brokerage: 'The Oppenheim Group',
     market: 'Del Mar',
-    score: 7,
+    score: 18,
     competitorScore: 45,
     gaps: [
       { platform: 'Google Business Profile', status: 'missing', impact: 'High', points: 14 },
