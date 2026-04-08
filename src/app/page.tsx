@@ -39,7 +39,7 @@ export default function Home() {
           </div>
           {/* Nav row — order: My Platforms | Articles | Reviews */}
           <div className="flex items-center gap-4 md:gap-6 border-t border-white/10 pt-3 md:border-0 md:pt-0 md:absolute md:top-6 md:left-1/2 md:-translate-x-1/2">
-            <Link href="/copy-kit" className="text-xs md:text-sm text-gray-400 hover:text-white transition-colors">My Platforms</Link>
+            <Link href="/copy-kit" className="text-xs md:text-sm text-gray-400 hover:text-white transition-colors">My Citation Profiles</Link>
             <Link href="/articles" className="text-xs md:text-sm text-gray-400 hover:text-white transition-colors">Articles</Link>
             <Link href="/reviews" className="text-xs md:text-sm text-gray-400 hover:text-white transition-colors">Reviews</Link>
           </div>
@@ -93,8 +93,8 @@ export default function Home() {
           {/* My Platforms Card */}
           <Link href="/copy-kit" className="block rounded-xl p-6 transition-all duration-200 hover:opacity-90 hover:scale-[1.02]" style={{ background: '#0A1929', border: '2px solid #D4A830' }}>
             <div className="text-3xl mb-3">🏠</div>
-            <h3 className="text-lg font-bold mb-2" style={{ color: '#D4A830' }}>My Platforms</h3>
-            <p className="text-sm text-gray-400 mb-4">Your optimized bios, ready to paste into each platform profile</p>
+            <h3 className="text-lg font-bold mb-2" style={{ color: '#D4A830' }}>My Citation Profiles</h3>
+            <p className="text-sm text-gray-400 mb-4">Your Citation Profiles, ready to post to each platform</p>
             <span className="text-sm font-semibold" style={{ color: '#00BFA6' }}>Open →</span>
           </Link>
 
