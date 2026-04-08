@@ -548,8 +548,22 @@ export default function CopyKitPage() {
             <div className="flex items-center gap-4">
               <Link href="/articles" className="text-sm text-gray-400 hover:text-white transition-colors">Articles</Link>
               <Link href="/reviews" className="text-sm text-gray-400 hover:text-white transition-colors">Reviews</Link>
+              <Link href="/audit" className="text-sm text-gray-400 hover:text-white transition-colors">Audit</Link>
               <Link href="/copy-kit" className="text-sm font-semibold transition-colors" style={{ color: '#00BFA6' }}>My Citation Profiles</Link>
             </div>
+            {/* Score pill */}
+            <Link href="/audit" style={{ textDecoration: 'none' }}>
+              <div style={{ background: 'rgba(255,255,255,0.07)', borderRadius: '8px', padding: '6px 14px', display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer', border: '1px solid rgba(255,255,255,0.1)' }}>
+                <div style={{ textAlign: 'center' }}>
+                  <div style={{ fontSize: '18px', fontWeight: 800, color: '#DC2626', lineHeight: 1 }}>5</div>
+                  <div style={{ fontSize: '9px', color: '#4a6380', letterSpacing: '0.5px' }}>/ 100</div>
+                </div>
+                <div>
+                  <div style={{ fontSize: '10px', fontWeight: 700, color: '#00BFA6', letterSpacing: '1px', textTransform: 'uppercase' }}>Citation Score</div>
+                  <div style={{ fontSize: '9px', color: '#4a6380' }}>+2 pts · Day 13 · Apr 8</div>
+                </div>
+              </div>
+            </Link>
             <div className="text-right">
               <div className="font-semibold">Radley Raven</div>
               <div className="text-sm text-gray-400">The Oppenheim Group · Carlsbad</div>
