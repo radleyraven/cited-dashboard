@@ -168,9 +168,9 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
                 {brokerage} · {market} · Generated {new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
               </p>
             </div>
-            {/* Top CTA — smaller, convenience catch per Ash/Blanks research */}
-            <a href={intakeUrl} style={{ flexShrink: 0, display: 'inline-block', background: '#00BFA6', color: '#fff', fontWeight: 700, fontSize: '13px', padding: '10px 20px', borderRadius: '6px', textDecoration: 'none', letterSpacing: '0.2px', alignSelf: 'center' }}>
-              Claim My Spot →
+            {/* Top text link — early convenience catch */}
+            <a href={intakeUrl} style={{ flexShrink: 0, display: 'inline-block', color: '#00BFA6', fontWeight: 600, fontSize: '13px', textDecoration: 'none', alignSelf: 'center' }}>
+              Ready to start? Claim your founding spot →
             </a>
           </div>
         </div>
@@ -196,7 +196,8 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
             Citation Score — {market}
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px', textAlign: 'center' }}>
+          {/* You vs Competitor */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', textAlign: 'center' }}>
 
             {/* Your score */}
             <div>
@@ -228,8 +229,24 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
               </div>
             </div>
 
-            {/* Projected */}
-            <div>
+          </div>
+
+          {/* Gap between current and competitor */}
+          <div style={{ marginTop: '24px', padding: '12px 16px', background: '#fef2f2', borderRadius: '8px', border: '1px solid #fecaca', textAlign: 'center' }}>
+            <span style={{ fontSize: '13px', color: '#dc2626', fontWeight: 600 }}>
+              You&apos;re {competitorScore - score} points behind the top competitor in {market}.
+            </span>
+          </div>
+
+          {/* Section divider */}
+          <div style={{ borderTop: '1px solid #e8edf2', margin: '24px 0 20px' }} />
+
+          {/* 90-Day Target — With Cited by Day 90 */}
+          <div style={{ textAlign: 'center' }}>
+            <div style={{ fontSize: '11px', fontWeight: 700, color: '#00BFA6', letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: '16px' }}>
+              With Cited by Day 90
+            </div>
+            <div style={{ display: 'inline-block' }}>
               <div style={{ position: 'relative', display: 'inline-block' }}>
                 <ScoreCircle score={projected90} color="#00BFA6" size={110} />
                 <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', textAlign: 'center' }}>
@@ -242,14 +259,6 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
                 <div style={{ fontSize: '11px', color: '#94a3b8', marginTop: '2px' }}>With Cited</div>
               </div>
             </div>
-
-          </div>
-
-          {/* Gap between current and competitor */}
-          <div style={{ marginTop: '24px', padding: '12px 16px', background: '#fef2f2', borderRadius: '8px', border: '1px solid #fecaca', textAlign: 'center' }}>
-            <span style={{ fontSize: '13px', color: '#dc2626', fontWeight: 600 }}>
-              You&apos;re {competitorScore - score} points behind the top competitor in {market}.
-            </span>
           </div>
         </div>
 
@@ -260,16 +269,20 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
           </div>
 
           {/* Show top 4 gaps prominently: GBP + LinkedIn Profile + Zillow + wildcard */}
-          {gaps.filter(g => g.impact === 'High' || g.impact === 'Medium').slice(0, 4).map((gap, i, arr) => (
-            <div key={i} style={{
+          {gaps.filter(g => g.impact === 'High' || g.impact === 'Medium').slice(0, 4).map((gap, i) => (
+            <div key={i} style={gap.impact === 'High' ? {
               display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-              padding: '13px 0',
-              borderBottom: i < arr.length - 1 ? '1px solid #f1f5f9' : 'none'
+              padding: '12px 14px', marginBottom: '8px', borderRadius: '4px',
+              borderLeft: '4px solid #EF4444', background: '#fff5f5',
+            } : {
+              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+              padding: '12px 14px', marginBottom: '8px', borderRadius: '4px',
+              border: '1px solid #e8edf2', background: '#f8f9fa',
             }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                 <div style={{
                   width: '8px', height: '8px', borderRadius: '50%', flexShrink: 0,
-                  background: gap.impact === 'High' ? '#dc2626' : '#f59e0b'
+                  background: gap.impact === 'High' ? '#EF4444' : '#94a3b8'
                 }} />
                 <span style={{ fontSize: '14px', color: '#1a1a2e', fontWeight: 500 }}>{gap.platform}</span>
               </div>
@@ -277,8 +290,8 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
                 <span style={{ fontSize: '13px', color: '#00BFA6', fontWeight: 700 }}>+{gap.points} pts</span>
                 <span style={{
                   fontSize: '11px', fontWeight: 700, padding: '3px 10px', borderRadius: '20px',
-                  color: gap.impact === 'High' ? '#dc2626' : '#f59e0b',
-                  background: gap.impact === 'High' ? '#fef2f2' : '#fffbeb'
+                  color: gap.impact === 'High' ? '#EF4444' : '#64748b',
+                  background: gap.impact === 'High' ? '#fef2f2' : '#f1f5f9'
                 }}>
                   {gap.impact} Impact
                 </span>
@@ -305,6 +318,13 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
             <div style={{ fontSize: '12px', color: '#0f766e', fontWeight: 600 }}>
               Your score: {score} + {gaps.reduce((a, g) => a + g.points, 0)} points from closing these gaps = <strong>{projected90}/100 in 90 days</strong>
             </div>
+          </div>
+
+          {/* Primary CTA — right after gap analysis */}
+          <div style={{ marginTop: '20px', textAlign: 'center' }}>
+            <a href={intakeUrl} style={{ display: 'inline-block', background: '#00BFA6', color: '#fff', fontWeight: 700, fontSize: '15px', padding: '14px 32px', borderRadius: '8px', textDecoration: 'none', letterSpacing: '0.3px' }}>
+              Claim My Founding Spot →
+            </a>
           </div>
         </div>
 
