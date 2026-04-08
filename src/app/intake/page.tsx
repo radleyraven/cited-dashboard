@@ -276,7 +276,7 @@ function IntakeForm() {
             <div style={{ display: "flex", gap: "12px", marginBottom: "14px", alignItems: "flex-start" }}>
               <span style={{ color: "#00BFA6", fontWeight: 700, flexShrink: 0 }}>→</span>
               <p style={{ fontSize: "14px", color: "#cbd5e1", lineHeight: 1.7, margin: 0 }}>
-                <strong style={{ color: "#fff" }}>Your business &amp; visibility audit starts now.</strong> We'll analyze where you stand, build your positioning statement, and have your optimized platform copy ready within 48 hours.
+                <strong style={{ color: "#fff" }}>Your business &amp; visibility audit starts now.</strong> We'll analyze where you stand, build your positioning statement, and have your optimized Citation Profiles ready within 48 hours.
               </p>
             </div>
             <div style={{ display: "flex", gap: "12px", alignItems: "flex-start" }}>
@@ -306,7 +306,7 @@ function IntakeForm() {
           </p>
 
           <p style={{ fontSize: "12px", color: "#4a6380" }}>
-            Cited · AI Visibility for Professionals · citedagent.com · Powered by PRISM
+            Cited · AI Visibility for Professionals · citedagent.com · Powered by PRISM™
           </p>
         </div>
       </div>
