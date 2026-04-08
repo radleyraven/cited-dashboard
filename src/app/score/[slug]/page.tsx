@@ -214,7 +214,7 @@ const prospects: Record<string, ProspectData> = {
     brokerage: 'Compass',
     market: 'Rancho Santa Fe',
     score: 28,
-    competitorScore: 55,
+    competitorScore: 62,
     gaps: [
       { platform: 'Yelp Profile', status: 'missing', impact: 'High', points: 12 },
       { platform: 'LinkedIn Articles', status: 'missing', impact: 'Medium', points: 7 },
@@ -244,7 +244,7 @@ const prospects: Record<string, ProspectData> = {
     brokerage: 'The Oppenheim Group',
     market: 'La Jolla',
     score: 5,
-    competitorScore: 52,
+    competitorScore: 68,
     gaps: [
       { platform: 'Google Business Profile', status: 'missing', impact: 'High', points: 14 },
       { platform: 'LinkedIn Profile Optimization', status: 'unoptimized', impact: 'High', points: 10 },
@@ -278,7 +278,7 @@ const prospects: Record<string, ProspectData> = {
     brokerage: 'Exude Luxury Group',
     market: 'La Jolla',
     score: 10,
-    competitorScore: 52,
+    competitorScore: 68,
     gaps: [
       { platform: 'Google Business Profile', status: 'missing', impact: 'High', points: 14 },
       { platform: 'LinkedIn Profile Optimization', status: 'unoptimized', impact: 'High', points: 10 },
