@@ -548,7 +548,7 @@ export default function CopyKitPage() {
             <div className="flex items-center gap-4">
               <Link href="/articles" className="text-sm text-gray-400 hover:text-white transition-colors">Articles</Link>
               <Link href="/reviews" className="text-sm text-gray-400 hover:text-white transition-colors">Reviews</Link>
-              <Link href="/copy-kit" className="text-sm font-semibold transition-colors" style={{ color: '#00BFA6' }}>Copy Kit</Link>
+              <Link href="/copy-kit" className="text-sm font-semibold transition-colors" style={{ color: '#00BFA6' }}>My Citation Profiles</Link>
             </div>
             <div className="text-right">
               <div className="font-semibold">Radley Raven</div>
@@ -562,9 +562,9 @@ export default function CopyKitPage() {
       <main className="max-w-4xl mx-auto px-6 py-10">
         {/* Page Header */}
         <div className="mb-8">
-          <h2 className="text-3xl font-bold" style={{ color: '#0A1929' }}>Your Platform Copy</h2>
+          <h2 className="text-3xl font-bold" style={{ color: '#0A1929' }}>Your Citation Profiles</h2>
           <p className="text-gray-500 mt-2 max-w-2xl">
-            Review the optimized copy for each platform, paste it in, and post it. Each card has a direct link to open the platform, a copy button at the top, and paste-ready fields for everything you need. Platforms are ordered by AI citation impact — start with GBP and LinkedIn.
+            Review your Citation Profiles for each platform, paste them in, and post them. Each card has a direct link to open the platform, copy button at top, and paste-ready fields for everything you need. Platforms ordered by AI citation impact — start with GBP and LinkedIn.
           </p>
 
           {/* Progress bar */}
