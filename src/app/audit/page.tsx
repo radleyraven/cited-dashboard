@@ -6,39 +6,41 @@ import SignOutButton from '@/components/SignOutButton';
 const client = {
   name: "Radley Raven",
   brokerage: "The Oppenheim Group",
-  citationScore: 3,
+  citationScore: 5,
+  baselineScore: 3,
   primaryMarket: "Carmel Valley",
+  scanDate: "April 8, 2026",
 };
 
 const marketScores = [
-  { market: "Carmel Valley", clientScore: 3, competitorScore: 65, competitorName: "Seth O'Byrne", gap: 62 },
+  { market: "Carmel Valley", clientScore: 5, competitorScore: 65, competitorName: "Seth O'Byrne", gap: 60 },
   { market: "Carlsbad", clientScore: 0, competitorScore: 52, competitorName: "Erin Wade", gap: 52 },
-  { market: "Rancho Santa Fe", clientScore: 10, competitorScore: 38, competitorName: "Barry Estates", gap: 28 },
+  { market: "Rancho Santa Fe", clientScore: 10, competitorScore: 45, competitorName: "Laura Barry", gap: 35 },
 ];
 
 const platforms = [
   { name: "Google Business Profile", status: "unoptimized", scoreImpact: 14, href: "/copy-kit" },
   { name: "LinkedIn", status: "partial", scoreImpact: 10, href: "/copy-kit" },
-  { name: "Yelp", status: "missing", scoreImpact: 12, href: "/copy-kit" },
-  { name: "Foursquare", status: "missing", scoreImpact: 8, href: "/copy-kit" },
+  { name: "Yelp", status: "unoptimized", scoreImpact: 12, href: "/copy-kit" },
+  { name: "Foursquare", status: "pending", scoreImpact: 8, href: "/copy-kit" },
   { name: "Zillow", status: "unoptimized", scoreImpact: 8, href: "/copy-kit" },
   { name: "Realtor.com", status: "partial", scoreImpact: 6, href: "/copy-kit" },
   { name: "FastExpert", status: "missing", scoreImpact: 5, href: "/copy-kit" },
   { name: "Bing Places", status: "claimed", scoreImpact: 3, href: "/copy-kit" },
   { name: "Apple Business Connect", status: "pending", scoreImpact: 3, href: "/copy-kit" },
-  { name: "HomeLight", status: "partial", scoreImpact: 3, href: "/copy-kit" },
-  { name: "Homes.com", status: "missing", scoreImpact: 4, href: "/copy-kit" },
+  { name: "HomeLight", status: "missing", scoreImpact: 3, href: "/copy-kit" },
+  { name: "Homes.com", status: "partial", scoreImpact: 4, href: "/copy-kit" },
 ];
 
 const immediateWins = [
-  { rank: 1, platform: "Yelp", points: 12, reason: "Perplexity cites Yelp in 100% of industries. Re-indexes in 24-72 hours — fastest PRISM signal available.", owner: "Cited" },
-  { rank: 2, platform: "Google Business Profile", points: 14, reason: "Primary signal for Google AI Overviews and Gemini. Copy kit has everything you need to paste in.", owner: "You" },
-  { rank: 3, platform: "Foursquare", points: 8, reason: "Feeds 60-70% of ChatGPT local results directly. Most agents have never heard of it. We handle the submission.", owner: "Cited" },
+  { rank: 1, platform: "Yelp — Get on the Best Agents List", points: 12, reason: "Currently have a Yelp profile but not on the CV or Carlsbad best-agents list. Seth O'Byrne has 40+ reviews. 5+ keyword-rich reviews + optimized bio = list placement. This is the single highest-leverage action in Month 2.", owner: "Cited + You" },
+  { rank: 2, platform: "LinkedIn Headline Re-Index", points: 8, reason: "Headline still shows 'Entrepreneur • Operations' in search index. Bio content has partially updated. Full re-index expected April 9-14 — will add Carmel Valley + Carlsbad keyword association.", owner: "Cited" },
+  { rank: 3, platform: "Google Business Profile", points: 14, reason: "Updated in dashboard but not yet indexed for Carmel Valley or Carlsbad. 60-day GBP indexing window — normal. Posting to GBP weekly accelerates indexing.", owner: "You" },
 ];
 
 const trajectory = [
   { label: "Baseline", score: 3, date: "Mar 26", projected: false },
-  { label: "Current", score: 3, date: "Apr 7", projected: false },
+  { label: "Day 13", score: 5, date: "Apr 8", projected: false },
   { label: "Day 30 Target", score: 28, date: "May 7", projected: true },
   { label: "Day 90 Target", score: 55, date: "Jul 7", projected: true },
 ];
