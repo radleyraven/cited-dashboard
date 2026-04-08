@@ -131,6 +131,18 @@ const prefillData: Record<string, Record<string, string>> = {
     topTransactions: 'International marketing background + luxury RE — La Jolla specialist',
     hideMLSUpload: 'true',
   },
+  'nic-lind': {
+    fullName: 'Nic Lind',
+    email: '',
+    brokerage: 'Commencement Bay Brokers',
+    primaryMarkets: 'Tacoma, Gig Harbor, Western Washington',
+    zillowUrl: '',
+    linkedinUrl: '',
+    realtorUrl: '',
+    yearsInMarket: '10',
+    topTransactions: 'Principal broker serving all of Western Washington',
+    hideMLSUpload: 'true',
+  },
 };
 
 const prospects: Record<string, ProspectData> = {
@@ -279,6 +291,23 @@ const prospects: Record<string, ProspectData> = {
     market: 'La Jolla',
     score: 10,
     competitorScore: 68,
+    gaps: [
+      { platform: 'Google Business Profile', status: 'missing', impact: 'High', points: 14 },
+      { platform: 'LinkedIn Profile Optimization', status: 'unoptimized', impact: 'High', points: 10 },
+      { platform: 'Yelp Profile', status: 'missing', impact: 'High', points: 12 },
+      { platform: 'Zillow Bio Optimization', status: 'unoptimized', impact: 'Medium', points: 8 },
+      { platform: 'LinkedIn Articles', status: 'missing', impact: 'Medium', points: 7 },
+      { platform: 'FastExpert', status: 'missing', impact: 'Low', points: 4 },
+      { platform: 'Foursquare', status: 'missing', impact: 'Low', points: 4 },
+      { platform: 'GBP Posts (freshness)', status: 'missing', impact: 'Low', points: 3 },
+    ],
+  },,
+  'nic-lind': {
+    name: 'Nic Lind',
+    brokerage: 'Commencement Bay Brokers',
+    market: 'Tacoma',
+    score: 8,
+    competitorScore: 42,
     gaps: [
       { platform: 'Google Business Profile', status: 'missing', impact: 'High', points: 14 },
       { platform: 'LinkedIn Profile Optimization', status: 'unoptimized', impact: 'High', points: 10 },
