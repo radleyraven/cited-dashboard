@@ -8,31 +8,20 @@ import { createSupabaseBrowserClient } from '@/lib/supabase-browser';
 const QUESTIONS = [
   {
     id: 'q1',
-    label: "What's one thing buyers or sellers moving to your area are always surprised to discover — something that isn't obvious from Zillow?",
-    hint: 'A neighborhood dynamic, hidden gem, school zone, or lifestyle detail',
+    label: "What’s the #1 mistake sellers in your market make that costs them money — and how do you fix it before listing?",
+    hint: 'Pricing, timing, prep work — what do you catch that others miss?',
   },
   {
     id: 'q2',
-    label: "What's the biggest mistake sellers in your market make that costs them money or time?",
-    hint: 'Real example is fine — no names needed',
+    label: "What’s one thing about selling in your primary market that surprises sellers in 2026 — something they couldn’t find on Zillow?",
+    hint: 'Think hyperlocal — neighborhood dynamics, buyer behavior, what actually drives price',
   },
   {
     id: 'q3',
-    label: 'Pick your top two neighborhoods and compare them — what\'s different about the vibe, buyers, price points, tradeoffs?',
-    hint: 'Your market insight, not a data dump',
-  },
-  {
-    id: 'q4',
-    label: 'What does exceptional presentation mean to you? One specific thing you do that other agents skip.',
-    hint: 'This becomes your differentiator in the article',
-  },
-  {
-    id: 'q5',
-    label: "What's your honest read on your market right now? What are you seeing on the ground?",
-    hint: '2-3 sentences is plenty',
+    label: "Give me one real data point from a recent listing that tells the story of where your seller market is headed right now.",
+    hint: 'A price, a DOM stat, a specific transaction — real numbers make the article uncopyable',
   },
 ];
-
 const VOICE_STYLE_OPTIONS = [
   'Warm and conversational',
   'Authoritative and data-driven',
@@ -85,9 +74,9 @@ export default function BriefPage() {
     setError(null);
 
     // Basic validation — first 3 questions required
-    for (const q of QUESTIONS.slice(0, 3)) {
+    for (const q of QUESTIONS) {
       if (!answers[q.id]?.trim()) {
-        setError('Please answer the first 3 questions before submitting.');
+        setError('Please answer all 3 questions before submitting.');
         return;
       }
     }
