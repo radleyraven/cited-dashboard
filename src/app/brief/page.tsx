@@ -134,7 +134,7 @@ export default function BriefPage() {
             <div className="flex items-center gap-4">
               <Link href="/articles" className="text-sm text-gray-400 hover:text-white transition-colors">Articles</Link>
               <Link href="/reviews" className="text-sm text-gray-400 hover:text-white transition-colors">Reviews</Link>
-              <Link href="/copy-kit" className="text-sm text-gray-400 hover:text-white transition-colors">Copy Kit</Link>
+              <Link href="/copy-kit" className="text-sm text-gray-400 hover:text-white transition-colors">My Citation Profiles</Link>
             </div>
             <div className="text-right">
               <div className="font-semibold">Radley Raven</div>
