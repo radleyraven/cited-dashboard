@@ -274,11 +274,11 @@ const prospects: Record<string, ProspectData> = {
     brokerage: 'The Oppenheim Group',
     market: 'Del Mar',
     score: 18,
-    competitorScore: 45,
+    competitorScore: 55,
     gaps: [
       { platform: 'Google Business Profile', status: 'missing', impact: 'High', points: 14 },
       { platform: 'LinkedIn Profile Optimization', status: 'unoptimized', impact: 'High', points: 10 },
-      { platform: 'Yelp Profile', status: 'missing', impact: 'High', points: 12 },
+      { platform: 'Yelp Profile (listed — not optimized)', status: 'unoptimized', impact: 'High', points: 8 },
       { platform: 'Zillow Bio Optimization', status: 'unoptimized', impact: 'Medium', points: 8 },
       { platform: 'LinkedIn Articles', status: 'missing', impact: 'Medium', points: 7 },
       { platform: 'FastExpert', status: 'missing', impact: 'Low', points: 4 },
