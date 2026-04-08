@@ -197,7 +197,7 @@ const prospects: Record<string, ProspectData> = {
     name: 'Adam Loew',
     brokerage: 'Keller Williams',
     market: 'Carmel Valley',
-    score: 22,
+    score: 15,
     competitorScore: 65,
     gaps: [
       { platform: 'Google Business Profile', status: 'unoptimized', impact: 'High', points: 14 },
@@ -213,8 +213,8 @@ const prospects: Record<string, ProspectData> = {
     name: 'Bree Bornstein',
     brokerage: 'Compass',
     market: 'Rancho Santa Fe',
-    score: 38,
-    competitorScore: 52,
+    score: 28,
+    competitorScore: 55,
     gaps: [
       { platform: 'Yelp Profile', status: 'missing', impact: 'High', points: 12 },
       { platform: 'LinkedIn Articles', status: 'missing', impact: 'Medium', points: 7 },
@@ -244,7 +244,7 @@ const prospects: Record<string, ProspectData> = {
     brokerage: 'The Oppenheim Group',
     market: 'La Jolla',
     score: 5,
-    competitorScore: 42,
+    competitorScore: 52,
     gaps: [
       { platform: 'Google Business Profile', status: 'missing', impact: 'High', points: 14 },
       { platform: 'LinkedIn Profile Optimization', status: 'unoptimized', impact: 'High', points: 10 },
@@ -277,8 +277,8 @@ const prospects: Record<string, ProspectData> = {
     name: 'Sanjay Solomon',
     brokerage: 'Exude Luxury Group',
     market: 'La Jolla',
-    score: 12,
-    competitorScore: 48,
+    score: 10,
+    competitorScore: 52,
     gaps: [
       { platform: 'Google Business Profile', status: 'missing', impact: 'High', points: 14 },
       { platform: 'LinkedIn Profile Optimization', status: 'unoptimized', impact: 'High', points: 10 },
