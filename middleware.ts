@@ -17,7 +17,7 @@ const PUBLIC_ROUTES = [
   "/terms",
 ];
 
-export function proxy(request: NextRequest) {
+export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Allow public routes
