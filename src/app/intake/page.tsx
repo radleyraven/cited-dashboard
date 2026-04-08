@@ -397,7 +397,7 @@ function IntakeForm() {
 
       {/* Card container */}
       <div style={{
-        maxWidth: "560px", margin: "0 auto", padding: currentCard < 15 ? "80px 16px 32px" : "0 16px",
+        maxWidth: "640px", width: "100%", margin: "0 auto", padding: currentCard < 15 ? "80px 20px 32px" : "0 20px",
         minHeight: "100vh", display: "flex", flexDirection: "column", justifyContent: currentCard === 15 ? "center" : "flex-start",
       }}>
         {/* Back button */}
