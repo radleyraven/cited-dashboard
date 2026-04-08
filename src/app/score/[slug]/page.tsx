@@ -172,7 +172,7 @@ const prospects: Record<string, ProspectData> = {
     name: 'Radley Raven',
     brokerage: 'The Oppenheim Group',
     market: 'Carmel Valley',
-    score: 3,
+    score: 5,
     competitorScore: 65,
     gaps: [
       { platform: 'Google Business Profile', status: 'unoptimized', impact: 'High', points: 14 },
@@ -436,7 +436,7 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
               </div>
               <div style={{ marginTop: '8px' }}>
                 <div style={{ fontSize: '12px', fontWeight: 700, color: '#0A1929' }}>You</div>
-                <div style={{ fontSize: '10px', color: '#94a3b8', marginTop: '2px' }}>Not appearing in AI</div>
+                <div style={{ fontSize: '10px', color: '#94a3b8', marginTop: '2px' }}>Early signals building</div>
               </div>
             </div>
 
