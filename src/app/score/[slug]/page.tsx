@@ -186,7 +186,8 @@ const prospects: Record<string, ProspectData> = {
       { platform: 'Foursquare', status: 'missing', impact: 'Low', points: 4 },
       { platform: 'GBP Posts (freshness)', status: 'missing', impact: 'Low', points: 3 },
     ],
-   'travis-mcclain': {
+  },
+  'travis-mcclain': {
     name: 'Travis McClain',
     brokerage: 'HomeSmart',
     market: 'Carlsbad',
@@ -267,7 +268,7 @@ const prospects: Record<string, ProspectData> = {
       { platform: 'Foursquare', status: 'missing', impact: 'Low', points: 4 },
       { platform: 'GBP Posts (freshness)', status: 'missing', impact: 'Low', points: 3 },
     ],
-  },,
+  },
   'raquel-abrams': {
     name: 'Raquel Abrams',
     brokerage: 'The Oppenheim Group',
@@ -284,7 +285,7 @@ const prospects: Record<string, ProspectData> = {
       { platform: 'Foursquare', status: 'missing', impact: 'Low', points: 4 },
       { platform: 'GBP Posts (freshness)', status: 'missing', impact: 'Low', points: 3 },
     ],
-  },,
+  },
   'sanjay-solomon': {
     name: 'Sanjay Solomon',
     brokerage: 'Exude Luxury Group',
@@ -301,7 +302,7 @@ const prospects: Record<string, ProspectData> = {
       { platform: 'Foursquare', status: 'missing', impact: 'Low', points: 4 },
       { platform: 'GBP Posts (freshness)', status: 'missing', impact: 'Low', points: 3 },
     ],
-  },,
+  },
   'nic-lind': {
     name: 'Nic Lind',
     brokerage: 'Commencement Bay Brokers',
@@ -321,7 +322,7 @@ const prospects: Record<string, ProspectData> = {
   },
 };
 
-function ScoreCirclecle({ score, color, size = 100 }: { score: number; color: string; size?: number }) {
+function ScoreCircle({ score, color, size = 100 }: { score: number; color: string; size?: number }) {
   const r = (size / 2) - 8;
   const circumference = 2 * Math.PI * r;
   const filled = (score / 100) * circumference;
