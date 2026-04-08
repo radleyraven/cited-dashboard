@@ -82,7 +82,7 @@ export default function PositioningPage() {
             </div>
           </div>
           <div className="flex items-center gap-4 md:gap-6 border-t border-white/10 pt-3 md:border-0 md:pt-0 md:absolute md:top-6 md:left-1/2 md:-translate-x-1/2">
-            <Link href="/copy-kit" className="text-xs md:text-sm text-gray-400 hover:text-white transition-colors">My Platforms</Link>
+            <Link href="/copy-kit" className="text-xs md:text-sm text-gray-400 hover:text-white transition-colors">My Citation Profiles</Link>
             <Link href="/articles" className="text-xs md:text-sm text-gray-400 hover:text-white transition-colors">Articles</Link>
             <Link href="/reviews" className="text-xs md:text-sm text-gray-400 hover:text-white transition-colors">Reviews</Link>
           </div>
@@ -95,7 +95,7 @@ export default function PositioningPage() {
         <div className="mb-8">
           <h2 className="text-3xl font-bold" style={{ color: '#0A1929' }}>Your Positioning Statement</h2>
           <p className="text-gray-500 mt-2">
-            This is the foundation of everything we write for you — your bios, articles, and platform copy. Read it, then approve it or tell us what to change.
+            This is the foundation of everything we write for you — your bios, articles, and Citation Profiles. Read it, then approve it or tell us what to change.
           </p>
         </div>
 
@@ -128,7 +128,7 @@ export default function PositioningPage() {
               &ldquo;{POSITIONING_STATEMENT}&rdquo;
             </blockquote>
             <p className="text-sm" style={{ color: approved ? '#065f46' : '#6B7280' }}>
-              This statement guides everything we write — your bios, your articles, your platform copy. It should sound like you.
+              This statement guides everything we write — your bios, your articles, your Citation Profiles. It should sound like you.
             </p>
           </div>
         </section>
@@ -147,8 +147,8 @@ export default function PositioningPage() {
                   </svg>
                 </div>
                 <div>
-                  <p className="font-semibold" style={{ color: '#00BFA6' }}>Approved — we&rsquo;re writing your platform copy now</p>
-                  <p className="text-sm text-gray-500 mt-0.5">Your platform copy will be ready within 48 hours.</p>
+                  <p className="font-semibold" style={{ color: '#00BFA6' }}>Approved — we&rsquo;re building your Citation Profiles now</p>
+                  <p className="text-sm text-gray-500 mt-0.5">Your Citation Profiles will be ready within 48 hours.</p>
                 </div>
               </div>
             ) : (
@@ -326,7 +326,7 @@ export default function PositioningPage() {
           className="rounded-xl px-6 py-4 text-sm text-gray-600 border border-gray-100"
           style={{ background: '#F8F9FA' }}
         >
-          Once approved, your platform copy will be ready within 48 hours. Questions? Reply to any of our emails or reach out at{' '}
+          Once approved, your Citation Profiles will be ready within 48 hours. Questions? Reply to any of our emails or reach out at{' '}
           <a href="mailto:hello@citedagent.com" className="font-semibold" style={{ color: '#00BFA6' }}>
             hello@citedagent.com
           </a>
