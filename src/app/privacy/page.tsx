@@ -10,7 +10,7 @@ export default function PrivacyPolicyPage() {
           </a>
           <div style={{ fontSize: '10px', color: '#4a6380', letterSpacing: '1.5px', textTransform: 'uppercase', marginTop: '3px' }}>AI Visibility for Professionals</div>
         </div>
-        <div style={{ fontSize: '11px', color: '#4a6380' }}>Powered by <span style={{ color: '#00BFA6', fontWeight: 700 }}>PRISM</span></div>
+        <div style={{ fontSize: '11px', color: '#4a6380' }}>Powered by <span style={{ color: '#00BFA6', fontWeight: 700 }}>PRISM™</span></div>
       </header>
       <div style={{ height: '3px', background: 'linear-gradient(90deg, #D4A830 0%, #00BFA6 100%)' }} />
 
@@ -22,7 +22,7 @@ export default function PrivacyPolicyPage() {
             Legal
           </div>
           <h1 style={{ fontSize: '32px', fontWeight: 800, color: '#0A1929', margin: '0 0 12px', lineHeight: 1.2 }}>Privacy Policy</h1>
-          <p style={{ fontSize: '14px', color: '#94a3b8', margin: 0 }}>Last updated: April 2026</p>
+          <p style={{ fontSize: '14px', color: '#94a3b8', margin: 0 }}>Last updated: April 8, 2026</p>
         </div>
 
         <div style={{ background: '#fff', borderRadius: '14px', padding: '40px 36px', border: '1px solid #e8edf2', boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
@@ -41,6 +41,9 @@ export default function PrivacyPolicyPage() {
             <li><strong>Professional information:</strong> Brokerage name, real estate license number, years of experience, primary markets, and transaction history.</li>
             <li><strong>Platform URLs:</strong> Links to your LinkedIn, Zillow, Yelp, Realtor.com, FastExpert, HomeLight, personal website, YouTube, and other professional profiles.</li>
             <li><strong>MLS data files:</strong> Transaction documents or exports you upload for profile optimization purposes. These files are processed and then deleted (see Data Retention).</li>
+            <li><strong>PRISM™ scan results:</strong> Citation Score data, per-model visibility scores, platform status, and competitive gap analysis generated through our scanning process.</li>
+            <li><strong>Satellite website data:</strong> If Cited builds and hosts a personal website on your behalf, we store the domain registration, hosting configuration, and website content. You own the content; Cited manages the infrastructure.</li>
+            <li><strong>Headshot and photos:</strong> Professional photos you provide for use on platform profiles and your satellite website.</li>
           </ul>
           <p style={{ fontSize: '15px', color: '#4a5568', lineHeight: 1.8, margin: '0 0 32px' }}>
             We also collect usage data automatically when you access our dashboard, including login times, pages viewed, and feature interactions. This data is collected via Vercel Analytics and does not identify you individually.
