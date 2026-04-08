@@ -3,6 +3,7 @@ import type { NextRequest } from "next/server";
 
 // Public routes — no auth required
 const PUBLIC_ROUTES = [
+  "/",
   "/login",
   "/auth",
   "/score",
