@@ -26,7 +26,7 @@ export default function HowItWorksPage() {
     { item: 'Citation Score Audit + PRISM Baseline Scan', value: 250 },
     { item: 'Google Business Profile claim + full optimization', value: 400 },
     { item: 'LinkedIn profile rewrite — location, markets, expertise signals', value: 350 },
-    { item: 'Zillow bio rewrite for AI keyword structure', value: 200 },
+    { item: 'Zillow + Realtor.com bio rewrites for AI keyword structure', value: 300 },
     { item: 'FastExpert + Bing Places + Apple Business profile builds', value: 300 },
     { item: 'Month 1 authority article (written in your voice, published)', value: 500 },
     { item: 'Monthly PRISM re-scans across 4 AI models (3 months)', value: 450 },
