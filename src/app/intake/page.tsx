@@ -490,7 +490,7 @@ function renderCardContent(p: CardProps) {
         <FieldGroup label="Full Name" required>
           <TextInput value={form.fullName} onChange={(v) => set("fullName", v)} />
         </FieldGroup>
-        <FieldGroup label="Email" required hint={form.signupEmail && form.email !== form.signupEmail ? `Dashboard login: ${form.signupEmail}` : undefined}>
+        <FieldGroup label="Email" required hint={form.signupEmail && form.email !== form.signupEmail ? `Account email: ${form.signupEmail}` : undefined}>
           <TextInput value={form.email} onChange={(v) => set("email", v)} type="email" />
         </FieldGroup>
         <FieldGroup label="Phone" required>
