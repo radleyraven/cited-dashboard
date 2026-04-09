@@ -256,21 +256,6 @@ export default function MarketsPage() {
 
       {/* Content */}
       <div style={{ maxWidth: '720px', margin: '0 auto', padding: '40px 24px' }}>
-        {/* Education Line */}
-        <div style={{
-          background: '#0A1929',
-          color: '#fff',
-          padding: '16px 24px',
-          borderRadius: '8px',
-          marginBottom: '32px',
-          textAlign: 'center',
-        }}>
-          <p style={{ margin: 0, fontSize: '15px', fontWeight: 500, lineHeight: 1.6 }}>
-            AI recommends agents it can find evidence for.{' '}
-            <span style={{ color: '#00BFA6', fontWeight: 700 }}>We&apos;re building your evidence.</span>
-          </p>
-        </div>
-
         {/* Intro */}
         <h1 style={{
           fontSize: '28px',
@@ -284,12 +269,27 @@ export default function MarketsPage() {
         <p style={{
           fontSize: '15px',
           color: '#64748b',
-          marginBottom: '32px',
+          marginBottom: '24px',
           lineHeight: 1.6,
         }}>
           Based on your transaction history, intake data, and our initial PRISM Scan, we&apos;ve identified
           three markets to focus your optimization. Approve each market individually, or approve all at once.
         </p>
+
+        {/* Education Line — positioned right before market cards */}
+        <div style={{
+          background: '#0A1929',
+          color: '#fff',
+          padding: '16px 24px',
+          borderRadius: '8px',
+          marginBottom: '32px',
+          textAlign: 'center',
+        }}>
+          <p style={{ margin: 0, fontSize: '15px', fontWeight: 500, lineHeight: 1.6 }}>
+            AI recommends agents it can find evidence for.{' '}
+            <span style={{ color: '#00BFA6', fontWeight: 700 }}>We&apos;re building your evidence.</span>
+          </p>
+        </div>
 
         {/* Data Sources */}
         <div style={{
