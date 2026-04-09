@@ -7,14 +7,14 @@ import { createSupabaseBrowserClient } from "@/lib/supabase-browser";
 
 /* ═══════════════════════════════════════════════════════════════
    CITED Intake Form — Progressive Disclosure (Template 17)
-   v2.0 — Batch fix from Client Zero walkthrough April 8, 2026
+   v3.0 — Batch 4 fixes April 9, 2026
    Spec: references/cited-intake-config.md
    ═══════════════════════════════════════════════════════════════ */
 
 // ── Platform definitions ───────────────────────────────────────
 
 const PLATFORMS = [
-  { key: "gbp", label: "Google Business Profile", impact: "high" as const, statusKey: "gbpStatus", urlKey: null, note: "No URL needed — we find your listing" },
+  { key: "gbp", label: "Google Business Profile", impact: "high" as const, statusKey: "gbpStatus", urlKey: "gbpUrl" },
   { key: "linkedin", label: "LinkedIn", impact: "high" as const, statusKey: "linkedinStatus", urlKey: "linkedinUrl" },
   { key: "yelp", label: "Yelp", impact: "high" as const, statusKey: "yelpStatus", urlKey: "yelpUrl" },
   { key: "bing", label: "Bing Places", impact: "high" as const, statusKey: "bingStatus", urlKey: "bingUrl" },
@@ -42,7 +42,7 @@ const REVIEW_OPTIONS = ["Google Business Profile", "Yelp", "Zillow", "Realtor.co
 // Fields that came from PRISM scan (show "From your audit" badge)
 const PRISM_FOUND_FIELDS = new Set([
   "brokerage", "brokerageAddress", "primaryMarkets",
-  "linkedinUrl", "zillowUrl", "yelpUrl", "realtorUrl",
+  "gbpUrl", "linkedinUrl", "zillowUrl", "yelpUrl", "realtorUrl",
   "fastexpertUrl", "youtubeUrl", "brokerageProfileUrl",
 ]);
 
@@ -74,7 +74,7 @@ type FormData = {
   headshotFile: File | null;
   landscapeFile: File | null;
   // Platform statuses + URLs
-  gbpStatus: string;
+  gbpStatus: string; gbpUrl: string;
   linkedinStatus: string; linkedinUrl: string;
   yelpStatus: string; yelpUrl: string;
   bingStatus: string; bingUrl: string;
@@ -104,7 +104,7 @@ function getInitialForm(sp: ReturnType<typeof useSearchParams>): FormData {
     phone: "",
     brokerage: sp.get("brokerage") || "",
     title: "",
-    licenseNumber: "",
+    licenseNumber: sp.get("licenseNumber") || "",
     brokerageAddress: sp.get("brokerageAddress") || "",
     yearsInMarket: sp.get("yearsInMarket") || "",
     primaryMarkets: sp.get("primaryMarkets") || "",
@@ -121,6 +121,7 @@ function getInitialForm(sp: ReturnType<typeof useSearchParams>): FormData {
     headshotFile: null,
     landscapeFile: null,
     gbpStatus: sp.get("gbpStatus") || "",
+    gbpUrl: sp.get("gbpUrl") || "",
     linkedinStatus: sp.get("linkedinUrl") ? "yes" : "",
     linkedinUrl: sp.get("linkedinUrl") || "",
     yelpStatus: sp.get("yelpUrl") ? "yes" : "",
@@ -258,10 +259,42 @@ function IntakeForm() {
     setTimeout(() => { setCurrentCard(target); setAnimating(false); }, 150);
   }
 
+  // Save in-progress data to Supabase (non-blocking, after Card 1 when we have email)
+  async function saveProgress(f: FormData, cardNum: number) {
+    if (!f.email.trim()) return; // need email to upsert
+    const signupEmail = (f.signupEmail || f.email).trim().toLowerCase();
+    const contactEmail = f.email.trim().toLowerCase();
+    try {
+      await fetch("/api/intake", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          signupEmail, fullName: f.fullName, email: f.email, phone: f.phone,
+          brokerage: f.brokerage, title: f.title, licenseNumber: f.licenseNumber,
+          brokerageAddress: f.brokerageAddress, yearsInMarket: f.yearsInMarket,
+          primaryMarkets: f.primaryMarkets, primaryMarketZip: f.primaryMarketZips,
+          neighborhoods: f.neighborhoods, brokerageProfileUrl: f.brokerageProfileUrl,
+          personalWebsiteUrl: f.personalWebsiteUrl, audienceFocus: f.audienceFocus,
+          differentiator: f.differentiator, voiceCapture: f.voiceCapture,
+          topTransactions: f.transactions.filter(Boolean).map(t => t.replace("||", " — ")).join("\n"),
+          gbpStatus: f.gbpStatus, linkedinUrl: f.linkedinUrl, zillowUrl: f.zillowUrl,
+          yelpUrl: f.yelpUrl, realtorUrl: f.realtorUrl, fastexpertUrl: f.fastexpertUrl,
+          youtubeUrl: f.youtubeUrl, skippedFields: f.skippedFields,
+          intakeCompletionPct: Math.round((cardNum / TOTAL_CARDS) * 100),
+          reviewPlatforms: f.reviewPlatforms,
+        }),
+      });
+    } catch { /* non-blocking — localStorage is the fallback */ }
+  }
+
   function next() {
     const errs = validateCard(currentCard, form);
     if (errs.length > 0) { setValidationErrors(errs); return; }
     setValidationErrors([]);
+    // Save to Supabase after Card 1 (we have email by then)
+    if (currentCard >= 1 && form.email.trim()) {
+      saveProgress(form, currentCard + 1);
+    }
     goTo(currentCard + 1, "forward");
   }
 
@@ -343,7 +376,7 @@ function IntakeForm() {
       if (form.mlsFile) {
         try { await supabase.storage.from("mls-uploads").upload(`${email}/${Date.now()}-mls-${form.mlsFile.name}`, form.mlsFile, { cacheControl: "3600", upsert: false }); } catch { /* non-blocking */ }
       }
-      try { await supabase.auth.signInWithOtp({ email, options: { emailRedirectTo: "https://citedagent.com/auth/callback?next=/" } }); } catch { /* non-blocking */ }
+      try { await supabase.auth.signInWithOtp({ email, options: { emailRedirectTo: "https://citedagent.com/auth/callback?next=/copy-kit" } }); } catch { /* non-blocking */ }
 
       localStorage.removeItem(STORAGE_KEY);
       localStorage.removeItem(STORAGE_KEY + "-card");
@@ -402,7 +435,7 @@ function IntakeForm() {
 
       {/* Card container */}
       <div style={{
-        maxWidth: "640px", width: "100%", margin: "0 auto",
+        maxWidth: "720px", width: "100%", margin: "0 auto",
         padding: isCelebration ? "0 20px" : "24px 20px 40px",
         minHeight: isCelebration ? "100vh" : "auto",
         display: isCelebration ? "flex" : "block",
@@ -504,7 +537,7 @@ function renderCardContent(p: CardProps) {
   // ── Card 2: Practice ───────────────────────────────────────
   if (cardId === 2) return (
     <div>
-      <CardHeader title="Your practice" subtitle="Confirm or update your brokerage details." />
+      <CardHeader title="About Your Business" subtitle="Confirm or update your brokerage details." />
       <Fields>
         <FieldGroup label="Brokerage / Company" required prefilled={isPrefilled("brokerage")}>
           <TextInput value={form.brokerage} onChange={(v) => set("brokerage", v)} />
@@ -639,18 +672,24 @@ function renderCardContent(p: CardProps) {
       <CardHeader title="One deal you want to be known for"
         subtitle="This becomes the hero deal in your bio and articles." />
       <Fields>
-        {form.transactions.map((tx, i) => (
-          <FieldGroup key={i} label={form.transactions.length > 1 ? `Deal ${i + 1}` : ""}
-            hint={i === 0 ? "Address, price, and what made it memorable" : undefined}>
-            <TextInput value={tx}
-              onChange={(v) => {
-                const updated = [...form.transactions];
-                updated[i] = v;
-                set("transactions", updated);
-              }}
-              placeholder='e.g., 7911 Calle Posada, Carlsbad — $2.1M — Sold 8% above asking in 12 days' />
-          </FieldGroup>
-        ))}
+        {form.transactions.map((tx, i) => {
+          const parts = tx.split("||");
+          const addr = parts[0] || "";
+          const story = parts[1] || "";
+          return (
+            <div key={i} style={{ background: "#f8f9fa", borderRadius: "10px", padding: "14px 16px", display: "flex", flexDirection: "column", gap: "10px" }}>
+              {form.transactions.length > 1 && (
+                <p style={{ fontSize: "12px", fontWeight: 700, color: "#94a3b8", margin: 0, textTransform: "uppercase", letterSpacing: "0.5px" }}>Deal {i + 1}</p>
+              )}
+              <FieldGroup label="Address & price" hint="e.g., 7911 Calle Posada, Carlsbad — $2.1M">
+                <TextInput value={addr} onChange={(v) => { const u = [...form.transactions]; u[i] = v + "||" + story; set("transactions", u); }} />
+              </FieldGroup>
+              <FieldGroup label="What made it memorable" hint="e.g., Sold 8% above asking in 12 days, multiple offers">
+                <TextInput value={story} onChange={(v) => { const u = [...form.transactions]; u[i] = addr + "||" + v; set("transactions", u); }} />
+              </FieldGroup>
+            </div>
+          );
+        })}
         {form.transactions.length < 3 && (
           <button onClick={() => set("transactions", [...form.transactions, ""])} style={{
             background: "none", border: "1px dashed #cbd5e1", borderRadius: "8px",
@@ -752,9 +791,7 @@ function renderCardContent(p: CardProps) {
           </FieldGroup>
         )}
 
-        {"note" in plat && plat.note && (
-          <p style={{ fontSize: "12px", color: "#94a3b8", margin: "12px 0 0", fontStyle: "italic" }}>{plat.note}</p>
-        )}
+
 
         {statusVal === "yes" && <NextButton onClick={next} />}
         {!statusVal && <SkipButton onClick={() => { skip(plat.key + "_platform"); }} label="Skip — CITED will find it →" />}
@@ -856,21 +893,43 @@ function renderCardContent(p: CardProps) {
   );
 
   // ── Card 26: Celebration ───────────────────────────────────
-  if (cardId === CELEBRATION_CARD) return (
+  if (cardId === CELEBRATION_CARD) {
+    const firstName = form.fullName.split(" ")[0] || "there";
+    return (
     <div style={{ textAlign: "center", padding: "20px 0" }}>
-      {/* Animated check circle */}
-      <div style={{
-        width: "88px", height: "88px", borderRadius: "50%", margin: "0 auto 20px",
-        background: "linear-gradient(135deg, rgba(0,191,166,0.2), rgba(0,230,200,0.1))",
+      {/* Animated check circle with pulse */}
+      <style>{`
+        @keyframes checkPulse {
+          0% { transform: scale(0.6); opacity: 0; }
+          60% { transform: scale(1.1); opacity: 1; }
+          100% { transform: scale(1); opacity: 1; }
+        }
+        @keyframes confettiDrop {
+          0% { transform: translateY(-20px); opacity: 0; }
+          100% { transform: translateY(0); opacity: 1; }
+        }
+        .check-circle { animation: checkPulse 0.5s ease forwards; }
+        .confetti-bar { animation: confettiDrop 0.6s ease 0.3s both; }
+      `}</style>
+      <div className="check-circle" style={{
+        width: "96px", height: "96px", borderRadius: "50%", margin: "0 auto 20px",
+        background: "linear-gradient(135deg, rgba(0,191,166,0.25), rgba(0,230,200,0.1))",
         border: "3px solid #00BFA6", display: "flex", alignItems: "center", justifyContent: "center",
       }}>
-        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#00BFA6" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+        <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#00BFA6" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
           <polyline points="20 6 9 17 4 12" />
         </svg>
       </div>
 
-      <h1 style={{ fontSize: "28px", fontWeight: 800, color: "#fff", margin: "0 0 4px" }}>
-        We&apos;re on it.
+      {/* Confetti accent */}
+      <div className="confetti-bar" style={{ display: "flex", justifyContent: "center", gap: "6px", marginBottom: "20px" }}>
+        {["#00BFA6", "#D4A830", "#00BFA6", "#fff", "#00BFA6", "#D4A830", "#00BFA6"].map((c, i) => (
+          <div key={i} style={{ width: "8px", height: "8px", borderRadius: "2px", background: c, opacity: 0.7, transform: `rotate(${i * 15}deg)` }} />
+        ))}
+      </div>
+
+      <h1 style={{ fontSize: "30px", fontWeight: 800, color: "#fff", margin: "0 0 6px" }}>
+        Welcome to CITED, {firstName}.
       </h1>
       <p style={{ fontSize: "16px", color: "#00BFA6", fontWeight: 600, margin: "0 0 28px" }}>
         Your business &amp; visibility audit has started.
@@ -895,7 +954,7 @@ function renderCardContent(p: CardProps) {
         We&apos;ll be in touch personally within 24 hours.
       </p>
 
-      <GoogleSignInButton redirectTo="https://citedagent.com/auth/callback?next=/" />
+      <GoogleSignInButton redirectTo="https://citedagent.com/auth/callback?next=/copy-kit" />
 
       <div style={{ display: "flex", alignItems: "center", gap: "12px", margin: "16px 0" }}>
         <div style={{ flex: 1, height: "1px", background: "rgba(255,255,255,0.1)" }} />
@@ -908,7 +967,7 @@ function renderCardContent(p: CardProps) {
         <a href="/login" style={{ color: "#00BFA6", textDecoration: "none", fontWeight: 600 }}>go to the login page →</a>
       </p>
     </div>
-  );
+  );}
 
   return null;
 }
