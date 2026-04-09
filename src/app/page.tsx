@@ -23,7 +23,7 @@ export default function LandingPage() {
     },
     {
       q: "Who else in North County San Diego is doing this?",
-      a: "Fewer than 5% of agents in any North County market are actively optimizing for AI visibility right now. We're currently working with a small founding cohort — we don't publish their names publicly while they're building their competitive advantage. That's the point of moving first.",
+      a: "Fewer than 5% of agents in any North County market are actively optimizing for AI visibility right now. We're currently working with a small group of founding members — we don't publish their names publicly while they're building their competitive advantage. That's the point of moving first.",
     },
   ];
 
@@ -63,14 +63,17 @@ export default function LandingPage() {
       <section style={{ background: '#0A1929', padding: '72px 28px 80px', textAlign: 'center' }}>
         <div style={{ maxWidth: '700px', margin: '0 auto' }}>
           <div style={{ display: 'inline-block', background: 'rgba(212,168,48,0.15)', color: '#D4A830', fontSize: '11px', fontWeight: 700, letterSpacing: '2px', textTransform: 'uppercase', padding: '6px 16px', borderRadius: '20px', marginBottom: '28px', border: '1px solid rgba(212,168,48,0.3)' }}>
-            North County San Diego · Founding Cohort
+            North County San Diego · Founding Members
           </div>
           <h1 style={{ fontSize: '40px', fontWeight: 900, color: '#fff', lineHeight: 1.2, margin: '0 0 24px', letterSpacing: '-0.5px' }}>
             When buyers ask AI who to hire —<br />
             <span style={{ color: '#00BFA6' }}>does your name come up?</span>
           </h1>
-          <p style={{ fontSize: '18px', color: '#8aa0b8', lineHeight: 1.7, margin: '0 0 40px', maxWidth: '560px', marginLeft: 'auto', marginRight: 'auto' }}>
-            AI is now the first stop for buyers and sellers researching agents. Most agents are invisible to it. We fix that — in 90 days, guaranteed.
+          <p style={{ fontSize: '18px', color: '#8aa0b8', lineHeight: 1.7, margin: '0 0 8px', maxWidth: '560px', marginLeft: 'auto', marginRight: 'auto' }}>
+            Cited optimizes your AI visibility — so ChatGPT, Perplexity, and Google AI recommend you by name.
+          </p>
+          <p style={{ fontSize: '15px', color: '#64748b', lineHeight: 1.6, margin: '0 0 40px', maxWidth: '480px', marginLeft: 'auto', marginRight: 'auto' }}>
+            Most agents are invisible to AI. We fix that in 90 days, guaranteed.
           </p>
           <a
             href="/scan"
@@ -93,9 +96,6 @@ export default function LandingPage() {
 
         {/* ── THE PROBLEM ── */}
         <section style={{ padding: '64px 0 48px' }}>
-          <div style={{ display: 'inline-block', background: '#0A1929', color: '#D4A830', fontSize: '11px', fontWeight: 700, letterSpacing: '2px', textTransform: 'uppercase', padding: '6px 16px', borderRadius: '20px', marginBottom: '20px' }}>
-            The Problem
-          </div>
           <h2 style={{ fontSize: '30px', fontWeight: 800, color: '#0A1929', margin: '0 0 12px', lineHeight: 1.25 }}>
             Traditional Google rankings are no longer enough. AI is now the first stop — and most agents are invisible to it.
           </h2>
@@ -142,9 +142,6 @@ export default function LandingPage() {
 
         {/* ── WEEK BY WEEK ── */}
         <section style={{ marginBottom: '48px' }}>
-          <div style={{ display: 'inline-block', background: '#0A1929', color: '#D4A830', fontSize: '11px', fontWeight: 700, letterSpacing: '2px', textTransform: 'uppercase', padding: '6px 16px', borderRadius: '20px', marginBottom: '20px' }}>
-            Week by Week
-          </div>
           <h2 style={{ fontSize: '26px', fontWeight: 700, color: '#0A1929', margin: '0 0 8px' }}>Your first 30 days.</h2>
           <p style={{ fontSize: '15px', color: '#64748b', margin: '0 0 24px' }}>What we do — and what we need from you.</p>
 
@@ -177,9 +174,6 @@ export default function LandingPage() {
 
         {/* ── WHY NOW ── */}
         <section style={{ background: '#fff', borderRadius: '14px', padding: '36px 32px', marginBottom: '48px', border: '1px solid #e8edf2', boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
-          <div style={{ display: 'inline-block', background: '#0A1929', color: '#D4A830', fontSize: '11px', fontWeight: 700, letterSpacing: '2px', textTransform: 'uppercase', padding: '6px 16px', borderRadius: '20px', marginBottom: '20px' }}>
-            Why Now
-          </div>
           <h2 style={{ fontSize: '24px', fontWeight: 700, color: '#0A1929', margin: '0 0 14px' }}>
             This is where SEO was in 2005.
           </h2>
@@ -264,8 +258,39 @@ export default function LandingPage() {
             ))}
           </div>
           <p style={{ fontSize: '12px', color: '#64748b', textAlign: 'center', margin: '16px 0 0', lineHeight: 1.6 }}>
-            Full case studies publishing as founding cohort results are confirmed.
+            Full case studies publishing as founding member results are confirmed.
           </p>
+        </section>
+
+        {/* ── NOT CONVINCED YET ── */}
+        <section style={{ background: '#0A1929', borderRadius: '14px', padding: '36px 32px', marginBottom: '48px' }}>
+          <div style={{ display: 'inline-block', background: 'rgba(212,168,48,0.15)', color: '#D4A830', fontSize: '11px', fontWeight: 700, letterSpacing: '2px', textTransform: 'uppercase', padding: '5px 14px', borderRadius: '20px', marginBottom: '16px', border: '1px solid rgba(212,168,48,0.25)' }}>
+            Still Weighing It?
+          </div>
+          <h2 style={{ fontSize: '22px', fontWeight: 700, color: '#fff', margin: '0 0 20px', lineHeight: 1.3 }}>
+            Fair questions we hear from agents who are almost in.
+          </h2>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            {[
+              {
+                q: "What if my score doesn&apos;t move at all?",
+                a: "Then you owe us nothing. The Citation Guarantee™ is 20 points in 90 days or there&apos;s no charge. We don&apos;t send an invoice unless we deliver results.",
+              },
+              {
+                q: "I&apos;m busy. How much time does this actually take?",
+                a: "Intake is about 5 minutes — most fields are pre-filled from your audit. After that, your biggest time commitment is answering 3 questions for each monthly article (3 minutes). We write everything else.",
+              },
+              {
+                q: "What if AI visibility doesn&apos;t become a real factor in my market?",
+                a: "It already is in some. The question is when it becomes dominant in yours. The agents who move now own the position before it matters — not after. And everything we build stays yours regardless.",
+              },
+            ].map((item, i) => (
+              <div key={i} style={{ borderTop: i > 0 ? '1px solid rgba(255,255,255,0.08)' : 'none', paddingTop: i > 0 ? '16px' : '0' }}>
+                <div style={{ fontSize: '14px', fontWeight: 700, color: '#fff', marginBottom: '6px' }} dangerouslySetInnerHTML={{ __html: item.q }} />
+                <div style={{ fontSize: '13px', color: '#64748b', lineHeight: 1.7 }} dangerouslySetInnerHTML={{ __html: item.a }} />
+              </div>
+            ))}
+          </div>
         </section>
 
         {/* ── FOUNDING OFFER ── */}
