@@ -25,7 +25,7 @@ const DEFAULT_MARKETS: MarketRec[] = [
   {
     name: 'Carmel Valley',
     tier: 'primary',
-    evidence: 'Deepest transaction history + strongest existing AI signal. 11 closed deals concentrated in Rancho Pacifica.',
+    evidence: 'Your deepest concentration of closed deals — 11 transactions in Rancho Pacifica and surrounding neighborhoods. AI is already picking up signals here.',
     txn_volume: '$44.8M',
     txn_count: 11,
     ai_signal: 'Strongest — partial platform presence',
@@ -34,7 +34,7 @@ const DEFAULT_MARKETS: MarketRec[] = [
   {
     name: 'Carlsbad',
     tier: 'secondary',
-    evidence: 'Strong volume across La Costa, Santalina, and Santander. Mixed-tier market — luxury (Aviara) and mid-market.',
+    evidence: '6 closed transactions across La Costa, Santalina, and Santander — from $1.1M condos to $2.2M luxury homes. We optimize for both price ranges.',
     txn_volume: '$10.0M',
     txn_count: 6,
     ai_signal: 'Some signal — partial presence',
@@ -43,7 +43,7 @@ const DEFAULT_MARKETS: MarketRec[] = [
   {
     name: 'Rancho Santa Fe',
     tier: 'growth',
-    evidence: 'Luxury market with Del Mar Country Club and Whispering Palms transactions. High opportunity, building evidence.',
+    evidence: '3 high-value transactions including a $6.2M sale at Del Mar Country Club. The evidence is starting — we build from here.',
     txn_volume: '$11.7M',
     txn_count: 3,
     ai_signal: 'Minimal — not in AI results',
