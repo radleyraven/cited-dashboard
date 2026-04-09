@@ -51,6 +51,7 @@ const STORAGE_KEY = "cited-intake-v2";
 // ── Types ──────────────────────────────────────────────────────
 
 type FormData = {
+  signupEmail: string;
   fullName: string;
   email: string;
   phone: string;
@@ -97,6 +98,7 @@ type FormData = {
 
 function getInitialForm(sp: ReturnType<typeof useSearchParams>): FormData {
   return {
+    signupEmail: sp.get("email") || "",
     fullName: sp.get("fullName") || "",
     email: sp.get("email") || "",
     phone: "",
@@ -311,7 +313,7 @@ function IntakeForm() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          fullName: form.fullName, email: form.email, phone: form.phone,
+          signupEmail: form.signupEmail, fullName: form.fullName, email: form.email, phone: form.phone,
           brokerage: form.brokerage, title: form.title, licenseNumber: form.licenseNumber,
           brokerageAddress: form.brokerageAddress, yearsInMarket: form.yearsInMarket,
           primaryMarkets: form.primaryMarkets, primaryMarketZip: form.primaryMarketZips,
@@ -488,7 +490,7 @@ function renderCardContent(p: CardProps) {
         <FieldGroup label="Full Name" required>
           <TextInput value={form.fullName} onChange={(v) => set("fullName", v)} />
         </FieldGroup>
-        <FieldGroup label="Email" required>
+        <FieldGroup label="Email" required hint={form.signupEmail && form.email !== form.signupEmail ? `Dashboard login: ${form.signupEmail}` : undefined}>
           <TextInput value={form.email} onChange={(v) => set("email", v)} type="email" />
         </FieldGroup>
         <FieldGroup label="Phone" required>
@@ -656,17 +658,28 @@ function renderCardContent(p: CardProps) {
             cursor: "pointer", width: "100%",
           }}>+ Add another notable deal</button>
         )}
-        {/* MLS Upload */}
+        {/* MLS — done for CA/WA, upload for others */}
         <div style={{ marginTop: "8px", padding: "12px 16px", background: "#f0fdf9", borderRadius: "8px", border: "1px solid rgba(0,191,166,0.15)" }}>
-          {form.mlsDoneForYou ? (
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
             <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-              <span style={{ color: "#00BFA6", fontSize: "16px" }}>&#10003;</span>
-              <span style={{ fontSize: "13px", color: "#0A1929", fontWeight: 500 }}>Done — we pull your MLS data directly</span>
+              <div onClick={() => set("mlsDoneForYou", !form.mlsDoneForYou)} style={{
+                width: "20px", height: "20px", borderRadius: "4px", cursor: "pointer", flexShrink: 0,
+                background: form.mlsDoneForYou ? "#00BFA6" : "#fff",
+                border: `2px solid ${form.mlsDoneForYou ? "#00BFA6" : "#cbd5e1"}`,
+                display: "flex", alignItems: "center", justifyContent: "center",
+              }}>
+                {form.mlsDoneForYou && <span style={{ color: "#fff", fontSize: "14px", lineHeight: 1 }}>✓</span>}
+              </div>
+              <span style={{ fontSize: "13px", color: "#0A1929", fontWeight: 500 }}>MLS transaction data</span>
             </div>
-          ) : (
-            <FieldGroup label="Upload MLS data" hint="CSV, PDF, or Excel — we'll extract stats automatically">
-              <FileInput accept=".csv,.pdf,.xlsx,.xls" file={form.mlsFile} onChange={(f) => set("mlsFile", f)} icon={"📎"} />
-            </FieldGroup>
+            <span style={{ fontSize: "12px", color: form.mlsDoneForYou ? "#00BFA6" : "#94a3b8", fontWeight: 600 }}>
+              {form.mlsDoneForYou ? "Done for you" : "Upload needed"}
+            </span>
+          </div>
+          {!form.mlsDoneForYou && (
+            <div style={{ marginTop: "12px" }}>
+              <FileInput accept=".csv,.pdf,.xlsx,.xls" file={form.mlsFile} onChange={(f) => set("mlsFile", f)} icon={"📎"} label="Upload MLS export (CSV, PDF, or Excel)" />
+            </div>
           )}
         </div>
       </Fields>

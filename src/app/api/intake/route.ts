@@ -91,17 +91,20 @@ export async function POST(request: Request) {
       reviewPlatforms[idx] = `Other: ${body.reviewOther.trim()}`;
     }
 
-    // Upsert: if email exists, update. If new, insert.
-    // This allows clients to re-submit (Client Zero reset, corrections, etc.)
+    // Upsert: match on signupEmail first (original email from score page), then contact email.
+    // This allows clients to re-submit and handles email changes (e.g., gmail → brokerage email).
+    const signupEmail = (body.signupEmail || body.email || "").trim().toLowerCase();
+    const contactEmail = body.email.trim().toLowerCase();
+
     const { data: existing } = await supabase
       .from("cited_intake")
       .select("id")
-      .eq("email", body.email.trim().toLowerCase())
+      .or(`email.ilike.${signupEmail},email.ilike.${contactEmail}`)
       .limit(1);
 
     const payload = {
       full_name: body.fullName.trim(),
-      email: body.email.trim(),
+      email: contactEmail,
       phone: body.phone?.trim() || null,
       brokerage: body.brokerage.trim(),
       title: body.title?.trim() || null,
@@ -144,7 +147,6 @@ export async function POST(request: Request) {
       // Insert new record
       const result = await supabase.from("cited_intake").insert({
         ...payload,
-        email: body.email.trim(),
       });
       error = result.error;
     }
