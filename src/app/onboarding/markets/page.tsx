@@ -216,7 +216,7 @@ export default function MarketsPage() {
     setLoading(false);
   }
 
-  const firstName = clientName.split(' ')[0] || 'there';
+  const firstName = clientName.split(' ')[0] || '';
   const approvedCount = markets.filter(m => m.approved).length;
 
   if (authLoading) {
@@ -279,7 +279,7 @@ export default function MarketsPage() {
           marginBottom: '8px',
           lineHeight: 1.3,
         }}>
-          {firstName}, here&apos;s your market strategy.
+          {firstName ? `${firstName}, here's your market strategy.` : "Here's your market strategy."}
         </h1>
         <p style={{
           fontSize: '15px',
@@ -287,7 +287,7 @@ export default function MarketsPage() {
           marginBottom: '32px',
           lineHeight: 1.6,
         }}>
-          Based on your transaction history, intake data, and our initial PRISM Scan, we&apos;ve identified
+          Based on your transaction history, intake data, and our initial AI scan, we&apos;ve identified
           three markets to focus your optimization. Approve each market individually, or approve all at once.
         </p>
 
