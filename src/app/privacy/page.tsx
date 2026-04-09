@@ -8,7 +8,7 @@ export default function PrivacyPolicyPage() {
           <a href="/" style={{ textDecoration: 'none' }}>
             <div style={{ fontSize: '20px', fontWeight: 800, letterSpacing: '5px', color: '#00BFA6' }}>CITED</div>
           </a>
-          <div style={{ fontSize: '10px', color: '#4a6380', letterSpacing: '1.5px', textTransform: 'uppercase', marginTop: '3px' }}>AI Visibility for Professionals</div>
+          <div style={{ fontSize: '10px', color: '#4a6380', letterSpacing: '1.5px', textTransform: 'uppercase', marginTop: '3px' }}>AI Citation Optimization™</div>
         </div>
         <div style={{ fontSize: '11px', color: '#4a6380' }}>Powered by <span style={{ color: '#00BFA6', fontWeight: 700 }}>PRISM™</span></div>
       </header>
@@ -28,7 +28,7 @@ export default function PrivacyPolicyPage() {
         <div style={{ background: '#fff', borderRadius: '14px', padding: '40px 36px', border: '1px solid #e8edf2', boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
 
           <p style={{ fontSize: '15px', color: '#4a5568', lineHeight: 1.8, margin: '0 0 32px' }}>
-            Cited (&quot;we,&quot; &quot;our,&quot; or &quot;us&quot;) is committed to protecting your privacy. This Privacy Policy explains how we collect, use, share, and retain information when you use our AI visibility optimization services at <a href="https://citedagent.com" style={{ color: '#00BFA6' }}>citedagent.com</a>. By using Cited, you agree to the practices described below.
+            Cited (&quot;we,&quot; &quot;our,&quot; or &quot;us&quot;) is committed to protecting your privacy. This Privacy Policy explains how we collect, use, share, and retain information when you use our AI Citation Optimization™ services at <a href="https://citedagent.com" style={{ color: '#00BFA6' }}>citedagent.com</a>. By using Cited, you agree to the practices described below.
           </p>
 
           {/* Section 1 */}
@@ -55,7 +55,7 @@ export default function PrivacyPolicyPage() {
             We use the information we collect exclusively to deliver and improve our services to you. Specifically, your information is used to:
           </p>
           <ul style={{ fontSize: '15px', color: '#4a5568', lineHeight: 1.9, margin: '0 0 32px', paddingLeft: '24px' }}>
-            <li>Build and optimize your AI visibility profile across platforms.</li>
+            <li>Build and optimize your AI citation profile across platforms.</li>
             <li>Write professional bios and authority articles in your voice.</li>
             <li>Submit your profile to relevant directories and citation sources.</li>
             <li>Run monthly PRISM scans across AI models to measure and track your Citation Score.</li>
@@ -145,7 +145,7 @@ export default function PrivacyPolicyPage() {
             <a href="/terms" style={{ color: '#64748b', textDecoration: 'none' }}>Terms of Service</a>
           </div>
           <div style={{ marginTop: '8px' }}>
-            Cited · AI Visibility for Professionals · <a href="https://citedagent.com" style={{ color: '#94a3b8' }}>citedagent.com</a>
+            Cited · AI Citation Optimization™ for Professionals · <a href="https://citedagent.com" style={{ color: '#94a3b8' }}>citedagent.com</a>
           </div>
         </div>
 

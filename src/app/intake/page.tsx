@@ -583,7 +583,7 @@ function renderCardContent(p: CardProps) {
   // ── Card 4: Markets ────────────────────────────────────────
   if (cardId === 4) return (
     <div>
-      <CardHeader title="Where do you work?" subtitle="These markets drive all your AI visibility targeting." />
+      <CardHeader title="Where do you work?" subtitle="These markets drive all your AI citation visibility targeting." />
       <Fields>
         <FieldGroup label="Primary markets — cities" required prefilled={isPrefilled("primaryMarkets")}
           hint="List 1–3 cities (e.g., Carmel Valley, Carlsbad, Rancho Santa Fe)">
@@ -876,7 +876,7 @@ function renderCardContent(p: CardProps) {
       </Fields>
 
       <p style={{ fontSize: "12px", color: "#94a3b8", textAlign: "center", margin: "20px 0 12px", lineHeight: 1.6 }}>
-        Your data is used exclusively to optimize your AI visibility. We never share or sell your information.{" "}
+        Your data is used exclusively to optimize your AI citation visibility. We never share or sell your information.{" "}
         <a href="/privacy" style={{ color: "#64748b" }}>Privacy Policy</a>{" · "}
         <a href="/terms" style={{ color: "#64748b" }}>Terms</a>
       </p>

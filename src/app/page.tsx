@@ -1,6 +1,6 @@
 export const metadata = {
   title: 'Cited — AI Visibility for Real Estate Agents',
-  description: 'Find out what AI says about you. Cited audits your AI visibility and optimizes your profiles so ChatGPT, Perplexity, and Google AI recommend you to buyers.',
+  description: 'Find out what AI says about you. Cited audits your AI citation visibility and optimizes your profiles so ChatGPT, Perplexity, and Google AI recommend you to buyers.',
 };
 
 export default function LandingPage() {
@@ -23,7 +23,7 @@ export default function LandingPage() {
     },
     {
       q: "Who else in North County San Diego is doing this?",
-      a: "Fewer than 5% of agents in any North County market are actively optimizing for AI visibility right now. We're currently working with a small group of founding members — we don't publish their names publicly while they're building their competitive advantage. That's the point of moving first.",
+      a: "Fewer than 5% of agents in any North County market are actively optimizing for AI citation visibility right now. We're currently working with a small group of founding members — we don't publish their names publicly while they're building their competitive advantage. That's the point of moving first.",
     },
   ];
 
@@ -53,7 +53,7 @@ export default function LandingPage() {
       <header style={{ background: '#0A1929', padding: '20px 28px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <div>
           <div style={{ fontSize: '20px', fontWeight: 800, letterSpacing: '5px', color: '#00BFA6' }}>CITED</div>
-          <div style={{ fontSize: '10px', color: '#4a6380', letterSpacing: '1.5px', textTransform: 'uppercase', marginTop: '3px' }}>AI Visibility for Professionals</div>
+          <div style={{ fontSize: '10px', color: '#4a6380', letterSpacing: '1.5px', textTransform: 'uppercase', marginTop: '3px' }}>AI Citation Optimization™</div>
         </div>
         <div style={{ fontSize: '11px', color: '#4a6380' }}>Powered by <span style={{ color: '#00BFA6', fontWeight: 700 }}>PRISM™</span></div>
       </header>
@@ -70,7 +70,7 @@ export default function LandingPage() {
             <span style={{ color: '#00BFA6' }}>does your name come up?</span>
           </h1>
           <p style={{ fontSize: '18px', color: '#8aa0b8', lineHeight: 1.7, margin: '0 0 8px', maxWidth: '560px', marginLeft: 'auto', marginRight: 'auto' }}>
-            Cited optimizes your AI visibility — so ChatGPT, Perplexity, and Google AI recommend you by name.
+            Cited optimizes your AI citation visibility — so ChatGPT, Perplexity, and Google AI recommend you by name.
           </p>
           <p style={{ fontSize: '15px', color: '#64748b', lineHeight: 1.6, margin: '0 0 40px', maxWidth: '480px', marginLeft: 'auto', marginRight: 'auto' }}>
             Most agents are invisible to AI. We fix that in 90 days, guaranteed.
@@ -399,7 +399,7 @@ export default function LandingPage() {
             <a href="/terms" style={{ color: '#4a6380', textDecoration: 'none' }}>Terms of Service</a>
           </div>
           <div style={{ color: '#2a3f54', fontSize: '12px' }}>
-            Cited · AI Visibility for Professionals · Powered by <span style={{ color: '#00BFA6', fontWeight: 700 }}>PRISM™</span>
+            Cited · AI Citation Optimization™ for Professionals · Powered by <span style={{ color: '#00BFA6', fontWeight: 700 }}>PRISM™</span>
           </div>
           <div style={{ color: '#1e2e3e', fontSize: '11px', marginTop: '4px' }}>
             Professional Recognition Index for Search Models

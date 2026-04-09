@@ -8,7 +8,7 @@ export default function TermsOfServicePage() {
           <a href="/" style={{ textDecoration: 'none' }}>
             <div style={{ fontSize: '20px', fontWeight: 800, letterSpacing: '5px', color: '#00BFA6' }}>CITED</div>
           </a>
-          <div style={{ fontSize: '10px', color: '#4a6380', letterSpacing: '1.5px', textTransform: 'uppercase', marginTop: '3px' }}>AI Visibility for Professionals</div>
+          <div style={{ fontSize: '10px', color: '#4a6380', letterSpacing: '1.5px', textTransform: 'uppercase', marginTop: '3px' }}>AI Citation Optimization™</div>
         </div>
         <div style={{ fontSize: '11px', color: '#4a6380' }}>Powered by <span style={{ color: '#00BFA6', fontWeight: 700 }}>PRISM™</span></div>
       </header>
@@ -28,13 +28,13 @@ export default function TermsOfServicePage() {
         <div style={{ background: '#fff', borderRadius: '14px', padding: '40px 36px', border: '1px solid #e8edf2', boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
 
           <p style={{ fontSize: '15px', color: '#4a5568', lineHeight: 1.8, margin: '0 0 32px' }}>
-            These Terms of Service (&quot;Terms&quot;) govern your access to and use of Cited&apos;s AI visibility optimization services (&quot;Service&quot;), operated by Cited (&quot;we,&quot; &quot;our,&quot; or &quot;us&quot;) at <a href="https://citedagent.com" style={{ color: '#00BFA6' }}>citedagent.com</a>. By signing up or using the Service, you agree to these Terms. If you do not agree, do not use the Service.
+            These Terms of Service (&quot;Terms&quot;) govern your access to and use of Cited&apos;s AI Citation Optimization™ services (&quot;Service&quot;), operated by Cited (&quot;we,&quot; &quot;our,&quot; or &quot;us&quot;) at <a href="https://citedagent.com" style={{ color: '#00BFA6' }}>citedagent.com</a>. By signing up or using the Service, you agree to these Terms. If you do not agree, do not use the Service.
           </p>
 
           {/* Section 1 */}
           <h2 style={{ fontSize: '18px', fontWeight: 700, color: '#0A1929', margin: '0 0 12px', paddingTop: '8px', borderTop: '2px solid #f0f4f8' }}>1. Description of Service</h2>
           <p style={{ fontSize: '15px', color: '#4a5568', lineHeight: 1.8, margin: '0 0 12px' }}>
-            Cited provides AI visibility optimization services for licensed professionals. The Service includes:
+            Cited provides AI Citation Optimization™ services for licensed professionals. The Service includes:
           </p>
           <ul style={{ fontSize: '15px', color: '#4a5568', lineHeight: 1.9, margin: '0 0 32px', paddingLeft: '24px' }}>
             <li>Full PRISM™ Citation Score audit across 12 platforms and 4 AI models (ChatGPT, Perplexity, Gemini, Claude).</li>
@@ -125,7 +125,7 @@ export default function TermsOfServicePage() {
           {/* Section 6 */}
           <h2 style={{ fontSize: '18px', fontWeight: 700, color: '#0A1929', margin: '0 0 12px', paddingTop: '28px', borderTop: '2px solid #f0f4f8' }}>6. Limitation of Liability &amp; Results Disclaimer</h2>
           <p style={{ fontSize: '15px', color: '#4a5568', lineHeight: 1.8, margin: '0 0 12px' }}>
-            Cited provides AI visibility optimization services based on current understanding of AI model behavior. <strong>AI models (ChatGPT, Perplexity, Gemini, Claude) are operated by third parties and may change their algorithms, data sources, or citation behavior at any time without notice.</strong> Cited does not control these models and cannot guarantee specific placement, ranking, or recommendation in any AI model&apos;s outputs.
+            Cited provides AI Citation Optimization™ services based on current understanding of AI model behavior. <strong>AI models (ChatGPT, Perplexity, Gemini, Claude) are operated by third parties and may change their algorithms, data sources, or citation behavior at any time without notice.</strong> Cited does not control these models and cannot guarantee specific placement, ranking, or recommendation in any AI model&apos;s outputs.
           </p>
           <p style={{ fontSize: '15px', color: '#4a5568', lineHeight: 1.8, margin: '0 0 12px' }}>
             The Citation Guarantee™ is based on Citation Score improvement as measured by PRISM™, not on specific AI model outputs. Citation Score improvement does not guarantee that you will be recommended by any specific AI model for any specific query.
@@ -209,7 +209,7 @@ export default function TermsOfServicePage() {
             <a href="/terms" style={{ color: '#64748b', textDecoration: 'none' }}>Terms of Service</a>
           </div>
           <div style={{ marginTop: '8px' }}>
-            Cited · AI Visibility for Professionals · <a href="https://citedagent.com" style={{ color: '#94a3b8' }}>citedagent.com</a> · Powered by PRISM™
+            Cited · AI Citation Optimization™ for Professionals · <a href="https://citedagent.com" style={{ color: '#94a3b8' }}>citedagent.com</a> · Powered by PRISM™
           </div>
         </div>
 

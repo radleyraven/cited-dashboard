@@ -101,7 +101,7 @@ function LoginContent() {
       <div className="w-full max-w-sm px-6">
         <div className="text-center mb-10">
           <h1 className="text-3xl font-bold tracking-widest" style={{ color: '#00BFA6' }}>CITED</h1>
-          <p className="text-gray-400 mt-2 text-sm">AI Visibility Dashboard</p>
+          <p className="text-gray-400 mt-2 text-sm">AI Citation Dashboard</p>
         </div>
 
         {sent ? (

@@ -455,7 +455,7 @@ export default function ArticlesPage() {
         </div>
 
         <div className="pb-4 text-center text-sm text-gray-400">
-          Cited · AI Visibility for Professionals · citedagent.com
+          Cited · AI Citation Optimization™ for Professionals · citedagent.com
         </div>
       </main>
     </div>

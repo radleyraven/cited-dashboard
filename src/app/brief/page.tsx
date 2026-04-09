@@ -117,7 +117,7 @@ export default function BriefPage() {
             <Link href="/">
               <h1 className="text-2xl font-bold tracking-widest cursor-pointer" style={{ color: '#00BFA6' }}>CITED</h1>
             </Link>
-            <p className="text-sm text-gray-400 mt-1">AI Visibility Dashboard</p>
+            <p className="text-sm text-gray-400 mt-1">AI Citation Dashboard</p>
           </div>
           <div className="flex items-center gap-6">
             <div className="flex items-center gap-4">
@@ -329,7 +329,7 @@ export default function BriefPage() {
         )}
 
         <div className="mt-10 text-center text-sm text-gray-400">
-          Cited · AI Visibility for Professionals · citedagent.com
+          Cited · AI Citation Optimization™ for Professionals · citedagent.com
         </div>
       </main>
     </div>

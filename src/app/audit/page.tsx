@@ -90,7 +90,7 @@ export default function AuditPage() {
               <Link href="/">
                 <h1 className="text-xl md:text-2xl font-bold tracking-widest cursor-pointer" style={{ color: '#00BFA6' }}>CITED</h1>
               </Link>
-              <p className="text-xs md:text-sm text-gray-400 mt-0.5">AI Visibility Dashboard</p>
+              <p className="text-xs md:text-sm text-gray-400 mt-0.5">AI Citation Dashboard</p>
             </div>
             <div className="text-right">
               <div className="font-semibold text-sm md:text-base">{client.name}</div>
@@ -127,7 +127,7 @@ export default function AuditPage() {
               Lead with Carmel Valley. Here&apos;s why.
             </h3>
             <p className="text-gray-300 leading-relaxed">
-              Your Carmel Valley transaction history + AI visibility gap make it the highest-leverage market to target first. 11 closed deals, $44.8M in a single ZIP code — and AI currently has no idea you exist there.
+              Your Carmel Valley transaction history + AI citation gap make it the highest-leverage market to target first. 11 closed deals, $44.8M in a single ZIP code — and AI currently has no idea you exist there.
             </p>
           </div>
         </section>
@@ -370,7 +370,7 @@ export default function AuditPage() {
 
         {/* Footer */}
         <div className="text-center text-sm text-gray-400">
-          Cited · AI Visibility for Professionals · citedagent.com · Powered by PRISM™
+          Cited · AI Citation Optimization™ for Professionals · citedagent.com · Powered by PRISM™
         </div>
 
       </main>

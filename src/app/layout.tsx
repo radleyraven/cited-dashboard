@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Cited — AI Visibility Dashboard",
+  title: "Cited — AI Citation Dashboard",
   description: "Your AI citation score, platform status, and content hub.",
 };
 

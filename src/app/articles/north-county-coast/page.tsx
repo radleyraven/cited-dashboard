@@ -387,7 +387,7 @@ export default function NorthCountyCoastPage() {
 
         {/* Footer */}
         <div className="mt-8 text-center text-sm text-gray-400">
-          Cited · AI Visibility for Professionals · citedagent.com
+          Cited · AI Citation Optimization™ for Professionals · citedagent.com
         </div>
       </main>
     </div>

@@ -24,7 +24,7 @@ const AUDIT_FINDINGS = [
   },
   {
     icon: "⚠️",
-    label: "Your biggest AI visibility gap",
+    label: "Your biggest AI citation gap",
     value: "Citation Score: 3/100. You are invisible to AI search in Carmel Valley and Carlsbad — the two markets where you have the deepest track record. That is the gap Cited closes.",
   },
   {
@@ -73,7 +73,7 @@ export default function PositioningPage() {
               <Link href="/">
                 <h1 className="text-xl md:text-2xl font-bold tracking-widest cursor-pointer" style={{ color: '#00BFA6' }}>CITED</h1>
               </Link>
-              <p className="text-xs md:text-sm text-gray-400 mt-0.5">AI Visibility Dashboard</p>
+              <p className="text-xs md:text-sm text-gray-400 mt-0.5">AI Citation Dashboard</p>
             </div>
             <div className="text-right">
               <div className="font-semibold text-sm md:text-base">Radley Raven</div>
@@ -278,7 +278,7 @@ export default function PositioningPage() {
         <section className="mb-8">
           <div className="mb-3">
             <p className="text-xs font-bold uppercase tracking-wider" style={{ color: '#EF4444' }}>⚡ What needs immediate attention</p>
-            <p className="text-sm text-gray-500 mt-1">These three gaps are limiting your AI visibility right now. We fix all three as part of your onboarding.</p>
+            <p className="text-sm text-gray-500 mt-1">These three gaps are limiting your AI citation visibility right now. We fix all three as part of your onboarding.</p>
           </div>
           <div className="space-y-3">
             {AUDIT_FINDINGS.slice(3).map((finding, i) => (
@@ -333,7 +333,7 @@ export default function PositioningPage() {
         </div>
 
         <div className="mt-10 text-center text-sm text-gray-400">
-          Cited · AI Visibility for Professionals · citedagent.com · Powered by PRISM™
+          Cited · AI Citation Optimization™ for Professionals · citedagent.com · Powered by PRISM™
         </div>
       </main>
     </div>

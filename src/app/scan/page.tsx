@@ -75,7 +75,7 @@ export default function ScanPage() {
       <header style={{ background: "#0A1929", padding: "16px 24px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <div>
           <div style={{ fontSize: "18px", fontWeight: 800, letterSpacing: "5px", color: "#00BFA6" }}>CITED</div>
-          <div style={{ fontSize: "10px", color: "#4a6380", letterSpacing: "1.5px", textTransform: "uppercase", marginTop: "2px" }}>AI Visibility for Professionals</div>
+          <div style={{ fontSize: "10px", color: "#4a6380", letterSpacing: "1.5px", textTransform: "uppercase", marginTop: "2px" }}>AI Citation Optimization™</div>
         </div>
         <div style={{ fontSize: "11px", color: "#4a6380" }}>Powered by <span style={{ color: "#00BFA6", fontWeight: 700 }}>PRISM™</span></div>
       </header>
@@ -93,7 +93,7 @@ export default function ScanPage() {
             <span style={{ color: "#00BFA6" }}>in your market.</span>
           </h1>
           <p style={{ fontSize: "16px", color: "#4a5568", lineHeight: 1.7, margin: 0 }}>
-            We&apos;ll run your Citation Score — a 0–100 measure of your AI visibility — and show you exactly how you compare to the top agent in your market.
+            We&apos;ll run your Citation Score — a 0–100 measure of your AI citation visibility — and show you exactly how you compare to the top agent in your market.
           </p>
         </div>
 
@@ -182,7 +182,7 @@ export default function ScanPage() {
         </div>
 
         <p style={{ fontSize: "12px", color: "#94a3b8", textAlign: "center", margin: "24px 0 0", lineHeight: 1.6 }}>
-          Cited · AI Visibility for Professionals · Powered by PRISM™
+          Cited · AI Citation Optimization™ for Professionals · Powered by PRISM™
         </p>
       </main>
     </div>

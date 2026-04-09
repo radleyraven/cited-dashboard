@@ -642,7 +642,7 @@ export default function BestLuxuryAgentsCarmelValley2026() {
               <span style={{ fontWeight: 700, color: '#0A1929' }}>
                 Is your name missing from this list?
               </span>{' '}
-              Learn about Cited&apos;s AI visibility optimization for Carmel Valley agents.
+              Learn about Cited&apos;s AI Citation Optimization™ for Carmel Valley agents.
             </div>
             <a
               href="/how-it-works"
