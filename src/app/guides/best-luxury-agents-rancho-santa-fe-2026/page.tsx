@@ -176,7 +176,7 @@ export default function BestLuxuryAgentsRanchoSantaFe2026() {
         <div
           style={{
             height: '3px',
-            background: 'linear-gradient(90deg, #D4A830 0%, #00BFA6 100%)',
+            background: 'linear-gradient(90deg, #00BFA6, #D4A830, #00BFA6)',
           }}
         />
 
@@ -308,7 +308,7 @@ export default function BestLuxuryAgentsRanchoSantaFe2026() {
               <div
                 style={{
                   height: '4px',
-                  background: 'linear-gradient(90deg, #00BFA6, #0A1929)',
+                  background: 'linear-gradient(90deg, #00BFA6, #D4A830, #00BFA6)',
                 }}
               />
 

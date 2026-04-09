@@ -63,7 +63,7 @@ export default function ThirtyDaysPage() {
           Powered by <span style={{ color: '#00BFA6', fontWeight: 700 }}>PRISM</span>
         </div>
       </header>
-      <div style={{ height: '3px', background: 'linear-gradient(90deg, #D4A830 0%, #00BFA6 100%)' }} />
+      <div style={{ height: '3px', background: 'linear-gradient(90deg, #00BFA6, #D4A830, #00BFA6)' }} />
 
       <main style={{ maxWidth: '680px', margin: '0 auto', padding: '40px 20px 56px' }}>
 

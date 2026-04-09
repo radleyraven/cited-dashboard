@@ -379,7 +379,7 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
       </header>
 
       {/* Gold accent line */}
-      <div style={{ height: '3px', background: 'linear-gradient(90deg, #D4A830 0%, #00BFA6 100%)' }} />
+      <div style={{ height: '3px', background: 'linear-gradient(90deg, #00BFA6, #D4A830, #00BFA6)' }} />
 
       <main style={{ maxWidth: '660px', margin: '0 auto', padding: '36px 20px 48px' }}>
 

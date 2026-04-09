@@ -79,7 +79,7 @@ export default function ScanPage() {
         </div>
         <div style={{ fontSize: "11px", color: "#4a6380" }}>Powered by <span style={{ color: "#00BFA6", fontWeight: 700 }}>PRISM™</span></div>
       </header>
-      <div style={{ height: "3px", background: "linear-gradient(90deg, #D4A830 0%, #00BFA6 100%)" }} />
+      <div style={{ height: "3px", background: "linear-gradient(90deg, #00BFA6, #D4A830, #00BFA6)" }} />
 
       <main style={{ maxWidth: "480px", margin: "0 auto", padding: "48px 20px 64px" }}>
 

@@ -57,7 +57,7 @@ export default function LandingPage() {
         </div>
         <div style={{ fontSize: '11px', color: '#4a6380' }}>Powered by <span style={{ color: '#00BFA6', fontWeight: 700 }}>PRISM™</span></div>
       </header>
-      <div style={{ height: '3px', background: 'linear-gradient(90deg, #D4A830 0%, #00BFA6 100%)' }} />
+      <div style={{ height: '3px', background: 'linear-gradient(90deg, #00BFA6, #D4A830, #00BFA6)' }} />
 
       {/* ── HERO ── */}
       <section style={{ background: '#0A1929', padding: '72px 28px 80px', textAlign: 'center' }}>
@@ -392,7 +392,7 @@ export default function LandingPage() {
 
       {/* ── FOOTER ── */}
       <footer style={{ background: '#0A1929', padding: '32px 28px', textAlign: 'center' }}>
-        <div style={{ height: '2px', background: 'linear-gradient(90deg, #D4A830 0%, #00BFA6 100%)', marginBottom: '24px', borderRadius: '1px' }} />
+        <div style={{ height: '2px', background: 'linear-gradient(90deg, #00BFA6, #D4A830, #00BFA6)', marginBottom: '24px', borderRadius: '1px' }} />
         <div style={{ fontSize: '13px', color: '#4a6380', lineHeight: 2 }}>
           <div style={{ marginBottom: '8px' }}>
             <a href="/privacy" style={{ color: '#4a6380', textDecoration: 'none', marginRight: '20px' }}>Privacy Policy</a>
