@@ -443,7 +443,7 @@ export default function MarketsPage() {
                   color: '#475569',
                   lineHeight: 1.5,
                 }}>
-                  <strong>Why this tier:</strong> {market.evidence}
+                  {market.evidence}
                 </div>
               </div>
             </div>
