@@ -319,7 +319,7 @@ export default function MarketsPage() {
 
         {/* Approve All Button (top) */}
         {!allApproved && !changeSubmitted && (
-          <div style={{ marginBottom: '20px', textAlign: 'right' }}>
+          <div style={{ marginBottom: '20px', textAlign: 'center' }}>
             <button
               onClick={approveAll}
               disabled={allMarketApproved}
