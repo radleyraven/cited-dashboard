@@ -14,19 +14,22 @@ import { createSupabaseBrowserClient } from "@/lib/supabase-browser";
 // ── Platform definitions ───────────────────────────────────────
 
 const PLATFORMS = [
-  { key: "gbp", label: "Google Business Profile", badge: "🔴 Tier 1 — Highest AI Impact", statusKey: "gbpStatus", urlKey: null, note: "No URL needed — we find your listing" },
-  { key: "linkedin", label: "LinkedIn", badge: "🔴 Tier 1 — All AI Models", statusKey: "linkedinStatus", urlKey: "linkedinUrl" },
-  { key: "yelp", label: "Yelp", badge: "🔴 Tier 1 — Perplexity Source", statusKey: "yelpStatus", urlKey: "yelpUrl" },
-  { key: "bing", label: "Bing Places", badge: "🔴 Tier 1 — ChatGPT Source", statusKey: "bingStatus", urlKey: "bingUrl" },
-  { key: "foursquare", label: "Foursquare", badge: "🟡 Tier 2 — Feeds ChatGPT", statusKey: "foursquareStatus", urlKey: "foursquareUrl" },
-  { key: "zillow", label: "Zillow", badge: "🟡 Tier 2", statusKey: "zillowStatus", urlKey: "zillowUrl" },
-  { key: "realtor", label: "Realtor.com", badge: "🟡 Tier 2", statusKey: "realtorStatus", urlKey: "realtorUrl" },
-  { key: "youtube", label: "YouTube", badge: "🟡 Tier 2", statusKey: "youtubeStatus", urlKey: "youtubeUrl" },
-  { key: "fastexpert", label: "FastExpert", badge: "🟡 Tier 2 — Best Of", statusKey: "fastexpertStatus", urlKey: "fastexpertUrl" },
-  { key: "homelight", label: "HomeLight", badge: "🟢 Tier 3 — Best Of", statusKey: "homelightStatus", urlKey: "homelightUrl" },
-  { key: "apple", label: "Apple Business Connect", badge: "🟢 Tier 3 — Siri & Maps", statusKey: "appleStatus", urlKey: "appleUrl" },
-  { key: "homescom", label: "Homes.com", badge: "🟢 Tier 3", statusKey: "homescomStatus", urlKey: "homescomUrl" },
+  { key: "gbp", label: "Google Business Profile", impact: "high" as const, statusKey: "gbpStatus", urlKey: null, note: "No URL needed — we find your listing" },
+  { key: "linkedin", label: "LinkedIn", impact: "high" as const, statusKey: "linkedinStatus", urlKey: "linkedinUrl" },
+  { key: "yelp", label: "Yelp", impact: "high" as const, statusKey: "yelpStatus", urlKey: "yelpUrl" },
+  { key: "bing", label: "Bing Places", impact: "high" as const, statusKey: "bingStatus", urlKey: "bingUrl" },
+  { key: "foursquare", label: "Foursquare", impact: "medium" as const, statusKey: "foursquareStatus", urlKey: "foursquareUrl" },
+  { key: "zillow", label: "Zillow", impact: "medium" as const, statusKey: "zillowStatus", urlKey: "zillowUrl" },
+  { key: "realtor", label: "Realtor.com", impact: "medium" as const, statusKey: "realtorStatus", urlKey: "realtorUrl" },
+  { key: "youtube", label: "YouTube", impact: "medium" as const, statusKey: "youtubeStatus", urlKey: "youtubeUrl" },
+  { key: "fastexpert", label: "FastExpert", impact: "medium" as const, statusKey: "fastexpertStatus", urlKey: "fastexpertUrl" },
+  { key: "homelight", label: "HomeLight", impact: "supporting" as const, statusKey: "homelightStatus", urlKey: "homelightUrl" },
+  { key: "apple", label: "Apple Business Connect", impact: "supporting" as const, statusKey: "appleStatus", urlKey: "appleUrl" },
+  { key: "homescom", label: "Homes.com", impact: "supporting" as const, statusKey: "homescomStatus", urlKey: "homescomUrl" },
 ] as const;
+
+const IMPACT_LABELS = { high: "High Impact", medium: "Medium Impact", supporting: "Supporting" } as const;
+const IMPACT_COLORS = { high: "#dc2626", medium: "#ca8a04", supporting: "#16a34a" } as const;
 
 const PLATFORM_START_CARD = 12;
 const REVIEW_CARD = PLATFORM_START_CARD + PLATFORMS.length; // 24
@@ -382,28 +385,16 @@ function IntakeForm() {
 
   return (
     <div style={{ minHeight: "100vh", background: isCelebration ? "#0A1929" : "#f8f9fa" }}>
-      {/* Progress bar + step indicator */}
+      {/* Top header - CITED logo + step */}
       {!isCelebration && (
-        <div style={{ position: "sticky", top: 0, zIndex: 50, background: "#0A1929", borderBottom: "1px solid rgba(255,255,255,0.1)" }}>
-          <div style={{ padding: "12px 20px 8px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <div style={{ position: "sticky", top: 0, zIndex: 50, background: "#0A1929", padding: "12px 20px" }}>
+          <div style={{ maxWidth: "640px", margin: "0 auto", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
             <span style={{ color: "#00BFA6", fontSize: "15px", fontWeight: 800, letterSpacing: "1.5px" }}>CITED</span>
             <span style={{ color: "#94a3b8", fontSize: "13px" }}>
               Step {Math.min(currentCard, TOTAL_CARDS - 1)} of {TOTAL_CARDS - 1}
-              {getCardTitle(currentCard) && ` \u2014 ${getCardTitle(currentCard)}`}
+              {getCardTitle(currentCard) && ` — ${getCardTitle(currentCard)}`}
             </span>
           </div>
-          <div style={{ height: "8px", background: "#1e293b" }}>
-            <div style={{
-              height: "100%", background: "linear-gradient(90deg, #00BFA6, #00e6c8)",
-              width: `${progressPercent}%`, transition: "width 0.4s ease",
-              borderRadius: "0 4px 4px 0",
-            }} />
-          </div>
-          {preFillCount > 0 && currentCard <= 2 && (
-            <div style={{ padding: "6px 20px", background: "rgba(0,191,166,0.06)", borderTop: "1px solid rgba(0,191,166,0.1)" }}>
-              <span style={{ color: "#00BFA6", fontSize: "12px" }}>{preFillCount} fields confirmed from your audit</span>
-            </div>
-          )}
         </div>
       )}
 
@@ -415,12 +406,30 @@ function IntakeForm() {
         display: isCelebration ? "flex" : "block",
         flexDirection: "column", justifyContent: "center",
       }}>
+        {/* Progress bar — above card, same width */}
+        {!isCelebration && (
+          <div style={{ marginBottom: "4px" }}>
+            <div style={{ height: "6px", background: "#e2e8f0", borderRadius: "3px", overflow: "hidden" }}>
+              <div style={{
+                height: "100%", background: "linear-gradient(90deg, #00BFA6, #00e6c8)",
+                width: `${progressPercent}%`, transition: "width 0.4s ease",
+                borderRadius: "3px",
+              }} />
+            </div>
+            {preFillCount > 0 && currentCard <= 2 && (
+              <p style={{ fontSize: "12px", color: "#00BFA6", margin: "6px 0 0", textAlign: "right" }}>
+                {preFillCount} fields from your audit
+              </p>
+            )}
+          </div>
+        )}
+
         {/* Back button */}
         {currentCard > 1 && !isCelebration && (
           <button onClick={back} style={{
             background: "none", border: "none", color: "#64748b", fontSize: "13px",
             cursor: "pointer", padding: "8px 0", marginBottom: "8px",
-          }}>{"\u2190 Back"}</button>
+          }}>{"← Back"}</button>
         )}
 
         {/* Validation errors */}
@@ -482,7 +491,7 @@ function renderCardContent(p: CardProps) {
         <FieldGroup label="Email" required>
           <TextInput value={form.email} onChange={(v) => set("email", v)} type="email" />
         </FieldGroup>
-        <FieldGroup label="Phone" required hint="For copy kit coordination and onboarding">
+        <FieldGroup label="Phone" required>
           <TextInput value={form.phone} onChange={(v) => set("phone", v)} type="tel" />
         </FieldGroup>
       </Fields>
@@ -501,11 +510,11 @@ function renderCardContent(p: CardProps) {
         <FieldGroup label="Title / Role" hint="e.g., Luxury Real Estate Agent">
           <TextInput value={form.title} onChange={(v) => set("title", v)} />
         </FieldGroup>
-        <FieldGroup label="License #" required hint="CA DRE # \u2014 required on all advertising">
+        <FieldGroup label="License #" required hint="CA DRE # — required on all advertising">
           <TextInput value={form.licenseNumber} onChange={(v) => set("licenseNumber", v)} />
         </FieldGroup>
         <FieldGroup label="Brokerage office address" prefilled={isPrefilled("brokerageAddress")}
-          hint="Must match exactly across all platforms \u2014 AI uses this to verify you">
+          hint="Must match exactly across all platforms — AI uses this to verify you">
           <TextInput value={form.brokerageAddress} onChange={(v) => set("brokerageAddress", v)} />
         </FieldGroup>
         <FieldGroup label="Years in your market">
@@ -522,7 +531,7 @@ function renderCardContent(p: CardProps) {
   // ── Card 3: Micro-Reward ───────────────────────────────────
   if (cardId === 3) return (
     <MicroReward
-      message="Great start \u2014 CITED can now begin building your optimization plan."
+      message="Great start — CITED can now begin building your optimization plan."
       nextHint="Next up: your markets and what makes you different."
       onContinue={next}
     />
@@ -533,14 +542,14 @@ function renderCardContent(p: CardProps) {
     <div>
       <CardHeader title="Where do you work?" subtitle="These markets drive all your AI visibility targeting." />
       <Fields>
-        <FieldGroup label="Primary markets \u2014 cities" required prefilled={isPrefilled("primaryMarkets")}
-          hint="e.g., Carmel Valley, Carlsbad, Rancho Santa Fe">
+        <FieldGroup label="Primary markets — cities" required prefilled={isPrefilled("primaryMarkets")}
+          hint="List 1–3 cities (e.g., Carmel Valley, Carlsbad, Rancho Santa Fe)">
           <TextArea value={form.primaryMarkets} onChange={(v) => set("primaryMarkets", v)} rows={2} />
         </FieldGroup>
-        <FieldGroup label="Market ZIP codes" hint="List 1\u20135, comma separated (e.g., 92130, 92009, 92067)">
+        <FieldGroup label="Market ZIP codes" hint="List 1–5 ZIP codes, comma separated (e.g., 92130, 92009, 92067)">
           <TextArea value={form.primaryMarketZips} onChange={(v) => set("primaryMarketZips", v)} rows={2} />
         </FieldGroup>
-        <FieldGroup label="Specific neighborhoods" hint="The more specific, the better \u2014 feeds directly into AI query targeting">
+        <FieldGroup label="Specific neighborhoods" hint="List 3–5 neighborhoods you specialize in">
           <TextArea value={form.neighborhoods} onChange={(v) => set("neighborhoods", v)} rows={2}
             placeholder="e.g., Pacific Highlands Ranch, La Costa Oaks, Bird Rock" />
         </FieldGroup>
@@ -559,7 +568,7 @@ function renderCardContent(p: CardProps) {
           <TextInput value={form.brokerageProfileUrl} onChange={(v) => set("brokerageProfileUrl", v)} type="url"
             placeholder="https://yourbrokerage.com/agents/your-name" />
         </FieldGroup>
-        <FieldGroup label="Personal agent website" hint="Your own domain \u2014 highest AI citation value. Leave blank if not live.">
+        <FieldGroup label="Personal agent website" hint="Your own domain — highest AI citation value. Leave blank if not live.">
           <TextInput value={form.personalWebsiteUrl} onChange={(v) => set("personalWebsiteUrl", v)} type="url"
             placeholder="https://yourname.com" />
         </FieldGroup>
@@ -588,8 +597,8 @@ function renderCardContent(p: CardProps) {
   // ── Card 7: Micro-Reward ───────────────────────────────────
   if (cardId === 7) return (
     <MicroReward
-      message={`We'll focus your Full PRISM Scan on your top 1\u20132 markets \u2014 where opportunity meets your activity \u2014 and run quick checks on the rest. Maximum impact, no wasted effort.`}
-      nextHint="Next up: the most important question \u2014 what makes you different."
+      message="We'll focus your Full PRISM Scan on your top 1–3 markets — where opportunity meets your activity — and run quick checks on the rest. Maximum impact, no wasted effort."
+      nextHint="Next up: the most important question — what makes you different."
       onContinue={next}
     />
   );
@@ -599,12 +608,12 @@ function renderCardContent(p: CardProps) {
     <div>
       <CardHeader title="What makes you different?"
         subtitle="This is the most important question. It feeds your entire positioning." />
-      <FieldGroup label="" hint="Think about: your approach, your track record, what you do that others don't. Even 1\u20132 sentences helps \u2014 we'll craft your positioning statement from this.">
+      <FieldGroup label="" hint="Think about: your approach, your track record, what you do that others don't. Even 1–2 sentences helps — we'll craft your positioning statement from this.">
         <TextArea value={form.differentiator} onChange={(v) => set("differentiator", v)} rows={4}
           placeholder={'e.g., "I specialize in off-market properties in RSF" or "My clients\u2019 homes sell 15% faster than market average."'} />
       </FieldGroup>
       <NextButton onClick={next} />
-      <SkipButton onClick={() => skip("differentiator")} label={"Skip for now \u2014 I'll think about this \u2192"} />
+      <SkipButton onClick={() => skip("differentiator")} label={"Skip for now — I'll think about this →"} />
     </div>
   );
 
@@ -612,7 +621,7 @@ function renderCardContent(p: CardProps) {
   if (cardId === 9) return (
     <div>
       <CardHeader title="What do clients say about you?"
-        subtitle="This helps us write in your voice \u2014 not a generic agent voice." />
+        subtitle="This helps us write in your voice — not a generic agent voice." />
       <FieldGroup label="" hint="What's the compliment you hear most? What do clients tell their friends?">
         <TextArea value={form.voiceCapture} onChange={(v) => set("voiceCapture", v)} rows={3}
           placeholder={'e.g., "Clients always say I made a stressful process feel easy."'} />
@@ -637,7 +646,7 @@ function renderCardContent(p: CardProps) {
                 updated[i] = v;
                 set("transactions", updated);
               }}
-              placeholder='e.g., 7911 Calle Posada, Carlsbad \u2014 $2.1M \u2014 Sold 8% above asking in 12 days' />
+              placeholder='e.g., 7911 Calle Posada, Carlsbad — $2.1M — Sold 8% above asking in 12 days' />
           </FieldGroup>
         ))}
         {form.transactions.length < 3 && (
@@ -652,11 +661,11 @@ function renderCardContent(p: CardProps) {
           {form.mlsDoneForYou ? (
             <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
               <span style={{ color: "#00BFA6", fontSize: "16px" }}>&#10003;</span>
-              <span style={{ fontSize: "13px", color: "#0A1929", fontWeight: 500 }}>Done \u2014 we pull your MLS data directly</span>
+              <span style={{ fontSize: "13px", color: "#0A1929", fontWeight: 500 }}>Done — we pull your MLS data directly</span>
             </div>
           ) : (
-            <FieldGroup label="Upload MLS data" hint="CSV, PDF, or Excel \u2014 we'll extract stats automatically">
-              <FileInput accept=".csv,.pdf,.xlsx,.xls" file={form.mlsFile} onChange={(f) => set("mlsFile", f)} icon={"\uD83D\uDCCE"} />
+            <FieldGroup label="Upload MLS data" hint="CSV, PDF, or Excel — we'll extract stats automatically">
+              <FileInput accept=".csv,.pdf,.xlsx,.xls" file={form.mlsFile} onChange={(f) => set("mlsFile", f)} icon={"📎"} />
             </FieldGroup>
           )}
         </div>
@@ -671,11 +680,11 @@ function renderCardContent(p: CardProps) {
     <div>
       <CardHeader title="Your photos" subtitle="We'll resize for all 12 platforms. You can always add these later." />
       <Fields>
-        <FieldGroup label="Professional headshot" hint="Minimum 400\u00d7400px, JPG or PNG">
-          <FileInput accept="image/*" file={form.headshotFile} onChange={(f) => set("headshotFile", f)} icon={"\uD83D\uDCF7"} label="Choose headshot" />
+        <FieldGroup label="Professional headshot" hint="Minimum 400×400px, JPG or PNG">
+          <FileInput accept="image/*" file={form.headshotFile} onChange={(f) => set("headshotFile", f)} icon={"📷"} label="Choose headshot" />
         </FieldGroup>
-        <FieldGroup label="Landscape / market photo" hint="One great shot \u2014 property, neighborhood, or market. We'll create all banners from this.">
-          <FileInput accept="image/*" file={form.landscapeFile} onChange={(f) => set("landscapeFile", f)} icon={"\uD83D\uDDBC"} label="Choose landscape photo" />
+        <FieldGroup label="Landscape / market photo" hint="One great shot — property, neighborhood, or market. We'll create all banners from this.">
+          <FileInput accept="image/*" file={form.landscapeFile} onChange={(f) => set("landscapeFile", f)} icon={"🖼"} label="Choose landscape photo" />
         </FieldGroup>
       </Fields>
       <NextButton onClick={next} />
@@ -683,7 +692,7 @@ function renderCardContent(p: CardProps) {
         if (!form.headshotFile) p.addSkipped("headshot");
         if (!form.landscapeFile) p.addSkipped("landscape_photo");
         skip();
-      }} label={"Skip \u2014 I'll add photos later \u2192"} />
+      }} label={"Skip — I'll add photos later →"} />
     </div>
   );
 
@@ -698,9 +707,9 @@ function renderCardContent(p: CardProps) {
     return (
       <div>
         <div style={{ marginBottom: "20px" }}>
-          <h2 style={{ fontSize: "22px", fontWeight: 800, color: "#0A1929", margin: "0 0 4px" }}>{plat.label}</h2>
-          <span style={{ fontSize: "12px", fontWeight: 600, color: plat.badge.startsWith("\uD83D\uDD34") ? "#dc2626" : plat.badge.startsWith("\uD83D\uDFE1") ? "#ca8a04" : "#16a34a" }}>
-            {plat.badge}
+          <h2 style={{ fontSize: "22px", fontWeight: 800, color: "#0A1929", margin: "0 0 6px" }}>{plat.label}</h2>
+          <span style={{ fontSize: "11px", fontWeight: 700, color: IMPACT_COLORS[plat.impact], background: `${IMPACT_COLORS[plat.impact]}10`, padding: "3px 10px", borderRadius: "10px", letterSpacing: "0.3px" }}>
+            {IMPACT_LABELS[plat.impact]}
           </span>
         </div>
 
@@ -735,7 +744,7 @@ function renderCardContent(p: CardProps) {
         )}
 
         {statusVal === "yes" && <NextButton onClick={next} />}
-        {!statusVal && <SkipButton onClick={() => { skip(plat.key + "_platform"); }} label="Skip \u2014 CITED will find it \u2192" />}
+        {!statusVal && <SkipButton onClick={() => { skip(plat.key + "_platform"); }} label="Skip — CITED will find it →" />}
       </div>
     );
   }
@@ -743,7 +752,7 @@ function renderCardContent(p: CardProps) {
   // ── Card 24: Review Preferences ────────────────────────────
   if (cardId === REVIEW_CARD) return (
     <div>
-      <CardHeader title="Where should we help drive reviews?" subtitle="We'll include review links in your copy kit. Start with 1\u20132." />
+      <CardHeader title="Where should we help drive reviews?" subtitle="We'll include review links in your copy kit. Start with 1–2." />
       <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
         {REVIEW_OPTIONS.map((platform) => (
           <label key={platform} style={{
@@ -778,24 +787,24 @@ function renderCardContent(p: CardProps) {
         <SummarySection title="About You" onEdit={() => jumpTo(1)}>
           <SumRow label="Name" value={form.fullName} />
           <SumRow label="Email" value={form.email} />
-          <SumRow label="Phone" value={form.phone || "\u2014"} />
+          <SumRow label="Phone" value={form.phone || "—"} />
           <SumRow label="Brokerage" value={form.brokerage} />
           <SumRow label="License" value={form.licenseNumber} />
         </SummarySection>
         <SummarySection title="Markets & Audience" onEdit={() => jumpTo(4)}>
           <SumRow label="Markets" value={form.primaryMarkets} />
-          <SumRow label="ZIP codes" value={form.primaryMarketZips || "\u2014"} />
-          <SumRow label="Neighborhoods" value={form.neighborhoods || "\u2014"} />
-          <SumRow label="Focus" value={form.audienceFocus === "sellers" ? "Primarily sellers" : form.audienceFocus === "buyers" ? "Primarily buyers" : form.audienceFocus === "both" ? "Both equally" : "\u2014"} />
+          <SumRow label="ZIP codes" value={form.primaryMarketZips || "—"} />
+          <SumRow label="Neighborhoods" value={form.neighborhoods || "—"} />
+          <SumRow label="Focus" value={form.audienceFocus === "sellers" ? "Primarily sellers" : form.audienceFocus === "buyers" ? "Primarily buyers" : form.audienceFocus === "both" ? "Both equally" : "—"} />
         </SummarySection>
         <SummarySection title="Your Story" onEdit={() => jumpTo(8)}>
-          <SumRow label="What makes you different" value={form.differentiator ? (form.differentiator.length > 80 ? form.differentiator.slice(0, 80) + "..." : form.differentiator) : "\u26A0\uFE0F Skipped"} />
+          <SumRow label="What makes you different" value={form.differentiator ? (form.differentiator.length > 80 ? form.differentiator.slice(0, 80) + "..." : form.differentiator) : "⚠️ Skipped"} />
           <SumRow label="Client voice" value={form.voiceCapture ? (form.voiceCapture.length > 60 ? form.voiceCapture.slice(0, 60) + "..." : form.voiceCapture) : "Skipped"} />
           <SumRow label="Notable deals" value={form.transactions.filter(Boolean).length > 0 ? `${form.transactions.filter(Boolean).length} provided` : "Skipped"} />
         </SummarySection>
         <SummarySection title="Photos & Platforms" onEdit={() => jumpTo(11)}>
-          <SumRow label="Headshot" value={form.headshotFile ? "\u2705 Uploaded" : "\u26A0\uFE0F Not yet"} />
-          <SumRow label="Landscape" value={form.landscapeFile ? "\u2705 Uploaded" : "Not yet"} />
+          <SumRow label="Headshot" value={form.headshotFile ? "✅ Uploaded" : "⚠️ Not yet"} />
+          <SumRow label="Landscape" value={form.landscapeFile ? "✅ Uploaded" : "Not yet"} />
           <SumRow label="Platforms" value={`${countPlatformsConfirmed(form)} confirmed`} />
         </SummarySection>
 
@@ -810,7 +819,7 @@ function renderCardContent(p: CardProps) {
 
       <p style={{ fontSize: "12px", color: "#94a3b8", textAlign: "center", margin: "20px 0 12px", lineHeight: 1.6 }}>
         Your data is used exclusively to optimize your AI visibility. We never share or sell your information.{" "}
-        <a href="/privacy" style={{ color: "#64748b" }}>Privacy Policy</a>{" \u00b7 "}
+        <a href="/privacy" style={{ color: "#64748b" }}>Privacy Policy</a>{" · "}
         <a href="/terms" style={{ color: "#64748b" }}>Terms</a>
       </p>
 
@@ -818,7 +827,7 @@ function renderCardContent(p: CardProps) {
         <input type="checkbox" checked={form.termsAccepted} onChange={(e) => set("termsAccepted", e.target.checked)}
           style={{ accentColor: "#00BFA6", width: "18px", height: "18px", marginTop: "2px", flexShrink: 0 }} />
         <span style={{ fontSize: "13px", color: "#0A1929", lineHeight: 1.5 }}>
-          I agree to Cited&apos;s <a href="/terms" style={{ color: "#00BFA6" }}>Terms of Service</a> and{" "}
+          I agree to CITED&apos;s <a href="/terms" style={{ color: "#00BFA6" }}>Terms of Service</a> and{" "}
           <a href="/privacy" style={{ color: "#00BFA6" }}>Privacy Policy</a>, and understand the first 90 days are free.
         </span>
       </label>
@@ -828,7 +837,7 @@ function renderCardContent(p: CardProps) {
         borderRadius: "10px", fontSize: "16px", fontWeight: 700, cursor: submitting ? "not-allowed" : "pointer",
         opacity: submitting ? 0.6 : 1,
       }}>
-        {submitting ? "Submitting..." : "Start My Optimization \u2192"}
+        {submitting ? "Submitting..." : "Start My Optimization →"}
       </button>
     </div>
   );
@@ -848,19 +857,19 @@ function renderCardContent(p: CardProps) {
       </div>
 
       <h1 style={{ fontSize: "28px", fontWeight: 800, color: "#fff", margin: "0 0 4px" }}>
-        You&apos;re all set.
+        We&apos;re on it.
       </h1>
-      <p style={{ fontSize: "18px", color: "#00BFA6", fontWeight: 600, margin: "0 0 28px" }}>
-        Welcome to CITED.
+      <p style={{ fontSize: "16px", color: "#00BFA6", fontWeight: 600, margin: "0 0 28px" }}>
+        Your business &amp; visibility audit has started.
       </p>
 
       {/* Next steps */}
       <div style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: "14px", padding: "24px", marginBottom: "24px", textAlign: "left" }}>
         <p style={{ fontSize: "11px", fontWeight: 700, color: "#64748b", letterSpacing: "1.5px", margin: "0 0 16px", textTransform: "uppercase" }}>What happens next</p>
         {[
-          ["\u2460", "Your positioning statement is being built now. You'll review it within 48 hours."],
-          ["\u2461", "Your optimized platform copy will be ready shortly after."],
-          ["\u2462", "Your first article brief arrives once positioning is approved."],
+          ["①", "We're analyzing your markets, your competitors, and your current AI footprint right now."],
+          ["②", "Your positioning statement will be ready for review within 48 hours."],
+          ["③", "Your optimized profiles and first article brief follow from there."],
         ].map(([num, text], i) => (
           <div key={i} style={{ display: "flex", gap: "14px", marginBottom: i < 2 ? "16px" : 0, alignItems: "flex-start" }}>
             <span style={{ color: "#00BFA6", fontWeight: 800, fontSize: "18px", flexShrink: 0, lineHeight: 1.3 }}>{num}</span>
@@ -869,8 +878,8 @@ function renderCardContent(p: CardProps) {
         ))}
       </div>
 
-      <p style={{ fontSize: "14px", color: "#94a3b8", margin: "0 0 24px", fontStyle: "italic" }}>
-        We handle 87% of the work. You provide 15 minutes a month.
+      <p style={{ fontSize: "14px", color: "#94a3b8", margin: "0 0 24px" }}>
+        We&apos;ll be in touch personally within 24 hours.
       </p>
 
       <GoogleSignInButton redirectTo="https://citedagent.com/auth/callback?next=/" />
@@ -883,7 +892,7 @@ function renderCardContent(p: CardProps) {
 
       <p style={{ fontSize: "13px", color: "#4a6380", margin: 0 }}>
         Check your email for a dashboard access link, or{" "}
-        <a href="/login" style={{ color: "#00BFA6", textDecoration: "none", fontWeight: 600 }}>go to the login page \u2192</a>
+        <a href="/login" style={{ color: "#00BFA6", textDecoration: "none", fontWeight: 600 }}>go to the login page →</a>
       </p>
     </div>
   );
@@ -942,7 +951,7 @@ function TextArea({ value, onChange, rows = 3, placeholder }: {
   );
 }
 
-function FileInput({ accept, file, onChange, icon = "\uD83D\uDCCE", label = "Choose file" }: {
+function FileInput({ accept, file, onChange, icon = "📎", label = "Choose file" }: {
   accept: string; file: File | null; onChange: (f: File | null) => void; icon?: string; label?: string;
 }) {
   return (
@@ -991,7 +1000,7 @@ function CardHeader({ title, subtitle }: { title: string; subtitle: string }) {
   );
 }
 
-function NextButton({ onClick, label = "Continue \u2192" }: { onClick: () => void; label?: string }) {
+function NextButton({ onClick, label = "Continue →" }: { onClick: () => void; label?: string }) {
   return (
     <button onClick={onClick} style={{
       width: "100%", padding: "14px", background: "#00BFA6", color: "#fff", border: "none",
@@ -1000,7 +1009,7 @@ function NextButton({ onClick, label = "Continue \u2192" }: { onClick: () => voi
   );
 }
 
-function SkipButton({ onClick, label = "Skip for now \u2192" }: { onClick: () => void; label?: string }) {
+function SkipButton({ onClick, label = "Skip for now →" }: { onClick: () => void; label?: string }) {
   return (
     <button onClick={onClick} style={{
       width: "100%", padding: "10px", background: "none", color: "#94a3b8",
@@ -1022,7 +1031,7 @@ function MicroReward({ message, nextHint, onContinue }: { message: string; nextH
       </div>
       <p style={{ fontSize: "15px", color: "#0A1929", lineHeight: 1.6, margin: "0 0 8px", fontWeight: 500 }}>{message}</p>
       <p style={{ fontSize: "13px", color: "#94a3b8", margin: "0 0 20px" }}>{nextHint}</p>
-      <NextButton onClick={onContinue} label="Keep going \u2192" />
+      <NextButton onClick={onContinue} label="Keep going →" />
     </div>
   );
 }
@@ -1066,11 +1075,11 @@ function SummarySection({ title, onEdit, children }: { title: string; onEdit: ()
 }
 
 function SumRow({ label, value }: { label: string; value: string }) {
-  const isWarning = value.includes("\u26A0");
+  const isWarning = value.includes("⚠");
   return (
-    <div style={{ display: "flex", fontSize: "13px", lineHeight: 1.5 }}>
-      <span style={{ color: "#94a3b8", width: "120px", flexShrink: 0 }}>{label}</span>
-      <span style={{ color: isWarning ? "#D4A830" : "#0A1929", fontWeight: isWarning ? 600 : 400, wordBreak: "break-word" }}>{value || "\u2014"}</span>
+    <div style={{ display: "flex", fontSize: "13px", lineHeight: 1.5, gap: "8px" }}>
+      <span style={{ color: "#94a3b8", minWidth: "100px", maxWidth: "140px", flexShrink: 0 }}>{label}</span>
+      <span style={{ color: isWarning ? "#D4A830" : "#0A1929", fontWeight: isWarning ? 600 : 400, wordBreak: "break-word" }}>{value || "—"}</span>
     </div>
   );
 }
