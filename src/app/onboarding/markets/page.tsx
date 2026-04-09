@@ -86,6 +86,7 @@ export default function MarketsPage() {
   const [loading, setLoading] = useState(false);
   const [clientName, setClientName] = useState('');
   const [authLoading, setAuthLoading] = useState(true);
+  const [userEmail, setUserEmail] = useState('');
   const router = useRouter();
 
   useEffect(() => {
@@ -100,6 +101,7 @@ export default function MarketsPage() {
       setAuthLoading(false);
       return;
     }
+    setUserEmail(user.email || '');
 
     // Try matching by email first, then by signup_email
     let data = null;
@@ -232,11 +234,23 @@ export default function MarketsPage() {
       {/* Header */}
       <div style={{
         background: '#0A1929',
-        padding: '24px 32px',
-        textAlign: 'center',
+        padding: '20px 32px',
       }}>
-        <div style={{ fontSize: '24px', fontWeight: 900, color: '#fff', letterSpacing: '2px', marginBottom: '4px' }}>CITED</div>
-        <div style={{ fontSize: '10px', fontWeight: 600, color: '#00BFA6', textTransform: 'uppercase', letterSpacing: '2.5px' }}>AI Citation Optimization™</div>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', maxWidth: '720px', margin: '0 auto' }}>
+          <div>
+            <div style={{ fontSize: '24px', fontWeight: 900, color: '#fff', letterSpacing: '2px', marginBottom: '2px' }}>CITED</div>
+            <div style={{ fontSize: '10px', fontWeight: 600, color: '#00BFA6', textTransform: 'uppercase', letterSpacing: '2.5px' }}>AI Citation Optimization™</div>
+          </div>
+          <div style={{ textAlign: 'right' }}>
+            {userEmail ? (
+              <div style={{ fontSize: '12px', color: '#64748b' }}>
+                <span style={{ color: '#94a3b8' }}>{userEmail}</span>
+              </div>
+            ) : (
+              <a href="/login" style={{ fontSize: '12px', color: '#00BFA6', textDecoration: 'none', fontWeight: 600 }}>Sign in</a>
+            )}
+          </div>
+        </div>
       </div>
       <div style={{ height: '3px', background: 'linear-gradient(90deg, #00BFA6, #D4A830, #00BFA6)' }} />
 
@@ -450,9 +464,42 @@ export default function MarketsPage() {
           );
         })}
 
+        {/* What Happens Next */}
+        {!allApproved && !changeSubmitted && (
+          <div style={{
+            background: '#f8f9fa',
+            borderRadius: '8px',
+            padding: '20px 24px',
+            marginTop: '32px',
+            marginBottom: '24px',
+          }}>
+            <div style={{ fontSize: '13px', fontWeight: 700, color: '#0A1929', marginBottom: '16px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>What happens next</div>
+            {[
+              { num: '1', title: 'Approve your markets', desc: 'Confirm or adjust — takes 30 seconds.' },
+              { num: '2', title: 'Confirm your neighborhoods', desc: "We'll show the specific neighborhoods within each market." },
+              { num: '3', title: 'Full PRISM Scan launches', desc: 'We test exactly what happens when someone asks AI "who\'s the best agent in your market?" — on every platform that matters. Results within 24 hours.' },
+            ].map((step, i) => (
+              <div key={step.num} style={{ display: 'flex', gap: '12px', marginBottom: i < 2 ? '12px' : 0 }}>
+                <div style={{
+                  width: '24px', height: '24px', minWidth: '24px',
+                  background: '#00BFA6', borderRadius: '50%',
+                  textAlign: 'center', lineHeight: '24px',
+                  color: '#fff', fontSize: '12px', fontWeight: 700,
+                }}>
+                  {step.num}
+                </div>
+                <div>
+                  <div style={{ fontSize: '14px', fontWeight: 600, color: '#0A1929' }}>{step.title}</div>
+                  <div style={{ fontSize: '13px', color: '#64748b' }}>{step.desc}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
         {/* Confirm + Continue Button */}
         {!allApproved && !changeSubmitted && (
-          <div style={{ marginTop: '32px' }}>
+          <div>
             <button
               onClick={handleConfirm}
               disabled={loading || approvedCount === 0}
