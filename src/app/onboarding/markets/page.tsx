@@ -287,7 +287,7 @@ export default function MarketsPage() {
           marginBottom: '32px',
           lineHeight: 1.6,
         }}>
-          Based on your transaction history, intake data, and our initial AI scan, we&apos;ve identified
+          Based on your transaction history, intake data, and our initial PRISM Scan, we&apos;ve identified
           three markets to focus your optimization. Approve each market individually, or approve all at once.
         </p>
 
