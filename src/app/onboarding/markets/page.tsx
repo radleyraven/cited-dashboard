@@ -229,6 +229,35 @@ export default function MarketsPage() {
     );
   }
 
+  // If not logged in, redirect to login with return URL
+  if (!userEmail) {
+    return (
+      <div style={{ minHeight: '100vh', background: '#f8f9fa', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ textAlign: 'center', padding: '40px', maxWidth: '400px' }}>
+          <div style={{ fontSize: '24px', fontWeight: 900, color: '#0A1929', letterSpacing: '2px', marginBottom: '8px' }}>CITED</div>
+          <div style={{ fontSize: '10px', fontWeight: 600, color: '#00BFA6', textTransform: 'uppercase', letterSpacing: '2.5px', marginBottom: '24px' }}>AI Citation Optimization™</div>
+          <p style={{ fontSize: '16px', color: '#0A1929', fontWeight: 600, marginBottom: '8px' }}>Sign in to view your market strategy</p>
+          <p style={{ fontSize: '14px', color: '#64748b', marginBottom: '24px' }}>Use the email address you signed up with.</p>
+          <a
+            href="/login?redirect=/onboarding/markets"
+            style={{
+              display: 'inline-block',
+              background: '#00BFA6',
+              color: '#fff',
+              fontSize: '15px',
+              fontWeight: 700,
+              padding: '12px 32px',
+              borderRadius: '8px',
+              textDecoration: 'none',
+            }}
+          >
+            Sign In →
+          </a>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div style={{ minHeight: '100vh', background: '#f8f9fa', padding: '0' }}>
       {/* Header */}
