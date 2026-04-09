@@ -99,7 +99,7 @@ export async function POST(request: Request) {
     const { data: existing } = await supabase
       .from("cited_intake")
       .select("id")
-      .or(`email.ilike.${signupEmail},email.ilike.${contactEmail}`)
+      .or(`email.eq.${signupEmail},email.eq.${contactEmail}`)
       .limit(1);
 
     const payload = {
