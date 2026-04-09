@@ -11,6 +11,8 @@ const PUBLIC_ROUTES = [
   "/30-days",
   "/intake",
   "/api/intake",
+  "/scan",
+  "/api/scan",
   "/copy-kit",
   "/guides",
   "/privacy",

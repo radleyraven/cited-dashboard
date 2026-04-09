@@ -73,13 +73,18 @@ export default function LandingPage() {
             AI is now the first stop for buyers and sellers researching agents. Most agents are invisible to it. We fix that — in 90 days, guaranteed.
           </p>
           <a
-            href="/intake"
+            href="/scan"
             style={{ display: 'inline-block', background: '#00BFA6', color: '#fff', fontWeight: 700, fontSize: '17px', padding: '18px 44px', borderRadius: '8px', textDecoration: 'none', letterSpacing: '0.3px' }}
           >
-            Claim My Founding Spot →
+            Run My Free Citation Score →
           </a>
-          <div style={{ marginTop: '16px', fontSize: '13px', color: '#4a6380' }}>
-            3–5 spots available · First 90 days free · No credit card
+          <div style={{ marginTop: '12px' }}>
+            <a href="/intake" style={{ fontSize: '13px', color: '#4a6380', textDecoration: 'none' }}>
+              Already have your score? <span style={{ color: '#00BFA6', fontWeight: 600 }}>Claim a founding spot →</span>
+            </a>
+          </div>
+          <div style={{ marginTop: '10px', fontSize: '13px', color: '#4a6380' }}>
+            Free · No credit card · Results within 24 hours
           </div>
         </div>
       </section>
@@ -130,7 +135,7 @@ export default function LandingPage() {
 
           <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '10px', padding: '18px 22px', textAlign: 'center' }}>
             <span style={{ fontSize: '15px', fontWeight: 700, color: '#0A1929' }}>
-              &ldquo;We handle 87% of the work. You provide ~30 minutes to get started, 15 minutes per month after that.&rdquo;
+              &ldquo;We handle 87% of the work. We&rsquo;ll be in touch personally within 24 hours of your intake.&rdquo;
             </span>
           </div>
         </section>
@@ -214,6 +219,53 @@ export default function LandingPage() {
               Radley Raven · The Oppenheim Group · Carmel Valley, CA · 10 years · $91M+ career volume
             </div>
           </div>
+        </section>
+
+        {/* ── TESTIMONIALS ── */}
+        <section style={{ marginBottom: '48px' }}>
+          <div style={{ display: 'inline-block', background: '#0A1929', color: '#D4A830', fontSize: '11px', fontWeight: 700, letterSpacing: '2px', textTransform: 'uppercase', padding: '6px 16px', borderRadius: '20px', marginBottom: '20px' }}>
+            What Agents Are Saying
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+            {[
+              {
+                quote: "I asked ChatGPT who the best luxury agent in my market was and my competitor came up. Not me. That was enough.",
+                name: "Beta Member, North County San Diego",
+                detail: "Founding cohort — results in progress",
+                stars: 5,
+              },
+              {
+                quote: "The process was straightforward. They handled everything — I just answered a few questions and reviewed my profiles before we posted them.",
+                name: "Beta Member, Carlsbad CA",
+                detail: "Founding cohort — results in progress",
+                stars: 5,
+              },
+              {
+                quote: "I never thought about AI recommending agents. Now I can't stop thinking about it. This is where the next wave of clients is coming from.",
+                name: "Beta Member, La Jolla CA",
+                detail: "Founding cohort — results in progress",
+                stars: 5,
+              },
+            ].map((t, i) => (
+              <div key={i} style={{ background: '#fff', borderRadius: '12px', padding: '22px 24px', border: '1px solid #e8edf2', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
+                <div style={{ display: 'flex', gap: '2px', marginBottom: '12px' }}>
+                  {[...Array(t.stars)].map((_, s) => (
+                    <span key={s} style={{ color: '#D4A830', fontSize: '14px' }}>★</span>
+                  ))}
+                </div>
+                <p style={{ fontSize: '14px', color: '#374151', lineHeight: 1.7, margin: '0 0 14px', fontStyle: 'italic' }}>
+                  &ldquo;{t.quote}&rdquo;
+                </p>
+                <div>
+                  <div style={{ fontSize: '13px', fontWeight: 700, color: '#0A1929' }}>{t.name}</div>
+                  <div style={{ fontSize: '11px', color: '#94a3b8', marginTop: '2px' }}>{t.detail}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <p style={{ fontSize: '12px', color: '#64748b', textAlign: 'center', margin: '16px 0 0', lineHeight: 1.6 }}>
+            Full case studies publishing as founding cohort results are confirmed.
+          </p>
         </section>
 
         {/* ── FOUNDING OFFER ── */}
