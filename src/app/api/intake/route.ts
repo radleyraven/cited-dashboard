@@ -110,6 +110,8 @@ export async function POST(request: Request) {
       title: body.title?.trim() || null,
       license_number: body.licenseNumber.trim(),
       brokerage_address: body.brokerageAddress?.trim() || null,
+      broker_dre: body.brokerDre?.trim() || null,
+      broker_name: body.brokerName?.trim() || null,
       brokerage_profile_url: body.brokerageProfileUrl?.trim() || null,
       personal_website_url: body.personalWebsiteUrl?.trim() || null,
       primary_markets: body.primaryMarkets.trim(),

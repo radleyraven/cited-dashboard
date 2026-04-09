@@ -42,6 +42,7 @@ const REVIEW_OPTIONS = ["Google Business Profile", "Yelp", "Zillow", "Realtor.co
 // Fields that came from PRISM scan (show "From your audit" badge)
 const PRISM_FOUND_FIELDS = new Set([
   "brokerage", "brokerageAddress", "primaryMarkets",
+  "brokerDre", "brokerName",
   "gbpUrl", "linkedinUrl", "zillowUrl", "yelpUrl", "realtorUrl",
   "fastexpertUrl", "youtubeUrl", "brokerageProfileUrl",
 ]);
@@ -58,6 +59,8 @@ type FormData = {
   brokerage: string;
   title: string;
   licenseNumber: string;
+  brokerDre: string;
+  brokerName: string;
   brokerageAddress: string;
   yearsInMarket: string;
   primaryMarkets: string;
@@ -105,6 +108,8 @@ function getInitialForm(sp: ReturnType<typeof useSearchParams>): FormData {
     brokerage: sp.get("brokerage") || "",
     title: "",
     licenseNumber: sp.get("licenseNumber") || "",
+    brokerDre: sp.get("brokerDre") || "",
+    brokerName: sp.get("brokerName") || "",
     brokerageAddress: sp.get("brokerageAddress") || "",
     yearsInMarket: sp.get("yearsInMarket") || "",
     primaryMarkets: sp.get("primaryMarkets") || "",
@@ -271,7 +276,7 @@ function IntakeForm() {
         body: JSON.stringify({
           signupEmail, fullName: f.fullName, email: f.email, phone: f.phone,
           brokerage: f.brokerage, title: f.title, licenseNumber: f.licenseNumber,
-          brokerageAddress: f.brokerageAddress, yearsInMarket: f.yearsInMarket,
+          brokerageAddress: f.brokerageAddress, brokerDre: f.brokerDre, brokerName: f.brokerName, yearsInMarket: f.yearsInMarket,
           primaryMarkets: f.primaryMarkets, primaryMarketZip: f.primaryMarketZips,
           neighborhoods: f.neighborhoods, brokerageProfileUrl: f.brokerageProfileUrl,
           personalWebsiteUrl: f.personalWebsiteUrl, audienceFocus: f.audienceFocus,
@@ -348,7 +353,7 @@ function IntakeForm() {
         body: JSON.stringify({
           signupEmail: form.signupEmail, fullName: form.fullName, email: form.email, phone: form.phone,
           brokerage: form.brokerage, title: form.title, licenseNumber: form.licenseNumber,
-          brokerageAddress: form.brokerageAddress, yearsInMarket: form.yearsInMarket,
+          brokerageAddress: form.brokerageAddress, brokerDre: form.brokerDre, brokerName: form.brokerName, yearsInMarket: form.yearsInMarket,
           primaryMarkets: form.primaryMarkets, primaryMarketZip: form.primaryMarketZips,
           neighborhoods: form.neighborhoods,
           brokerageProfileUrl: form.brokerageProfileUrl, personalWebsiteUrl: form.personalWebsiteUrl,
@@ -545,8 +550,11 @@ function renderCardContent(p: CardProps) {
         <FieldGroup label="Title / Role" hint="e.g., Luxury Real Estate Agent">
           <TextInput value={form.title} onChange={(v) => set("title", v)} />
         </FieldGroup>
-        <FieldGroup label="License #" required hint="CA DRE # — required on all advertising">
+        <FieldGroup label="Your DRE #" required hint="CA DRE # — required on all advertising">
           <TextInput value={form.licenseNumber} onChange={(v) => set("licenseNumber", v)} />
+        </FieldGroup>
+        <FieldGroup label="Broker DRE #" prefilled={isPrefilled("brokerDre")} hint="Your brokerage's license number — required on all advertising">
+          <TextInput value={form.brokerDre} onChange={(v) => set("brokerDre", v)} />
         </FieldGroup>
         <FieldGroup label="Brokerage office address" prefilled={isPrefilled("brokerageAddress")}
           hint="Must match exactly across all platforms — AI uses this to verify you">
