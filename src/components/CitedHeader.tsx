@@ -11,9 +11,11 @@
 type HeaderProps = {
   variant: 'onboarding' | 'dashboard';
   currentPage?: string;
-  stepIndicator?: string; // e.g., "Step 1 of 2 — Market Approval"
+  stepIndicator?: string;
   userEmail?: string;
   userName?: string;
+  clientTier?: 'founding_client' | 'standard' | 'premium';
+  clientTitle?: string; // e.g., "Oppenheim Group" or custom credential
 };
 
 const NAV_LINKS = [
@@ -24,7 +26,14 @@ const NAV_LINKS = [
   { label: 'Brief', href: '/brief' },
 ];
 
-export default function CitedHeader({ variant, currentPage, stepIndicator, userEmail, userName }: HeaderProps) {
+const TIER_BADGES: Record<string, { label: string; color: string; bg: string }> = {
+  founding_client: { label: '★ Founding Member', color: '#D4A830', bg: 'rgba(212,168,48,0.15)' },
+  standard: { label: '★ CITED Agent', color: '#00BFA6', bg: 'rgba(0,191,166,0.15)' },
+  premium: { label: '★★ Premium Agent', color: '#00BFA6', bg: 'rgba(0,191,166,0.15)' },
+};
+
+export default function CitedHeader({ variant, currentPage, stepIndicator, userEmail, userName, clientTier, clientTitle }: HeaderProps) {
+  const badge = clientTier ? TIER_BADGES[clientTier] : null;
   return (
     <>
       {/* Main Header Bar */}
@@ -68,15 +77,32 @@ export default function CitedHeader({ variant, currentPage, stepIndicator, userE
             </nav>
           )}
 
-          {/* Right: Auth */}
+          {/* Right: Client Identity */}
           <div style={{ textAlign: 'right' }}>
-            {userEmail ? (
+            {userName ? (
               <div>
-                {userName && (
-                  <div style={{ fontSize: '13px', fontWeight: 600, color: '#fff' }}>{userName}</div>
+                <div style={{ fontSize: '13px', fontWeight: 700, color: '#fff' }}>{userName}</div>
+                {clientTitle && (
+                  <div style={{ fontSize: '11px', color: '#94a3b8', marginTop: '1px' }}>{clientTitle}</div>
                 )}
-                <div style={{ fontSize: '11px', color: '#64748b' }}>{userEmail}</div>
+                {badge && (
+                  <div style={{
+                    display: 'inline-block',
+                    fontSize: '10px',
+                    fontWeight: 700,
+                    color: badge.color,
+                    background: badge.bg,
+                    padding: '2px 8px',
+                    borderRadius: '10px',
+                    marginTop: '4px',
+                    letterSpacing: '0.5px',
+                  }}>
+                    {badge.label}
+                  </div>
+                )}
               </div>
+            ) : userEmail ? (
+              <div style={{ fontSize: '11px', color: '#64748b' }}>{userEmail}</div>
             ) : (
               <a href="/login" style={{ fontSize: '13px', color: '#00BFA6', textDecoration: 'none', fontWeight: 600 }}>
                 Sign in

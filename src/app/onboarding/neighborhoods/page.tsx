@@ -76,6 +76,7 @@ function NeighborhoodsContent() {
   const [newHoodName, setNewHoodName] = useState('');
   const [clientName, setClientName] = useState('');
   const [clientEmail, setClientEmail] = useState('');
+  const [clientBrokerage, setClientBrokerage] = useState('');
   const [marketsApproved, setMarketsApproved] = useState(false);
   const [recordId, setRecordId] = useState('');
   const [tokenValid, setTokenValid] = useState(false);
@@ -95,7 +96,7 @@ function NeighborhoodsContent() {
     if (token) {
       const { data: d } = await supabase
         .from('cited_intake')
-        .select('id, full_name, email, markets_approved, neighborhoods_confirmed, neighborhood_data, onboarding_token_expires_at')
+        .select('id, full_name, email, brokerage, markets_approved, neighborhoods_confirmed, neighborhood_data, onboarding_token_expires_at')
         .eq('onboarding_token', token)
         .single();
       if (d) {
@@ -110,7 +111,7 @@ function NeighborhoodsContent() {
       if (user) {
         const { data: d } = await supabase
           .from('cited_intake')
-          .select('id, full_name, email, markets_approved, neighborhoods_confirmed, neighborhood_data')
+          .select('id, full_name, email, brokerage, markets_approved, neighborhoods_confirmed, neighborhood_data')
           .eq('email', user.email)
           .single();
         if (d) {
@@ -124,6 +125,7 @@ function NeighborhoodsContent() {
       setRecordId(data.id);
       setClientName(data.full_name || '');
       setClientEmail(data.email || '');
+      setClientBrokerage(data.brokerage || '');
       setMarketsApproved(!!data.markets_approved);
       if (data.neighborhoods_confirmed) setConfirmed(true);
       if (data.neighborhood_data) {
@@ -253,7 +255,9 @@ function NeighborhoodsContent() {
         variant="onboarding"
         stepIndicator="Step 2 of 2 — Neighborhood Confirmation"
         userEmail={clientEmail}
-        userName={firstName}
+        userName={clientName}
+        clientTitle={clientBrokerage}
+        clientTier="founding_client"
       />
 
       {/* Content */}

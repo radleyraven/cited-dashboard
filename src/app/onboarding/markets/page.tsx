@@ -59,6 +59,7 @@ function MarketsContent() {
   const [pageLoading, setPageLoading] = useState(true);
   const [clientName, setClientName] = useState('');
   const [clientEmail, setClientEmail] = useState('');
+  const [clientBrokerage, setClientBrokerage] = useState('');
   const [tokenValid, setTokenValid] = useState(false);
   const [recordId, setRecordId] = useState('');
   const router = useRouter();
@@ -76,7 +77,7 @@ function MarketsContent() {
       // Token-based auth (from email link)
       const { data } = await supabase
         .from('cited_intake')
-        .select('id, full_name, email, markets_approved, market_recommendations, onboarding_token_expires_at')
+        .select('id, full_name, email, brokerage, markets_approved, market_recommendations, onboarding_token_expires_at')
         .eq('onboarding_token', token)
         .single();
 
@@ -88,6 +89,7 @@ function MarketsContent() {
           setRecordId(data.id);
           setClientName(data.full_name || '');
           setClientEmail(data.email || '');
+          setClientBrokerage(data.brokerage || '');
           if (data.markets_approved) setAllApproved(true);
           if (data.market_recommendations) {
             try {
@@ -107,7 +109,7 @@ function MarketsContent() {
       if (user) {
         const { data } = await supabase
           .from('cited_intake')
-          .select('id, full_name, email, markets_approved, market_recommendations')
+          .select('id, full_name, email, brokerage, markets_approved, market_recommendations')
           .eq('email', user.email)
           .single();
 
@@ -116,6 +118,7 @@ function MarketsContent() {
           setRecordId(data.id);
           setClientName(data.full_name || '');
           setClientEmail(data.email || '');
+          setClientBrokerage(data.brokerage || '');
           if (data.markets_approved) setAllApproved(true);
           if (data.market_recommendations) {
             try {
@@ -144,9 +147,17 @@ function MarketsContent() {
 
   function approveAll() {
     setMarkets(prev => prev.map(m => ({ ...m, approved: true })));
+    // Auto-submit after brief visual confirmation
+    setTimeout(() => {
+      handleConfirmRef.current?.();
+    }, 800);
   }
 
+  const handleConfirmRef = { current: null as (() => void) | null };
+
   const allMarketApproved = markets.length > 0 && markets.every(m => m.approved);
+
+  handleConfirmRef.current = handleConfirm;
 
   async function handleConfirm() {
     if (!recordId) return;
@@ -235,7 +246,9 @@ function MarketsContent() {
         variant="onboarding"
         stepIndicator="Step 1 of 2 — Market Approval"
         userEmail={clientEmail}
-        userName={firstName}
+        userName={clientName}
+        clientTitle={clientBrokerage}
+        clientTier="founding_client"
       />
 
       {/* Content */}
@@ -288,7 +301,7 @@ function MarketsContent() {
               fontSize: '13px', fontWeight: 600, border: 'none', borderRadius: '6px',
               cursor: allMarketApproved ? 'default' : 'pointer',
             }}>
-              {allMarketApproved ? '✓ All Approved' : 'Approve All Markets'}
+              {allMarketApproved ? 'Saving & continuing...' : 'Approve All Markets'}
             </button>
           </div>
         )}
