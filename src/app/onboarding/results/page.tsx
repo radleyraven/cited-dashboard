@@ -8,7 +8,7 @@ import CitedHeader from '@/components/CitedHeader';
 import CitedFooter from '@/components/CitedFooter';
 
 /* ═══════════════════════════════════════════════════════════════
-   PRISM Scan Results — v5.0
+   Citation Report — v5.0
    April 10, 2026
 
    ALL client data pulled from Supabase scan_results JSON.
@@ -127,7 +127,7 @@ function StyledIcon({ letter, color, size = 36 }: { letter: string; color: strin
 
 /* ── Progress indicator ── */
 function ProgressIndicator() {
-  const steps = ['Your Results', 'Approve Strategy', 'Positioning', 'Copy Kit'];
+  const steps = ['Your Citation Report', 'Approve Strategy', 'Positioning', 'Copy Kit'];
   return (
     <div style={{
       display: 'flex', justifyContent: 'center', gap: '6px',
@@ -313,7 +313,7 @@ function ResultsContent() {
       <div style={{ minHeight: '100vh', background: '#f8f9fa', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <div style={{ textAlign: 'center', padding: '40px' }}>
           <div style={{ fontSize: '24px', fontWeight: 900, color: '#0A1929', letterSpacing: '2px' }}>CITED</div>
-          <p style={{ fontSize: '16px', color: '#64748b', marginTop: '16px' }}>Your scan results aren&apos;t ready yet. Check back soon.</p>
+          <p style={{ fontSize: '16px', color: '#64748b', marginTop: '16px' }}>Your Citation Report isn&apos;t ready yet. Check back soon.</p>
         </div>
       </div>
     );
@@ -330,7 +330,7 @@ function ResultsContent() {
       <div style={{ background: '#0A1929', padding: '44px 24px 40px', textAlign: 'center' }}>
         <div style={{ maxWidth: '680px', margin: '0 auto' }}>
           <div style={{ fontSize: '12px', color: '#00BFA6', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '14px' }}>
-            Your PRISM Scan is Complete
+            Your Citation Report is Ready
           </div>
           <h1 style={{ fontSize: '26px', fontWeight: 800, color: '#fff', lineHeight: 1.3, margin: '0 0 6px 0' }}>
             {firstName ? `${firstName}, here's what we found.` : "Here's what we found."}
