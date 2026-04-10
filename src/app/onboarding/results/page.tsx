@@ -372,17 +372,29 @@ function ResultsContent() {
         <div ref={el => { sectionRefs.current[0] = el; }} style={{ paddingTop: '36px' }}>
           <SectionHeader num="1" title="The Discovery Gap" color="#0A1929" />
           <p style={{ fontSize: '14px', color: '#64748b', margin: '0 0 16px 0', lineHeight: 1.5 }}>
-            We asked the top AI models sellers and buyers use today the exact questions they&apos;d ask. Here&apos;s what came back:
+            We asked the top AI models the exact questions a seller or buyer would ask when looking for an agent. Here&apos;s what came back for your primary market:
           </p>
 
-          <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '10px', padding: '18px', marginBottom: '14px' }}>
-            <div style={{ fontSize: '11px', fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '6px' }}>We asked {scan.ai_quote.model}:</div>
-            <div style={{ fontSize: '14px', fontWeight: 600, color: '#0A1929', fontStyle: 'italic', marginBottom: '10px', lineHeight: 1.5 }}>&ldquo;{scan.ai_quote.query}&rdquo;</div>
-            <div style={{ background: '#f8f9fa', borderRadius: '8px', padding: '12px 14px', borderLeft: '3px solid #EF4444', fontSize: '13px', color: '#475569', lineHeight: 1.6 }}>
-              &ldquo;{scan.ai_quote.response}&rdquo;
+          <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '12px', overflow: 'hidden', marginBottom: '14px', boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}>
+            {/* Query header */}
+            <div style={{ background: '#f8f9fa', padding: '12px 16px', borderBottom: '1px solid #e2e8f0' }}>
+              <div style={{ fontSize: '10px', fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '4px' }}>We asked {scan.ai_quote.model}:</div>
+              <div style={{ fontSize: '15px', fontWeight: 700, color: '#0A1929', fontStyle: 'italic', lineHeight: 1.4 }}>&ldquo;{scan.ai_quote.query}&rdquo;</div>
             </div>
-            <div style={{ marginTop: '10px', fontSize: '13px', color: '#EF4444', fontWeight: 600 }}>
-              Your name did not appear — in this query or any of the {scan.query_count} discovery queries we ran across all models.
+            {/* AI response */}
+            <div style={{ padding: '14px 16px', borderBottom: '1px solid #f1f5f9' }}>
+              <div style={{ fontSize: '10px', fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px' }}>AI Response:</div>
+              <div style={{ display: 'flex', gap: '10px' }}>
+                <div style={{ width: '3px', background: '#EF4444', borderRadius: '2px', flexShrink: 0 }} />
+                <div style={{ fontSize: '13px', color: '#475569', lineHeight: 1.6 }}>&ldquo;{scan.ai_quote.response}&rdquo;</div>
+              </div>
+            </div>
+            {/* Result */}
+            <div style={{ padding: '12px 16px', background: '#fff5f5', display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <div style={{ width: '20px', height: '20px', borderRadius: '50%', background: '#EF4444', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontSize: '12px' }}>✕</div>
+              <div style={{ fontSize: '13px', color: '#EF4444', fontWeight: 700, lineHeight: 1.4 }}>
+                Your name did not appear — in this query or any of the {scan.query_count} discovery queries we ran.
+              </div>
             </div>
           </div>
 
