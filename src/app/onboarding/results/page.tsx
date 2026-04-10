@@ -327,6 +327,68 @@ function ResultsContent() {
           </div>
         </div>
 
+        {/* D. MARKET STRATEGY */}
+        <div style={{ marginBottom: '24px' }}>
+          <h2 style={{ fontSize: '18px', fontWeight: 700, color: '#0A1929', margin: '0 0 8px 0' }}>Your Market Strategy</h2>
+          <p style={{ fontSize: '13px', color: '#64748b', marginBottom: '16px' }}>
+            Based on your scan results + transaction history, here&apos;s where we&apos;ll focus your optimization:
+          </p>
+          {markets.length > 0 ? markets.map(market => {
+            const tierConfig: Record<string, {label: string; color: string; icon: string}> = {
+              primary: { label: 'Primary Market', color: '#00BFA6', icon: '🎯' },
+              secondary: { label: 'Secondary Market', color: '#D4A830', icon: '📍' },
+              growth: { label: 'Growth Market', color: '#0A1929', icon: '🌱' },
+            };
+            const tier = tierConfig[market.tier] || tierConfig.primary;
+            return (
+              <div key={market.name} style={{
+                background: '#fff', border: '1px solid #e2e8f0', borderRadius: '8px',
+                padding: '16px', marginBottom: '8px', display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+              }}>
+                <div>
+                  <div style={{ fontSize: '16px', fontWeight: 700, color: '#0A1929' }}>{tier.icon} {market.name}</div>
+                  <div style={{ fontSize: '12px', color: '#94a3b8', marginTop: '2px' }}>{tier.label} · {market.txn_volume} · {market.txn_count} transactions</div>
+                  <div style={{ fontSize: '12px', color: '#64748b', marginTop: '4px' }}>{market.evidence}</div>
+                </div>
+              </div>
+            );
+          }) : (
+            <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '16px' }}>
+              <div>🎯 <strong>Carmel Valley</strong> — Primary Market · $44.8M · 11 transactions</div>
+              <div style={{ marginTop: '8px' }}>📍 <strong>Carlsbad</strong> — Secondary Market · $10.0M · 6 transactions</div>
+              <div style={{ marginTop: '8px' }}>🌱 <strong>Rancho Santa Fe</strong> — Growth Market · $11.7M · 3 transactions</div>
+            </div>
+          )}
+        </div>
+
+        {/* E. NEIGHBORHOODS */}
+        <div style={{ marginBottom: '32px' }}>
+          <h2 style={{ fontSize: '18px', fontWeight: 700, color: '#0A1929', margin: '0 0 8px 0' }}>Target Neighborhoods</h2>
+          <p style={{ fontSize: '13px', color: '#64748b', marginBottom: '16px' }}>
+            Discovered from your MLS transactions + AI cross-reference. These are the neighborhoods AI recognizes:
+          </p>
+          <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '16px' }}>
+            <div style={{ marginBottom: '12px' }}>
+              <div style={{ fontSize: '13px', fontWeight: 700, color: '#00BFA6', marginBottom: '6px' }}>Carmel Valley</div>
+              <div style={{ fontSize: '13px', color: '#475569', lineHeight: 1.6 }}>
+                Rancho Pacifica · Whispering Woods · Pacific Highlands Ranch · Torrey Hills · Del Mar Mesa
+              </div>
+            </div>
+            <div style={{ marginBottom: '12px' }}>
+              <div style={{ fontSize: '13px', fontWeight: 700, color: '#D4A830', marginBottom: '6px' }}>Carlsbad</div>
+              <div style={{ fontSize: '13px', color: '#475569', lineHeight: 1.6 }}>
+                La Costa · Santalina · Santander · Aviara · La Costa Oaks
+              </div>
+            </div>
+            <div>
+              <div style={{ fontSize: '13px', fontWeight: 700, color: '#0A1929', marginBottom: '6px' }}>Rancho Santa Fe</div>
+              <div style={{ fontSize: '13px', color: '#475569', lineHeight: 1.6 }}>
+                Del Mar Country Club · Whispering Palms · The Crosby · Fairbanks Ranch
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* I. APPROVE */}
         {!approved ? (
           <div style={{ marginBottom: '32px' }}>
@@ -356,7 +418,7 @@ function ResultsContent() {
               fontSize: '16px', fontWeight: 700, border: 'none', borderRadius: '8px',
               cursor: saving ? 'wait' : 'pointer', opacity: saving ? 0.7 : 1,
             }}>
-              {saving ? 'Saving...' : '✓ Approve Strategy — Start Optimization'}
+              {saving ? 'Saving...' : '✓ Approve 3 Markets + 14 Neighborhoods — Start Optimization'}
             </button>
           </div>
         ) : (
