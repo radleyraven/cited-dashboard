@@ -1,5 +1,7 @@
 'use client';
 
+import { useState } from 'react';
+
 /* ═══════════════════════════════════════════════════════════════
    CITED Universal Header Component
    Two variants: onboarding (minimal) + dashboard (full nav)
@@ -34,6 +36,21 @@ const TIER_BADGES: Record<string, { label: string; color: string; bg: string }> 
 
 export default function CitedHeader({ variant, currentPage, stepIndicator, userEmail, userName, clientTier, clientTitle }: HeaderProps) {
   const badge = clientTier ? TIER_BADGES[clientTier] : null;
+  const [exitTaps, setExitTaps] = useState(0);
+
+  function handleLogoClick(e: React.MouseEvent) {
+    if (variant === 'onboarding') {
+      e.preventDefault();
+      if (exitTaps === 0) {
+        setExitTaps(1);
+        // Reset after 4 seconds
+        setTimeout(() => setExitTaps(0), 4000);
+      } else {
+        // Second tap — navigate away
+        window.location.href = '/';
+      }
+    }
+  }
   return (
     <>
       {/* Main Header Bar */}
@@ -49,7 +66,7 @@ export default function CitedHeader({ variant, currentPage, stepIndicator, userE
           margin: '0 auto',
         }}>
           {/* Left: Brand */}
-          <a href="/" style={{ textDecoration: 'none' }}>
+          <a href="/" onClick={handleLogoClick} style={{ textDecoration: 'none', cursor: 'pointer' }}>
             <div style={{ fontSize: '22px', fontWeight: 900, color: '#fff', letterSpacing: '2px', marginBottom: '2px' }}>CITED</div>
             <div style={{ fontSize: '9px', fontWeight: 600, color: '#00BFA6', textTransform: 'uppercase', letterSpacing: '2px' }}>
               AI Citation Optimization™
@@ -114,6 +131,33 @@ export default function CitedHeader({ variant, currentPage, stepIndicator, userE
 
       {/* Gradient Bar */}
       <div style={{ height: '3px', background: 'linear-gradient(90deg, #00BFA6, #D4A830, #00BFA6)' }} />
+
+      {/* Exit Nudge (onboarding — first tap) */}
+      {variant === 'onboarding' && exitTaps === 1 && (
+        <div style={{
+          background: '#fffdf5',
+          borderBottom: '1px solid #D4A830',
+          padding: '10px 32px',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          gap: '16px',
+          animation: 'fadeIn 0.2s ease',
+        }}>
+          <span style={{ fontSize: '13px', color: '#0A1929', fontWeight: 500 }}>
+            Almost done — finish approving your markets to unlock your Full PRISM Scan.
+          </span>
+          <button
+            onClick={() => { window.location.href = '/'; }}
+            style={{
+              fontSize: '12px', color: '#94a3b8', background: 'none', border: '1px solid #e2e8f0',
+              borderRadius: '4px', padding: '4px 12px', cursor: 'pointer', whiteSpace: 'nowrap',
+            }}
+          >
+            Leave anyway
+          </button>
+        </div>
+      )}
 
       {/* Step Indicator (onboarding only) */}
       {variant === 'onboarding' && stepIndicator && (
