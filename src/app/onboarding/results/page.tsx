@@ -218,6 +218,55 @@ function Modal({ onClose, onConfirm }: { onClose: () => void; onConfirm: () => v
   );
 }
 
+/* ── Strength cards — collapsible ── */
+const STRENGTH_ICONS: Record<string, string> = {
+  'Content Freshness': '🔄',
+  'Direct Name Recognition': '✓',
+  'Google Business Profile': '⭐',
+};
+
+function StrengthCards({ strengths }: { strengths: StrengthData[] }) {
+  const [expanded, setExpanded] = useState<number | null>(null);
+  return (
+    <div>
+      {strengths.map((item, i) => {
+        const isOpen = expanded === i;
+        return (
+          <div key={i} style={{
+            background: '#fff', border: '1px solid #e2e8f0', borderRadius: '10px',
+            marginBottom: '8px', overflow: 'hidden',
+            boxShadow: isOpen ? '0 2px 8px rgba(0,0,0,0.06)' : 'none',
+          }}>
+            <button onClick={() => setExpanded(isOpen ? null : i)} style={{
+              width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+              padding: '14px 16px', background: 'none', border: 'none', cursor: 'pointer', textAlign: 'left',
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <div style={{
+                  width: '32px', height: '32px', borderRadius: '8px', background: '#f0fdf9',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '16px', flexShrink: 0,
+                }}>
+                  {STRENGTH_ICONS[item.title] || '✓'}
+                </div>
+                <div style={{ fontSize: '15px', fontWeight: 700, color: '#0A1929' }}>{item.title}</div>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <div style={{ background: '#f0fdf9', color: '#00BFA6', fontSize: '11px', fontWeight: 700, padding: '3px 10px', borderRadius: '12px' }}>{item.badge}</div>
+                <div style={{ fontSize: '12px', color: '#94a3b8', transition: 'transform 0.2s', transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}>▾</div>
+              </div>
+            </button>
+            {isOpen && (
+              <div style={{ padding: '0 16px 14px', borderTop: '1px solid #f1f5f9' }}>
+                <div style={{ fontSize: '13px', color: '#64748b', lineHeight: 1.6, paddingTop: '10px' }}>{item.detail}</div>
+              </div>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 /* ════════════════════════════════════════════════════════════
    MAIN COMPONENT
    ════════════════════════════════════════════════════════════ */
@@ -470,8 +519,7 @@ function ResultsContent() {
               {/* What the gap means */}
               <div style={{ padding: '14px 20px', background: '#0A1929', display: 'flex', alignItems: 'center', gap: '12px' }}>
                 <div style={{ fontSize: '13px', color: '#94a3b8', lineHeight: 1.5, flex: 1 }}>
-                  The higher your score, the more consistently AI recommends you.
-                  Felicia is at ~55 and gets recommended regularly — our goal is to get you there and past it.
+                  Our goal isn&apos;t just to match Felicia at ~55 — it&apos;s to make you the <span style={{ color: '#00BFA6', fontWeight: 700 }}>most recommended agent</span> in your market.
                   Our analysis shows exactly where your <span style={{ color: '#00BFA6', fontWeight: 700 }}>+41 points</span> are coming from.
                 </div>
               </div>
@@ -490,15 +538,7 @@ function ResultsContent() {
             </p>
             <div style={{ marginBottom: '16px' }}><DepthBadge text={`${scan.platform_count} platforms audited · ${scan.query_count} queries analyzed`} /></div>
 
-            {scan.strengths.map((item, i) => (
-              <div key={i} style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '10px', padding: '14px 18px', marginBottom: '8px', borderLeft: '4px solid #00BFA6' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <div style={{ fontSize: '15px', fontWeight: 700, color: '#0A1929' }}>{item.title}</div>
-                  <div style={{ background: '#f0fdf9', color: '#00BFA6', fontSize: '11px', fontWeight: 700, padding: '2px 10px', borderRadius: '12px' }}>{item.badge}</div>
-                </div>
-                <div style={{ fontSize: '13px', color: '#64748b', marginTop: '6px', lineHeight: 1.5 }}>{item.detail}</div>
-              </div>
-            ))}
+            <StrengthCards strengths={scan.strengths} />
 
             <div style={{ background: '#f0fdf9', borderRadius: '8px', padding: '12px 16px', marginTop: '12px', fontSize: '13px', color: '#0A1929', textAlign: 'center', fontWeight: 500 }}>
               Now you know your foundation. Next: the specific gaps costing you AI recommendations.
