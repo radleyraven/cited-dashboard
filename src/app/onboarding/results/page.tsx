@@ -346,7 +346,7 @@ function ResultsContent() {
             {firstName ? `${firstName}, here's what we found.` : "Here's what we found."}
           </h1>
           <p style={{ fontSize: '13px', color: '#64748b', margin: '0 0 24px 0', lineHeight: 1.5 }}>
-            We ran {scan.query_count} queries across {scan.model_count} AI models, audited {scan.platform_count} platforms,
+            We ran {scan.query_count} queries across the top AI models buyers use, audited {scan.platform_count} platforms,
             analyzed {scan.txn_analyzed} of your transactions, and mapped {scan.neighborhood_count} neighborhoods — every query
             run {scan.consistency_runs}x for consistency.
           </p>
@@ -372,7 +372,7 @@ function ResultsContent() {
         <div ref={el => { sectionRefs.current[0] = el; }} style={{ paddingTop: '36px' }}>
           <SectionHeader num="1" title="The Discovery Gap" color="#0A1929" />
           <p style={{ fontSize: '14px', color: '#64748b', margin: '0 0 16px 0', lineHeight: 1.5 }}>
-            We asked all {scan.model_count} AI models the exact questions a buyer would ask. Here&apos;s what came back:
+            We asked the top AI models buyers use today the exact questions they&apos;d ask. Here&apos;s what came back:
           </p>
 
           <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '10px', padding: '18px', marginBottom: '14px' }}>
@@ -382,7 +382,7 @@ function ResultsContent() {
               &ldquo;{scan.ai_quote.response}&rdquo;
             </div>
             <div style={{ marginTop: '10px', fontSize: '13px', color: '#EF4444', fontWeight: 600 }}>
-              Your name did not appear — in this query or any of the {scan.query_count} discovery queries we ran.
+              Your name did not appear — in this query or any of the {scan.query_count} discovery queries we ran across all models.
             </div>
           </div>
 
