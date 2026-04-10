@@ -8,83 +8,18 @@ import CitedHeader from '@/components/CitedHeader';
 import CitedFooter from '@/components/CitedFooter';
 
 /* ═══════════════════════════════════════════════════════════════
-   PRISM Scan Results + Market/Neighborhood Approval (Combined)
-   Token-based auth — single delivery touchpoint
-   v1.0 — April 9, 2026
-   Protocol: cited-scan-delivery-protocol.md
+   PRISM Scan Results — Redesigned from Scratch
+   Story arc: Celebrate → Gap → Score → Markets → Path → Approve
+   v2.0 — April 9, 2026
+   Research: Sugarman (slippery slide), Peak-End (Yablonski),
+   Heath (Made to Stick), Cialdini (contrast), Raw.Studio (dashboard UX)
    ═══════════════════════════════════════════════════════════════ */
-
-type MarketRec = {
-  name: string;
-  tier: 'primary' | 'secondary' | 'growth';
-  evidence: string;
-  txn_volume: string;
-  txn_count: number;
-  ai_signal: string;
-  approved?: boolean;
-};
-
-type ScanResults = {
-  composite_score: number;
-  tier_name: string;
-  tier_line: string;
-  perplexity: number;
-  chatgpt: number;
-  gemini: number;
-  claude: number;
-  entity: number;
-  freshness: number;
-  competitors: { name: string; firm: string; market: string; score: number }[];
-  gaps: { title: string; impact: string; description: string }[];
-  trajectory: { day: string; target: string }[];
-  scan_date: string;
-  scan_completion: string;
-};
-
-const TIER_CONFIG = {
-  primary: { label: 'Primary Market', color: '#00BFA6', bg: '#f0fdf9', icon: '🎯' },
-  secondary: { label: 'Secondary Market', color: '#D4A830', bg: '#fffdf5', icon: '📍' },
-  growth: { label: 'Growth Market', color: '#0A1929', bg: '#f0f4f8', icon: '🌱' },
-};
-
-const DEFAULT_SCAN: ScanResults = {
-  composite_score: 24,
-  tier_name: 'Building',
-  tier_line: 'Foundation going in. Key platforms next.',
-  perplexity: 5,
-  chatgpt: 3,
-  gemini: 7,
-  claude: 4,
-  entity: 0,
-  freshness: 5,
-  competitors: [
-    { name: 'Felicia Lewis', firm: 'Felicia Lewis Group', market: 'Carmel Valley', score: 55 },
-    { name: 'Kurt Wannebo', firm: 'Compass', market: 'Carlsbad', score: 50 },
-    { name: 'Bree Bornstein', firm: 'Compass', market: 'Rancho Santa Fe', score: 45 },
-  ],
-  gaps: [
-    { title: 'Claim Bing Places + Foursquare', impact: '+14 points', description: 'ChatGPT pulls 87% of local results from Bing. Without these, you\'re invisible to ChatGPT for all discovery queries.' },
-    { title: 'Optimize Yelp + Begin Reviews', impact: '+12 points', description: 'Perplexity uses Yelp as its primary recommendation gate. Your profile exists but has 0 reviews and a generic bio.' },
-    { title: 'Fix Entity Inconsistency', impact: '+10 points', description: 'You\'re listed as Del Mar, La Jolla, Carlsbad, AND Carmel Valley across platforms. AI can\'t resolve you as one person.' },
-  ],
-  trajectory: [
-    { day: 'Day 0 (Today)', target: '24/100' },
-    { day: 'Day 14', target: '35-40' },
-    { day: 'Day 30', target: '45-50' },
-    { day: 'Day 60', target: '55-65' },
-    { day: 'Day 90', target: '65-75' },
-  ],
-  scan_date: '2026-04-09',
-  scan_completion: '99%',
-};
 
 function ResultsContent() {
   const [clientName, setClientName] = useState('');
-  const [markets, setMarkets] = useState<MarketRec[]>([]);
-  const [scan, setScan] = useState<ScanResults>(DEFAULT_SCAN);
-  const [loading, setLoading] = useState(true);
   const [approved, setApproved] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [recordId, setRecordId] = useState('');
   const searchParams = useSearchParams();
 
@@ -93,44 +28,14 @@ function ResultsContent() {
   async function loadData() {
     const supabase = createSupabaseBrowserClient();
     const token = searchParams.get('token');
-    let data = null;
-
     if (token) {
-      const { data: d } = await supabase
-        .from('cited_intake')
-        .select('id, full_name, market_recommendations, markets_approved, scan_results')
-        .eq('onboarding_token', token)
-        .single();
-      if (d) data = d;
-    } else {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (user) {
-        const { data: d } = await supabase
-          .from('cited_intake')
-          .select('id, full_name, market_recommendations, markets_approved, scan_results')
-          .eq('email', user.email)
-          .single();
-        if (d) data = d;
-      }
-    }
-
-    if (data) {
-      setRecordId(data.id);
-      setClientName(data.full_name || '');
-      if (data.markets_approved) setApproved(true);
-      if (data.market_recommendations) {
-        try {
-          const recs = typeof data.market_recommendations === 'string'
-            ? JSON.parse(data.market_recommendations) : data.market_recommendations;
-          if (Array.isArray(recs)) setMarkets(recs);
-        } catch {}
-      }
-      if (data.scan_results) {
-        try {
-          const sr = typeof data.scan_results === 'string'
-            ? JSON.parse(data.scan_results) : data.scan_results;
-          setScan(sr);
-        } catch {}
+      const { data } = await supabase.from('cited_intake')
+        .select('id, full_name, markets_approved')
+        .eq('onboarding_token', token).single();
+      if (data) {
+        setRecordId(data.id);
+        setClientName(data.full_name || '');
+        if (data.markets_approved) setApproved(true);
       }
     }
     setLoading(false);
@@ -154,10 +59,10 @@ function ResultsContent() {
 
   if (loading) {
     return (
-      <div style={{ minHeight: '100vh', background: '#f8f9fa', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div style={{ minHeight: '100vh', background: '#0A1929', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <div style={{ textAlign: 'center' }}>
-          <div style={{ fontSize: '24px', fontWeight: 900, color: '#0A1929', letterSpacing: '2px', marginBottom: '8px' }}>CITED</div>
-          <div style={{ fontSize: '14px', color: '#94a3b8' }}>Loading your scan results...</div>
+          <div style={{ fontSize: '24px', fontWeight: 900, color: '#fff', letterSpacing: '2px' }}>CITED</div>
+          <div style={{ fontSize: '14px', color: '#94a3b8', marginTop: '8px' }}>Loading your results...</div>
         </div>
       </div>
     );
@@ -167,241 +72,273 @@ function ResultsContent() {
     <div style={{ minHeight: '100vh', background: '#f8f9fa' }}>
       <CitedHeader variant="onboarding" userEmail="" userName={clientName} clientTier="founding_client" />
 
-      <div style={{ maxWidth: '720px', margin: '0 auto', padding: '40px 24px' }}>
-
-        {/* A. SCORE HERO */}
-        <div style={{ textAlign: 'center', marginBottom: '40px' }}>
-          <h1 style={{ fontSize: '28px', fontWeight: 800, color: '#0A1929', marginBottom: '16px' }}>
-            {firstName ? `${firstName}, your PRISM Scan is complete.` : 'Your PRISM Scan is complete.'}
+      {/* ════════════════════════════════════════════
+          SECTION 1: CELEBRATE THE CLIENT
+          Dark hero section — their stats, their wins
+          ════════════════════════════════════════════ */}
+      <div style={{ background: '#0A1929', padding: '48px 24px 40px', textAlign: 'center' }}>
+        <div style={{ maxWidth: '600px', margin: '0 auto' }}>
+          <div style={{ fontSize: '13px', color: '#00BFA6', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '16px' }}>
+            Your PRISM Scan is Complete
+          </div>
+          <h1 style={{ fontSize: '28px', fontWeight: 800, color: '#fff', lineHeight: 1.3, margin: '0 0 24px 0' }}>
+            {firstName ? `${firstName}, here's what we found.` : "Here's what we found."}
           </h1>
-          <div style={{
-            display: 'inline-block', background: '#0A1929', borderRadius: '16px',
-            padding: '32px 48px', textAlign: 'center',
-          }}>
-            <div style={{ fontSize: '11px', fontWeight: 600, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '8px' }}>Citation Score</div>
-            <div style={{ fontSize: '64px', fontWeight: 900, color: '#00BFA6', lineHeight: 1 }}>{scan.composite_score}</div>
-            <div style={{ fontSize: '18px', color: '#64748b', marginTop: '4px' }}>/100</div>
+
+          {/* Client Stats — Celebratory */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '12px', marginBottom: '24px' }}>
+            <div style={{ background: 'rgba(255,255,255,0.05)', borderRadius: '12px', padding: '16px 12px' }}>
+              <div style={{ fontSize: '28px', fontWeight: 900, color: '#00BFA6' }}>$91.7M</div>
+              <div style={{ fontSize: '11px', color: '#94a3b8', marginTop: '4px' }}>Career Volume</div>
+            </div>
+            <div style={{ background: 'rgba(255,255,255,0.05)', borderRadius: '12px', padding: '16px 12px' }}>
+              <div style={{ fontSize: '28px', fontWeight: 900, color: '#00BFA6' }}>33</div>
+              <div style={{ fontSize: '11px', color: '#94a3b8', marginTop: '4px' }}>Deals Closed</div>
+            </div>
+            <div style={{ background: 'rgba(255,255,255,0.05)', borderRadius: '12px', padding: '16px 12px' }}>
+              <div style={{ fontSize: '28px', fontWeight: 900, color: '#00BFA6' }}>5.0 ★</div>
+              <div style={{ fontSize: '11px', color: '#94a3b8', marginTop: '4px' }}>Google Rating</div>
+            </div>
+          </div>
+
+          <p style={{ fontSize: '15px', color: '#94a3b8', lineHeight: 1.6, margin: 0 }}>
+            You&apos;re one of the most active luxury agents in North County San Diego. But when buyers ask AI who to call — your name doesn&apos;t come up. <span style={{ color: '#fff', fontWeight: 600 }}>That changes now.</span>
+          </p>
+        </div>
+      </div>
+      <div style={{ height: '3px', background: 'linear-gradient(90deg, #00BFA6, #D4A830, #00BFA6)' }} />
+
+      <div style={{ maxWidth: '680px', margin: '0 auto', padding: '40px 24px' }}>
+
+        {/* ════════════════════════════════════════════
+            SECTION 2: THE GAP — Visual + Visceral
+            Side by side: competitor vs you
+            ════════════════════════════════════════════ */}
+        <div style={{ marginBottom: '40px' }}>
+          <h2 style={{ fontSize: '20px', fontWeight: 800, color: '#0A1929', margin: '0 0 16px 0' }}>
+            Here&apos;s what AI tells buyers in Carmel Valley right now.
+          </h2>
+
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
+            {/* Competitor */}
             <div style={{
-              marginTop: '12px', background: 'rgba(0,191,166,0.15)', color: '#00BFA6',
-              fontSize: '13px', fontWeight: 700, padding: '4px 16px', borderRadius: '20px', display: 'inline-block',
+              background: '#fff', border: '2px solid #EF4444', borderRadius: '12px',
+              padding: '24px 16px', textAlign: 'center',
             }}>
-              {scan.tier_name}
+              <div style={{ fontSize: '11px', color: '#EF4444', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '12px' }}>
+                AI Recommends
+              </div>
+              <div style={{ fontSize: '20px', fontWeight: 800, color: '#0A1929' }}>Felicia Lewis</div>
+              <div style={{ fontSize: '13px', color: '#64748b', marginTop: '4px' }}>Felicia Lewis Group</div>
+              <div style={{
+                marginTop: '16px', background: '#fff5f5', borderRadius: '8px', padding: '8px',
+                fontSize: '24px', fontWeight: 900, color: '#EF4444',
+              }}>~55<span style={{ fontSize: '14px', color: '#94a3b8' }}>/100</span></div>
             </div>
-            <div style={{ fontSize: '13px', color: '#94a3b8', marginTop: '8px' }}>{scan.tier_line}</div>
-          </div>
-          <div style={{ fontSize: '12px', color: '#94a3b8', marginTop: '12px' }}>
-            Based on 49 queries across ChatGPT, Perplexity, Gemini, and Brave · Scan completion: {scan.scan_completion} · {scan.scan_date}
-          </div>
-        </div>
 
-        {/* B. KEY FINDING */}
-        <div style={{
-          background: '#fff', border: '1px solid #e2e8f0', borderRadius: '12px',
-          padding: '24px', marginBottom: '24px',
-        }}>
-          <h2 style={{ fontSize: '18px', fontWeight: 700, color: '#0A1929', margin: '0 0 16px 0' }}>The Key Finding</h2>
-          <div style={{ display: 'flex', gap: '12px', marginBottom: '12px' }}>
-            <div style={{ flex: 1, background: '#f0fdf9', borderRadius: '8px', padding: '16px', borderLeft: '4px solid #00BFA6' }}>
-              <div style={{ fontSize: '14px', fontWeight: 600, color: '#0A1929' }}>When someone searches YOUR NAME</div>
-              <div style={{ fontSize: '13px', color: '#64748b', marginTop: '4px' }}>AI finds you ✅</div>
-            </div>
-            <div style={{ flex: 1, background: '#fff5f5', borderRadius: '8px', padding: '16px', borderLeft: '4px solid #EF4444' }}>
-              <div style={{ fontSize: '14px', fontWeight: 600, color: '#0A1929' }}>When someone searches BEST AGENT IN YOUR MARKET</div>
-              <div style={{ fontSize: '13px', color: '#EF4444', marginTop: '4px' }}>AI doesn't recommend you ❌</div>
+            {/* Client */}
+            <div style={{
+              background: '#fff', border: '2px solid #e2e8f0', borderRadius: '12px',
+              padding: '24px 16px', textAlign: 'center',
+            }}>
+              <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '12px' }}>
+                Your Current Score
+              </div>
+              <div style={{ fontSize: '20px', fontWeight: 800, color: '#0A1929' }}>{firstName || 'You'}</div>
+              <div style={{ fontSize: '13px', color: '#64748b', marginTop: '4px' }}>Oppenheim Group</div>
+              <div style={{
+                marginTop: '16px', background: '#f8f9fa', borderRadius: '8px', padding: '8px',
+                fontSize: '24px', fontWeight: 900, color: '#0A1929',
+              }}>24<span style={{ fontSize: '14px', color: '#94a3b8' }}>/100</span></div>
             </div>
           </div>
+
           <div style={{
-            background: '#0A1929', color: '#fff', padding: '12px 20px', borderRadius: '6px',
-            fontSize: '14px', fontWeight: 500, textAlign: 'center',
+            background: '#0A1929', color: '#fff', padding: '14px 20px', borderRadius: '8px',
+            fontSize: '14px', fontWeight: 500, textAlign: 'center', lineHeight: 1.5,
           }}>
-            That's the gap CITED closes.
+            When a buyer asks ChatGPT, Perplexity, or Google AI <em>&quot;who&apos;s the best agent in Carmel Valley?&quot;</em> — Felicia shows up. You don&apos;t. <span style={{ color: '#00BFA6', fontWeight: 700 }}>We fix that.</span>
           </div>
         </div>
 
-        {/* C. PER-MODEL SUB-SCORES */}
-        <div style={{ marginBottom: '24px' }}>
-          <h2 style={{ fontSize: '18px', fontWeight: 700, color: '#0A1929', margin: '0 0 16px 0' }}>How Each AI Model Sees You</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
-            {[
-              { name: 'Perplexity', score: scan.perplexity, max: 25, desc: 'Yelp-powered recommendations' },
-              { name: 'ChatGPT', score: scan.chatgpt, max: 25, desc: 'Bing + local search results' },
-              { name: 'Google AI', score: scan.gemini, max: 25, desc: 'Google Business + organic ranking' },
-              { name: 'Claude', score: scan.claude, max: 10, desc: 'Brave Search + reviews' },
-            ].map(model => (
-              <div key={model.name} style={{
-                background: '#fff', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '16px',
-              }}>
-                <div style={{ fontSize: '14px', fontWeight: 700, color: '#0A1929' }}>{model.name}</div>
-                <div style={{ fontSize: '11px', color: '#94a3b8', marginBottom: '8px' }}>{model.desc}</div>
-                <div style={{ fontSize: '28px', fontWeight: 800, color: model.score === 0 ? '#EF4444' : '#0A1929' }}>
-                  {model.score}<span style={{ fontSize: '14px', color: '#94a3b8' }}>/{model.max}</span>
-                </div>
-                <div style={{
-                  height: '4px', background: '#f1f5f9', borderRadius: '2px', marginTop: '8px', overflow: 'hidden',
-                }}>
-                  <div style={{
-                    height: '100%', width: `${(model.score / model.max) * 100}%`,
-                    background: model.score / model.max > 0.5 ? '#00BFA6' : model.score / model.max > 0.2 ? '#D4A830' : '#EF4444',
-                    borderRadius: '2px',
-                  }} />
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginTop: '12px' }}>
-            <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '16px' }}>
-              <div style={{ fontSize: '14px', fontWeight: 700, color: '#0A1929' }}>Entity Consistency</div>
-              <div style={{ fontSize: '11px', color: '#94a3b8', marginBottom: '8px' }}>Same name + location everywhere</div>
-              <div style={{ fontSize: '28px', fontWeight: 800, color: '#EF4444' }}>{scan.entity}<span style={{ fontSize: '14px', color: '#94a3b8' }}>/10</span></div>
-            </div>
-            <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '16px' }}>
-              <div style={{ fontSize: '14px', fontWeight: 700, color: '#0A1929' }}>Content Freshness</div>
-              <div style={{ fontSize: '11px', color: '#94a3b8', marginBottom: '8px' }}>Recent articles + GBP posts</div>
-              <div style={{ fontSize: '28px', fontWeight: 800, color: '#00BFA6' }}>{scan.freshness}<span style={{ fontSize: '14px', color: '#94a3b8' }}>/5</span></div>
-            </div>
-          </div>
-        </div>
+        {/* ════════════════════════════════════════════
+            SECTION 3: WHY — In Their Language
+            What each platform means (not model names)
+            ════════════════════════════════════════════ */}
+        <div style={{ marginBottom: '40px' }}>
+          <h2 style={{ fontSize: '20px', fontWeight: 800, color: '#0A1929', margin: '0 0 8px 0' }}>
+            Why you&apos;re not showing up.
+          </h2>
+          <p style={{ fontSize: '14px', color: '#64748b', margin: '0 0 16px 0' }}>
+            AI pulls recommendations from specific platforms. Here&apos;s where your gaps are:
+          </p>
 
-        {/* F. COMPETITOR SNAPSHOT */}
-        <div style={{ marginBottom: '24px' }}>
-          <h2 style={{ fontSize: '18px', fontWeight: 700, color: '#0A1929', margin: '0 0 16px 0' }}>Who AI Recommends Instead</h2>
-          {scan.competitors.map(comp => (
-            <div key={comp.market} style={{
-              background: '#fff', border: '1px solid #e2e8f0', borderRadius: '8px',
-              padding: '16px', marginBottom: '8px', display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-            }}>
-              <div>
-                <div style={{ fontSize: '14px', fontWeight: 700, color: '#0A1929' }}>{comp.name}</div>
-                <div style={{ fontSize: '12px', color: '#94a3b8' }}>{comp.firm} · {comp.market}</div>
-              </div>
-              <div style={{ textAlign: 'right' }}>
-                <div style={{ fontSize: '20px', fontWeight: 800, color: '#0A1929' }}>~{comp.score}</div>
-                <div style={{ fontSize: '11px', color: '#94a3b8' }}>/100</div>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* G. TOP 3 GAPS */}
-        <div style={{ marginBottom: '24px' }}>
-          <h2 style={{ fontSize: '18px', fontWeight: 700, color: '#0A1929', margin: '0 0 16px 0' }}>Your Top 3 Opportunities</h2>
-          {scan.gaps.map((gap, i) => (
+          {[
+            {
+              platform: 'Yelp',
+              ai: 'Perplexity',
+              status: '0 reviews · Generic bio',
+              impact: 'Perplexity uses Yelp as its #1 source for agent recommendations.',
+              score: '5/25',
+              color: '#EF4444',
+              points: '+12 pts',
+            },
+            {
+              platform: 'Bing Places + Foursquare',
+              ai: 'ChatGPT',
+              status: 'Not claimed',
+              impact: 'ChatGPT pulls 87% of local results from Bing. You\'re invisible to it.',
+              score: '3/25',
+              color: '#EF4444',
+              points: '+14 pts',
+            },
+            {
+              platform: 'Google Business + Website',
+              ai: 'Google AI / Gemini',
+              status: '11 reviews · No schema markup',
+              impact: 'Your GBP is active but your website has no AI-readable structure.',
+              score: '7/25',
+              color: '#D4A830',
+              points: '+10 pts',
+            },
+            {
+              platform: 'Platform Consistency',
+              ai: 'All AI Models',
+              status: '4 different locations listed',
+              impact: 'AI sees Del Mar, La Jolla, Carlsbad, AND Carmel Valley. It can\'t resolve you as one person.',
+              score: '0/10',
+              color: '#EF4444',
+              points: '+10 pts',
+            },
+          ].map((item, i) => (
             <div key={i} style={{
-              background: '#fff', border: '1px solid #e2e8f0', borderRadius: '8px',
-              padding: '20px', marginBottom: '12px',
+              background: '#fff', border: '1px solid #e2e8f0', borderRadius: '10px',
+              padding: '16px 20px', marginBottom: '10px',
+              borderLeft: `4px solid ${item.color}`,
             }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '8px' }}>
-                <div style={{ fontSize: '15px', fontWeight: 700, color: '#0A1929' }}>{gap.title}</div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                <div>
+                  <div style={{ fontSize: '15px', fontWeight: 700, color: '#0A1929' }}>{item.platform}</div>
+                  <div style={{ fontSize: '12px', color: '#94a3b8', marginTop: '2px' }}>Used by {item.ai} · Score: {item.score}</div>
+                </div>
                 <div style={{
                   background: '#f0fdf9', color: '#00BFA6', fontSize: '12px', fontWeight: 700,
-                  padding: '2px 10px', borderRadius: '12px', whiteSpace: 'nowrap',
-                }}>{gap.impact}</div>
+                  padding: '3px 10px', borderRadius: '12px', whiteSpace: 'nowrap',
+                }}>{item.points}</div>
               </div>
-              <div style={{ fontSize: '13px', color: '#64748b', lineHeight: 1.5 }}>{gap.description}</div>
+              <div style={{ fontSize: '13px', color: '#EF4444', fontWeight: 600, marginTop: '6px' }}>{item.status}</div>
+              <div style={{ fontSize: '13px', color: '#64748b', marginTop: '4px', lineHeight: 1.4 }}>{item.impact}</div>
+            </div>
+          ))}
+
+          <div style={{
+            background: '#f0fdf9', borderRadius: '8px', padding: '12px 16px', marginTop: '12px',
+            fontSize: '14px', color: '#0A1929', textAlign: 'center',
+          }}>
+            <strong>Content Freshness: 5/5 ✓</strong> — Your LinkedIn articles and GBP posts are active. This is your strongest signal right now.
+          </div>
+        </div>
+
+        {/* ════════════════════════════════════════════
+            SECTION 4: YOUR MARKETS — Slick Cards
+            From the market approval design (proven)
+            ════════════════════════════════════════════ */}
+        <div style={{ marginBottom: '40px' }}>
+          <h2 style={{ fontSize: '20px', fontWeight: 800, color: '#0A1929', margin: '0 0 8px 0' }}>
+            Where we&apos;ll focus your optimization.
+          </h2>
+          <p style={{ fontSize: '14px', color: '#64748b', margin: '0 0 16px 0' }}>
+            Based on your transaction history + what AI currently sees:
+          </p>
+
+          {[
+            { name: 'Carmel Valley', tier: '🎯 Primary', color: '#00BFA6', vol: '$44.8M', txns: '11', hoods: 'Rancho Pacifica (8 txns) · Whispering Woods · PHR (growth)', border: '#00BFA6' },
+            { name: 'Carlsbad', tier: '📍 Secondary', color: '#D4A830', vol: '$10.0M', txns: '6', hoods: 'La Costa (3 txns) · Santalina · Aviara (growth)', border: '#D4A830' },
+            { name: 'Rancho Santa Fe', tier: '🌱 Growth', color: '#0A1929', vol: '$11.7M', txns: '3', hoods: 'Del Mar Country Club ($6.2M) · Whispering Palms', border: '#94a3b8' },
+          ].map(m => (
+            <div key={m.name} style={{
+              background: '#fff', border: `2px solid ${m.border}`, borderRadius: '12px',
+              padding: '20px', marginBottom: '12px',
+            }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                <div>
+                  <span style={{ fontSize: '11px', fontWeight: 700, color: m.color, textTransform: 'uppercase', letterSpacing: '1px' }}>{m.tier}</span>
+                  <div style={{ fontSize: '18px', fontWeight: 800, color: '#0A1929', marginTop: '2px' }}>{m.name}</div>
+                </div>
+                <div style={{ textAlign: 'right' }}>
+                  <div style={{ fontSize: '18px', fontWeight: 800, color: '#0A1929' }}>{m.vol}</div>
+                  <div style={{ fontSize: '11px', color: '#94a3b8' }}>{m.txns} transactions</div>
+                </div>
+              </div>
+              <div style={{ fontSize: '12px', color: '#64748b', lineHeight: 1.5 }}>
+                <strong>Neighborhoods:</strong> {m.hoods}
+              </div>
             </div>
           ))}
         </div>
 
-        {/* H. 90-DAY TRAJECTORY */}
-        <div style={{ marginBottom: '32px' }}>
-          <h2 style={{ fontSize: '18px', fontWeight: 700, color: '#0A1929', margin: '0 0 16px 0' }}>Your 90-Day Path</h2>
-          <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '20px' }}>
-            {scan.trajectory.map((step, i) => (
-              <div key={i} style={{
-                display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-                padding: '10px 0', borderBottom: i < scan.trajectory.length - 1 ? '1px solid #f1f5f9' : 'none',
-              }}>
-                <div style={{ fontSize: '14px', fontWeight: i === 0 ? 700 : 500, color: '#0A1929' }}>{step.day}</div>
-                <div style={{
-                  fontSize: '16px', fontWeight: 700,
-                  color: i === 0 ? '#EF4444' : i === scan.trajectory.length - 1 ? '#00BFA6' : '#0A1929',
-                }}>{step.target}</div>
-              </div>
-            ))}
-            <div style={{
-              marginTop: '16px', background: '#f0fdf9', borderRadius: '6px', padding: '12px 16px',
-              fontSize: '13px', color: '#0A1929', textAlign: 'center',
-            }}>
-              <strong>Citation Guarantee™:</strong> +20 points in 90 days or you owe nothing.
-            </div>
-          </div>
-        </div>
+        {/* ════════════════════════════════════════════
+            SECTION 5: THE PATH — 90 Day Trajectory
+            ════════════════════════════════════════════ */}
+        <div style={{ marginBottom: '40px' }}>
+          <h2 style={{ fontSize: '20px', fontWeight: 800, color: '#0A1929', margin: '0 0 16px 0' }}>
+            Your 90-day path.
+          </h2>
 
-        {/* D. MARKET STRATEGY */}
-        <div style={{ marginBottom: '24px' }}>
-          <h2 style={{ fontSize: '18px', fontWeight: 700, color: '#0A1929', margin: '0 0 8px 0' }}>Your Market Strategy</h2>
-          <p style={{ fontSize: '13px', color: '#64748b', marginBottom: '16px' }}>
-            Based on your scan results + transaction history, here&apos;s where we&apos;ll focus your optimization:
-          </p>
-          {markets.length > 0 ? markets.map(market => {
-            const tierConfig: Record<string, {label: string; color: string; icon: string}> = {
-              primary: { label: 'Primary Market', color: '#00BFA6', icon: '🎯' },
-              secondary: { label: 'Secondary Market', color: '#D4A830', icon: '📍' },
-              growth: { label: 'Growth Market', color: '#0A1929', icon: '🌱' },
-            };
-            const tier = tierConfig[market.tier] || tierConfig.primary;
-            return (
-              <div key={market.name} style={{
-                background: '#fff', border: '1px solid #e2e8f0', borderRadius: '8px',
-                padding: '16px', marginBottom: '8px', display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-              }}>
-                <div>
-                  <div style={{ fontSize: '16px', fontWeight: 700, color: '#0A1929' }}>{tier.icon} {market.name}</div>
-                  <div style={{ fontSize: '12px', color: '#94a3b8', marginTop: '2px' }}>{tier.label} · {market.txn_volume} · {market.txn_count} transactions</div>
-                  <div style={{ fontSize: '12px', color: '#64748b', marginTop: '4px' }}>{market.evidence}</div>
+          <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '24px', position: 'relative' }}>
+            {/* Progress visualization */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '24px', position: 'relative' }}>
+              {/* Track line */}
+              <div style={{ position: 'absolute', top: '14px', left: '20px', right: '20px', height: '3px', background: '#f1f5f9', borderRadius: '2px' }}>
+                <div style={{ width: '10%', height: '100%', background: 'linear-gradient(90deg, #EF4444, #D4A830)', borderRadius: '2px' }} />
+              </div>
+              {[
+                { label: 'Today', score: '24', color: '#EF4444', active: true },
+                { label: 'Day 30', score: '45-50', color: '#D4A830', active: false },
+                { label: 'Day 60', score: '55-65', color: '#D4A830', active: false },
+                { label: 'Day 90', score: '65-75', color: '#00BFA6', active: false },
+              ].map((step, i) => (
+                <div key={i} style={{ textAlign: 'center', position: 'relative', zIndex: 1 }}>
+                  <div style={{
+                    width: '28px', height: '28px', borderRadius: '50%', margin: '0 auto 8px',
+                    background: step.active ? step.color : '#fff',
+                    border: `3px solid ${step.color}`,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  }}>
+                    {step.active && <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#fff' }} />}
+                  </div>
+                  <div style={{ fontSize: '16px', fontWeight: 800, color: step.color }}>{step.score}</div>
+                  <div style={{ fontSize: '11px', color: '#94a3b8', marginTop: '2px' }}>{step.label}</div>
                 </div>
-              </div>
-            );
-          }) : (
-            <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '16px' }}>
-              <div>🎯 <strong>Carmel Valley</strong> — Primary Market · $44.8M · 11 transactions</div>
-              <div style={{ marginTop: '8px' }}>📍 <strong>Carlsbad</strong> — Secondary Market · $10.0M · 6 transactions</div>
-              <div style={{ marginTop: '8px' }}>🌱 <strong>Rancho Santa Fe</strong> — Growth Market · $11.7M · 3 transactions</div>
+              ))}
             </div>
-          )}
-        </div>
 
-        {/* E. NEIGHBORHOODS */}
-        <div style={{ marginBottom: '32px' }}>
-          <h2 style={{ fontSize: '18px', fontWeight: 700, color: '#0A1929', margin: '0 0 8px 0' }}>Target Neighborhoods</h2>
-          <p style={{ fontSize: '13px', color: '#64748b', marginBottom: '16px' }}>
-            Discovered from your MLS transactions + AI cross-reference. These are the neighborhoods AI recognizes:
-          </p>
-          <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '16px' }}>
-            <div style={{ marginBottom: '12px' }}>
-              <div style={{ fontSize: '13px', fontWeight: 700, color: '#00BFA6', marginBottom: '6px' }}>Carmel Valley — 3 core + 1 growth</div>
-              <div style={{ fontSize: '13px', color: '#475569', lineHeight: 1.6 }}>
-                <strong>Rancho Pacifica</strong> (8 txns) · <strong>Whispering Woods</strong> (2 txns) · <strong>Santander</strong> (1 txn) · <span style={{ color: '#94a3b8' }}>Pacific Highlands Ranch (growth)</span>
-              </div>
-            </div>
-            <div style={{ marginBottom: '12px' }}>
-              <div style={{ fontSize: '13px', fontWeight: 700, color: '#D4A830', marginBottom: '6px' }}>Carlsbad — 3 core + 1 growth</div>
-              <div style={{ fontSize: '13px', color: '#475569', lineHeight: 1.6 }}>
-                <strong>La Costa</strong> (3 txns) · <strong>Santalina</strong> (2 txns) · <strong>Santander</strong> (1 txn) · <span style={{ color: '#94a3b8' }}>Aviara (growth)</span>
-              </div>
-            </div>
-            <div>
-              <div style={{ fontSize: '13px', fontWeight: 700, color: '#0A1929', marginBottom: '6px' }}>Rancho Santa Fe — 2 core</div>
-              <div style={{ fontSize: '13px', color: '#475569', lineHeight: 1.6 }}>
-                <strong>Del Mar Country Club</strong> ($6.2M) · <strong>Whispering Palms</strong> (2 txns)
-              </div>
+            <div style={{
+              background: '#f0fdf9', borderRadius: '8px', padding: '14px 16px',
+              fontSize: '14px', color: '#0A1929', textAlign: 'center',
+            }}>
+              <strong>Citation Guarantee™:</strong> +20 points in 90 days or you owe nothing. Ever.
             </div>
           </div>
         </div>
 
-        {/* I. APPROVE */}
+        {/* ════════════════════════════════════════════
+            SECTION 6: APPROVE
+            Clear, specific, one action
+            ════════════════════════════════════════════ */}
         {!approved ? (
           <div style={{ marginBottom: '32px' }}>
+            {/* What Happens Next */}
             <div style={{
-              background: '#f8f9fa', borderRadius: '8px', padding: '20px 24px', marginBottom: '24px',
+              background: '#f8f9fa', borderRadius: '10px', padding: '20px 24px', marginBottom: '20px',
             }}>
-              <div style={{ fontSize: '13px', fontWeight: 700, color: '#0A1929', marginBottom: '16px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>What happens next</div>
+              <div style={{ fontSize: '13px', fontWeight: 700, color: '#0A1929', marginBottom: '14px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>What happens next</div>
               {[
-                { num: '1', title: 'Approve your market strategy', desc: 'Confirm markets and neighborhoods — takes 30 seconds.' },
-                { num: '2', title: 'Your positioning statement arrives', desc: 'Written from your scan data + intake — within 24 hours.' },
-                { num: '3', title: 'Copy kit + satellite site build begins', desc: 'Platform-specific bios + your AI-optimized website.' },
+                { num: '1', title: 'Approve your strategy below', desc: '3 markets + 9 neighborhoods — takes 10 seconds.' },
+                { num: '2', title: 'Your positioning statement arrives', desc: 'Written from this scan + your intake — within 24 hours.' },
+                { num: '3', title: 'We start building', desc: '12 platform bios + your AI-optimized website + first article.' },
               ].map((step, i) => (
-                <div key={step.num} style={{ display: 'flex', gap: '12px', marginBottom: i < 2 ? '12px' : 0 }}>
+                <div key={step.num} style={{ display: 'flex', gap: '12px', marginBottom: i < 2 ? '10px' : 0 }}>
                   <div style={{
                     width: '24px', height: '24px', minWidth: '24px', background: '#00BFA6', borderRadius: '50%',
                     textAlign: 'center', lineHeight: '24px', color: '#fff', fontSize: '12px', fontWeight: 700,
@@ -413,23 +350,24 @@ function ResultsContent() {
                 </div>
               ))}
             </div>
+
             <button onClick={handleApprove} disabled={saving} style={{
-              width: '100%', padding: '16px 24px', background: '#00BFA6', color: '#fff',
-              fontSize: '16px', fontWeight: 700, border: 'none', borderRadius: '8px',
+              width: '100%', padding: '18px 24px', background: '#00BFA6', color: '#fff',
+              fontSize: '16px', fontWeight: 700, border: 'none', borderRadius: '10px',
               cursor: saving ? 'wait' : 'pointer', opacity: saving ? 0.7 : 1,
+              boxShadow: '0 4px 12px rgba(0,191,166,0.3)',
             }}>
               {saving ? 'Saving...' : '✓ Approve 3 Markets + 9 Neighborhoods — Start Optimization'}
             </button>
           </div>
         ) : (
           <div style={{
-            background: '#f0fdf9', border: '2px solid #00BFA6', borderRadius: '12px',
-            padding: '24px', textAlign: 'center', marginBottom: '32px',
+            background: '#0A1929', borderRadius: '12px', padding: '32px', textAlign: 'center', marginBottom: '32px',
           }}>
-            <div style={{ fontSize: '32px', marginBottom: '8px' }}>🚀</div>
-            <h3 style={{ fontSize: '18px', fontWeight: 700, color: '#0A1929', margin: '0 0 8px 0' }}>Strategy Approved — Optimization Begins</h3>
-            <p style={{ fontSize: '14px', color: '#64748b', margin: 0 }}>
-              Your positioning statement will arrive within 24 hours. We&apos;re on it.
+            <div style={{ fontSize: '36px', marginBottom: '12px' }}>🚀</div>
+            <h3 style={{ fontSize: '20px', fontWeight: 800, color: '#fff', margin: '0 0 8px 0' }}>Strategy Approved — We&apos;re On It</h3>
+            <p style={{ fontSize: '14px', color: '#94a3b8', margin: 0 }}>
+              Your positioning statement will arrive within 24 hours. The building starts now.
             </p>
           </div>
         )}
@@ -443,7 +381,7 @@ function ResultsContent() {
 export default function ResultsPage() {
   return (
     <Suspense fallback={
-      <div style={{ minHeight: '100vh', background: '#f8f9fa', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div style={{ minHeight: '100vh', background: '#0A1929', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <div style={{ fontSize: '14px', color: '#94a3b8' }}>Loading...</div>
       </div>
     }>
