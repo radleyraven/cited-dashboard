@@ -346,7 +346,7 @@ function ResultsContent() {
             {firstName ? `${firstName}, here's what we found.` : "Here's what we found."}
           </h1>
           <p style={{ fontSize: '13px', color: '#64748b', margin: '0 0 24px 0', lineHeight: 1.5 }}>
-            We ran {scan.query_count} queries across the top AI models buyers use, audited {scan.platform_count} platforms,
+            We ran {scan.query_count} queries across the top AI models sellers and buyers use, audited {scan.platform_count} platforms,
             analyzed {scan.txn_analyzed} of your transactions, and mapped {scan.neighborhood_count} neighborhoods — every query
             run {scan.consistency_runs}x for consistency.
           </p>
@@ -359,7 +359,7 @@ function ResultsContent() {
             ))}
           </div>
           <p style={{ fontSize: '15px', color: '#94a3b8', lineHeight: 1.6, margin: 0, maxWidth: '520px', marginLeft: 'auto', marginRight: 'auto' }}>
-            These numbers tell the story of a top-performing luxury agent. But when buyers ask AI who to call —{' '}
+            These numbers tell the story of a top-performing luxury agent. But when sellers and buyers ask AI who to call —{' '}
             <span style={{ color: '#fff', fontWeight: 600 }}>your name doesn&apos;t come up. Let&apos;s fix that.</span>
           </p>
         </div>
@@ -372,7 +372,7 @@ function ResultsContent() {
         <div ref={el => { sectionRefs.current[0] = el; }} style={{ paddingTop: '36px' }}>
           <SectionHeader num="1" title="The Discovery Gap" color="#0A1929" />
           <p style={{ fontSize: '14px', color: '#64748b', margin: '0 0 16px 0', lineHeight: 1.5 }}>
-            We asked the top AI models buyers use today the exact questions they&apos;d ask. Here&apos;s what came back:
+            We asked the top AI models sellers and buyers use today the exact questions they&apos;d ask. Here&apos;s what came back:
           </p>
 
           <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '10px', padding: '18px', marginBottom: '14px' }}>
