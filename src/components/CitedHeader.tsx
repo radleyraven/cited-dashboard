@@ -104,14 +104,10 @@ export default function CitedHeader({ variant, currentPage, stepIndicator, userE
                 )}
                 {badge && (
                   <div style={{
-                    display: 'inline-block',
-                    fontSize: '9px',
-                    fontWeight: 700,
+                    fontSize: '10px',
+                    fontWeight: 600,
                     color: badge.color,
-                    background: badge.bg,
-                    padding: '2px 8px',
-                    borderRadius: '10px',
-                    marginTop: '3px',
+                    marginTop: '2px',
                     letterSpacing: '0.5px',
                   }}>
                     {badge.label}
