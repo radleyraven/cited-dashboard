@@ -454,18 +454,37 @@ function ResultsContent() {
             <div style={{ marginBottom: '16px' }}><DepthBadge text={`${scan.query_count} queries · ${scan.platform_count} platforms · ${scan.consistency_runs}x consistency runs per query`} /></div>
 
             {scan.gaps.map((gap, i) => (
-              <div key={i} style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '10px', padding: '16px 18px', marginBottom: '10px', borderLeft: `4px solid ${gap.color}` }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                  <div style={{ fontSize: '15px', fontWeight: 700, color: '#0A1929' }}>{gap.title}</div>
-                  <div style={{ background: '#f0fdf9', color: '#00BFA6', fontSize: '11px', fontWeight: 700, padding: '2px 10px', borderRadius: '12px', whiteSpace: 'nowrap' }}>{gap.points}</div>
+              <div key={i} style={{ background: '#fff', borderRadius: '12px', marginBottom: '12px', overflow: 'hidden', boxShadow: '0 1px 4px rgba(0,0,0,0.06)', border: '1px solid #e2e8f0' }}>
+                {/* Card header — platform + point impact */}
+                <div style={{ padding: '14px 16px 12px', borderBottom: '1px solid #f1f5f9', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <div style={{ width: '6px', height: '36px', borderRadius: '3px', background: gap.color, flexShrink: 0 }} />
+                    <div>
+                      <div style={{ fontSize: '15px', fontWeight: 800, color: '#0A1929' }}>{gap.title}</div>
+                      <div style={{ fontSize: '11px', color: gap.color, fontWeight: 600, marginTop: '1px' }}>{gap.status}</div>
+                    </div>
+                  </div>
+                  <div style={{ textAlign: 'center', background: gap.color === '#EF4444' ? '#fff5f5' : '#fffdf5', borderRadius: '10px', padding: '6px 12px', minWidth: '56px' }}>
+                    <div style={{ fontSize: '18px', fontWeight: 900, color: gap.color, lineHeight: 1 }}>{gap.points.replace(' pts', '')}</div>
+                    <div style={{ fontSize: '9px', color: gap.color, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>pts</div>
+                  </div>
                 </div>
-                <div style={{ fontSize: '12px', color: '#EF4444', fontWeight: 600, marginTop: '5px' }}>{gap.status}</div>
-                <div style={{ fontSize: '13px', color: '#64748b', marginTop: '6px', lineHeight: 1.5 }}>{gap.impact}</div>
-                <div style={{ marginTop: '8px', padding: '10px 12px', background: '#f0fdf9', borderRadius: '6px', fontSize: '13px', color: '#0A1929', lineHeight: 1.5 }}>
-                  <strong>What we do:</strong> {gap.action}
+
+                {/* Impact */}
+                <div style={{ padding: '12px 16px 0', fontSize: '13px', color: '#475569', lineHeight: 1.6 }}>{gap.impact}</div>
+
+                {/* What we do */}
+                <div style={{ margin: '12px 16px', padding: '10px 14px', background: '#f0fdf9', borderRadius: '8px', borderLeft: '3px solid #00BFA6' }}>
+                  <div style={{ fontSize: '10px', fontWeight: 700, color: '#00BFA6', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '4px' }}>What we do</div>
+                  <div style={{ fontSize: '13px', color: '#0A1929', lineHeight: 1.5 }}>{gap.action}</div>
                 </div>
-                <div style={{ marginTop: '6px', fontSize: '12px', color: '#00BFA6', fontWeight: 600, fontStyle: 'italic' }}>
-                  Result: {gap.outcome}
+
+                {/* Result */}
+                <div style={{ padding: '0 16px 14px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <div style={{ width: '16px', height: '16px', borderRadius: '50%', background: '#00BFA6', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <span style={{ fontSize: '9px', color: '#fff', fontWeight: 700 }}>→</span>
+                  </div>
+                  <div style={{ fontSize: '12px', color: '#00BFA6', fontWeight: 600 }}>{gap.outcome}</div>
                 </div>
               </div>
             ))}
