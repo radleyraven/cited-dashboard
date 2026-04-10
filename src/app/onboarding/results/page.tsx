@@ -663,7 +663,7 @@ function ResultsContent() {
               ))}
             </div>
 
-            <div style={{ background: '#f0fdf9', borderRadius: '8px', padding: '12px 16px', fontSize: '14px', color: '#0A1929', textAlign: 'center', marginTop: '16px', border: '1px solid #00BFA6' }}>
+            <div style={{ background: '#f0fdf9', borderRadius: '8px', padding: '12px 16px', fontSize: '14px', color: '#0A1929', textAlign: 'center', marginTop: '10px', border: '1px solid #00BFA6' }}>
               <strong>Citation Guarantee™:</strong> +20 points in 90 days or you owe nothing. Ever.
             </div>
 
