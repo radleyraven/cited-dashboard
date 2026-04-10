@@ -399,33 +399,83 @@ function ResultsContent() {
           </div>
 
           {primaryCompetitor && (
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '14px' }}>
-              <div style={{ background: '#fff', border: '2px solid #EF4444', borderRadius: '12px', padding: '18px 14px', textAlign: 'center' }}>
-                <div style={{ fontSize: '10px', color: '#EF4444', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px' }}>AI Recommends Instead</div>
-                <div style={{ fontSize: '17px', fontWeight: 800, color: '#0A1929' }}>{primaryCompetitor.competitor}</div>
-                <div style={{ fontSize: '11px', color: '#64748b', marginTop: '2px' }}>{primaryCompetitor.competitor_brokerage}</div>
-                {scan.competitor_validation?.verified && (
-                  <div style={{ fontSize: '10px', color: '#94a3b8', marginTop: '3px' }}>DRE #{scan.competitor_validation.dre} · Verified</div>
-                )}
-                <div style={{ marginTop: '12px', background: '#fff5f5', borderRadius: '8px', padding: '6px', fontSize: '20px', fontWeight: 900, color: '#EF4444' }}>
-                  {primaryCompetitor.competitor_score}<span style={{ fontSize: '12px', color: '#94a3b8' }}>/100</span>
+            <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '14px', overflow: 'hidden', marginBottom: '14px', boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}>
+
+              {/* Score spectrum bar */}
+              <div style={{ padding: '16px 20px 12px', borderBottom: '1px solid #f1f5f9' }}>
+                <div style={{ fontSize: '11px', fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '10px' }}>
+                  Citation Score Scale
+                </div>
+                <div style={{ position: 'relative', height: '8px', borderRadius: '4px', background: 'linear-gradient(90deg, #EF4444 0%, #F59E0B 30%, #D4A830 50%, #00BFA6 75%, #0A1929 100%)', marginBottom: '6px' }}>
+                  {/* Radley marker */}
+                  <div style={{
+                    position: 'absolute', top: '-4px', left: `${scan.composite_score}%`,
+                    width: '16px', height: '16px', borderRadius: '50%', background: '#0A1929',
+                    border: '2px solid #fff', boxShadow: '0 1px 4px rgba(0,0,0,0.2)',
+                    transform: 'translateX(-50%)',
+                  }} />
+                  {/* Competitor marker */}
+                  <div style={{
+                    position: 'absolute', top: '-4px', left: '55%',
+                    width: '16px', height: '16px', borderRadius: '50%', background: '#EF4444',
+                    border: '2px solid #fff', boxShadow: '0 1px 4px rgba(0,0,0,0.2)',
+                    transform: 'translateX(-50%)',
+                  }} />
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '10px', color: '#94a3b8', marginTop: '4px' }}>
+                  <span>0 — Not Indexed</span>
+                  <span>50 — In the Mix</span>
+                  <span>100 — Top Cited</span>
                 </div>
               </div>
-              <div style={{ background: '#fff', border: '2px solid #e2e8f0', borderRadius: '12px', padding: '18px 14px', textAlign: 'center' }}>
-                <div style={{ fontSize: '10px', color: '#94a3b8', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px' }}>Your Citation Score</div>
-                <div style={{ fontSize: '17px', fontWeight: 800, color: '#0A1929' }}>{firstName || 'You'}</div>
-                <div style={{ fontSize: '11px', color: '#64748b', marginTop: '2px' }}>Oppenheim Group</div>
-                <div style={{ marginTop: '12px', background: '#f8f9fa', borderRadius: '8px', padding: '6px', fontSize: '20px', fontWeight: 900, color: '#0A1929' }}>
-                  {scan.composite_score}<span style={{ fontSize: '12px', color: '#94a3b8' }}>/100</span>
+
+              {/* Side by side — YOUR score leads */}
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0' }}>
+
+                {/* Radley — primary focus */}
+                <div style={{ padding: '20px', borderRight: '1px solid #f1f5f9' }}>
+                  <div style={{ fontSize: '10px', color: '#94a3b8', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px' }}>Your Score</div>
+                  <div style={{ fontSize: '18px', fontWeight: 800, color: '#0A1929' }}>{firstName || 'You'}</div>
+                  <div style={{ fontSize: '11px', color: '#64748b' }}>Oppenheim Group</div>
+                  <div style={{ marginTop: '12px' }}>
+                    <div style={{ fontSize: '42px', fontWeight: 900, color: '#0A1929', lineHeight: 1 }}>{scan.composite_score}</div>
+                    <div style={{ fontSize: '13px', color: '#94a3b8', marginTop: '2px' }}>out of 100</div>
+                  </div>
+                  <div style={{ marginTop: '10px', display: 'inline-block', background: '#f0f4f8', borderRadius: '6px', padding: '4px 10px', fontSize: '11px', fontWeight: 700, color: '#64748b' }}>
+                    {scan.tier_name} · {scan.tier_line}
+                  </div>
+                  <div style={{ marginTop: '8px', fontSize: '12px', color: '#64748b', lineHeight: 1.4 }}>
+                    AI knows who you are but doesn&apos;t recommend you in discovery searches yet.
+                  </div>
+                </div>
+
+                {/* Competitor — benchmark context */}
+                <div style={{ padding: '20px', background: '#fafbfc' }}>
+                  <div style={{ fontSize: '10px', color: '#EF4444', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px' }}>Current Benchmark</div>
+                  <div style={{ fontSize: '18px', fontWeight: 800, color: '#0A1929' }}>{primaryCompetitor.competitor}</div>
+                  <div style={{ fontSize: '11px', color: '#64748b' }}>{primaryCompetitor.competitor_brokerage}</div>
+                  {scan.competitor_validation?.verified && (
+                    <div style={{ fontSize: '10px', color: '#94a3b8', marginTop: '2px' }}>DRE #{scan.competitor_validation.dre} · Verified active</div>
+                  )}
+                  <div style={{ marginTop: '12px' }}>
+                    <div style={{ fontSize: '42px', fontWeight: 900, color: '#EF4444', lineHeight: 1 }}>~55</div>
+                    <div style={{ fontSize: '13px', color: '#94a3b8', marginTop: '2px' }}>out of 100</div>
+                  </div>
+                  <div style={{ marginTop: '10px', fontSize: '12px', color: '#64748b', lineHeight: 1.4 }}>
+                    Appears in AI recommendations in Carmel Valley. This is the slot we&apos;re building you into.
+                  </div>
+                </div>
+              </div>
+
+              {/* What the gap means */}
+              <div style={{ padding: '14px 20px', background: '#0A1929', display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <div style={{ fontSize: '13px', color: '#94a3b8', lineHeight: 1.5, flex: 1 }}>
+                  A score of <span style={{ color: '#fff', fontWeight: 700 }}>65+</span> is where AI begins recommending you regularly.
+                  You need <span style={{ color: '#00BFA6', fontWeight: 700 }}>+41 points</span> — and our analysis shows exactly where to get them.
                 </div>
               </div>
             </div>
           )}
-
-          <div style={{ background: '#0A1929', color: '#fff', padding: '12px 18px', borderRadius: '8px', fontSize: '13px', fontWeight: 500, textAlign: 'center', lineHeight: 1.5 }}>
-            Think of your Citation Score like a credit score for AI visibility. Right now, yours is {scan.composite_score}.{' '}
-            <span style={{ color: '#00BFA6', fontWeight: 700 }}>Here&apos;s exactly what&apos;s holding it back — and how we fix it.</span>
-          </div>
 
           {visibleSection < 2 && <ContinueButton onClick={() => revealNext(2)} text="See What's Working" />}
         </div>
