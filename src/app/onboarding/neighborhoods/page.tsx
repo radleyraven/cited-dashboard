@@ -1,14 +1,16 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { Suspense } from 'react';
 import { createSupabaseBrowserClient } from '@/lib/supabase-browser';
+import CitedHeader from '@/components/CitedHeader';
+import CitedFooter from '@/components/CitedFooter';
 
 /* ═══════════════════════════════════════════════════════════════
    Neighborhood Confirmation Card — Onboarding Step 2
-   Client confirms neighborhoods per approved market
-   before Full PRISM scan runs.
-   v1.0 — April 9, 2026
+   Token-based auth (same token from markets page)
+   v2.0 — April 9, 2026
    ═══════════════════════════════════════════════════════════════ */
 
 type Neighborhood = {
@@ -65,15 +67,20 @@ const SOURCE_LABELS: Record<string, { label: string; color: string }> = {
   prism: { label: 'From PRISM scan', color: '#6366f1' },
 };
 
-export default function NeighborhoodsPage() {
+function NeighborhoodsContent() {
   const [groups, setGroups] = useState<MarketGroup[]>(DEFAULT_GROUPS);
   const [confirmed, setConfirmed] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [pageLoading, setPageLoading] = useState(true);
   const [addingTo, setAddingTo] = useState<string | null>(null);
   const [newHoodName, setNewHoodName] = useState('');
   const [clientName, setClientName] = useState('');
+  const [clientEmail, setClientEmail] = useState('');
   const [marketsApproved, setMarketsApproved] = useState(false);
+  const [recordId, setRecordId] = useState('');
+  const [tokenValid, setTokenValid] = useState(false);
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   useEffect(() => {
     loadClientData();
@@ -81,32 +88,53 @@ export default function NeighborhoodsPage() {
 
   async function loadClientData() {
     const supabase = createSupabaseBrowserClient();
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return;
+    const token = searchParams.get('token');
 
-    const { data } = await supabase
-      .from('cited_intake')
-      .select('full_name, markets_approved, neighborhoods_confirmed, neighborhood_data')
-      .eq('email', user.email)
-      .single();
+    let data = null;
+
+    if (token) {
+      const { data: d } = await supabase
+        .from('cited_intake')
+        .select('id, full_name, email, markets_approved, neighborhoods_confirmed, neighborhood_data, onboarding_token_expires_at')
+        .eq('onboarding_token', token)
+        .single();
+      if (d) {
+        const expires = new Date(d.onboarding_token_expires_at);
+        if (expires > new Date()) {
+          data = d;
+          setTokenValid(true);
+        }
+      }
+    } else {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        const { data: d } = await supabase
+          .from('cited_intake')
+          .select('id, full_name, email, markets_approved, neighborhoods_confirmed, neighborhood_data')
+          .eq('email', user.email)
+          .single();
+        if (d) {
+          data = d;
+          setTokenValid(true);
+        }
+      }
+    }
 
     if (data) {
+      setRecordId(data.id);
       setClientName(data.full_name || '');
+      setClientEmail(data.email || '');
       setMarketsApproved(!!data.markets_approved);
-      if (data.neighborhoods_confirmed) {
-        setConfirmed(true);
-      }
+      if (data.neighborhoods_confirmed) setConfirmed(true);
       if (data.neighborhood_data) {
         try {
           const parsed = typeof data.neighborhood_data === 'string'
-            ? JSON.parse(data.neighborhood_data)
-            : data.neighborhood_data;
-          if (Array.isArray(parsed) && parsed.length > 0) {
-            setGroups(parsed);
-          }
+            ? JSON.parse(data.neighborhood_data) : data.neighborhood_data;
+          if (Array.isArray(parsed) && parsed.length > 0) setGroups(parsed);
         } catch { /* use defaults */ }
       }
     }
+    setPageLoading(false);
   }
 
   function toggleNeighborhood(marketIdx: number, hoodIdx: number) {
@@ -150,10 +178,9 @@ export default function NeighborhoodsPage() {
   }
 
   async function handleConfirm() {
+    if (!recordId) return;
     setLoading(true);
     const supabase = createSupabaseBrowserClient();
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return;
 
     const confirmedHoods = groups.flatMap(g =>
       g.neighborhoods.filter(n => n.confirmed).map(n => ({
@@ -171,52 +198,63 @@ export default function NeighborhoodsPage() {
         neighborhood_data: JSON.stringify(groups),
         confirmed_neighborhoods: JSON.stringify(confirmedHoods),
       })
-      .eq('email', user.email);
+      .eq('id', recordId);
 
     setConfirmed(true);
     setLoading(false);
   }
 
-  const firstName = clientName.split(' ')[0] || 'there';
+  const firstName = clientName.split(' ')[0] || '';
   const totalConfirmed = groups.reduce((sum, g) => sum + g.neighborhoods.filter(n => n.confirmed).length, 0);
 
+  if (pageLoading) {
+    return (
+      <div style={{ minHeight: '100vh', background: '#f8f9fa', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ textAlign: 'center' }}>
+          <div style={{ fontSize: '24px', fontWeight: 900, color: '#0A1929', letterSpacing: '2px', marginBottom: '8px' }}>CITED</div>
+          <div style={{ fontSize: '14px', color: '#94a3b8' }}>Loading your neighborhoods...</div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!tokenValid) {
+    return (
+      <div style={{ minHeight: '100vh', background: '#f8f9fa', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ textAlign: 'center', padding: '40px', maxWidth: '400px' }}>
+          <div style={{ fontSize: '24px', fontWeight: 900, color: '#0A1929', letterSpacing: '2px', marginBottom: '8px' }}>CITED</div>
+          <p style={{ fontSize: '16px', color: '#0A1929', fontWeight: 600 }}>Sign in to continue</p>
+          <a href="/login?redirect=/onboarding/neighborhoods" style={{
+            display: 'inline-block', background: '#00BFA6', color: '#fff',
+            fontSize: '15px', fontWeight: 700, padding: '12px 32px', borderRadius: '8px', textDecoration: 'none',
+          }}>Sign In →</a>
+        </div>
+      </div>
+    );
+  }
+
   if (!marketsApproved && !confirmed) {
+    const token = searchParams.get('token');
+    const tokenParam = token ? `?token=${token}` : '';
     return (
       <div style={{ minHeight: '100vh', background: '#f8f9fa', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <div style={{ textAlign: 'center', padding: '40px' }}>
+          <div style={{ fontSize: '24px', fontWeight: 900, color: '#0A1929', letterSpacing: '2px', marginBottom: '16px' }}>CITED</div>
           <p style={{ fontSize: '16px', color: '#64748b' }}>Markets need to be approved first.</p>
-          <a href="/onboarding/markets" style={{ color: '#00BFA6', fontWeight: 600 }}>← Go to Market Approval</a>
+          <a href={`/onboarding/markets${tokenParam}`} style={{ color: '#00BFA6', fontWeight: 600 }}>← Go to Market Approval</a>
         </div>
       </div>
     );
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: '#f8f9fa', padding: '0' }}>
-      {/* Header */}
-      <div style={{
-        background: '#0A1929',
-        padding: '24px 32px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <span style={{ fontSize: '20px', fontWeight: 800, color: '#fff', letterSpacing: '-0.5px' }}>CITED</span>
-          <span style={{ color: '#64748b', fontSize: '14px' }}>|</span>
-          <span style={{ color: '#94a3b8', fontSize: '14px' }}>Neighborhoods</span>
-        </div>
-        <div style={{
-          background: 'rgba(0,191,166,0.15)',
-          color: '#00BFA6',
-          fontSize: '12px',
-          fontWeight: 600,
-          padding: '4px 12px',
-          borderRadius: '20px',
-        }}>
-          Step 2 of 2
-        </div>
-      </div>
+    <div style={{ minHeight: '100vh', background: '#f8f9fa' }}>
+      <CitedHeader
+        variant="onboarding"
+        stepIndicator="Step 2 of 2 — Neighborhood Confirmation"
+        userEmail={clientEmail}
+        userName={firstName}
+      />
 
       {/* Content */}
       <div style={{ maxWidth: '720px', margin: '0 auto', padding: '40px 24px' }}>
@@ -504,17 +542,20 @@ export default function NeighborhoodsPage() {
           </div>
         )}
 
-        {/* Footer */}
-        <div style={{
-          marginTop: '48px',
-          textAlign: 'center',
-          fontSize: '12px',
-          color: '#94a3b8',
-          paddingBottom: '32px',
-        }}>
-          Powered by PRISM™ · CITED
-        </div>
+        <CitedFooter />
       </div>
     </div>
+  );
+}
+
+export default function NeighborhoodsPage() {
+  return (
+    <Suspense fallback={
+      <div style={{ minHeight: '100vh', background: '#f8f9fa', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ fontSize: '14px', color: '#94a3b8' }}>Loading...</div>
+      </div>
+    }>
+      <NeighborhoodsContent />
+    </Suspense>
   );
 }
