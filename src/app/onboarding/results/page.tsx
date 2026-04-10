@@ -311,10 +311,10 @@ function ContinueButton({ onClick, text }: { onClick: () => void; text: string }
   return (
     <div style={{ textAlign: 'center', padding: '24px 0 8px' }}>
       <button onClick={onClick} style={{
-        background: '#0A1929', color: '#fff', border: 'none',
+        background: '#00BFA6', color: '#fff', border: 'none',
         padding: '14px 32px', borderRadius: '8px', fontSize: '15px',
         fontWeight: 700, cursor: 'pointer',
-        boxShadow: '0 2px 8px rgba(10,25,41,0.15)',
+        boxShadow: '0 2px 8px rgba(0,191,166,0.25)',
         transition: 'transform 0.2s',
       }}>
         {text} →
