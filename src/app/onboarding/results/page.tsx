@@ -479,40 +479,32 @@ function ResultsContent() {
                 </div>
               </div>
 
-              {/* Side by side — YOUR score leads */}
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0' }}>
+              {/* Side by side — cleaner, balanced */}
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
 
-                {/* Radley — primary focus */}
-                <div style={{ padding: '20px', borderRight: '1px solid #f1f5f9' }}>
-                  <div style={{ fontSize: '10px', color: '#94a3b8', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px' }}>Your Score</div>
-                  <div style={{ fontSize: '18px', fontWeight: 800, color: '#0A1929' }}>{firstName || 'You'}</div>
-                  <div style={{ fontSize: '11px', color: '#64748b' }}>Oppenheim Group</div>
-                  <div style={{ marginTop: '12px' }}>
-                    <div style={{ fontSize: '42px', fontWeight: 900, color: '#0A1929', lineHeight: 1 }}>{scan.composite_score}</div>
-                    <div style={{ fontSize: '13px', color: '#94a3b8', marginTop: '2px' }}>out of 100</div>
+                {/* Radley */}
+                <div style={{ padding: '20px 20px 20px 20px', borderRight: '1px solid #f1f5f9' }}>
+                  <div style={{ fontSize: '10px', color: '#94a3b8', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '12px' }}>Your Score</div>
+                  <div style={{ fontSize: '48px', fontWeight: 900, color: '#0A1929', lineHeight: 1 }}>{scan.composite_score}</div>
+                  <div style={{ fontSize: '12px', color: '#94a3b8', marginTop: '4px', marginBottom: '12px' }}>out of 100</div>
+                  <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: '#f0f4f8', borderRadius: '20px', padding: '4px 12px', marginBottom: '10px' }}>
+                    <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#64748b' }} />
+                    <span style={{ fontSize: '11px', fontWeight: 600, color: '#475569' }}>{scan.tier_name}</span>
                   </div>
-                  <div style={{ marginTop: '10px', display: 'inline-block', background: '#f0f4f8', borderRadius: '6px', padding: '4px 10px', fontSize: '11px', fontWeight: 700, color: '#64748b' }}>
-                    {scan.tier_name} · {scan.tier_line}
-                  </div>
-                  <div style={{ marginTop: '8px', fontSize: '12px', color: '#64748b', lineHeight: 1.4 }}>
-                    AI knows who you are but doesn&apos;t recommend you in discovery searches yet.
+                  <div style={{ fontSize: '12px', color: '#94a3b8', lineHeight: 1.5 }}>
+                    AI knows you — but doesn&apos;t recommend you in discovery searches yet.
                   </div>
                 </div>
 
-                {/* Competitor — benchmark context */}
+                {/* Competitor */}
                 <div style={{ padding: '20px', background: '#fafbfc' }}>
-                  <div style={{ fontSize: '10px', color: '#EF4444', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px' }}>Current Benchmark</div>
-                  <div style={{ fontSize: '18px', fontWeight: 800, color: '#0A1929' }}>{primaryCompetitor.competitor}</div>
-                  <div style={{ fontSize: '11px', color: '#64748b' }}>{primaryCompetitor.competitor_brokerage}</div>
-                  {scan.competitor_validation?.verified && (
-                    <div style={{ fontSize: '10px', color: '#94a3b8', marginTop: '2px' }}>DRE #{scan.competitor_validation.dre} · Verified active</div>
-                  )}
-                  <div style={{ marginTop: '12px' }}>
-                    <div style={{ fontSize: '42px', fontWeight: 900, color: '#EF4444', lineHeight: 1 }}>~55</div>
-                    <div style={{ fontSize: '13px', color: '#94a3b8', marginTop: '2px' }}>out of 100</div>
-                  </div>
-                  <div style={{ marginTop: '10px', fontSize: '12px', color: '#64748b', lineHeight: 1.4 }}>
-                    Appears in AI recommendations in Carmel Valley. This is the slot we&apos;re building you into.
+                  <div style={{ fontSize: '10px', color: '#EF4444', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '12px' }}>Benchmark</div>
+                  <div style={{ fontSize: '48px', fontWeight: 900, color: '#EF4444', lineHeight: 1 }}>~55</div>
+                  <div style={{ fontSize: '12px', color: '#94a3b8', marginTop: '4px', marginBottom: '12px' }}>out of 100</div>
+                  <div style={{ fontSize: '13px', fontWeight: 700, color: '#0A1929', marginBottom: '2px' }}>{primaryCompetitor.competitor}</div>
+                  <div style={{ fontSize: '11px', color: '#94a3b8', marginBottom: '10px' }}>{primaryCompetitor.competitor_brokerage}</div>
+                  <div style={{ fontSize: '12px', color: '#94a3b8', lineHeight: 1.5 }}>
+                    Currently recommended by AI in {primaryCompetitor.name} — the position we&apos;re building you into.
                   </div>
                 </div>
               </div>
