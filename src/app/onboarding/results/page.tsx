@@ -369,21 +369,21 @@ function ResultsContent() {
           </p>
           <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '16px' }}>
             <div style={{ marginBottom: '12px' }}>
-              <div style={{ fontSize: '13px', fontWeight: 700, color: '#00BFA6', marginBottom: '6px' }}>Carmel Valley</div>
+              <div style={{ fontSize: '13px', fontWeight: 700, color: '#00BFA6', marginBottom: '6px' }}>Carmel Valley — 3 core + 1 growth</div>
               <div style={{ fontSize: '13px', color: '#475569', lineHeight: 1.6 }}>
-                Rancho Pacifica · Whispering Woods · Pacific Highlands Ranch · Torrey Hills · Del Mar Mesa
+                <strong>Rancho Pacifica</strong> (8 txns) · <strong>Whispering Woods</strong> (2 txns) · <strong>Santander</strong> (1 txn) · <span style={{ color: '#94a3b8' }}>Pacific Highlands Ranch (growth)</span>
               </div>
             </div>
             <div style={{ marginBottom: '12px' }}>
-              <div style={{ fontSize: '13px', fontWeight: 700, color: '#D4A830', marginBottom: '6px' }}>Carlsbad</div>
+              <div style={{ fontSize: '13px', fontWeight: 700, color: '#D4A830', marginBottom: '6px' }}>Carlsbad — 3 core + 1 growth</div>
               <div style={{ fontSize: '13px', color: '#475569', lineHeight: 1.6 }}>
-                La Costa · Santalina · Santander · Aviara · La Costa Oaks
+                <strong>La Costa</strong> (3 txns) · <strong>Santalina</strong> (2 txns) · <strong>Santander</strong> (1 txn) · <span style={{ color: '#94a3b8' }}>Aviara (growth)</span>
               </div>
             </div>
             <div>
-              <div style={{ fontSize: '13px', fontWeight: 700, color: '#0A1929', marginBottom: '6px' }}>Rancho Santa Fe</div>
+              <div style={{ fontSize: '13px', fontWeight: 700, color: '#0A1929', marginBottom: '6px' }}>Rancho Santa Fe — 2 core</div>
               <div style={{ fontSize: '13px', color: '#475569', lineHeight: 1.6 }}>
-                Del Mar Country Club · Whispering Palms · The Crosby · Fairbanks Ranch
+                <strong>Del Mar Country Club</strong> ($6.2M) · <strong>Whispering Palms</strong> (2 txns)
               </div>
             </div>
           </div>
@@ -418,7 +418,7 @@ function ResultsContent() {
               fontSize: '16px', fontWeight: 700, border: 'none', borderRadius: '8px',
               cursor: saving ? 'wait' : 'pointer', opacity: saving ? 0.7 : 1,
             }}>
-              {saving ? 'Saving...' : '✓ Approve 3 Markets + 14 Neighborhoods — Start Optimization'}
+              {saving ? 'Saving...' : '✓ Approve 3 Markets + 9 Neighborhoods — Start Optimization'}
             </button>
           </div>
         ) : (
