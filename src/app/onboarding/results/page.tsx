@@ -470,8 +470,9 @@ function ResultsContent() {
               {/* What the gap means */}
               <div style={{ padding: '14px 20px', background: '#0A1929', display: 'flex', alignItems: 'center', gap: '12px' }}>
                 <div style={{ fontSize: '13px', color: '#94a3b8', lineHeight: 1.5, flex: 1 }}>
-                  A score of <span style={{ color: '#fff', fontWeight: 700 }}>65+</span> is where AI begins recommending you regularly.
-                  You need <span style={{ color: '#00BFA6', fontWeight: 700 }}>+41 points</span> — and our analysis shows exactly where to get them.
+                  The higher your score, the more consistently AI recommends you.
+                  Felicia is at ~55 and gets recommended regularly — our goal is to get you there and past it.
+                  Our analysis shows exactly where your <span style={{ color: '#00BFA6', fontWeight: 700 }}>+41 points</span> are coming from.
                 </div>
               </div>
             </div>
