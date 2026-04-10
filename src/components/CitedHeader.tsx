@@ -98,20 +98,20 @@ export default function CitedHeader({ variant, currentPage, stepIndicator, userE
           <div style={{ textAlign: 'right' }}>
             {userName ? (
               <div>
-                <div style={{ fontSize: '13px', fontWeight: 700, color: '#fff' }}>{userName}</div>
+                <div style={{ fontSize: '13px', fontWeight: 700, color: '#fff', lineHeight: 1.2 }}>{userName}</div>
                 {clientTitle && (
-                  <div style={{ fontSize: '11px', color: '#94a3b8', marginTop: '1px' }}>{clientTitle}</div>
+                  <div style={{ fontSize: '11px', color: '#94a3b8', marginTop: '2px' }}>{clientTitle}</div>
                 )}
                 {badge && (
                   <div style={{
                     display: 'inline-block',
-                    fontSize: '10px',
+                    fontSize: '9px',
                     fontWeight: 700,
                     color: badge.color,
                     background: badge.bg,
                     padding: '2px 8px',
                     borderRadius: '10px',
-                    marginTop: '4px',
+                    marginTop: '3px',
                     letterSpacing: '0.5px',
                   }}>
                     {badge.label}
