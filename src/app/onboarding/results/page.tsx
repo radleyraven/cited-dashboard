@@ -98,7 +98,7 @@ const SCAN_DATA = {
       impact: 'ChatGPT pulls 87% of its local business data from Bing. If you don\'t exist in Bing Places, you don\'t exist in ChatGPT. Same with Foursquare — it feeds multiple AI models.',
       points: '+14 pts',
       color: '#EF4444',
-      action: 'We\'ll claim and fully optimize both profiles with your positioning copy.',
+      action: 'We\'ll walk you through claiming both profiles — takes about 5 minutes each. Once claimed, we fully optimize them with your positioning copy.',
     },
     {
       title: 'Google Business + Website Schema',
