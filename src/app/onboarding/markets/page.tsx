@@ -247,7 +247,6 @@ function MarketsContent() {
         stepIndicator="Step 1 of 2 — Market Approval"
         userEmail={clientEmail}
         userName={clientName}
-        clientTitle={clientBrokerage}
         clientTier="founding_client"
       />
 

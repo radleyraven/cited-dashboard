@@ -256,7 +256,6 @@ function NeighborhoodsContent() {
         stepIndicator="Step 2 of 2 — Neighborhood Confirmation"
         userEmail={clientEmail}
         userName={clientName}
-        clientTitle={clientBrokerage}
         clientTier="founding_client"
       />
 
