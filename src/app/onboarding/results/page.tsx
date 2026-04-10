@@ -102,7 +102,7 @@ const SCAN = {
     },
     {
       title: 'Google Business Profile',
-      detail: 'Your GBP is claimed, actively posted, and has 11 reviews with a perfect 5.0 rating. This is the foundation — it just needs more reviews to cross the AI recommendation threshold.',
+      detail: 'Your GBP is claimed, actively posted, and has 8 reviews with a perfect 5.0 rating. This is the foundation — it just needs more reviews to cross the AI recommendation threshold.',
       badge: 'Active',
     },
   ],
@@ -128,7 +128,7 @@ const SCAN = {
     },
     {
       title: 'Website Schema + AI Structure',
-      status: '11 GBP reviews · No AI-readable structure on your website',
+      status: '8 GBP reviews · No AI-readable structure on your website',
       impact: 'Google AI and Gemini rely on schema markup — structured data that tells AI exactly who you are, where you work, and what you specialize in. Your website has none. Google AI can\'t parse your expertise from your site.',
       points: '+10 pts',
       color: '#D4A830',
@@ -776,12 +776,12 @@ function ResultsContent() {
                       <div style={{ fontSize: '18px', fontWeight: 800, color: '#0A1929' }}>{market.name}</div>
 
                       {/* Stats */}
-                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: '8px', marginTop: '10px' }}>
+                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginTop: '10px' }}>
                         {[
                           { label: 'Volume', value: market.volume },
                           { label: 'Transactions', value: market.txnCount },
                           { label: 'Avg Price', value: market.avgPrice },
-                          { label: 'AI Leader', value: market.competitor },
+                          { label: 'AI Visibility Leader', value: `${market.competitor} (${market.competitorScore})` },
                         ].map(s => (
                           <div key={s.label} style={{ background: tier.bg, borderRadius: '6px', padding: '8px 10px' }}>
                             <div style={{ fontSize: '9px', fontWeight: 600, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.5px' }}>{s.label}</div>
