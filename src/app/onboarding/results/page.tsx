@@ -153,14 +153,15 @@ function DeliverableIcon({ type, size = 28 }: { type: string; size?: number }) {
 function ProgressIndicator() {
   const steps = ['Citation Report', 'Approve Strategy', 'Positioning', 'Copy Kit'];
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', gap: '6px', padding: '14px 24px', background: '#fff', borderBottom: '1px solid #f1f5f9', flexWrap: 'wrap' }}>
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', padding: '12px 24px', background: '#fff', borderBottom: '1px solid #f1f5f9' }}>
       {steps.map((step, i) => (
-        <div key={step} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '5px', opacity: i === 0 ? 1 : 0.4 }}>
-            <div style={{ width: '18px', height: '18px', borderRadius: '50%', background: i === 0 ? '#0A1929' : '#e2e8f0', color: '#fff', fontSize: '9px', fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{i + 1}</div>
-            <span style={{ fontSize: '11px', fontWeight: i === 0 ? 700 : 500, color: i === 0 ? '#0A1929' : '#94a3b8' }}>{step}</span>
+        <div key={step} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', opacity: i === 0 ? 1 : 0.35 }}>
+            <div style={{ width: '20px', height: '20px', borderRadius: '50%', background: i === 0 ? '#0A1929' : '#e2e8f0', color: i === 0 ? '#fff' : '#94a3b8', fontSize: '10px', fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>{i + 1}</div>
+            {/* Show label only for active step on mobile */}
+            {i === 0 && <span style={{ fontSize: '12px', fontWeight: 700, color: '#0A1929', whiteSpace: 'nowrap' }}>{step}</span>}
           </div>
-          {i < steps.length - 1 && <div style={{ width: '16px', height: '1px', background: '#e2e8f0' }} />}
+          {i < steps.length - 1 && <div style={{ width: '20px', height: '1px', background: '#e2e8f0', flexShrink: 0 }} />}
         </div>
       ))}
     </div>
