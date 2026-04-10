@@ -393,7 +393,7 @@ function ResultsContent() {
             <div style={{ padding: '12px 16px', background: '#fff5f5', display: 'flex', alignItems: 'center', gap: '10px' }}>
               <div style={{ width: '20px', height: '20px', borderRadius: '50%', background: '#EF4444', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontSize: '12px' }}>✕</div>
               <div style={{ fontSize: '13px', color: '#EF4444', fontWeight: 700, lineHeight: 1.4 }}>
-                Your name did not appear — in this query or any of the {scan.query_count} discovery queries we ran.
+                Your name did not appear — in this query or any discovery query we ran across all your markets and all AI models.
               </div>
             </div>
           </div>
