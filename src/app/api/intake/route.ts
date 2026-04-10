@@ -132,6 +132,7 @@ export async function POST(request: Request) {
       youtube_url: body.youtubeUrl?.trim() || null,
       additional_platforms: body.additionalPlatforms?.trim() || null,
       gbp_status: body.gbpStatus?.trim() || null,
+      gbp_url: body.gbpUrl?.trim() || null,
       skipped_fields: body.skippedFields?.length > 0 ? body.skippedFields : [],
       intake_completion_pct: body.intakeCompletionPct ?? 100,
       gbp_manager_added: body.gbpStatus === "added" || body.gbpManagerAdded === true,
