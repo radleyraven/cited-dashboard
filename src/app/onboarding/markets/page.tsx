@@ -146,33 +146,29 @@ function MarketsContent() {
   }
 
   function approveAll() {
-    setMarkets(prev => prev.map(m => ({ ...m, approved: true })));
-    // Auto-submit after brief visual confirmation
+    const allApprovedMarkets = markets.map(m => ({ ...m, approved: true }));
+    setMarkets(allApprovedMarkets);
+    // Auto-submit with the approved markets directly (don't rely on stale state)
     setTimeout(() => {
-      handleConfirmRef.current?.();
+      saveAndContinue(allApprovedMarkets);
     }, 800);
   }
 
-  const handleConfirmRef = { current: null as (() => void) | null };
-
   const allMarketApproved = markets.length > 0 && markets.every(m => m.approved);
 
-  handleConfirmRef.current = handleConfirm;
-
-  async function handleConfirm() {
+  async function saveAndContinue(marketsToSave: MarketRec[]) {
     if (!recordId) return;
     setLoading(true);
     const supabase = createSupabaseBrowserClient();
     const token = searchParams.get('token');
 
-    const approvedMarkets = markets.filter(m => m.approved);
     const updateData = {
       markets_approved: true,
       markets_approved_at: new Date().toISOString(),
-      primary_market: approvedMarkets.find(m => m.tier === 'primary')?.name || '',
-      secondary_market: approvedMarkets.find(m => m.tier === 'secondary')?.name || '',
-      growth_market: approvedMarkets.find(m => m.tier === 'growth')?.name || '',
-      market_recommendations: JSON.stringify(markets),
+      primary_market: marketsToSave.find(m => m.tier === 'primary')?.name || '',
+      secondary_market: marketsToSave.find(m => m.tier === 'secondary')?.name || '',
+      growth_market: marketsToSave.find(m => m.tier === 'growth')?.name || '',
+      market_recommendations: JSON.stringify(marketsToSave),
     };
 
     await supabase
@@ -183,11 +179,14 @@ function MarketsContent() {
     setAllApproved(true);
     setLoading(false);
 
-    // Redirect to neighborhoods with same token
+    const tokenParam = token ? `?token=${token}` : '';
     setTimeout(() => {
-      const tokenParam = token ? `?token=${token}` : '';
       router.push(`/onboarding/neighborhoods${tokenParam}`);
-    }, 2000);
+    }, 1500);
+  }
+
+  async function handleConfirm() {
+    await saveAndContinue(markets);
   }
 
   async function handleChangeRequest() {
