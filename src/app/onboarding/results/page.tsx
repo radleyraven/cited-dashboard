@@ -456,7 +456,7 @@ function ResultsContent() {
           }}>
             <div style={{ textAlign: 'center', borderRight: '1px solid rgba(255,255,255,0.1)', paddingRight: '20px' }}>
               <div style={{ fontSize: '48px', fontWeight: 900, color: '#fff', lineHeight: 1 }}>90</div>
-              <div style={{ fontSize: '12px', color: '#64748b', marginTop: '6px', lineHeight: 1.4 }}>Searches {audienceFocus === 'buyers' ? 'buyers and sellers' : 'sellers and buyers'} run in your markets</div>
+              <div style={{ fontSize: '12px', color: '#64748b', marginTop: '6px', lineHeight: 1.4 }}>Searches sellers and buyers run in your markets</div>
             </div>
             <div style={{ textAlign: 'center', paddingLeft: '20px' }}>
               <div style={{ fontSize: '48px', fontWeight: 900, color: '#EF4444', lineHeight: 1 }}>0</div>
