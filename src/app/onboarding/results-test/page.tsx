@@ -220,20 +220,36 @@ function StrengthCards({ strengths }: { strengths: StrengthData[] }) {
         const isOpen = expanded === i;
         return (
           <div key={i} style={{ background: '#fff', borderRadius: '10px', overflow: 'hidden' }}>
-            <button onClick={() => setExpanded(isOpen ? null : i)} style={{
-              width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-              padding: '14px 18px', background: 'none', border: 'none', cursor: 'pointer', textAlign: 'left',
-              borderLeft: `4px solid ${D.teal}`,
-            }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <div style={{ width: '28px', height: '28px', borderRadius: '8px', background: '#f0fdf9', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '14px', color: D.teal, fontWeight: 700, flexShrink: 0 }}>
-                  {STRENGTH_ICONS[item.title] || '✓'}
+            <button
+              onClick={() => setExpanded(isOpen ? null : i)}
+              style={{
+                width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                padding: '14px 18px', background: 'none', border: 'none', cursor: 'pointer', textAlign: 'left',
+                borderLeft: `4px solid ${D.teal}`, transition: 'background 0.15s',
+              }}
+              onMouseEnter={e => (e.currentTarget.style.background = '#f0faf8')}
+              onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
+            >
+              <div style={{ flex: 1 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <div style={{ width: '28px', height: '28px', borderRadius: '8px', background: '#f0fdf9', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '14px', color: D.teal, fontWeight: 700, flexShrink: 0 }}>
+                    {STRENGTH_ICONS[item.title] || '✓'}
+                  </div>
+                  <span style={{ fontSize: '14px', fontWeight: 600, color: D.textPrimary }}>{item.title}</span>
                 </div>
-                <span style={{ fontSize: '14px', fontWeight: 600, color: D.textPrimary }}>{item.title}</span>
+                {!isOpen && (
+                  <div style={{ fontSize: '12px', color: D.textTertiary, marginTop: '4px', marginLeft: '38px', lineHeight: 1.4 }}>
+                    {item.detail.length > 80 ? item.detail.substring(0, 80) + '…' : item.detail}
+                  </div>
+                )}
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexShrink: 0, marginLeft: '12px' }}>
                 <span style={{ fontSize: '11px', fontWeight: 600, color: D.teal, background: '#f0fdf9', padding: '3px 10px', borderRadius: '12px' }}>{item.badge}</span>
-                <span style={{ fontSize: '11px', color: D.textTertiary, transform: isOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }}>▾</span>
+                <div style={{
+                  width: '22px', height: '22px', borderRadius: '6px', border: `1.5px solid ${D.border}`,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontSize: '12px', color: D.textTertiary, transform: isOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s',
+                }}>▾</div>
               </div>
             </button>
             {isOpen && (
@@ -248,26 +264,47 @@ function StrengthCards({ strengths }: { strengths: StrengthData[] }) {
   );
 }
 
-/* ── Section Summary Bar (Note 40 — compact completed state) ── */
-function SectionSummaryBar({ title, stat, onExpand }: { title: string; stat: string; onExpand: () => void }) {
+/* ── Section Summary Bar (Note 40 — compact completed state, enriched) ── */
+function SectionSummaryBar({ title, stats, onExpand }: { title: string; stats: { label: string; value: string; color?: string }[]; onExpand: () => void }) {
   return (
     <div
       onClick={onExpand}
       style={{
-        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        padding: '12px 18px', background: '#fff', borderRadius: '10px',
-        cursor: 'pointer', marginBottom: '8px', borderLeft: `3px solid #00BFA6`,
-        transition: 'background 0.15s',
+        background: '#fff', borderRadius: '10px', cursor: 'pointer',
+        borderLeft: `3px solid #00BFA6`, transition: 'background 0.15s',
+        padding: '18px 20px',
       }}
       onMouseEnter={e => (e.currentTarget.style.background = '#f0faf8')}
       onMouseLeave={e => (e.currentTarget.style.background = '#fff')}
     >
-      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-        <span style={{ fontSize: '12px', color: '#00BFA6', fontWeight: 700 }}>✓</span>
-        <span style={{ fontSize: '13px', fontWeight: 600, color: '#0A1929' }}>{title}</span>
-        <span style={{ fontSize: '12px', color: '#94a3b8' }}>· {stat}</span>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: stats.length > 0 ? '10px' : 0 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <span style={{ fontSize: '13px', color: '#00BFA6', fontWeight: 700 }}>✓</span>
+          <span style={{ fontSize: '14px', fontWeight: 700, color: '#0A1929' }}>{title}</span>
+        </div>
+        <span style={{ fontSize: '11px', color: '#94a3b8', flexShrink: 0 }}>expand ↓</span>
       </div>
-      <span style={{ fontSize: '11px', color: '#94a3b8' }}>expand ↓</span>
+      {stats.length > 0 && (
+        <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', paddingLeft: '21px' }}>
+          {stats.map((s, i) => (
+            <div key={i} style={{ fontSize: '12px', color: '#94a3b8', lineHeight: 1.4 }}>
+              <span style={{ color: '#475569' }}>{s.label}: </span>
+              <span style={{ fontWeight: 600, color: s.color || '#0A1929' }}>{s.value}</span>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ── Re-collapse button for expanded completed sections ── */
+function CompactButton({ onClick }: { onClick: () => void }) {
+  return (
+    <div style={{ paddingTop: '12px' }}>
+      <button onClick={onClick} style={{ background: 'none', border: 'none', fontSize: '12px', color: '#94a3b8', fontWeight: 600, cursor: 'pointer', padding: 0 }}>
+        ↑ Compact this section
+      </button>
     </div>
   );
 }
@@ -362,6 +399,8 @@ function ResultsContent() {
   const [visibleSection, setVisibleSection] = useState(1);
   const [collapsedSections, setCollapsedSections] = useState<Set<number>>(new Set());
   const [marketConfirms, setMarketConfirms] = useState<boolean[]>([]);
+  const [hoodStep, setHoodStep] = useState<Set<number>>(new Set()); // markets showing neighborhood confirmation step
+  const [hoodConfirms, setHoodConfirms] = useState<boolean[]>([]); // neighborhoods confirmed per market
   const [expandedMarket, setExpandedMarket] = useState<number | null>(null);
   const [showApprovePanel, setShowApprovePanel] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -396,8 +435,10 @@ function ResultsContent() {
   }
 
   const revealNext = useCallback((n: number) => {
-    // Collapse the previous section when continuing (Note 40)
-    setCollapsedSections(prev => new Set(prev).add(n - 1));
+    // Only compact sections 1-3 (narrative setup). Sections 4+ (Markets, 90-Day, Deliverables, Approve) stay open.
+    if (n - 1 >= 1 && n - 1 <= 3) {
+      setCollapsedSections(prev => new Set(prev).add(n - 1));
+    }
     setVisibleSection(prev => Math.max(prev, n));
     setTimeout(() => { sectionRefs.current[n - 1]?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 100);
   }, []);
@@ -407,8 +448,25 @@ function ResultsContent() {
     setTimeout(() => { marketsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 100);
   }
 
-  function toggleMarket(i: number) { setMarketConfirms(prev => { const n = [...prev]; n[i] = !n[i]; return n; }); }
-  function approveAllMarkets() { setMarketConfirms(prev => prev.map(() => true)); }
+  function toggleMarket(i: number) {
+    const wasConfirmed = marketConfirms[i];
+    if (wasConfirmed) {
+      // Un-approve: reset to full card
+      setMarketConfirms(prev => { const n = [...prev]; n[i] = false; return n; });
+      setHoodStep(prev => { const n = new Set(prev); n.delete(i); return n; });
+    } else {
+      // Approve market → show neighborhood step
+      setHoodStep(prev => new Set(prev).add(i));
+    }
+  }
+  function confirmNeighborhoods(i: number) {
+    setHoodStep(prev => { const n = new Set(prev); n.delete(i); return n; });
+    setMarketConfirms(prev => { const n = [...prev]; n[i] = true; return n; });
+  }
+  function approveAllMarkets() {
+    setMarketConfirms(prev => prev.map(() => true));
+    setHoodStep(new Set());
+  }
 
   function handleApproveClick() {
     if (!allMarketsConfirmed) { setShowModal(true); return; }
@@ -497,7 +555,11 @@ function ResultsContent() {
         {/* ═══ SECTION 1: DISCOVERY GAP ═══ */}
         <div ref={el => { sectionRefs.current[0] = el; }} style={{ paddingTop: D.sectionGap }}>
         {collapsedSections.has(1) ? (
-          <SectionSummaryBar title="The Discovery Gap" stat={`${clientScore}/100 · 0 of ${scan.query_count} queries`} onExpand={() => setCollapsedSections(prev => { const n = new Set(prev); n.delete(1); return n; })} />
+          <SectionSummaryBar title="The Discovery Gap" stats={[
+            { label: 'Citation Score', value: `${clientScore}/100`, color: D.red },
+            { label: 'Behind benchmark', value: `${competitorScore - clientScore} pts`, color: D.red },
+            { label: 'AI queries with your name', value: '0 of 90', color: D.red },
+          ]} onExpand={() => setCollapsedSections(prev => { const n = new Set(prev); n.delete(1); return n; })} />
         ) : (<>
           <h2 style={{ fontSize: '22px', fontWeight: 800, color: D.navy, margin: '0 0 6px 0' }}>The Discovery Gap</h2>
           <p style={{ fontSize: '14px', color: D.textSecondary, margin: '0 0 20px 0', lineHeight: 1.7 }}>
@@ -616,13 +678,16 @@ function ResultsContent() {
           )}
 
           {visibleSection < 2 && <ContinueButton onClick={() => revealNext(2)} text="See What's Already Working" />}
+          {visibleSection >= 2 && <CompactButton onClick={() => setCollapsedSections(prev => new Set(prev).add(1))} />}
         </>)}</div>
 
         {/* ═══ SECTION 2: STRENGTHS ═══ */}
         {visibleSection >= 2 && (
           <div ref={el => { sectionRefs.current[1] = el; }} style={{ paddingTop: D.sectionGap }}>
             {collapsedSections.has(2) ? (
-              <SectionSummaryBar title="What's Already Working" stat={`${scan.strengths.length} strengths found`} onExpand={() => setCollapsedSections(prev => { const n = new Set(prev); n.delete(2); return n; })} />
+              <SectionSummaryBar title="What's Already Working" stats={scan.strengths.map(s => ({
+                label: s.title, value: s.badge, color: D.teal,
+              }))} onExpand={() => setCollapsedSections(prev => { const n = new Set(prev); n.delete(2); return n; })} />
             ) : (
               <>
                 <h2 style={{ fontSize: '22px', fontWeight: 800, color: D.navy, margin: '0 0 6px 0' }}>What&apos;s Already Working</h2>
@@ -631,6 +696,7 @@ function ResultsContent() {
                 </p>
                 <StrengthCards strengths={scan.strengths} />
                 {visibleSection < 3 && <ContinueButton onClick={() => revealNext(3)} text="See Where the Gaps Are" />}
+                {visibleSection >= 3 && <CompactButton onClick={() => setCollapsedSections(prev => new Set(prev).add(2))} />}
               </>
             )}
           </div>
@@ -640,7 +706,11 @@ function ResultsContent() {
         {visibleSection >= 3 && (
           <div ref={el => { sectionRefs.current[2] = el; }} style={{ paddingTop: D.sectionGap }}>
             {collapsedSections.has(3) ? (
-              <SectionSummaryBar title="Where the Gaps Are" stat={`${scan.gaps.length} gaps · +46 pts recoverable`} onExpand={() => setCollapsedSections(prev => { const n = new Set(prev); n.delete(3); return n; })} />
+              <SectionSummaryBar title="Where the Gaps Are" stats={[
+                { label: 'Gaps found', value: `${scan.gaps.length}`, color: D.red },
+                { label: 'Points leaving on the table', value: '+46', color: D.teal },
+                { label: 'Path to', value: `${clientScore} → 65+ in 90 days` },
+              ]} onExpand={() => setCollapsedSections(prev => { const n = new Set(prev); n.delete(3); return n; })} />
             ) : (
               <>
                 <h2 style={{ fontSize: '22px', fontWeight: 800, color: D.navy, margin: '0 0 6px 0' }}>Where the Gaps Are</h2>
@@ -653,6 +723,7 @@ function ResultsContent() {
                   <span style={{ fontSize: '13px', color: D.textTertiary, marginLeft: '10px' }}>— enough to move from {clientScore} to 65+ in 90 days</span>
                 </div>
                 {visibleSection < 4 && <ContinueButton onClick={() => revealNext(4)} text="See Your Market Strategy" />}
+                {visibleSection >= 4 && <CompactButton onClick={() => setCollapsedSections(prev => new Set(prev).add(3))} />}
               </>
             )}
           </div>
@@ -707,21 +778,64 @@ function ResultsContent() {
 
                 return (
                   <div key={market.name} style={{ background: '#fff', borderRadius: '12px', overflow: 'hidden', borderLeft: `4px solid ${isConfirmed ? D.teal : tier.color}`, transition: 'border-color 0.3s' }}>
-                    {/* Collapsed approved state */}
-                    {isConfirmed && !approved && (
+                    {/* Neighborhood confirmation step — after market approved, before full collapse */}
+                    {hoodStep.has(idx) && !approved && (
+                      <div>
+                        <div style={{ padding: '20px 20px 10px' }}>
+                          <div style={{ fontSize: '10px', fontWeight: 700, color: tier.color, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '4px' }}>{tier.label}</div>
+                          <div style={{ fontSize: '19px', fontWeight: 800, color: D.navy, marginBottom: '4px' }}>{market.name} ✓</div>
+                          <div style={{ fontSize: '13px', color: D.textSecondary, lineHeight: 1.6 }}>
+                            Last step — confirm the neighborhoods we&apos;ll optimize for.
+                          </div>
+                        </div>
+                        <div style={{ padding: '10px 20px 16px' }}>
+                          <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                            {hoods.map((hood) => {
+                              const recognized = hood.ai_status === 'recognized';
+                              return (
+                                <div key={hood.name} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '9px 12px', background: D.grayBg, borderRadius: '8px' }}>
+                                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                    <div style={{ width: '18px', height: '18px', borderRadius: '50%', background: recognized ? '#f0fdf9' : '#fff5f5', border: `1.5px solid ${recognized ? D.teal : D.red}`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '9px', fontWeight: 700, color: recognized ? D.teal : D.red, flexShrink: 0 }}>
+                                      {recognized ? '✓' : '!'}
+                                    </div>
+                                    <div>
+                                      <div style={{ fontSize: '13px', fontWeight: 600, color: D.navy }}>{hood.name}</div>
+                                      <div style={{ fontSize: '11px', color: D.textTertiary }}>{hood.reason}</div>
+                                    </div>
+                                  </div>
+                                  <span style={{ fontSize: '10px', fontWeight: 600, color: recognized ? D.teal : '#D4A830', whiteSpace: 'nowrap' }}>
+                                    {recognized ? 'Already in AI — we reinforce it' : 'Not indexed — we\'ll change that'}
+                                  </span>
+                                </div>
+                              );
+                            })}
+                          </div>
+                          <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '12px' }}>
+                            <button onClick={() => confirmNeighborhoods(idx)} style={{
+                              background: D.teal, color: '#fff', border: 'none', borderRadius: '20px',
+                              padding: '7px 18px', fontSize: '12px', fontWeight: 700, cursor: 'pointer',
+                            }}>
+                              Confirm {hoods.length} neighborhoods →
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                    {/* Collapsed approved state — after neighborhoods confirmed */}
+                    {isConfirmed && !hoodStep.has(idx) && !approved && (
                       <div style={{ padding: '14px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                           <span style={{ fontSize: '14px', color: D.teal, fontWeight: 700 }}>✅</span>
                           <span style={{ fontSize: '14px', fontWeight: 700, color: D.navy }}>{market.name}</span>
-                          <span style={{ fontSize: '11px', color: D.textTertiary }}>— {tier.label} · Approved</span>
+                          <span style={{ fontSize: '11px', color: D.textTertiary }}>— {tier.label} · {hoods.length} neighborhoods · Approved</span>
                         </div>
                         <button onClick={() => toggleMarket(idx)} style={{ background: 'none', border: 'none', fontSize: '12px', color: D.teal, fontWeight: 600, cursor: 'pointer', padding: 0 }}>
                           Edit ↗
                         </button>
                       </div>
                     )}
-                    {/* Full card — shown when not confirmed, or when already fully approved */}
-                    {(!isConfirmed || approved) && (
+                    {/* Full card — shown when not confirmed and not in hood step, or when already fully approved */}
+                    {((!isConfirmed && !hoodStep.has(idx)) || approved) && (
                     <div style={{ padding: '20px 20px 16px', position: 'relative' }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                         <div>
