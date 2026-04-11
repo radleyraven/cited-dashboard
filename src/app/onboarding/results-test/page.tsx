@@ -51,6 +51,7 @@ interface MarketData {
   competitor: string;
   competitor_brokerage: string;
   competitor_score: string;
+  competitor_signals?: string[]; // Note 39: "Why AI recommends her" bullets
   ai_signal: string;
   txn_highlight: string;
   neighborhoods: NeighborhoodData[];
@@ -247,8 +248,40 @@ function StrengthCards({ strengths }: { strengths: StrengthData[] }) {
   );
 }
 
+/* ── Section Summary Bar (Note 40 — compact completed state) ── */
+function SectionSummaryBar({ title, stat, onExpand }: { title: string; stat: string; onExpand: () => void }) {
+  return (
+    <div
+      onClick={onExpand}
+      style={{
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        padding: '12px 18px', background: '#fff', borderRadius: '10px',
+        cursor: 'pointer', marginBottom: '8px', borderLeft: `3px solid #00BFA6`,
+        transition: 'background 0.15s',
+      }}
+      onMouseEnter={e => (e.currentTarget.style.background = '#f0faf8')}
+      onMouseLeave={e => (e.currentTarget.style.background = '#fff')}
+    >
+      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+        <span style={{ fontSize: '12px', color: '#00BFA6', fontWeight: 700 }}>✓</span>
+        <span style={{ fontSize: '13px', fontWeight: 600, color: '#0A1929' }}>{title}</span>
+        <span style={{ fontSize: '12px', color: '#94a3b8' }}>· {stat}</span>
+      </div>
+      <span style={{ fontSize: '11px', color: '#94a3b8' }}>expand ↓</span>
+    </div>
+  );
+}
+
 /* ── Gap Cards (accordion) ── */
-function GapCards({ gaps }: { gaps: GapData[] }) {
+function GapCards({ gaps, audienceFocus }: { gaps: GapData[]; audienceFocus: string }) {
+  // Note 42: swap buyer/seller language based on audienceFocus
+  function swapAudience(text: string): string {
+    if (audienceFocus === 'sellers') {
+      return text.replace(/\bbuyers\b/gi, 'sellers').replace(/\bbuyer\b/gi, 'seller').replace(/\bbuy with\b/gi, 'list with').replace(/\bbuying\b/gi, 'selling');
+    } else {
+      return text.replace(/\bsellers\b/gi, 'buyers').replace(/\bseller\b/gi, 'buyer').replace(/\blist with\b/gi, 'buy with').replace(/\bselling\b/gi, 'buying');
+    }
+  }
   const [expanded, setExpanded] = useState<number | null>(null);
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
@@ -268,8 +301,8 @@ function GapCards({ gaps }: { gaps: GapData[] }) {
               onMouseLeave={e => (e.currentTarget.style.background = 'none')}
             >
               <div style={{ flex: 1 }}>
-                <div style={{ fontSize: '15px', fontWeight: 700, color: '#0A1929' }}>{gap.title}</div>
-                <div style={{ fontSize: '12px', color: gap.color, fontWeight: 600, marginTop: '3px' }}>{gap.status}</div>
+                <div style={{ fontSize: '15px', fontWeight: 700, color: '#0A1929' }}>{swapAudience(gap.title)}</div>
+                <div style={{ fontSize: '12px', color: gap.color, fontWeight: 600, marginTop: '3px' }}>{swapAudience(gap.status)}</div>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexShrink: 0, marginLeft: '12px' }}>
                 <div style={{ background: '#f0fdf9', color: '#00BFA6', fontSize: '12px', fontWeight: 700, padding: '4px 12px', borderRadius: '12px', whiteSpace: 'nowrap' }}>{gap.points}</div>
@@ -283,11 +316,11 @@ function GapCards({ gaps }: { gaps: GapData[] }) {
             {/* Expanded detail */}
             {isOpen && (
               <div style={{ padding: '0 20px 16px 20px', borderTop: '1px solid #f1f5f9' }}>
-                <p style={{ fontSize: '13px', color: '#475569', margin: '12px 0', lineHeight: 1.7 }}>{gap.impact}</p>
+                <p style={{ fontSize: '13px', color: '#475569', margin: '12px 0', lineHeight: 1.7 }}>{swapAudience(gap.impact)}</p>
                 <div style={{ background: '#f0fdf9', borderRadius: '8px', padding: '12px 14px', marginBottom: '10px' }}>
-                  <p style={{ fontSize: '13px', color: '#0A1929', margin: 0, lineHeight: 1.6 }}>{gap.action}</p>
+                  <p style={{ fontSize: '13px', color: '#0A1929', margin: 0, lineHeight: 1.6 }}>{swapAudience(gap.action)}</p>
                 </div>
-                <p style={{ fontSize: '12px', color: '#00BFA6', fontWeight: 600, margin: 0 }}>→ {gap.outcome}</p>
+                <p style={{ fontSize: '12px', color: '#00BFA6', fontWeight: 600, margin: 0 }}>→ {swapAudience(gap.outcome)}</p>
               </div>
             )}
           </div>
@@ -327,6 +360,7 @@ function ResultsContent() {
   const [scan, setScan] = useState<ScanResults | null>(null);
   const [audienceFocus, setAudienceFocus] = useState('sellers');
   const [visibleSection, setVisibleSection] = useState(1);
+  const [collapsedSections, setCollapsedSections] = useState<Set<number>>(new Set());
   const [marketConfirms, setMarketConfirms] = useState<boolean[]>([]);
   const [expandedMarket, setExpandedMarket] = useState<number | null>(null);
   const [showApprovePanel, setShowApprovePanel] = useState(false);
@@ -362,6 +396,8 @@ function ResultsContent() {
   }
 
   const revealNext = useCallback((n: number) => {
+    // Collapse the previous section when continuing (Note 40)
+    setCollapsedSections(prev => new Set(prev).add(n - 1));
     setVisibleSection(prev => Math.max(prev, n));
     setTimeout(() => { sectionRefs.current[n - 1]?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 100);
   }, []);
@@ -460,6 +496,9 @@ function ResultsContent() {
 
         {/* ═══ SECTION 1: DISCOVERY GAP ═══ */}
         <div ref={el => { sectionRefs.current[0] = el; }} style={{ paddingTop: D.sectionGap }}>
+        {collapsedSections.has(1) ? (
+          <SectionSummaryBar title="The Discovery Gap" stat={`${clientScore}/100 · 0 of ${scan.query_count} queries`} onExpand={() => setCollapsedSections(prev => { const n = new Set(prev); n.delete(1); return n; })} />
+        ) : (<>
           <h2 style={{ fontSize: '22px', fontWeight: 800, color: D.navy, margin: '0 0 6px 0' }}>The Discovery Gap</h2>
           <p style={{ fontSize: '14px', color: D.textSecondary, margin: '0 0 20px 0', lineHeight: 1.7 }}>
             Your next client is asking AI who to list with right now. Here&apos;s what one of those queries returned:
@@ -544,12 +583,24 @@ function ResultsContent() {
                 {/* Competitor — benchmark context */}
                 <div style={{ padding: '24px', background: D.grayBg }}>
                   <div style={{ fontSize: '10px', fontWeight: 700, color: D.red, textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '12px' }}>Benchmark</div>
-                  <div style={{ fontFamily: 'Georgia, serif', fontSize: `${Math.round(64 * (competitorScore / 100))}px`, fontWeight: 900, color: D.red, lineHeight: 1, minHeight: '64px', display: 'flex', alignItems: 'flex-start' }}>~{competitorScore}</div>
+                  <div style={{ fontFamily: 'Georgia, serif', fontSize: `${Math.round(64 * (competitorScore / 100))}px`, fontWeight: 900, color: '#94a3b8', lineHeight: 1, minHeight: '64px', display: 'flex', alignItems: 'flex-start' }}>~{competitorScore}</div>
                   <div style={{ fontSize: '12px', color: D.textTertiary, marginTop: '4px', marginBottom: '10px' }}>out of 100</div>
                   <div style={{ fontSize: '13px', fontWeight: 700, color: D.navy, marginBottom: '2px' }}>{primaryCompetitor.competitor}</div>
-                  <div style={{ fontSize: '11px', color: D.textTertiary, marginBottom: '8px' }}>{primaryCompetitor.competitor_brokerage}</div>
+                  <div style={{ fontSize: '11px', color: D.textTertiary, marginBottom: '2px' }}>{primaryCompetitor.competitor_brokerage}</div>
                   {scan.competitor_validation?.verified && (
-                    <div style={{ fontSize: '10px', color: D.textTertiary }}>DRE #{scan.competitor_validation.dre} · Verified</div>
+                    <div style={{ fontSize: '10px', color: D.textTertiary, marginBottom: '10px' }}>DRE #{scan.competitor_validation.dre} · Verified</div>
+                  )}
+                  {/* Note 39: Why AI recommends them */}
+                  {primaryCompetitor.competitor_signals && primaryCompetitor.competitor_signals.length > 0 && (
+                    <div style={{ marginTop: '10px', paddingTop: '10px', borderTop: `1px solid ${D.border}` }}>
+                      <div style={{ fontSize: '9px', fontWeight: 700, color: D.textTertiary, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '6px' }}>Why AI recommends her</div>
+                      {primaryCompetitor.competitor_signals.map((signal, i) => (
+                        <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '5px', marginBottom: '4px' }}>
+                          <span style={{ color: D.red, fontWeight: 700, fontSize: '10px', flexShrink: 0, marginTop: '1px' }}>→</span>
+                          <span style={{ fontSize: '11px', color: D.textSecondary, lineHeight: 1.4 }}>{signal}</span>
+                        </div>
+                      ))}
+                    </div>
                   )}
                 </div>
               </div>
@@ -565,33 +616,45 @@ function ResultsContent() {
           )}
 
           {visibleSection < 2 && <ContinueButton onClick={() => revealNext(2)} text="See What's Already Working" />}
-        </div>
+        </>)}</div>
 
         {/* ═══ SECTION 2: STRENGTHS ═══ */}
         {visibleSection >= 2 && (
           <div ref={el => { sectionRefs.current[1] = el; }} style={{ paddingTop: D.sectionGap }}>
-            <h2 style={{ fontSize: '22px', fontWeight: 800, color: D.navy, margin: '0 0 6px 0' }}>What&apos;s Already Working</h2>
-            <p style={{ fontSize: '14px', color: D.textSecondary, margin: '0 0 20px 0', lineHeight: 1.7 }}>
-              You&apos;re not starting from zero. Our {scan.platform_count}-platform audit found real strengths to build on.
-            </p>
-            <StrengthCards strengths={scan.strengths} />
-            {visibleSection < 3 && <ContinueButton onClick={() => revealNext(3)} text="See Where the Gaps Are" />}
+            {collapsedSections.has(2) ? (
+              <SectionSummaryBar title="What's Already Working" stat={`${scan.strengths.length} strengths found`} onExpand={() => setCollapsedSections(prev => { const n = new Set(prev); n.delete(2); return n; })} />
+            ) : (
+              <>
+                <h2 style={{ fontSize: '22px', fontWeight: 800, color: D.navy, margin: '0 0 6px 0' }}>What&apos;s Already Working</h2>
+                <p style={{ fontSize: '14px', color: D.textSecondary, margin: '0 0 20px 0', lineHeight: 1.7 }}>
+                  You&apos;re not starting from zero. Our {scan.platform_count}-platform audit found real strengths to build on.
+                </p>
+                <StrengthCards strengths={scan.strengths} />
+                {visibleSection < 3 && <ContinueButton onClick={() => revealNext(3)} text="See Where the Gaps Are" />}
+              </>
+            )}
           </div>
         )}
 
         {/* ═══ SECTION 3: GAPS ═══ */}
         {visibleSection >= 3 && (
           <div ref={el => { sectionRefs.current[2] = el; }} style={{ paddingTop: D.sectionGap }}>
-            <h2 style={{ fontSize: '22px', fontWeight: 800, color: D.navy, margin: '0 0 6px 0' }}>Where the Gaps Are</h2>
-            <p style={{ fontSize: '14px', color: D.textSecondary, margin: '0 0 20px 0', lineHeight: 1.7 }}>
-              {scan.gaps.length} specific gaps are keeping you out of AI recommendations. Each one has a measurable fix.
-            </p>
-            <GapCards gaps={scan.gaps} />
-            <div style={{ background: D.navy, borderRadius: '10px', padding: '14px 20px', marginTop: '16px', textAlign: 'center' }}>
-              <span style={{ fontSize: '14px', color: '#fff', fontWeight: 600 }}>Points you&apos;re leaving on the table: <span style={{ color: D.teal }}>+46</span></span>
-              <span style={{ fontSize: '13px', color: D.textTertiary, marginLeft: '10px' }}>— enough to move from {clientScore} to 65+ in 90 days</span>
-            </div>
-            {visibleSection < 4 && <ContinueButton onClick={() => revealNext(4)} text="See Your Market Strategy" />}
+            {collapsedSections.has(3) ? (
+              <SectionSummaryBar title="Where the Gaps Are" stat={`${scan.gaps.length} gaps · +46 pts recoverable`} onExpand={() => setCollapsedSections(prev => { const n = new Set(prev); n.delete(3); return n; })} />
+            ) : (
+              <>
+                <h2 style={{ fontSize: '22px', fontWeight: 800, color: D.navy, margin: '0 0 6px 0' }}>Where the Gaps Are</h2>
+                <p style={{ fontSize: '14px', color: D.textSecondary, margin: '0 0 20px 0', lineHeight: 1.7 }}>
+                  {scan.gaps.length} specific gaps are keeping you out of AI recommendations. Each one has a measurable fix.
+                </p>
+                <GapCards gaps={scan.gaps} audienceFocus={audienceFocus} />
+                <div style={{ background: D.navy, borderRadius: '10px', padding: '14px 20px', marginTop: '16px', textAlign: 'center' }}>
+                  <span style={{ fontSize: '14px', color: '#fff', fontWeight: 600 }}>Points you&apos;re leaving on the table: <span style={{ color: D.teal }}>+46</span></span>
+                  <span style={{ fontSize: '13px', color: D.textTertiary, marginLeft: '10px' }}>— enough to move from {clientScore} to 65+ in 90 days</span>
+                </div>
+                {visibleSection < 4 && <ContinueButton onClick={() => revealNext(4)} text="See Your Market Strategy" />}
+              </>
+            )}
           </div>
         )}
 
