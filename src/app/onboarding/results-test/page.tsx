@@ -8,8 +8,8 @@ import CitedHeader from '@/components/CitedHeader';
 import CitedFooter from '@/components/CitedFooter';
 
 /* ═══════════════════════════════════════════════════════════════
-   Citation Report — v8.0 (Test Page)
-   April 11, 2026 — Research-backed visual redesign
+   Citation Report — v9.0 (Test Page)
+   April 11, 2026 — 38-note research-backed redesign
 
    Design system from: Refactoring UI, Non-Designer's Design Book,
    Thinking with Type, Beautiful Evidence, Stanford Web Credibility Study
@@ -148,7 +148,7 @@ const D = {
 const TIER_CONFIG: Record<string, { label: string; color: string; bg: string }> = {
   primary: { label: 'Primary', color: D.teal, bg: '#f0fdf9' },
   secondary: { label: 'Secondary', color: '#D4A830', bg: '#fffdf5' },
-  growth: { label: 'Growth', color: D.textSecondary, bg: D.grayBg },
+  growth: { label: 'Growth', color: '#94a3b8', bg: D.grayBg },
 };
 
 /* ── SVG deliverable icon ── */
@@ -180,6 +180,8 @@ function ContinueButton({ onClick, text }: { onClick: () => void; text: string }
       }}>
         {text} →
       </button>
+      {/* Note 37: subtle section transition pull */}
+      <div style={{ marginTop: '32px', height: '2px', background: 'linear-gradient(90deg, rgba(0,191,166,0.18) 0%, rgba(0,191,166,0.04) 100%)', borderRadius: '1px' }} />
     </div>
   );
 }
@@ -245,21 +247,68 @@ function StrengthCards({ strengths }: { strengths: StrengthData[] }) {
   );
 }
 
+/* ── Gap Cards (accordion) ── */
+function GapCards({ gaps }: { gaps: GapData[] }) {
+  const [expanded, setExpanded] = useState<number | null>(null);
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+      {gaps.map((gap, i) => {
+        const isOpen = expanded === i;
+        return (
+          <div key={i} style={{ background: '#fff', borderRadius: '12px', overflow: 'hidden', borderLeft: `4px solid ${gap.color}` }}>
+            {/* Collapsed header — always visible, full row clickable */}
+            <button
+              onClick={() => setExpanded(isOpen ? null : i)}
+              style={{
+                width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                padding: '16px 20px', background: 'none', border: 'none', cursor: 'pointer', textAlign: 'left',
+                transition: 'background 0.15s',
+              }}
+              onMouseEnter={e => (e.currentTarget.style.background = '#f0faf8')}
+              onMouseLeave={e => (e.currentTarget.style.background = 'none')}
+            >
+              <div style={{ flex: 1 }}>
+                <div style={{ fontSize: '15px', fontWeight: 700, color: '#0A1929' }}>{gap.title}</div>
+                <div style={{ fontSize: '12px', color: gap.color, fontWeight: 600, marginTop: '3px' }}>{gap.status}</div>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexShrink: 0, marginLeft: '12px' }}>
+                <div style={{ background: '#f0fdf9', color: '#00BFA6', fontSize: '12px', fontWeight: 700, padding: '4px 12px', borderRadius: '12px', whiteSpace: 'nowrap' }}>{gap.points}</div>
+                <div style={{
+                  width: '22px', height: '22px', borderRadius: '6px', border: '1.5px solid #e2e8f0',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontSize: '12px', color: '#94a3b8', transform: isOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s',
+                }}>▾</div>
+              </div>
+            </button>
+            {/* Expanded detail */}
+            {isOpen && (
+              <div style={{ padding: '0 20px 16px 20px', borderTop: '1px solid #f1f5f9' }}>
+                <p style={{ fontSize: '13px', color: '#475569', margin: '12px 0', lineHeight: 1.7 }}>{gap.impact}</p>
+                <div style={{ background: '#f0fdf9', borderRadius: '8px', padding: '12px 14px', marginBottom: '10px' }}>
+                  <p style={{ fontSize: '13px', color: '#0A1929', margin: 0, lineHeight: 1.6 }}>{gap.action}</p>
+                </div>
+                <p style={{ fontSize: '12px', color: '#00BFA6', fontWeight: 600, margin: 0 }}>→ {gap.outcome}</p>
+              </div>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 /* ── Modal ── */
-function Modal({ onClose, onConfirm }: { onClose: () => void; onConfirm: () => void }) {
+function Modal({ onClose }: { onClose: () => void }) {
   return (
     <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
       <div style={{ background: '#fff', borderRadius: '16px', padding: '32px 28px', maxWidth: '360px', width: '100%', textAlign: 'center' }}>
-        <div style={{ fontSize: '28px', marginBottom: '12px' }}>⚠️</div>
-        <h3 style={{ fontSize: '17px', fontWeight: 800, color: D.navy, margin: '0 0 8px 0' }}>Confirm all 3 markets first</h3>
+        <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: '#f0fdf9', border: `2px solid ${D.teal}`, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px', fontSize: '16px', color: D.teal, fontWeight: 700 }}>ⓘ</div>
+        <h3 style={{ fontSize: '17px', fontWeight: 800, color: D.navy, margin: '0 0 8px 0' }}>Approve all 3 markets first</h3>
         <p style={{ fontSize: '13px', color: D.textSecondary, margin: '0 0 24px 0', lineHeight: 1.6 }}>
-          Scroll up and confirm each market before approving your strategy.
+          Scroll up and approve each market — then your strategy is ready to lock in.
         </p>
-        <button onClick={onClose} style={{ width: '100%', padding: '13px', background: D.teal, color: '#fff', border: 'none', borderRadius: '8px', fontSize: '14px', fontWeight: 700, cursor: 'pointer', marginBottom: '10px' }}>
-          Go Back and Confirm
-        </button>
-        <button onClick={onConfirm} style={{ width: '100%', padding: '8px', background: 'none', color: D.textTertiary, border: 'none', fontSize: '13px', cursor: 'pointer' }}>
-          Skip — approve anyway
+        <button onClick={onClose} style={{ width: '100%', padding: '13px', background: D.teal, color: '#fff', border: 'none', borderRadius: '8px', fontSize: '14px', fontWeight: 700, cursor: 'pointer' }}>
+          ← Review my markets
         </button>
       </div>
     </div>
@@ -338,6 +387,7 @@ function ResultsContent() {
     await supabase.from('cited_intake').update({
       markets_approved: true, markets_approved_at: new Date().toISOString(),
       neighborhoods_confirmed: true, neighborhoods_confirmed_at: new Date().toISOString(),
+      strategy_approved: true, strategy_approved_at: new Date().toISOString(),
     }).eq('id', recordId);
     setApproved(true);
     setSaving(false);
@@ -373,14 +423,14 @@ function ResultsContent() {
 
   return (
     <div style={{ minHeight: '100vh', background: D.grayBg }}>
-      {showModal && <Modal onClose={scrollToMarkets} onConfirm={() => { setShowModal(false); setShowApprovePanel(true); }} />}
+      {showModal && <Modal onClose={scrollToMarkets} />}
 
       <CitedHeader variant="onboarding" userEmail="" userName={clientName} clientTier="founding_client" />
       <ProgressIndicator />
 
       {/* ═══ HERO ═══ */}
       <div style={{ background: D.navy, padding: '48px 24px 44px', textAlign: 'center' }}>
-        <div style={{ maxWidth: '640px', margin: '0 auto' }}>
+        <div style={{ maxWidth: '800px', margin: '0 auto' }}>
           <div style={{ fontSize: '11px', color: D.teal, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '2.5px', marginBottom: '16px' }}>
             Your Citation Report is Ready
           </div>
@@ -406,7 +456,7 @@ function ResultsContent() {
       </div>
       <div style={{ height: '3px', background: `linear-gradient(90deg, ${D.teal}, #D4A830, ${D.teal})` }} />
 
-      <div style={{ maxWidth: '660px', margin: '0 auto', padding: `0 24px 48px` }}>
+      <div style={{ maxWidth: '800px', margin: '0 auto', padding: `0 24px 48px` }}>
 
         {/* ═══ SECTION 1: DISCOVERY GAP ═══ */}
         <div ref={el => { sectionRefs.current[0] = el; }} style={{ paddingTop: D.sectionGap }}>
@@ -536,29 +586,9 @@ function ResultsContent() {
             <p style={{ fontSize: '14px', color: D.textSecondary, margin: '0 0 20px 0', lineHeight: 1.7 }}>
               {scan.gaps.length} specific gaps are keeping you out of AI recommendations. Each one has a measurable fix.
             </p>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-              {scan.gaps.map((gap, i) => (
-                <div key={i} style={{ background: '#fff', borderRadius: '12px', overflow: 'hidden' }}>
-                  <div style={{ padding: '16px 20px 14px', borderLeft: `4px solid ${gap.color}`, display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                    <div style={{ flex: 1 }}>
-                      <div style={{ fontSize: '15px', fontWeight: 700, color: D.navy }}>{gap.title}</div>
-                      <div style={{ fontSize: '12px', color: gap.color, fontWeight: 600, marginTop: '3px' }}>{gap.status}</div>
-                    </div>
-                    <div style={{ background: '#f0fdf9', color: D.teal, fontSize: '12px', fontWeight: 700, padding: '4px 12px', borderRadius: '12px', whiteSpace: 'nowrap', marginLeft: '12px' }}>{gap.points}</div>
-                  </div>
-                  <div style={{ padding: '0 20px 0 24px', borderLeft: `4px solid ${gap.color}` }}>
-                    <p style={{ fontSize: '13px', color: D.textSecondary, margin: '0 0 12px 0', lineHeight: 1.7 }}>{gap.impact}</p>
-                    <div style={{ background: '#f0fdf9', borderRadius: '8px', padding: '10px 14px', marginBottom: '10px' }}>
-                      <div style={{ fontSize: '10px', fontWeight: 700, color: D.teal, textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '4px' }}>What we do</div>
-                      <p style={{ fontSize: '13px', color: D.textPrimary, margin: 0, lineHeight: 1.6 }}>{gap.action}</p>
-                    </div>
-                    <p style={{ fontSize: '12px', color: D.teal, fontWeight: 600, margin: '0 0 16px 0' }}>→ {gap.outcome}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
+            <GapCards gaps={scan.gaps} />
             <div style={{ background: D.navy, borderRadius: '10px', padding: '14px 20px', marginTop: '16px', textAlign: 'center' }}>
-              <span style={{ fontSize: '14px', color: '#fff', fontWeight: 600 }}>Total recoverable: <span style={{ color: D.teal }}>+46 points</span></span>
+              <span style={{ fontSize: '14px', color: '#fff', fontWeight: 600 }}>Points you&apos;re leaving on the table: <span style={{ color: D.teal }}>+46</span></span>
               <span style={{ fontSize: '13px', color: D.textTertiary, marginLeft: '10px' }}>— enough to move from {clientScore} to 65+ in 90 days</span>
             </div>
             {visibleSection < 4 && <ContinueButton onClick={() => revealNext(4)} text="See Your Market Strategy" />}
@@ -580,7 +610,7 @@ function ResultsContent() {
               {[
                 { icon: '📋', label: 'Your Input', desc: 'Markets you identified' },
                 { icon: '📊', label: 'Your Transactions', desc: `${scan.txn_analyzed} sales analyzed` },
-                { icon: '🔍', label: 'Our Analysis', desc: `${scan.query_count} AI queries run` },
+                { icon: '🔍', label: 'PRISM SCAN™', desc: `4 AI models · ${scan.platform_count} platforms audited` },
               ].map(s => (
                 <div key={s.label} style={{ background: '#fff', borderRadius: '8px', padding: '12px 14px', textAlign: 'center' }}>
                   <div style={{ fontSize: '18px', marginBottom: '4px' }}>{s.icon}</div>
@@ -597,7 +627,7 @@ function ResultsContent() {
                   color: allMarketsConfirmed ? D.textTertiary : '#fff', fontSize: '12px', fontWeight: 600,
                   border: 'none', borderRadius: '6px', cursor: allMarketsConfirmed ? 'default' : 'pointer',
                 }}>
-                  {allMarketsConfirmed ? '✓ All Confirmed' : `Confirm All ${scan.markets.length}`}
+                  {allMarketsConfirmed ? '✓ All Approved' : `Approve All ${scan.markets.length}`}
                 </button>
               </div>
             )}
@@ -614,6 +644,21 @@ function ResultsContent() {
 
                 return (
                   <div key={market.name} style={{ background: '#fff', borderRadius: '12px', overflow: 'hidden', borderLeft: `4px solid ${isConfirmed ? D.teal : tier.color}`, transition: 'border-color 0.3s' }}>
+                    {/* Collapsed approved state */}
+                    {isConfirmed && !approved && (
+                      <div style={{ padding: '14px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                          <span style={{ fontSize: '14px', color: D.teal, fontWeight: 700 }}>✅</span>
+                          <span style={{ fontSize: '14px', fontWeight: 700, color: D.navy }}>{market.name}</span>
+                          <span style={{ fontSize: '11px', color: D.textTertiary }}>— {tier.label} · Approved</span>
+                        </div>
+                        <button onClick={() => toggleMarket(idx)} style={{ background: 'none', border: 'none', fontSize: '12px', color: D.teal, fontWeight: 600, cursor: 'pointer', padding: 0 }}>
+                          Edit ↗
+                        </button>
+                      </div>
+                    )}
+                    {/* Full card — shown when not confirmed, or when already fully approved */}
+                    {(!isConfirmed || approved) && (
                     <div style={{ padding: '20px 20px 16px', position: 'relative' }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                         <div>
@@ -627,12 +672,12 @@ function ResultsContent() {
                         </div>
                         {!approved && (
                           <button onClick={() => toggleMarket(idx)} style={{
-                            background: isConfirmed ? D.teal : '#fff', color: isConfirmed ? '#fff' : D.textTertiary,
-                            border: isConfirmed ? `2px solid ${D.teal}` : `2px solid ${D.border}`,
+                            background: '#fff', color: D.textTertiary,
+                            border: `2px solid ${D.border}`,
                             borderRadius: '20px', padding: '5px 14px', fontSize: '11px', fontWeight: 700,
                             cursor: 'pointer', transition: 'all 0.2s', flexShrink: 0, marginLeft: '12px',
                           }}>
-                            {isConfirmed ? '✓ Confirmed' : 'Confirm'}
+                            Approve
                           </button>
                         )}
                       </div>
@@ -652,7 +697,7 @@ function ResultsContent() {
                       </div>
 
                       <div style={{ marginTop: '10px', fontSize: '13px', color: D.textSecondary, lineHeight: 1.6, padding: '8px 12px', background: D.grayBg, borderRadius: '6px' }}>
-                        <strong style={{ color: D.navy }}>From our analysis:</strong> {market.ai_signal}
+                        <strong style={{ color: D.navy }}>From our PRISM Scan™:</strong> {market.ai_signal}
                       </div>
                       <div style={{ marginTop: '6px', fontSize: '12px', color: D.textTertiary }}>
                         <strong>Evidence:</strong> {market.txn_highlight}
@@ -665,6 +710,7 @@ function ResultsContent() {
                         {isExpanded ? '▾ Hide neighborhoods' : `▸ See ${hoods.length} recommended neighborhoods`}
                       </button>
                     </div>
+                    )}
 
                     {isExpanded && (
                       <div style={{ borderTop: `1px solid ${D.grayMid}`, padding: '16px 20px', background: D.grayBg }}>
@@ -708,28 +754,45 @@ function ResultsContent() {
           <div ref={el => { sectionRefs.current[4] = el; }} style={{ paddingTop: D.sectionGap }}>
             <h2 style={{ fontSize: '22px', fontWeight: 800, color: D.navy, margin: '0 0 6px 0' }}>From {clientScore} to 65+ — Your 90-Day Path</h2>
             <div style={{ position: 'relative', paddingLeft: '28px', marginTop: '20px' }}>
-              <div style={{ position: 'absolute', left: '10px', top: 0, bottom: 0, width: '2px', background: `linear-gradient(180deg, ${D.red}, #D4A830, ${D.teal})` }} />
-              {scan.trajectory.map((ms, i) => (
-                <div key={ms.day} style={{ position: 'relative', marginBottom: i < scan.trajectory.length - 1 ? '20px' : 0 }}>
-                  <div style={{ position: 'absolute', left: '-28px', top: '2px', width: '20px', height: '20px', borderRadius: '50%', background: i === 0 ? ms.color : '#fff', border: `3px solid ${ms.color}`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    {i === 0 && <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#fff' }} />}
-                  </div>
-                  <div style={{ background: '#fff', borderRadius: '10px', padding: '14px 18px' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
-                      <div style={{ fontSize: '13px', fontWeight: 700, color: D.navy }}>{ms.day}</div>
-                      <div style={{ fontFamily: 'Georgia, serif', fontSize: '18px', fontWeight: 900, color: ms.color }}>{ms.score}<span style={{ fontSize: '11px', color: D.textTertiary, fontFamily: 'system-ui' }}>/100</span></div>
+              <div style={{ position: 'absolute', left: '10px', top: 0, bottom: 0, width: '2px', background: `linear-gradient(180deg, ${D.red}, #D4A830, ${D.navy}, ${D.teal})` }} />
+              {scan.trajectory.map((ms, i) => {
+                // Day 60 (index 2) gets navy; Day 0 stays red, Day 30 stays gold, Day 90 stays teal
+                const dotColor = i === 2 ? D.navy : ms.color;
+                const isToday = i === 0;
+                // Calculate delta from previous milestone
+                const prevScore = i === 0 ? null : parseInt(scan.trajectory[i - 1].score);
+                const thisScore = parseInt(ms.score);
+                const delta = prevScore !== null ? thisScore - prevScore : null;
+                return (
+                  <div key={ms.day} style={{ position: 'relative', marginBottom: i < scan.trajectory.length - 1 ? '20px' : 0 }}>
+                    <div style={{ position: 'absolute', left: '-28px', top: '2px', width: '20px', height: '20px', borderRadius: '50%', background: isToday ? dotColor : '#fff', border: `3px solid ${dotColor}`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      {isToday && <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#fff' }} />}
                     </div>
-                    <div style={{ fontSize: '13px', fontWeight: 600, color: ms.color, marginBottom: '8px' }}>{ms.headline}</div>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                      {ms.outcomes.map((outcome, j) => (
-                        <div key={j} style={{ display: 'flex', alignItems: 'flex-start', gap: '6px', fontSize: '12px', color: D.textSecondary, lineHeight: 1.5 }}>
-                          <span style={{ color: D.teal, fontWeight: 700, flexShrink: 0 }}>→</span>{outcome}
+                    <div style={{ background: isToday ? '#fff8f8' : '#fff', borderRadius: '10px', padding: '14px 18px' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
+                        <div>
+                          {isToday && <div style={{ fontSize: '9px', fontWeight: 700, color: D.red, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '2px' }}>📍 You are here</div>}
+                          <div style={{ fontSize: '13px', fontWeight: 700, color: D.navy }}>{ms.day}</div>
                         </div>
-                      ))}
+                        <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px' }}>
+                          {delta !== null && (
+                            <span style={{ fontSize: '11px', fontWeight: 600, color: '#94a3b8' }}>+{delta} pts</span>
+                          )}
+                          <div style={{ fontFamily: 'Georgia, serif', fontSize: '18px', fontWeight: 900, color: dotColor }}>{ms.score}<span style={{ fontSize: '11px', color: D.textTertiary, fontFamily: 'system-ui' }}>/100</span></div>
+                        </div>
+                      </div>
+                      <div style={{ fontSize: '13px', fontWeight: 600, color: dotColor, marginBottom: '8px' }}>{ms.headline}</div>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                        {ms.outcomes.map((outcome, j) => (
+                          <div key={j} style={{ display: 'flex', alignItems: 'flex-start', gap: '6px', fontSize: '12px', color: D.textSecondary, lineHeight: 1.5 }}>
+                            <span style={{ color: D.teal, fontWeight: 700, flexShrink: 0 }}>→</span>{outcome}
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
             <div style={{ background: '#f0fdf9', borderRadius: '8px', padding: '12px 18px', fontSize: '14px', color: D.navy, textAlign: 'center', marginTop: '12px', border: `1px solid ${D.teal}` }}>
               <strong>Citation Guarantee™:</strong> +20 points in 90 days or you owe nothing. Ever.
@@ -767,21 +830,33 @@ function ResultsContent() {
               <>
                 {!showApprovePanel ? (
                   <>
+                    {/* Note 36: thin rule above approval section */}
+                    <div style={{ height: '1px', background: '#e2e8f0', marginBottom: '32px' }} />
                     <h2 style={{ fontSize: '22px', fontWeight: 800, color: D.navy, margin: '0 0 8px 0' }}>Approve Your Strategy</h2>
                     <p style={{ fontSize: '14px', color: D.textSecondary, margin: '0 0 24px 0', lineHeight: 1.7 }}>
-                      You&apos;ve seen your data, your gaps, your markets, and your path. When you&apos;re ready — approve your strategy and we start building.
+                      You&apos;ve reviewed your data, your gaps, and your path. Approve your strategy and we start building today.
                     </p>
-                    <button onClick={handleApproveClick} style={{
-                      width: '100%', padding: '18px 24px', background: D.teal, color: '#fff',
-                      fontSize: '16px', fontWeight: 700, border: 'none', borderRadius: '10px',
-                      cursor: 'pointer', boxShadow: `0 4px 16px rgba(0,191,166,0.3)`,
-                    }}>
-                      Approve My Strategy →
+                    {/* Note 22: locked button until all markets approved */}
+                    <button
+                      onClick={handleApproveClick}
+                      disabled={!allMarketsConfirmed}
+                      style={{
+                        display: 'block', margin: '0 auto', padding: '18px 40px',
+                        background: allMarketsConfirmed ? D.teal : '#e2e8f0',
+                        color: allMarketsConfirmed ? '#fff' : '#94a3b8',
+                        fontSize: '16px', fontWeight: 700, border: 'none', borderRadius: '10px',
+                        cursor: allMarketsConfirmed ? 'pointer' : 'not-allowed',
+                        boxShadow: allMarketsConfirmed ? `0 4px 16px rgba(0,191,166,0.3)` : 'none',
+                        transition: 'all 0.2s',
+                      }}
+                    >
+                      {allMarketsConfirmed
+                        ? 'Approve My Strategy →'
+                        : `Approve My Strategy (${confirmedCount}/${scan.markets.length} markets approved)`}
                     </button>
                     {!allMarketsConfirmed && (
-                      <p style={{ textAlign: 'center', fontSize: '12px', color: D.textTertiary, marginTop: '10px' }}>
-                        {confirmedCount}/{scan.markets.length} markets confirmed ·{' '}
-                        <button onClick={scrollToMarkets} style={{ background: 'none', border: 'none', color: D.teal, fontSize: '12px', fontWeight: 600, cursor: 'pointer', padding: 0 }}>go back</button>
+                      <p style={{ textAlign: 'center', fontSize: '12px', color: D.textTertiary, marginTop: '12px' }}>
+                        <button onClick={scrollToMarkets} style={{ background: 'none', border: 'none', color: D.teal, fontSize: '12px', fontWeight: 600, cursor: 'pointer', padding: 0 }}>← Review my markets</button>
                       </p>
                     )}
                   </>
@@ -808,7 +883,7 @@ function ResultsContent() {
                       fontSize: '15px', fontWeight: 700, border: 'none', borderRadius: '8px',
                       cursor: saving ? 'wait' : 'pointer', opacity: saving ? 0.7 : 1,
                     }}>
-                      {saving ? 'Saving...' : '✓ Confirm — Start Building'}
+                      {saving ? 'Saving...' : '✓ Approve — Start Building'}
                     </button>
                   </div>
                 )}
