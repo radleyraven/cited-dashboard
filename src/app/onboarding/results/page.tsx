@@ -8,8 +8,8 @@ import CitedHeader from '@/components/CitedHeader';
 import CitedFooter from '@/components/CitedFooter';
 
 /* ═══════════════════════════════════════════════════════════════
-   Citation Report — v6.0
-   April 10, 2026
+   Citation Report — v7.0
+   April 11, 2026
 
    Changes from v5:
    - Hybrid market cards: data source icons (original style) + confirm
@@ -283,6 +283,7 @@ function ResultsContent() {
   const [expandedMarket, setExpandedMarket] = useState<number | null>(null);
   const [showApprovePanel, setShowApprovePanel] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [audienceFocus, setAudienceFocus] = useState<string>('sellers');
 
   const searchParams = useSearchParams();
   const sectionRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -296,12 +297,13 @@ function ResultsContent() {
     const token = searchParams.get('token');
     if (token) {
       const { data } = await supabase.from('cited_intake')
-        .select('id, full_name, markets_approved, scan_results')
+        .select('id, full_name, markets_approved, scan_results, audience_focus')
         .eq('onboarding_token', token).single();
       if (data) {
         setRecordId(data.id);
         setClientName(data.full_name || '');
         if (data.markets_approved) { setApproved(true); setVisibleSection(8); setShowApprovePanel(true); }
+        if (data.audience_focus) setAudienceFocus(data.audience_focus);
         if (data.scan_results) {
           const sr = data.scan_results as ScanResults;
           setScan(sr);
@@ -396,7 +398,7 @@ function ResultsContent() {
             {firstName ? `${firstName}, here's what we found.` : "Here's what we found."}
           </h1>
           <p style={{ fontSize: '13px', color: '#64748b', margin: '0 0 24px 0', lineHeight: 1.5 }}>
-            We ran {scan.query_count} queries across the top AI models sellers and buyers use, audited {scan.platform_count} platforms,
+            We ran {scan.query_count} queries across the top AI models {audienceFocus === 'buyers' ? 'buyers and sellers' : 'sellers and buyers'} use, audited {scan.platform_count} platforms,
             analyzed {scan.txn_analyzed} of your transactions, and mapped {scan.neighborhood_count} neighborhoods — every query
             run {scan.consistency_runs}x for consistency.
           </p>
@@ -409,7 +411,7 @@ function ResultsContent() {
             ))}
           </div>
           <p style={{ fontSize: '15px', color: '#94a3b8', lineHeight: 1.6, margin: 0, maxWidth: '520px', marginLeft: 'auto', marginRight: 'auto' }}>
-            These numbers tell the story of a top-performing luxury agent. But when sellers and buyers ask AI who to call —{' '}
+            These numbers tell the story of a top-performing luxury agent. But when {audienceFocus === 'buyers' ? 'buyers and sellers' : 'sellers and buyers'} ask AI who to call —{' '}
             <span style={{ color: '#fff', fontWeight: 600 }}>your name doesn&apos;t come up. Let&apos;s fix that.</span>
           </p>
         </div>
@@ -422,7 +424,7 @@ function ResultsContent() {
         <div ref={el => { sectionRefs.current[0] = el; }} style={{ paddingTop: '36px' }}>
           <SectionHeader num="1" title="The Discovery Gap" color="#0A1929" />
           <p style={{ fontSize: '14px', color: '#64748b', margin: '0 0 16px 0', lineHeight: 1.5 }}>
-            We asked the top AI models the exact questions a seller or buyer would ask when looking for an agent. Here&apos;s what came back for your primary market:
+            Your next client is asking AI who to {audienceFocus === 'buyers' ? 'buy with' : 'list with'} right now. Here&apos;s what one of those queries returned:
           </p>
 
           <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '12px', overflow: 'hidden', marginBottom: '14px', boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}>
@@ -433,18 +435,32 @@ function ResultsContent() {
             </div>
             {/* AI response */}
             <div style={{ padding: '14px 16px', borderBottom: '1px solid #f1f5f9' }}>
-              <div style={{ fontSize: '10px', fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px' }}>AI Response:</div>
+              <div style={{ fontSize: '10px', fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px' }}>{scan.ai_quote.model} responded:</div>
               <div style={{ display: 'flex', gap: '10px' }}>
                 <div style={{ width: '3px', background: '#EF4444', borderRadius: '2px', flexShrink: 0 }} />
                 <div style={{ fontSize: '13px', color: '#475569', lineHeight: 1.6 }}>&ldquo;{scan.ai_quote.response}&rdquo;</div>
               </div>
             </div>
-            {/* Result */}
-            <div style={{ padding: '12px 16px', background: '#fff5f5', display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <div style={{ width: '20px', height: '20px', borderRadius: '50%', background: '#EF4444', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontSize: '12px' }}>✕</div>
-              <div style={{ fontSize: '13px', color: '#EF4444', fontWeight: 700, lineHeight: 1.4 }}>
-                Your name did not appear — in this query or any discovery query we ran across all your markets and all AI models.
+            {/* Result — context + stat inline */}
+            <div style={{ padding: '12px 16px', background: '#fff5f5', borderTop: '1px solid #fee2e2' }}>
+              <div style={{ fontSize: '13px', color: '#EF4444', fontWeight: 600, lineHeight: 1.5 }}>
+                We ran that search — and 89 others just like it — across all the AI tools {audienceFocus === 'buyers' ? 'buyers and sellers' : 'sellers and buyers'} are using right now to find agents. Your name came up 0 out of 90 times.
               </div>
+            </div>
+          </div>
+
+          {/* 90/0 Stat Block */}
+          <div style={{
+            background: '#0A1929', borderRadius: '10px', padding: '20px 24px',
+            marginBottom: '20px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0',
+          }}>
+            <div style={{ textAlign: 'center', borderRight: '1px solid rgba(255,255,255,0.1)', paddingRight: '20px' }}>
+              <div style={{ fontSize: '48px', fontWeight: 900, color: '#fff', lineHeight: 1 }}>90</div>
+              <div style={{ fontSize: '12px', color: '#64748b', marginTop: '6px', lineHeight: 1.4 }}>Searches {audienceFocus === 'buyers' ? 'buyers and sellers' : 'sellers and buyers'} run in your markets</div>
+            </div>
+            <div style={{ textAlign: 'center', paddingLeft: '20px' }}>
+              <div style={{ fontSize: '48px', fontWeight: 900, color: '#EF4444', lineHeight: 1 }}>0</div>
+              <div style={{ fontSize: '12px', color: '#64748b', marginTop: '6px', lineHeight: 1.4 }}>Times your name appeared</div>
             </div>
           </div>
 
@@ -453,8 +469,9 @@ function ResultsContent() {
 
               {/* Score spectrum bar */}
               <div style={{ padding: '16px 20px 12px', borderBottom: '1px solid #f1f5f9' }}>
-                <div style={{ fontSize: '11px', fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '10px' }}>
-                  Citation Score Scale
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+                  <div style={{ fontSize: '11px', fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '1px' }}>Citation Score Scale</div>
+                  <div style={{ fontSize: '10px', color: '#94a3b8', background: '#f0f4f8', borderRadius: '4px', padding: '3px 8px' }}>Based on {scan.query_count} queries across all AI models</div>
                 </div>
                 <div style={{ position: 'relative', height: '8px', borderRadius: '4px', background: 'linear-gradient(90deg, #EF4444 0%, #F59E0B 30%, #D4A830 50%, #00BFA6 75%, #0A1929 100%)', marginBottom: '6px' }}>
                   {/* Radley marker */}
