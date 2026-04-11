@@ -8,18 +8,24 @@ import CitedHeader from '@/components/CitedHeader';
 import CitedFooter from '@/components/CitedFooter';
 
 /* ═══════════════════════════════════════════════════════════════
-   Citation Report — v6.0
-   April 10, 2026
+   Citation Report — v8.0 (Test Page)
+   April 11, 2026 — Research-backed visual redesign
 
-   Changes from v5:
-   - Hybrid market cards: data source icons (original style) + confirm
-   - Neighborhoods: recommended list with reasons, no checkboxes
-   - Deliverable icons: SVG inline icons, no letter circles
-   - "Ghostwritten" removed — collaborative language
-   - Review strategy: flexible (no hardcoded platform)
-   - Approve: two-step (button → reveals What Happens Next → confirm)
-   - Unsaved warning: centered modal overlay, not banner
-   - AI Visibility Leader removed from market cards
+   Design system from: Refactoring UI, Non-Designer's Design Book,
+   Thinking with Type, Beautiful Evidence, Stanford Web Credibility Study
+
+   Changes from v7:
+   - All borders removed → background color + whitespace separation
+   - Section number circles removed (chartjunk — Tufte)
+   - Section connector text removed (chartjunk)
+   - Score: 64px serif, dominant, nothing competes
+   - Colors reduced: navy + teal only. Red = genuine alerts only.
+   - Hierarchy through weight+color, not size alone (Lupton)
+   - Left-aligned body content (Williams — alignment creates authority)
+   - 56px section gaps (breathing room)
+   - One shadow on score card only (elevation system)
+   - Proportional competitor score (Tufte — data-ink integrity)
+   - Market cards: small multiples, identical structure (Tufte)
    ═══════════════════════════════════════════════════════════════ */
 
 /* ── Types ── */
@@ -124,146 +130,138 @@ interface ScanResults {
   competitor_validation?: CompetitorValidation;
 }
 
-/* ── Tier config ── */
-const TIER_CONFIG: Record<string, { label: string; color: string; bg: string; border: string; desc: string }> = {
-  primary: { label: 'Primary Market', color: '#00BFA6', bg: '#f0fdf9', border: '#00BFA6', desc: 'Your headline market. Deepest evidence, highest optimization priority.' },
-  secondary: { label: 'Secondary Market', color: '#D4A830', bg: '#fffdf5', border: '#D4A830', desc: 'Strong signal. Included in all content and platform optimization.' },
-  growth: { label: 'Growth Market', color: '#64748b', bg: '#f0f4f8', border: '#94a3b8', desc: 'Building toward. Content and visibility grow over time.' },
+/* ── Design tokens ── */
+const D = {
+  navy: '#0A1929',
+  teal: '#00BFA6',
+  red: '#EF4444',
+  grayBg: '#f8f9fa',
+  grayMid: '#f1f5f9',
+  textPrimary: '#0A1929',
+  textSecondary: '#475569',
+  textTertiary: '#94a3b8',
+  border: '#e2e8f0',
+  sectionGap: '56px',
+  cardPad: '24px',
 };
 
-/* ── Inline SVG icons ── */
-function DeliverableIcon({ type, size = 28 }: { type: string; size?: number }) {
+const TIER_CONFIG: Record<string, { label: string; color: string; bg: string }> = {
+  primary: { label: 'Primary', color: D.teal, bg: '#f0fdf9' },
+  secondary: { label: 'Secondary', color: '#D4A830', bg: '#fffdf5' },
+  growth: { label: 'Growth', color: D.textSecondary, bg: D.grayBg },
+};
+
+/* ── SVG deliverable icon ── */
+function DeliverableIcon({ type, size = 20 }: { type: string; size?: number }) {
   const icons: Record<string, string> = {
     profiles: `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>`,
     globe: `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 4 10 15 15 0 0 1-4 10 15 15 0 0 1-4-10 15 15 0 0 1 4-10z"/></svg>`,
-    article: `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>`,
+    article: `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>`,
     star: `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`,
     chart: `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>`,
     refresh: `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>`,
   };
   return (
-    <div
-      style={{ color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-      dangerouslySetInnerHTML={{ __html: icons[type] || icons.article }}
-    />
-  );
-}
-
-/* ── Progress indicator ── */
-function ProgressIndicator() {
-  const steps = ['Citation Report', 'Approve Strategy', 'Positioning', 'Copy Kit'];
-  return (
-    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', padding: '12px 24px', background: '#fff', borderBottom: '1px solid #f1f5f9' }}>
-      {steps.map((step, i) => (
-        <div key={step} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', opacity: i === 0 ? 1 : 0.35 }}>
-            <div style={{ width: '20px', height: '20px', borderRadius: '50%', background: i === 0 ? '#0A1929' : '#e2e8f0', color: i === 0 ? '#fff' : '#94a3b8', fontSize: '10px', fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>{i + 1}</div>
-            {/* Show label only for active step on mobile */}
-            {i === 0 && <span style={{ fontSize: '12px', fontWeight: 700, color: '#0A1929', whiteSpace: 'nowrap' }}>{step}</span>}
-          </div>
-          {i < steps.length - 1 && <div style={{ width: '20px', height: '1px', background: '#e2e8f0', flexShrink: 0 }} />}
-        </div>
-      ))}
-    </div>
+    <div style={{ color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+      dangerouslySetInnerHTML={{ __html: icons[type] || icons.article }} />
   );
 }
 
 /* ── Continue button ── */
 function ContinueButton({ onClick, text }: { onClick: () => void; text: string }) {
   return (
-    <div style={{ textAlign: 'center', padding: '24px 0 8px' }}>
-      <button onClick={onClick} style={{ background: '#00BFA6', color: '#fff', border: 'none', padding: '14px 32px', borderRadius: '8px', fontSize: '15px', fontWeight: 700, cursor: 'pointer', boxShadow: '0 2px 8px rgba(0,191,166,0.25)' }}>
+    <div style={{ paddingTop: '32px', paddingBottom: '8px' }}>
+      <button onClick={onClick} style={{
+        background: D.teal, color: '#fff', border: 'none',
+        padding: '14px 32px', borderRadius: '8px', fontSize: '15px',
+        fontWeight: 700, cursor: 'pointer',
+        boxShadow: '0 2px 8px rgba(0,191,166,0.25)',
+        display: 'block',
+      }}>
         {text} →
       </button>
     </div>
   );
 }
 
-/* ── Depth badge ── */
-function DepthBadge({ text }: { text: string }) {
+/* ── Progress bar ── */
+function ProgressIndicator() {
+  const steps = ['Citation Report', 'Approve Strategy', 'Positioning', 'Copy Kit'];
   return (
-    <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: '#f0f4f8', borderRadius: '6px', padding: '6px 12px', fontSize: '12px', color: '#475569', fontWeight: 500 }}>
-      <span style={{ color: '#00BFA6', fontWeight: 700 }}>●</span> {text}
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', padding: '12px 24px', background: '#fff', borderBottom: `1px solid ${D.border}` }}>
+      {steps.map((step, i) => (
+        <div key={step} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', opacity: i === 0 ? 1 : 0.35 }}>
+            <div style={{ width: '20px', height: '20px', borderRadius: '50%', background: i === 0 ? D.navy : D.border, color: i === 0 ? '#fff' : D.textTertiary, fontSize: '10px', fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>{i + 1}</div>
+            {i === 0 && <span style={{ fontSize: '12px', fontWeight: 700, color: D.navy }}>{step}</span>}
+          </div>
+          {i < steps.length - 1 && <div style={{ width: '24px', height: '1px', background: D.border, flexShrink: 0 }} />}
+        </div>
+      ))}
     </div>
   );
 }
 
-/* ── Section header ── */
-function SectionHeader({ num, title, color }: { num: string; title: string; color: string }) {
-  return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px' }}>
-      <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: color, color: '#fff', fontSize: '13px', fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>{num}</div>
-      <h2 style={{ fontSize: '20px', fontWeight: 800, color: '#0A1929', margin: 0 }}>{title}</h2>
-    </div>
-  );
-}
-
-/* ── Centered modal ── */
-function Modal({ onClose, onConfirm }: { onClose: () => void; onConfirm: () => void }) {
-  return (
-    <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
-      <div style={{ background: '#fff', borderRadius: '16px', padding: '32px 28px', maxWidth: '360px', width: '100%', textAlign: 'center', boxShadow: '0 20px 60px rgba(0,0,0,0.3)' }}>
-        <div style={{ fontSize: '32px', marginBottom: '12px' }}>⚠️</div>
-        <h3 style={{ fontSize: '18px', fontWeight: 800, color: '#0A1929', margin: '0 0 8px 0' }}>Confirm all 3 markets first</h3>
-        <p style={{ fontSize: '14px', color: '#64748b', margin: '0 0 24px 0', lineHeight: 1.5 }}>
-          Scroll up and tap <strong>Confirm</strong> on each market before approving your strategy.
-        </p>
-        <button onClick={onClose} style={{ width: '100%', padding: '14px', background: '#00BFA6', color: '#fff', border: 'none', borderRadius: '8px', fontSize: '15px', fontWeight: 700, cursor: 'pointer', marginBottom: '10px' }}>
-          Go Back and Confirm
-        </button>
-        <button onClick={onConfirm} style={{ width: '100%', padding: '10px', background: 'none', color: '#94a3b8', border: 'none', fontSize: '13px', cursor: 'pointer' }}>
-          Skip — approve anyway
-        </button>
-      </div>
-    </div>
-  );
-}
-
-/* ── Strength cards — collapsible ── */
+/* ── Collapsible strength card ── */
 const STRENGTH_ICONS: Record<string, string> = {
-  'Content Freshness': '🔄',
+  'Content Freshness': '↻',
   'Direct Name Recognition': '✓',
-  'Google Business Profile': '⭐',
+  'Google Business Profile': '★',
 };
 
 function StrengthCards({ strengths }: { strengths: StrengthData[] }) {
   const [expanded, setExpanded] = useState<number | null>(null);
   return (
-    <div>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
       {strengths.map((item, i) => {
         const isOpen = expanded === i;
         return (
-          <div key={i} style={{
-            background: '#fff', border: '1px solid #e2e8f0', borderRadius: '10px',
-            marginBottom: '8px', overflow: 'hidden',
-            boxShadow: isOpen ? '0 2px 8px rgba(0,0,0,0.06)' : 'none',
-          }}>
+          <div key={i} style={{ background: '#fff', borderRadius: '10px', overflow: 'hidden' }}>
             <button onClick={() => setExpanded(isOpen ? null : i)} style={{
               width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-              padding: '14px 16px', background: 'none', border: 'none', cursor: 'pointer', textAlign: 'left',
+              padding: '14px 18px', background: 'none', border: 'none', cursor: 'pointer', textAlign: 'left',
+              borderLeft: `4px solid ${D.teal}`,
             }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <div style={{
-                  width: '32px', height: '32px', borderRadius: '8px', background: '#f0fdf9',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '16px', flexShrink: 0,
-                }}>
+                <div style={{ width: '28px', height: '28px', borderRadius: '8px', background: '#f0fdf9', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '14px', color: D.teal, fontWeight: 700, flexShrink: 0 }}>
                   {STRENGTH_ICONS[item.title] || '✓'}
                 </div>
-                <div style={{ fontSize: '15px', fontWeight: 700, color: '#0A1929' }}>{item.title}</div>
+                <span style={{ fontSize: '14px', fontWeight: 600, color: D.textPrimary }}>{item.title}</span>
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <div style={{ background: '#f0fdf9', color: '#00BFA6', fontSize: '11px', fontWeight: 700, padding: '3px 10px', borderRadius: '12px' }}>{item.badge}</div>
-                <div style={{ fontSize: '12px', color: '#94a3b8', transition: 'transform 0.2s', transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}>▾</div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <span style={{ fontSize: '11px', fontWeight: 600, color: D.teal, background: '#f0fdf9', padding: '3px 10px', borderRadius: '12px' }}>{item.badge}</span>
+                <span style={{ fontSize: '11px', color: D.textTertiary, transform: isOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }}>▾</span>
               </div>
             </button>
             {isOpen && (
-              <div style={{ padding: '0 16px 14px', borderTop: '1px solid #f1f5f9' }}>
-                <div style={{ fontSize: '13px', color: '#64748b', lineHeight: 1.6, paddingTop: '10px' }}>{item.detail}</div>
+              <div style={{ padding: '0 18px 14px 18px', borderLeft: `4px solid ${D.teal}` }}>
+                <p style={{ fontSize: '13px', color: D.textSecondary, lineHeight: 1.7, margin: 0 }}>{item.detail}</p>
               </div>
             )}
           </div>
         );
       })}
+    </div>
+  );
+}
+
+/* ── Modal ── */
+function Modal({ onClose, onConfirm }: { onClose: () => void; onConfirm: () => void }) {
+  return (
+    <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
+      <div style={{ background: '#fff', borderRadius: '16px', padding: '32px 28px', maxWidth: '360px', width: '100%', textAlign: 'center' }}>
+        <div style={{ fontSize: '28px', marginBottom: '12px' }}>⚠️</div>
+        <h3 style={{ fontSize: '17px', fontWeight: 800, color: D.navy, margin: '0 0 8px 0' }}>Confirm all 3 markets first</h3>
+        <p style={{ fontSize: '13px', color: D.textSecondary, margin: '0 0 24px 0', lineHeight: 1.6 }}>
+          Scroll up and confirm each market before approving your strategy.
+        </p>
+        <button onClick={onClose} style={{ width: '100%', padding: '13px', background: D.teal, color: '#fff', border: 'none', borderRadius: '8px', fontSize: '14px', fontWeight: 700, cursor: 'pointer', marginBottom: '10px' }}>
+          Go Back and Confirm
+        </button>
+        <button onClick={onConfirm} style={{ width: '100%', padding: '8px', background: 'none', color: D.textTertiary, border: 'none', fontSize: '13px', cursor: 'pointer' }}>
+          Skip — approve anyway
+        </button>
+      </div>
     </div>
   );
 }
@@ -278,6 +276,7 @@ function ResultsContent() {
   const [loading, setLoading] = useState(true);
   const [recordId, setRecordId] = useState('');
   const [scan, setScan] = useState<ScanResults | null>(null);
+  const [audienceFocus, setAudienceFocus] = useState('sellers');
   const [visibleSection, setVisibleSection] = useState(1);
   const [marketConfirms, setMarketConfirms] = useState<boolean[]>([]);
   const [expandedMarket, setExpandedMarket] = useState<number | null>(null);
@@ -296,11 +295,12 @@ function ResultsContent() {
     const token = searchParams.get('token');
     if (token) {
       const { data } = await supabase.from('cited_intake')
-        .select('id, full_name, markets_approved, scan_results')
+        .select('id, full_name, markets_approved, scan_results, audience_focus')
         .eq('onboarding_token', token).single();
       if (data) {
         setRecordId(data.id);
         setClientName(data.full_name || '');
+        if (data.audience_focus) setAudienceFocus(data.audience_focus);
         if (data.markets_approved) { setApproved(true); setVisibleSection(8); setShowApprovePanel(true); }
         if (data.scan_results) {
           const sr = data.scan_results as ScanResults;
@@ -312,33 +312,23 @@ function ResultsContent() {
     setLoading(false);
   }
 
-  const revealNext = useCallback((sectionNum: number) => {
-    setVisibleSection(prev => Math.max(prev, sectionNum));
-    setTimeout(() => {
-      const ref = sectionRefs.current[sectionNum - 1];
-      if (ref) ref.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }, 100);
+  const revealNext = useCallback((n: number) => {
+    setVisibleSection(prev => Math.max(prev, n));
+    setTimeout(() => { sectionRefs.current[n - 1]?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 100);
   }, []);
 
   function scrollToMarkets() {
     setShowModal(false);
-    setTimeout(() => {
-      if (marketsRef.current) marketsRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }, 100);
+    setTimeout(() => { marketsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 100);
   }
 
-  function toggleMarket(i: number) {
-    setMarketConfirms(prev => { const n = [...prev]; n[i] = !n[i]; return n; });
-  }
-
+  function toggleMarket(i: number) { setMarketConfirms(prev => { const n = [...prev]; n[i] = !n[i]; return n; }); }
   function approveAllMarkets() { setMarketConfirms(prev => prev.map(() => true)); }
 
   function handleApproveClick() {
     if (!allMarketsConfirmed) { setShowModal(true); return; }
     setShowApprovePanel(true);
-    setTimeout(() => {
-      if (approvePanelRef.current) approvePanelRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }, 100);
+    setTimeout(() => { approvePanelRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 100);
   }
 
   async function handleFinalApprove() {
@@ -346,10 +336,8 @@ function ResultsContent() {
     setSaving(true);
     const supabase = createSupabaseBrowserClient();
     await supabase.from('cited_intake').update({
-      markets_approved: true,
-      markets_approved_at: new Date().toISOString(),
-      neighborhoods_confirmed: true,
-      neighborhoods_confirmed_at: new Date().toISOString(),
+      markets_approved: true, markets_approved_at: new Date().toISOString(),
+      neighborhoods_confirmed: true, neighborhoods_confirmed_at: new Date().toISOString(),
     }).eq('id', recordId);
     setApproved(true);
     setSaving(false);
@@ -360,459 +348,382 @@ function ResultsContent() {
   const firstName = clientName.split(' ')[0] || '';
 
   if (loading) return (
-    <div style={{ minHeight: '100vh', background: '#0A1929', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+    <div style={{ minHeight: '100vh', background: D.navy, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <div style={{ textAlign: 'center' }}>
-        <div style={{ fontSize: '24px', fontWeight: 900, color: '#fff', letterSpacing: '2px' }}>CITED</div>
-        <div style={{ fontSize: '14px', color: '#94a3b8', marginTop: '8px' }}>Loading your Citation Report...</div>
+        <div style={{ fontSize: '22px', fontWeight: 900, color: '#fff', letterSpacing: '3px' }}>CITED</div>
+        <div style={{ fontSize: '13px', color: D.textTertiary, marginTop: '8px' }}>Loading your Citation Report...</div>
       </div>
     </div>
   );
 
   if (!scan) return (
-    <div style={{ minHeight: '100vh', background: '#f8f9fa', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+    <div style={{ minHeight: '100vh', background: D.grayBg, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <div style={{ textAlign: 'center', padding: '40px' }}>
-        <div style={{ fontSize: '24px', fontWeight: 900, color: '#0A1929', letterSpacing: '2px' }}>CITED</div>
-        <p style={{ fontSize: '16px', color: '#64748b', marginTop: '16px' }}>Your Citation Report isn&apos;t ready yet. Check back soon.</p>
+        <div style={{ fontSize: '22px', fontWeight: 900, color: D.navy, letterSpacing: '3px' }}>CITED</div>
+        <p style={{ fontSize: '15px', color: D.textSecondary, marginTop: '16px' }}>Your Citation Report isn&apos;t ready yet. Check back soon.</p>
       </div>
     </div>
   );
 
   const primaryCompetitor = scan.markets.find(m => m.tier === 'primary');
+  const clientScore = scan.composite_score;
+  const competitorScore = primaryCompetitor ? parseInt(primaryCompetitor.competitor_score.replace('~', '')) : 55;
+  const competitorPct = (competitorScore / 100) * 100;
+  const clientPct = (clientScore / 100) * 100;
 
   return (
-    <div style={{ minHeight: '100vh', background: '#f8f9fa' }}>
+    <div style={{ minHeight: '100vh', background: D.grayBg }}>
       {showModal && <Modal onClose={scrollToMarkets} onConfirm={() => { setShowModal(false); setShowApprovePanel(true); }} />}
 
       <CitedHeader variant="onboarding" userEmail="" userName={clientName} clientTier="founding_client" />
       <ProgressIndicator />
 
       {/* ═══ HERO ═══ */}
-      <div style={{ background: '#0A1929', padding: '44px 24px 40px', textAlign: 'center' }}>
-        <div style={{ maxWidth: '680px', margin: '0 auto' }}>
-          <div style={{ fontSize: '12px', color: '#00BFA6', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '14px' }}>
+      <div style={{ background: D.navy, padding: '48px 24px 44px', textAlign: 'center' }}>
+        <div style={{ maxWidth: '640px', margin: '0 auto' }}>
+          <div style={{ fontSize: '11px', color: D.teal, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '2.5px', marginBottom: '16px' }}>
             Your Citation Report is Ready
           </div>
-          <h1 style={{ fontSize: '26px', fontWeight: 800, color: '#fff', lineHeight: 1.3, margin: '0 0 6px 0' }}>
+          <h1 style={{ fontSize: '28px', fontWeight: 800, color: '#fff', lineHeight: 1.25, margin: '0 0 8px 0' }}>
             {firstName ? `${firstName}, here's what we found.` : "Here's what we found."}
           </h1>
-          <p style={{ fontSize: '13px', color: '#64748b', margin: '0 0 24px 0', lineHeight: 1.5 }}>
-            We ran {scan.query_count} queries across the top AI models sellers and buyers use, audited {scan.platform_count} platforms,
-            analyzed {scan.txn_analyzed} of your transactions, and mapped {scan.neighborhood_count} neighborhoods — every query
-            run {scan.consistency_runs}x for consistency.
+          <p style={{ fontSize: '13px', color: D.textTertiary, margin: '0 0 28px 0', lineHeight: 1.6 }}>
+            {scan.query_count} queries · {scan.platform_count} platforms audited · {scan.txn_analyzed} transactions analyzed · every query run {scan.consistency_runs}× for consistency
           </p>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '8px', marginBottom: '24px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '8px', marginBottom: '28px' }}>
             {scan.stats.map((stat) => (
-              <div key={stat.label} style={{ background: 'rgba(255,255,255,0.05)', borderRadius: '10px', padding: '12px 8px' }}>
-                <div style={{ fontSize: '22px', fontWeight: 900, color: '#00BFA6' }}>{stat.value}</div>
-                <div style={{ fontSize: '10px', color: '#94a3b8', marginTop: '3px' }}>{stat.label}</div>
+              <div key={stat.label} style={{ background: 'rgba(255,255,255,0.06)', borderRadius: '10px', padding: '14px 10px' }}>
+                <div style={{ fontSize: '22px', fontWeight: 900, color: D.teal }}>{stat.value}</div>
+                <div style={{ fontSize: '10px', color: D.textTertiary, marginTop: '4px', lineHeight: 1.3 }}>{stat.label}</div>
               </div>
             ))}
           </div>
-          <p style={{ fontSize: '15px', color: '#94a3b8', lineHeight: 1.6, margin: 0, maxWidth: '520px', marginLeft: 'auto', marginRight: 'auto' }}>
-            These numbers tell the story of a top-performing luxury agent. But when sellers and buyers ask AI who to call —{' '}
-            <span style={{ color: '#fff', fontWeight: 600 }}>your name doesn&apos;t come up. Let&apos;s fix that.</span>
+          <p style={{ fontSize: '14px', color: '#94a3b8', lineHeight: 1.7, margin: 0, maxWidth: '480px', marginLeft: 'auto', marginRight: 'auto' }}>
+            These numbers tell the story of a top luxury agent. But when sellers ask AI who to list with —{' '}
+            <span style={{ color: '#fff', fontWeight: 700 }}>your name doesn&apos;t come up.</span>
           </p>
         </div>
       </div>
-      <div style={{ height: '3px', background: 'linear-gradient(90deg, #00BFA6, #D4A830, #00BFA6)' }} />
+      <div style={{ height: '3px', background: `linear-gradient(90deg, ${D.teal}, #D4A830, ${D.teal})` }} />
 
-      <div style={{ maxWidth: '680px', margin: '0 auto', padding: '0 24px 32px' }}>
+      <div style={{ maxWidth: '660px', margin: '0 auto', padding: `0 24px 48px` }}>
 
         {/* ═══ SECTION 1: DISCOVERY GAP ═══ */}
-        <div ref={el => { sectionRefs.current[0] = el; }} style={{ paddingTop: '36px' }}>
-          <SectionHeader num="1" title="The Discovery Gap" color="#0A1929" />
-          <p style={{ fontSize: '14px', color: '#64748b', margin: '0 0 16px 0', lineHeight: 1.5 }}>
-            Your next client is asking AI who to call right now. Here&apos;s what came back for your primary market:
+        <div ref={el => { sectionRefs.current[0] = el; }} style={{ paddingTop: D.sectionGap }}>
+          <h2 style={{ fontSize: '22px', fontWeight: 800, color: D.navy, margin: '0 0 6px 0' }}>The Discovery Gap</h2>
+          <p style={{ fontSize: '14px', color: D.textSecondary, margin: '0 0 20px 0', lineHeight: 1.7 }}>
+            Your next client is asking AI who to list with right now. Here&apos;s what one of those queries returned:
           </p>
 
-          {/* ONE unified card — query → response → 90/0 → that's the gap */}
-          <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '14px', overflow: 'hidden', marginBottom: '20px', boxShadow: '0 2px 12px rgba(0,0,0,0.07)' }}>
-
-            {/* Query */}
-            <div style={{ padding: '18px 20px 14px' }}>
-              <div style={{ fontSize: '10px', fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '8px' }}>
+          {/* Unified AI quote card */}
+          <div style={{ background: '#fff', borderRadius: '14px', overflow: 'hidden', marginBottom: '20px', boxShadow: '0 2px 16px rgba(0,0,0,0.08)' }}>
+            <div style={{ padding: '20px 24px 16px', borderBottom: `1px solid ${D.grayMid}` }}>
+              <div style={{ fontSize: '10px', fontWeight: 700, color: D.textTertiary, textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '8px' }}>
                 We asked {scan.ai_quote.model}:
               </div>
-              <div style={{ fontSize: '16px', fontWeight: 700, color: '#0A1929', fontStyle: 'italic', lineHeight: 1.4 }}>
+              <div style={{ fontSize: '16px', fontWeight: 700, color: D.navy, fontStyle: 'italic', lineHeight: 1.4 }}>
                 &ldquo;{scan.ai_quote.query}&rdquo;
               </div>
             </div>
-
-            {/* AI response */}
-            <div style={{ padding: '14px 20px', borderTop: '1px solid #f1f5f9', borderBottom: '1px solid #f1f5f9' }}>
-              <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
-                <div style={{ width: '3px', minWidth: '3px', background: '#EF4444', borderRadius: '2px', marginTop: '2px', alignSelf: 'stretch' }} />
-                <div style={{ fontSize: '13px', color: '#475569', lineHeight: 1.7 }}>
+            <div style={{ padding: '16px 24px', borderBottom: `1px solid ${D.grayMid}` }}>
+              <div style={{ display: 'flex', gap: '12px' }}>
+                <div style={{ width: '3px', minWidth: '3px', background: D.red, borderRadius: '2px', alignSelf: 'stretch' }} />
+                <div style={{ fontSize: '13px', color: D.textSecondary, lineHeight: 1.8 }}>
                   &ldquo;{(() => {
                     const response = scan.ai_quote.response;
                     const competitor = primaryCompetitor?.competitor;
-                    if (!competitor || !response.includes(competitor)) {
-                      return response;
-                    }
+                    if (!competitor || !response.includes(competitor)) return response;
                     const parts = response.split(competitor);
                     return parts.map((part, i) => (
                       i < parts.length - 1
-                        ? <span key={i}>{part}<strong style={{ color: '#0A1929', fontWeight: 800 }}>{competitor}</strong></span>
+                        ? <span key={i}>{part}<strong style={{ color: D.navy, fontWeight: 800 }}>{competitor}</strong></span>
                         : <span key={i}>{part}</span>
                     ));
                   })()}&rdquo;
                 </div>
               </div>
             </div>
-
-            {/* 90/0 — inline, not its own block */}
-            <div style={{ padding: '16px 20px', background: '#fafbfc', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px' }}>
-              <div style={{ fontSize: '13px', color: '#64748b', lineHeight: 1.5, flex: 1 }}>
+            <div style={{ padding: '14px 24px', background: D.grayBg, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px' }}>
+              <p style={{ fontSize: '13px', color: D.textSecondary, margin: 0, lineHeight: 1.6, flex: 1 }}>
                 We ran that search — and 89 others across all the AI tools sellers are using right now. Your name appeared:
-              </div>
+              </p>
               <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px', flexShrink: 0 }}>
-                <span style={{ fontSize: '36px', fontWeight: 900, color: '#EF4444', lineHeight: 1 }}>0</span>
-                <span style={{ fontSize: '13px', color: '#94a3b8' }}>/ 90 times</span>
+                <span style={{ fontSize: '40px', fontWeight: 900, color: D.red, lineHeight: 1 }}>0</span>
+                <span style={{ fontSize: '13px', color: D.textTertiary }}>/ 90 times</span>
               </div>
             </div>
           </div>
 
+          {/* Score card — THE dominant element */}
           {primaryCompetitor && (
-            <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '14px', overflow: 'hidden', marginBottom: '14px', boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}>
+            <div style={{ background: '#fff', borderRadius: '14px', overflow: 'hidden', marginBottom: '20px', boxShadow: '0 4px 24px rgba(0,0,0,0.10)' }}>
 
-              {/* Score spectrum bar */}
-              <div style={{ padding: '16px 20px 12px', borderBottom: '1px solid #f1f5f9' }}>
+              {/* Score scale */}
+              <div style={{ padding: '20px 24px 16px', borderBottom: `1px solid ${D.grayMid}` }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-                  <div style={{ fontSize: '11px', fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '1px' }}>
-                    Citation Score Scale
-                  </div>
-                  <div style={{ fontSize: '10px', color: '#94a3b8', background: '#f0f4f8', borderRadius: '4px', padding: '3px 8px' }}>
-                    Based on {scan.query_count} queries across all AI models
-                  </div>
+                  <div style={{ fontSize: '10px', fontWeight: 700, color: D.textTertiary, textTransform: 'uppercase', letterSpacing: '1.5px' }}>Citation Score</div>
+                  <div style={{ fontSize: '10px', color: D.textTertiary, background: D.grayBg, padding: '3px 8px', borderRadius: '4px' }}>Based on {scan.query_count} queries</div>
                 </div>
-                <div style={{ position: 'relative', height: '8px', borderRadius: '4px', background: 'linear-gradient(90deg, #EF4444 0%, #F59E0B 30%, #D4A830 50%, #00BFA6 75%, #0A1929 100%)', marginBottom: '6px' }}>
-                  {/* Radley marker */}
-                  <div style={{
-                    position: 'absolute', top: '-4px', left: `${scan.composite_score}%`,
-                    width: '16px', height: '16px', borderRadius: '50%', background: '#0A1929',
-                    border: '2px solid #fff', boxShadow: '0 1px 4px rgba(0,0,0,0.2)',
-                    transform: 'translateX(-50%)',
-                  }} />
-                  {/* Competitor marker */}
-                  <div style={{
-                    position: 'absolute', top: '-4px', left: '55%',
-                    width: '16px', height: '16px', borderRadius: '50%', background: '#EF4444',
-                    border: '2px solid #fff', boxShadow: '0 1px 4px rgba(0,0,0,0.2)',
-                    transform: 'translateX(-50%)',
-                  }} />
+                <div style={{ position: 'relative', height: '8px', borderRadius: '4px', background: `linear-gradient(90deg, ${D.red} 0%, #F59E0B 30%, #D4A830 50%, ${D.teal} 75%, ${D.navy} 100%)`, marginBottom: '6px' }}>
+                  {/* Client dot */}
+                  <div style={{ position: 'absolute', top: '-5px', left: `${clientPct}%`, width: '18px', height: '18px', borderRadius: '50%', background: D.navy, border: '3px solid #fff', boxShadow: '0 2px 6px rgba(0,0,0,0.2)', transform: 'translateX(-50%)' }} />
+                  {/* Competitor dot */}
+                  <div style={{ position: 'absolute', top: '-5px', left: `${competitorPct}%`, width: '18px', height: '18px', borderRadius: '50%', background: D.red, border: '3px solid #fff', boxShadow: '0 2px 6px rgba(0,0,0,0.2)', transform: 'translateX(-50%)' }} />
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '10px', color: '#94a3b8', marginTop: '4px' }}>
-                  <span>0 — Not Indexed</span>
-                  <span>50 — In the Mix</span>
-                  <span>100 — Top Cited</span>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '10px', color: D.textTertiary }}>
+                  <span>Not indexed</span>
+                  <span>Recommended</span>
                 </div>
               </div>
 
-              {/* Side by side — cleaner, balanced */}
+              {/* Score comparison */}
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
-
-                {/* Radley */}
-                <div style={{ padding: '20px 20px 20px 20px', borderRight: '1px solid #f1f5f9' }}>
-                  <div style={{ fontSize: '10px', color: '#94a3b8', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '12px' }}>Your Score</div>
-                  <div style={{ fontSize: '48px', fontWeight: 900, color: '#0A1929', lineHeight: 1 }}>{scan.composite_score}</div>
-                  <div style={{ fontSize: '12px', color: '#94a3b8', marginTop: '4px', marginBottom: '12px' }}>out of 100</div>
-                  <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: '#f0f4f8', borderRadius: '20px', padding: '4px 12px', marginBottom: '10px' }}>
-                    <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#64748b' }} />
-                    <span style={{ fontSize: '11px', fontWeight: 600, color: '#475569' }}>{scan.tier_name}</span>
+                {/* Client score — dominant */}
+                <div style={{ padding: '24px', borderRight: `1px solid ${D.grayMid}` }}>
+                  <div style={{ fontSize: '10px', fontWeight: 700, color: D.textTertiary, textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '12px' }}>Your Score</div>
+                  <div style={{ fontFamily: 'Georgia, serif', fontSize: '64px', fontWeight: 900, color: D.navy, lineHeight: 1 }}>{clientScore}</div>
+                  <div style={{ fontSize: '12px', color: D.textTertiary, marginTop: '4px', marginBottom: '10px' }}>out of 100</div>
+                  <div style={{ display: 'inline-block', background: D.grayBg, borderRadius: '6px', padding: '4px 10px' }}>
+                    <span style={{ fontSize: '11px', fontWeight: 600, color: D.textSecondary }}>{scan.tier_name}</span>
                   </div>
-                  <div style={{ fontSize: '12px', color: '#94a3b8', lineHeight: 1.5 }}>
+                  <p style={{ fontSize: '12px', color: D.textTertiary, margin: '10px 0 0 0', lineHeight: 1.5 }}>
                     AI knows you — but doesn&apos;t recommend you in discovery searches yet.
-                  </div>
+                  </p>
                 </div>
 
-                {/* Competitor */}
-                <div style={{ padding: '20px', background: '#fafbfc' }}>
-                  <div style={{ fontSize: '10px', color: '#EF4444', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '12px' }}>Benchmark</div>
-                  <div style={{ fontSize: '48px', fontWeight: 900, color: '#EF4444', lineHeight: 1 }}>~55</div>
-                  <div style={{ fontSize: '12px', color: '#94a3b8', marginTop: '4px', marginBottom: '12px' }}>out of 100</div>
-                  <div style={{ fontSize: '13px', fontWeight: 700, color: '#0A1929', marginBottom: '2px' }}>{primaryCompetitor.competitor}</div>
-                  <div style={{ fontSize: '11px', color: '#94a3b8', marginBottom: '10px' }}>{primaryCompetitor.competitor_brokerage}</div>
-                  <div style={{ fontSize: '12px', color: '#94a3b8', lineHeight: 1.5 }}>
-                    Currently recommended by AI in {primaryCompetitor.name} — the position we&apos;re building you into.
-                  </div>
+                {/* Competitor — benchmark context */}
+                <div style={{ padding: '24px', background: D.grayBg }}>
+                  <div style={{ fontSize: '10px', fontWeight: 700, color: D.red, textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '12px' }}>Benchmark</div>
+                  <div style={{ fontFamily: 'Georgia, serif', fontSize: `${Math.round(64 * (competitorScore / 100))}px`, fontWeight: 900, color: D.red, lineHeight: 1, minHeight: '64px', display: 'flex', alignItems: 'flex-start' }}>~{competitorScore}</div>
+                  <div style={{ fontSize: '12px', color: D.textTertiary, marginTop: '4px', marginBottom: '10px' }}>out of 100</div>
+                  <div style={{ fontSize: '13px', fontWeight: 700, color: D.navy, marginBottom: '2px' }}>{primaryCompetitor.competitor}</div>
+                  <div style={{ fontSize: '11px', color: D.textTertiary, marginBottom: '8px' }}>{primaryCompetitor.competitor_brokerage}</div>
+                  {scan.competitor_validation?.verified && (
+                    <div style={{ fontSize: '10px', color: D.textTertiary }}>DRE #{scan.competitor_validation.dre} · Verified</div>
+                  )}
                 </div>
               </div>
 
-              {/* What the gap means */}
-              <div style={{ padding: '14px 20px', background: '#0A1929', display: 'flex', alignItems: 'center', gap: '12px' }}>
-                <div style={{ fontSize: '13px', color: '#94a3b8', lineHeight: 1.5, flex: 1 }}>
-                  Our goal isn&apos;t just to match Felicia at ~55 — it&apos;s to make you the <span style={{ color: '#00BFA6', fontWeight: 700 }}>most recommended agent</span> in your market.
-                  Our analysis shows exactly where your <span style={{ color: '#00BFA6', fontWeight: 700 }}>+41 points</span> are coming from.
-                </div>
+              {/* Goal */}
+              <div style={{ padding: '14px 24px', background: D.navy, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <p style={{ fontSize: '13px', color: '#94a3b8', margin: 0, lineHeight: 1.5 }}>
+                  Our goal isn&apos;t just to match the benchmark — it&apos;s to make you{' '}
+                  <strong style={{ color: D.teal }}>the most recommended agent</strong> in your market.
+                </p>
               </div>
             </div>
           )}
 
-          {visibleSection < 2 && <ContinueButton onClick={() => revealNext(2)} text="See What's Working" />}
+          {visibleSection < 2 && <ContinueButton onClick={() => revealNext(2)} text="See What's Already Working" />}
         </div>
 
         {/* ═══ SECTION 2: STRENGTHS ═══ */}
         {visibleSection >= 2 && (
-          <div ref={el => { sectionRefs.current[1] = el; }} style={{ paddingTop: '36px' }}>
-            <SectionHeader num="2" title="What's Already Working" color="#00BFA6" />
-            <p style={{ fontSize: '14px', color: '#64748b', margin: '0 0 4px 0', lineHeight: 1.5 }}>
+          <div ref={el => { sectionRefs.current[1] = el; }} style={{ paddingTop: D.sectionGap }}>
+            <h2 style={{ fontSize: '22px', fontWeight: 800, color: D.navy, margin: '0 0 6px 0' }}>What&apos;s Already Working</h2>
+            <p style={{ fontSize: '14px', color: D.textSecondary, margin: '0 0 20px 0', lineHeight: 1.7 }}>
               You&apos;re not starting from zero. Our {scan.platform_count}-platform audit found real strengths to build on.
             </p>
-            <div style={{ marginBottom: '16px' }}><DepthBadge text={`${scan.platform_count} platforms audited · ${scan.query_count} queries analyzed`} /></div>
-
             <StrengthCards strengths={scan.strengths} />
-
-            <div style={{ background: '#f0fdf9', borderRadius: '8px', padding: '12px 16px', marginTop: '12px', fontSize: '13px', color: '#0A1929', textAlign: 'center', fontWeight: 500 }}>
-              Now you know your foundation. Next: the specific gaps costing you AI recommendations.
-            </div>
             {visibleSection < 3 && <ContinueButton onClick={() => revealNext(3)} text="See Where the Gaps Are" />}
           </div>
         )}
 
         {/* ═══ SECTION 3: GAPS ═══ */}
         {visibleSection >= 3 && (
-          <div ref={el => { sectionRefs.current[2] = el; }} style={{ paddingTop: '36px' }}>
-            <SectionHeader num="3" title="Where the Gaps Are" color="#EF4444" />
-            <p style={{ fontSize: '14px', color: '#64748b', margin: '0 0 4px 0', lineHeight: 1.5 }}>
+          <div ref={el => { sectionRefs.current[2] = el; }} style={{ paddingTop: D.sectionGap }}>
+            <h2 style={{ fontSize: '22px', fontWeight: 800, color: D.navy, margin: '0 0 6px 0' }}>Where the Gaps Are</h2>
+            <p style={{ fontSize: '14px', color: D.textSecondary, margin: '0 0 20px 0', lineHeight: 1.7 }}>
               {scan.gaps.length} specific gaps are keeping you out of AI recommendations. Each one has a measurable fix.
             </p>
-            <div style={{ marginBottom: '16px' }}><DepthBadge text={`${scan.query_count} queries · ${scan.platform_count} platforms · ${scan.consistency_runs}x consistency runs per query`} /></div>
-
-            {scan.gaps.map((gap, i) => (
-              <div key={i} style={{ background: '#fff', borderRadius: '12px', marginBottom: '12px', overflow: 'hidden', boxShadow: '0 1px 4px rgba(0,0,0,0.06)', border: '1px solid #e2e8f0' }}>
-                {/* Card header — platform + point impact */}
-                <div style={{ padding: '14px 16px 12px', borderBottom: '1px solid #f1f5f9', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <div style={{ width: '6px', height: '36px', borderRadius: '3px', background: gap.color, flexShrink: 0 }} />
-                    <div>
-                      <div style={{ fontSize: '15px', fontWeight: 800, color: '#0A1929' }}>{gap.title}</div>
-                      <div style={{ fontSize: '11px', color: gap.color, fontWeight: 600, marginTop: '1px' }}>{gap.status}</div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              {scan.gaps.map((gap, i) => (
+                <div key={i} style={{ background: '#fff', borderRadius: '12px', overflow: 'hidden' }}>
+                  <div style={{ padding: '16px 20px 14px', borderLeft: `4px solid ${gap.color}`, display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                    <div style={{ flex: 1 }}>
+                      <div style={{ fontSize: '15px', fontWeight: 700, color: D.navy }}>{gap.title}</div>
+                      <div style={{ fontSize: '12px', color: gap.color, fontWeight: 600, marginTop: '3px' }}>{gap.status}</div>
                     </div>
+                    <div style={{ background: '#f0fdf9', color: D.teal, fontSize: '12px', fontWeight: 700, padding: '4px 12px', borderRadius: '12px', whiteSpace: 'nowrap', marginLeft: '12px' }}>{gap.points}</div>
                   </div>
-                  <div style={{ textAlign: 'center', background: gap.color === '#EF4444' ? '#fff5f5' : '#fffdf5', borderRadius: '10px', padding: '6px 12px', minWidth: '56px' }}>
-                    <div style={{ fontSize: '18px', fontWeight: 900, color: gap.color, lineHeight: 1 }}>{gap.points.replace(' pts', '')}</div>
-                    <div style={{ fontSize: '9px', color: gap.color, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>pts</div>
+                  <div style={{ padding: '0 20px 0 24px', borderLeft: `4px solid ${gap.color}` }}>
+                    <p style={{ fontSize: '13px', color: D.textSecondary, margin: '0 0 12px 0', lineHeight: 1.7 }}>{gap.impact}</p>
+                    <div style={{ background: '#f0fdf9', borderRadius: '8px', padding: '10px 14px', marginBottom: '10px' }}>
+                      <div style={{ fontSize: '10px', fontWeight: 700, color: D.teal, textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '4px' }}>What we do</div>
+                      <p style={{ fontSize: '13px', color: D.textPrimary, margin: 0, lineHeight: 1.6 }}>{gap.action}</p>
+                    </div>
+                    <p style={{ fontSize: '12px', color: D.teal, fontWeight: 600, margin: '0 0 16px 0' }}>→ {gap.outcome}</p>
                   </div>
                 </div>
-
-                {/* Impact */}
-                <div style={{ padding: '12px 16px 0', fontSize: '13px', color: '#475569', lineHeight: 1.6 }}>{gap.impact}</div>
-
-                {/* What we do */}
-                <div style={{ margin: '12px 16px', padding: '10px 14px', background: '#f0fdf9', borderRadius: '8px', borderLeft: '3px solid #00BFA6' }}>
-                  <div style={{ fontSize: '10px', fontWeight: 700, color: '#00BFA6', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '4px' }}>What we do</div>
-                  <div style={{ fontSize: '13px', color: '#0A1929', lineHeight: 1.5 }}>{gap.action}</div>
-                </div>
-
-                {/* Result */}
-                <div style={{ padding: '0 16px 14px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <div style={{ width: '16px', height: '16px', borderRadius: '50%', background: '#00BFA6', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                    <span style={{ fontSize: '9px', color: '#fff', fontWeight: 700 }}>→</span>
-                  </div>
-                  <div style={{ fontSize: '12px', color: '#00BFA6', fontWeight: 600 }}>{gap.outcome}</div>
-                </div>
-              </div>
-            ))}
-
-            <div style={{ background: '#0A1929', borderRadius: '8px', padding: '14px 18px', marginTop: '14px', textAlign: 'center' }}>
-              <span style={{ fontSize: '14px', color: '#fff', fontWeight: 600 }}>Total recoverable: <span style={{ color: '#00BFA6' }}>+46 points</span></span>
-              <span style={{ fontSize: '13px', color: '#64748b', marginLeft: '10px' }}>— enough to move from {scan.composite_score} to 65+ in 90 days</span>
+              ))}
+            </div>
+            <div style={{ background: D.navy, borderRadius: '10px', padding: '14px 20px', marginTop: '16px', textAlign: 'center' }}>
+              <span style={{ fontSize: '14px', color: '#fff', fontWeight: 600 }}>Total recoverable: <span style={{ color: D.teal }}>+46 points</span></span>
+              <span style={{ fontSize: '13px', color: D.textTertiary, marginLeft: '10px' }}>— enough to move from {clientScore} to 65+ in 90 days</span>
             </div>
             {visibleSection < 4 && <ContinueButton onClick={() => revealNext(4)} text="See Your Market Strategy" />}
           </div>
         )}
 
-        {/* ═══ SECTION 4: MARKETS — Hybrid original style + confirm ═══ */}
+        {/* ═══ SECTION 4: MARKETS ═══ */}
         {visibleSection >= 4 && (
-          <div ref={el => { sectionRefs.current[3] = el; }} style={{ paddingTop: '36px' }}>
+          <div ref={el => { sectionRefs.current[3] = el; }} style={{ paddingTop: D.sectionGap }}>
             <div ref={marketsRef}>
-              <SectionHeader num="4" title="Your Market Strategy" color="#D4A830" />
+              <h2 style={{ fontSize: '22px', fontWeight: 800, color: D.navy, margin: '0 0 6px 0' }}>Your Market Strategy</h2>
             </div>
-            <p style={{ fontSize: '14px', color: '#64748b', margin: '0 0 16px 0', lineHeight: 1.5 }}>
-              Based on your {scan.txn_analyzed} transactions, {scan.query_count} AI queries, and our {scan.platform_count}-platform audit,
-              we recommend optimizing your AI visibility in these {scan.markets.length} markets.
+            <p style={{ fontSize: '14px', color: D.textSecondary, margin: '0 0 16px 0', lineHeight: 1.7 }}>
+              Based on {scan.txn_analyzed} transactions, {scan.query_count} AI queries, and our {scan.platform_count}-platform audit, we recommend these {scan.markets.length} markets.
             </p>
 
-            {/* Data source icons — original style */}
+            {/* Data source icons */}
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '10px', marginBottom: '20px' }}>
               {[
-                { label: 'Your Input', icon: '📋', desc: 'Markets you identified' },
-                { label: 'Your Transactions', icon: '📊', desc: `${scan.txn_analyzed} sales analyzed` },
-                { label: 'Our Analysis', icon: '🔍', desc: `${scan.query_count} AI queries run` },
+                { icon: '📋', label: 'Your Input', desc: 'Markets you identified' },
+                { icon: '📊', label: 'Your Transactions', desc: `${scan.txn_analyzed} sales analyzed` },
+                { icon: '🔍', label: 'Our Analysis', desc: `${scan.query_count} AI queries run` },
               ].map(s => (
-                <div key={s.label} style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '12px', textAlign: 'center' }}>
-                  <div style={{ fontSize: '20px', marginBottom: '4px' }}>{s.icon}</div>
-                  <div style={{ fontSize: '11px', fontWeight: 700, color: '#0A1929', textTransform: 'uppercase', letterSpacing: '0.5px' }}>{s.label}</div>
-                  <div style={{ fontSize: '10px', color: '#94a3b8', marginTop: '2px' }}>{s.desc}</div>
+                <div key={s.label} style={{ background: '#fff', borderRadius: '8px', padding: '12px 14px', textAlign: 'center' }}>
+                  <div style={{ fontSize: '18px', marginBottom: '4px' }}>{s.icon}</div>
+                  <div style={{ fontSize: '10px', fontWeight: 700, color: D.navy, textTransform: 'uppercase', letterSpacing: '0.5px' }}>{s.label}</div>
+                  <div style={{ fontSize: '10px', color: D.textTertiary, marginTop: '2px' }}>{s.desc}</div>
                 </div>
               ))}
             </div>
 
             {!approved && (
-              <div style={{ textAlign: 'center', marginBottom: '16px' }}>
+              <div style={{ textAlign: 'right', marginBottom: '12px' }}>
                 <button onClick={approveAllMarkets} disabled={allMarketsConfirmed} style={{
-                  padding: '8px 20px', background: allMarketsConfirmed ? '#e2e8f0' : '#0A1929',
-                  color: allMarketsConfirmed ? '#94a3b8' : '#fff', fontSize: '12px', fontWeight: 600,
+                  padding: '7px 16px', background: allMarketsConfirmed ? D.border : D.navy,
+                  color: allMarketsConfirmed ? D.textTertiary : '#fff', fontSize: '12px', fontWeight: 600,
                   border: 'none', borderRadius: '6px', cursor: allMarketsConfirmed ? 'default' : 'pointer',
                 }}>
-                  {allMarketsConfirmed ? '✓ All Markets Confirmed' : `Confirm All ${scan.markets.length} Markets`}
+                  {allMarketsConfirmed ? '✓ All Confirmed' : `Confirm All ${scan.markets.length}`}
                 </button>
               </div>
             )}
 
-            {scan.markets.map((market, idx) => {
-              const tier = TIER_CONFIG[market.tier] || TIER_CONFIG.growth;
-              const isConfirmed = approved || marketConfirms[idx];
-              const isExpanded = expandedMarket === idx;
-              const hoods = market.recommended_neighborhoods || market.neighborhoods.map(n => ({
-                name: n.name, reason: n.txn_count ? `${n.txn_count} transactions` : `From your ${n.source}`,
-                ai_status: n.ai_recognized ? 'recognized' : 'not_indexed',
-              }));
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              {scan.markets.map((market, idx) => {
+                const tier = TIER_CONFIG[market.tier] || TIER_CONFIG.growth;
+                const isConfirmed = approved || marketConfirms[idx];
+                const isExpanded = expandedMarket === idx;
+                const hoods = market.recommended_neighborhoods || market.neighborhoods.map(n => ({
+                  name: n.name, reason: n.txn_count ? `${n.txn_count} transactions` : n.source,
+                  ai_status: n.ai_recognized ? 'recognized' : 'not_indexed',
+                }));
 
-              return (
-                <div key={market.name} style={{
-                  background: '#fff', border: `2px solid ${isConfirmed ? '#00BFA6' : tier.border}`,
-                  borderRadius: '12px', marginBottom: '16px', overflow: 'hidden', transition: 'border-color 0.3s',
-                  position: 'relative',
-                }}>
-                  {/* Tier badge — tab style */}
-                  <div style={{
-                    position: 'absolute', top: 0, left: '20px',
-                    background: tier.color, color: '#fff', fontSize: '10px', fontWeight: 700,
-                    padding: '4px 12px', borderRadius: '0 0 8px 8px',
-                    textTransform: 'uppercase', letterSpacing: '1px',
-                  }}>{tier.label}</div>
+                return (
+                  <div key={market.name} style={{ background: '#fff', borderRadius: '12px', overflow: 'hidden', borderLeft: `4px solid ${isConfirmed ? D.teal : tier.color}`, transition: 'border-color 0.3s' }}>
+                    <div style={{ padding: '20px 20px 16px', position: 'relative' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                        <div>
+                          <div style={{ fontSize: '10px', fontWeight: 700, color: tier.color, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '4px' }}>{tier.label}</div>
+                          <div style={{ fontSize: '19px', fontWeight: 800, color: D.navy }}>{market.name}</div>
+                          <div style={{ fontSize: '12px', color: D.textTertiary, marginTop: '2px' }}>
+                            {market.tier === 'primary' ? 'Highest AI opportunity — full optimization priority' :
+                             market.tier === 'secondary' ? 'Strong signal — included in all content and platforms' :
+                             'Building toward — visibility grows over time'}
+                          </div>
+                        </div>
+                        {!approved && (
+                          <button onClick={() => toggleMarket(idx)} style={{
+                            background: isConfirmed ? D.teal : '#fff', color: isConfirmed ? '#fff' : D.textTertiary,
+                            border: isConfirmed ? `2px solid ${D.teal}` : `2px solid ${D.border}`,
+                            borderRadius: '20px', padding: '5px 14px', fontSize: '11px', fontWeight: 700,
+                            cursor: 'pointer', transition: 'all 0.2s', flexShrink: 0, marginLeft: '12px',
+                          }}>
+                            {isConfirmed ? '✓ Confirmed' : 'Confirm'}
+                          </button>
+                        )}
+                      </div>
 
-                  {/* Confirm button */}
-                  {!approved && (
-                    <div style={{ position: 'absolute', top: '12px', right: '16px' }}>
-                      <button onClick={() => toggleMarket(idx)} style={{
-                        background: isConfirmed ? '#00BFA6' : '#fff',
-                        color: isConfirmed ? '#fff' : '#94a3b8',
-                        border: isConfirmed ? '2px solid #00BFA6' : '2px solid #e2e8f0',
-                        borderRadius: '20px', padding: '4px 14px', fontSize: '11px', fontWeight: 700,
-                        cursor: 'pointer', transition: 'all 0.2s',
+                      {/* Small multiples stats — identical structure every card */}
+                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '8px', marginTop: '14px' }}>
+                        {[
+                          { label: 'Volume', value: market.volume },
+                          { label: 'Transactions', value: market.txn_count },
+                          { label: 'Avg Price', value: market.avg_price },
+                        ].map(s => (
+                          <div key={s.label} style={{ background: tier.bg, borderRadius: '8px', padding: '10px 12px' }}>
+                            <div style={{ fontSize: '9px', fontWeight: 600, color: D.textTertiary, textTransform: 'uppercase', letterSpacing: '0.5px' }}>{s.label}</div>
+                            <div style={{ fontSize: '15px', fontWeight: 800, color: D.navy, marginTop: '2px' }}>{s.value}</div>
+                          </div>
+                        ))}
+                      </div>
+
+                      <div style={{ marginTop: '10px', fontSize: '13px', color: D.textSecondary, lineHeight: 1.6, padding: '8px 12px', background: D.grayBg, borderRadius: '6px' }}>
+                        <strong style={{ color: D.navy }}>From our analysis:</strong> {market.ai_signal}
+                      </div>
+                      <div style={{ marginTop: '6px', fontSize: '12px', color: D.textTertiary }}>
+                        <strong>Evidence:</strong> {market.txn_highlight}
+                      </div>
+
+                      <button onClick={() => setExpandedMarket(isExpanded ? null : idx)} style={{
+                        background: 'none', border: 'none', fontSize: '12px', color: D.teal,
+                        fontWeight: 600, cursor: 'pointer', padding: '6px 0 0', display: 'block',
                       }}>
-                        {isConfirmed ? '✓ Confirmed' : 'Confirm'}
+                        {isExpanded ? '▾ Hide neighborhoods' : `▸ See ${hoods.length} recommended neighborhoods`}
                       </button>
                     </div>
-                  )}
 
-                  <div style={{ padding: '20px 20px 16px', marginTop: '10px' }}>
-                    <h3 style={{ fontSize: '20px', fontWeight: 800, color: '#0A1929', margin: '0 0 4px 0' }}>{market.name}</h3>
-                    <p style={{ fontSize: '12px', color: '#94a3b8', margin: '0 0 14px 0' }}>{tier.desc}</p>
-
-                    {/* Stats — 3 column original style */}
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '10px', marginBottom: '12px' }}>
-                      {[
-                        { label: 'Volume', value: market.volume },
-                        { label: 'Transactions', value: market.txn_count },
-                        { label: 'Avg Price', value: market.avg_price },
-                      ].map(s => (
-                        <div key={s.label} style={{ background: tier.bg, borderRadius: '8px', padding: '10px 12px' }}>
-                          <div style={{ fontSize: '10px', fontWeight: 600, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.5px' }}>{s.label}</div>
-                          <div style={{ fontSize: '16px', fontWeight: 800, color: '#0A1929', marginTop: '2px' }}>{s.value}</div>
-                        </div>
-                      ))}
-                    </div>
-
-                    {/* AI signal */}
-                    <div style={{ fontSize: '13px', color: '#475569', lineHeight: 1.5, padding: '8px 12px', background: '#f8f9fa', borderRadius: '6px', marginBottom: '8px' }}>
-                      <strong style={{ color: '#0A1929' }}>From our analysis:</strong> {market.ai_signal}
-                    </div>
-
-                    {/* Evidence */}
-                    <div style={{ fontSize: '12px', color: '#64748b', marginBottom: '8px' }}>
-                      <strong>Your evidence:</strong> {market.txn_highlight}
-                    </div>
-
-                    {/* Neighborhoods toggle */}
-                    <button onClick={() => setExpandedMarket(isExpanded ? null : idx)} style={{
-                      background: 'none', border: 'none', fontSize: '13px', color: '#00BFA6',
-                      fontWeight: 600, cursor: 'pointer', padding: '2px 0',
-                    }}>
-                      {isExpanded ? '▾ Hide neighborhoods' : `▸ See ${hoods.length} recommended neighborhoods`}
-                    </button>
-                  </div>
-
-                  {/* Neighborhoods — recommended list, not checkboxes */}
-                  {isExpanded && (
-                    <div style={{ borderTop: '1px solid #f1f5f9', padding: '16px 20px', background: '#fafbfc' }}>
-                      <div style={{ fontSize: '11px', fontWeight: 700, color: '#0A1929', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '6px' }}>
-                        Recommended Neighborhoods
-                      </div>
-                      <p style={{ fontSize: '12px', color: '#64748b', margin: '0 0 10px 0', lineHeight: 1.4 }}>
-                        We recommend these {hoods.length} neighborhoods based on your transaction history and our analysis:
-                      </p>
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                        {hoods.map((hood) => {
-                          const recognized = hood.ai_status === 'recognized';
-                          return (
-                            <div key={hood.name} style={{
-                              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                              padding: '10px 12px', background: '#fff', borderRadius: '8px', border: '1px solid #e2e8f0',
-                            }}>
-                              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                                <div style={{
-                                  width: '20px', height: '20px', borderRadius: '50%', flexShrink: 0,
-                                  background: recognized ? '#f0fdf9' : '#fff5f5',
-                                  border: `1.5px solid ${recognized ? '#00BFA6' : '#EF4444'}`,
-                                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                  fontSize: '10px', fontWeight: 700, color: recognized ? '#00BFA6' : '#EF4444',
-                                }}>
-                                  {recognized ? '✓' : '!'}
+                    {isExpanded && (
+                      <div style={{ borderTop: `1px solid ${D.grayMid}`, padding: '16px 20px', background: D.grayBg }}>
+                        <div style={{ fontSize: '10px', fontWeight: 700, color: D.navy, textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '10px' }}>Recommended Neighborhoods</div>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                          {hoods.map((hood) => {
+                            const recognized = hood.ai_status === 'recognized';
+                            return (
+                              <div key={hood.name} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '9px 12px', background: '#fff', borderRadius: '8px' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                  <div style={{ width: '18px', height: '18px', borderRadius: '50%', background: recognized ? '#f0fdf9' : '#fff5f5', border: `1.5px solid ${recognized ? D.teal : D.red}`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '9px', fontWeight: 700, color: recognized ? D.teal : D.red, flexShrink: 0 }}>
+                                    {recognized ? '✓' : '!'}
+                                  </div>
+                                  <div>
+                                    <div style={{ fontSize: '13px', fontWeight: 600, color: D.navy }}>{hood.name}</div>
+                                    <div style={{ fontSize: '11px', color: D.textTertiary }}>{hood.reason}</div>
+                                  </div>
                                 </div>
-                                <div>
-                                  <div style={{ fontSize: '13px', fontWeight: 600, color: '#0A1929' }}>{hood.name}</div>
-                                  <div style={{ fontSize: '11px', color: '#94a3b8' }}>{hood.reason}</div>
-                                </div>
+                                <span style={{ fontSize: '10px', fontWeight: 600, color: recognized ? D.teal : D.red, whiteSpace: 'nowrap' }}>
+                                  {recognized ? 'AI sees this' : 'Not in AI yet'}
+                                </span>
                               </div>
-                              <span style={{ fontSize: '10px', fontWeight: 600, color: recognized ? '#00BFA6' : '#EF4444', whiteSpace: 'nowrap' }}>
-                                {recognized ? 'AI recognizes' : 'Not in AI yet'}
-                              </span>
-                            </div>
-                          );
-                        })}
+                            );
+                          })}
+                        </div>
+                        <p style={{ fontSize: '11px', color: D.textTertiary, margin: '10px 0 0 0' }}>
+                          Neighborhoods not yet in AI are where we&apos;ll build your content — getting you recommended in areas competitors haven&apos;t claimed.
+                        </p>
                       </div>
-                      <p style={{ fontSize: '11px', color: '#94a3b8', marginTop: '10px', marginBottom: 0 }}>
-                        Neighborhoods not yet in AI are where we&apos;ll build your content — getting you recommended in areas your competitors haven&apos;t claimed yet.
-                      </p>
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-
+                    )}
+                  </div>
+                );
+              })}
+            </div>
             {visibleSection < 5 && <ContinueButton onClick={() => revealNext(5)} text="See Your 90-Day Path" />}
           </div>
         )}
 
         {/* ═══ SECTION 5: 90-DAY PATH ═══ */}
         {visibleSection >= 5 && (
-          <div ref={el => { sectionRefs.current[4] = el; }} style={{ paddingTop: '36px' }}>
-            <SectionHeader num="5" title={`From ${scan.composite_score} to 65+ — Your 90-Day Path`} color="#0A1929" />
-
-            <div style={{ position: 'relative', paddingLeft: '30px' }}>
-              <div style={{ position: 'absolute', left: '11px', top: '0', bottom: '0', width: '2px', background: 'linear-gradient(180deg, #EF4444, #D4A830, #00BFA6)' }} />
+          <div ref={el => { sectionRefs.current[4] = el; }} style={{ paddingTop: D.sectionGap }}>
+            <h2 style={{ fontSize: '22px', fontWeight: 800, color: D.navy, margin: '0 0 6px 0' }}>From {clientScore} to 65+ — Your 90-Day Path</h2>
+            <div style={{ position: 'relative', paddingLeft: '28px', marginTop: '20px' }}>
+              <div style={{ position: 'absolute', left: '10px', top: 0, bottom: 0, width: '2px', background: `linear-gradient(180deg, ${D.red}, #D4A830, ${D.teal})` }} />
               {scan.trajectory.map((ms, i) => (
                 <div key={ms.day} style={{ position: 'relative', marginBottom: i < scan.trajectory.length - 1 ? '20px' : 0 }}>
-                  <div style={{
-                    position: 'absolute', left: '-30px', top: '2px', width: '22px', height: '22px', borderRadius: '50%',
-                    background: i === 0 ? ms.color : '#fff', border: `3px solid ${ms.color}`,
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  }}>
+                  <div style={{ position: 'absolute', left: '-28px', top: '2px', width: '20px', height: '20px', borderRadius: '50%', background: i === 0 ? ms.color : '#fff', border: `3px solid ${ms.color}`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     {i === 0 && <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#fff' }} />}
                   </div>
-                  <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '10px', padding: '14px 16px' }}>
+                  <div style={{ background: '#fff', borderRadius: '10px', padding: '14px 18px' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
-                      <div style={{ fontSize: '13px', fontWeight: 700, color: '#0A1929' }}>{ms.day}</div>
-                      <div style={{ fontSize: '16px', fontWeight: 900, color: ms.color }}>{ms.score}<span style={{ fontSize: '11px', color: '#94a3b8' }}>/100</span></div>
+                      <div style={{ fontSize: '13px', fontWeight: 700, color: D.navy }}>{ms.day}</div>
+                      <div style={{ fontFamily: 'Georgia, serif', fontSize: '18px', fontWeight: 900, color: ms.color }}>{ms.score}<span style={{ fontSize: '11px', color: D.textTertiary, fontFamily: 'system-ui' }}>/100</span></div>
                     </div>
-                    <div style={{ fontSize: '14px', fontWeight: 600, color: ms.color, marginBottom: '8px' }}>{ms.headline}</div>
+                    <div style={{ fontSize: '13px', fontWeight: 600, color: ms.color, marginBottom: '8px' }}>{ms.headline}</div>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
                       {ms.outcomes.map((outcome, j) => (
-                        <div key={j} style={{ display: 'flex', alignItems: 'flex-start', gap: '6px', fontSize: '12px', color: '#475569', lineHeight: 1.4 }}>
-                          <span style={{ color: '#00BFA6', fontWeight: 700, flexShrink: 0 }}>→</span>{outcome}
+                        <div key={j} style={{ display: 'flex', alignItems: 'flex-start', gap: '6px', fontSize: '12px', color: D.textSecondary, lineHeight: 1.5 }}>
+                          <span style={{ color: D.teal, fontWeight: 700, flexShrink: 0 }}>→</span>{outcome}
                         </div>
                       ))}
                     </div>
@@ -820,32 +731,28 @@ function ResultsContent() {
                 </div>
               ))}
             </div>
-
-            <div style={{ background: '#f0fdf9', borderRadius: '8px', padding: '12px 16px', fontSize: '14px', color: '#0A1929', textAlign: 'center', marginTop: '10px', border: '1px solid #00BFA6' }}>
+            <div style={{ background: '#f0fdf9', borderRadius: '8px', padding: '12px 18px', fontSize: '14px', color: D.navy, textAlign: 'center', marginTop: '12px', border: `1px solid ${D.teal}` }}>
               <strong>Citation Guarantee™:</strong> +20 points in 90 days or you owe nothing. Ever.
             </div>
             {visibleSection < 6 && <ContinueButton onClick={() => revealNext(6)} text="See What We're Building" />}
           </div>
         )}
 
-        {/* ═══ SECTION 6: DELIVERABLES — SVG icons ═══ */}
+        {/* ═══ SECTION 6: DELIVERABLES ═══ */}
         {visibleSection >= 6 && (
-          <div ref={el => { sectionRefs.current[5] = el; }} style={{ paddingTop: '36px' }}>
-            <SectionHeader num="6" title="What We're Building For You" color="#00BFA6" />
-            <p style={{ fontSize: '14px', color: '#64748b', margin: '0 0 16px 0', lineHeight: 1.5 }}>
-              Everything in your founding package — built from your scan data, your transactions, and your markets.
+          <div ref={el => { sectionRefs.current[5] = el; }} style={{ paddingTop: D.sectionGap }}>
+            <h2 style={{ fontSize: '22px', fontWeight: 800, color: D.navy, margin: '0 0 6px 0' }}>What We&apos;re Building For You</h2>
+            <p style={{ fontSize: '14px', color: D.textSecondary, margin: '0 0 20px 0', lineHeight: 1.7 }}>
+              Everything in your founding package — built from your scan, your transactions, and your markets.
             </p>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
               {scan.deliverables.map((item, i) => (
-                <div key={i} style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '10px', padding: '16px' }}>
-                  <div style={{
-                    width: '40px', height: '40px', borderRadius: '10px', background: item.color,
-                    display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '10px',
-                  }}>
-                    <DeliverableIcon type={item.icon} size={20} />
+                <div key={i} style={{ background: '#fff', borderRadius: '10px', padding: '18px' }}>
+                  <div style={{ width: '36px', height: '36px', borderRadius: '8px', background: item.color, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '10px' }}>
+                    <DeliverableIcon type={item.icon} size={18} />
                   </div>
-                  <div style={{ fontSize: '14px', fontWeight: 700, color: '#0A1929', marginBottom: '4px' }}>{item.title}</div>
-                  <div style={{ fontSize: '12px', color: '#64748b', lineHeight: 1.5 }}>{item.desc}</div>
+                  <div style={{ fontSize: '13px', fontWeight: 700, color: D.navy, marginBottom: '4px' }}>{item.title}</div>
+                  <div style={{ fontSize: '12px', color: D.textSecondary, lineHeight: 1.6 }}>{item.desc}</div>
                 </div>
               ))}
             </div>
@@ -853,58 +760,53 @@ function ResultsContent() {
           </div>
         )}
 
-        {/* ═══ SECTION 7: APPROVE — two-step ═══ */}
+        {/* ═══ SECTION 7: APPROVE ═══ */}
         {visibleSection >= 7 && (
-          <div ref={el => { sectionRefs.current[6] = el; }} style={{ paddingTop: '36px', marginBottom: '32px' }}>
+          <div ref={el => { sectionRefs.current[6] = el; }} style={{ paddingTop: D.sectionGap, marginBottom: '48px' }}>
             {!approved ? (
               <>
-                <SectionHeader num="✓" title="Approve Your Strategy" color="#0A1929" />
-
-                {/* Step 1: Approve button (shows What Happens Next panel) */}
                 {!showApprovePanel ? (
                   <>
-                    <p style={{ fontSize: '14px', color: '#64748b', margin: '0 0 20px 0', lineHeight: 1.5 }}>
+                    <h2 style={{ fontSize: '22px', fontWeight: 800, color: D.navy, margin: '0 0 8px 0' }}>Approve Your Strategy</h2>
+                    <p style={{ fontSize: '14px', color: D.textSecondary, margin: '0 0 24px 0', lineHeight: 1.7 }}>
                       You&apos;ve seen your data, your gaps, your markets, and your path. When you&apos;re ready — approve your strategy and we start building.
                     </p>
                     <button onClick={handleApproveClick} style={{
-                      width: '100%', padding: '18px 24px', background: '#00BFA6', color: '#fff',
+                      width: '100%', padding: '18px 24px', background: D.teal, color: '#fff',
                       fontSize: '16px', fontWeight: 700, border: 'none', borderRadius: '10px',
-                      cursor: 'pointer', boxShadow: '0 4px 12px rgba(0,191,166,0.3)',
+                      cursor: 'pointer', boxShadow: `0 4px 16px rgba(0,191,166,0.3)`,
                     }}>
                       Approve My Strategy →
                     </button>
                     {!allMarketsConfirmed && (
-                      <p style={{ textAlign: 'center', fontSize: '12px', color: '#94a3b8', marginTop: '10px' }}>
-                        {confirmedCount}/{scan.markets.length} markets confirmed · <button onClick={scrollToMarkets} style={{ background: 'none', border: 'none', color: '#00BFA6', fontSize: '12px', fontWeight: 600, cursor: 'pointer', padding: 0 }}>go back</button>
+                      <p style={{ textAlign: 'center', fontSize: '12px', color: D.textTertiary, marginTop: '10px' }}>
+                        {confirmedCount}/{scan.markets.length} markets confirmed ·{' '}
+                        <button onClick={scrollToMarkets} style={{ background: 'none', border: 'none', color: D.teal, fontSize: '12px', fontWeight: 600, cursor: 'pointer', padding: 0 }}>go back</button>
                       </p>
                     )}
                   </>
                 ) : (
-                  /* Step 2: What Happens Next + final confirm */
-                  <div ref={approvePanelRef}>
-                    <div style={{ background: '#0A1929', borderRadius: '12px', padding: '24px', marginBottom: '16px' }}>
-                      <div style={{ fontSize: '12px', fontWeight: 700, color: '#00BFA6', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '16px' }}>
-                        What happens when you confirm
-                      </div>
-                      {[
-                        { num: '1', title: 'Your positioning statement arrives within 24 hours', desc: 'Written from this scan + your intake — the foundation for all your platform profiles.' },
-                        { num: '2', title: 'We start building your platform profiles', desc: 'Optimized profiles for every platform that feeds AI recommendations — written in your voice.' },
-                        { num: '3', title: 'Your dedicated website + first article begin', desc: 'The two highest-impact deliverables. Your website is the key to Google AI.' },
-                      ].map((step, i) => (
-                        <div key={step.num} style={{ display: 'flex', gap: '12px', marginBottom: i < 2 ? '12px' : 0 }}>
-                          <div style={{ width: '22px', height: '22px', minWidth: '22px', background: '#00BFA6', borderRadius: '50%', textAlign: 'center', lineHeight: '22px', color: '#fff', fontSize: '11px', fontWeight: 700 }}>{step.num}</div>
-                          <div>
-                            <div style={{ fontSize: '14px', fontWeight: 600, color: '#fff' }}>{step.title}</div>
-                            <div style={{ fontSize: '12px', color: '#94a3b8' }}>{step.desc}</div>
-                          </div>
-                        </div>
-                      ))}
+                  <div ref={approvePanelRef} style={{ background: D.navy, borderRadius: '14px', padding: '28px', overflow: 'hidden' }}>
+                    <div style={{ fontSize: '11px', fontWeight: 700, color: D.teal, textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '18px' }}>
+                      What happens when you confirm
                     </div>
+                    {[
+                      { num: '1', title: 'Your positioning statement arrives within 24 hours', desc: 'Written from this scan + your intake — the foundation for everything.' },
+                      { num: '2', title: 'We start building your 12 platform profiles', desc: 'Optimized for every platform that feeds AI recommendations.' },
+                      { num: '3', title: 'Your dedicated website + first article begin', desc: 'The two highest-impact deliverables. Your website unlocks Google AI.' },
+                    ].map((step, i) => (
+                      <div key={step.num} style={{ display: 'flex', gap: '14px', marginBottom: i < 2 ? '14px' : '24px' }}>
+                        <div style={{ width: '22px', height: '22px', minWidth: '22px', background: D.teal, borderRadius: '50%', textAlign: 'center', lineHeight: '22px', color: '#fff', fontSize: '11px', fontWeight: 700 }}>{step.num}</div>
+                        <div>
+                          <div style={{ fontSize: '13px', fontWeight: 600, color: '#fff' }}>{step.title}</div>
+                          <div style={{ fontSize: '12px', color: '#94a3b8', marginTop: '2px' }}>{step.desc}</div>
+                        </div>
+                      </div>
+                    ))}
                     <button onClick={handleFinalApprove} disabled={saving} style={{
-                      width: '100%', padding: '18px 24px', background: '#00BFA6', color: '#fff',
-                      fontSize: '16px', fontWeight: 700, border: 'none', borderRadius: '10px',
+                      width: '100%', padding: '16px 24px', background: D.teal, color: '#fff',
+                      fontSize: '15px', fontWeight: 700, border: 'none', borderRadius: '8px',
                       cursor: saving ? 'wait' : 'pointer', opacity: saving ? 0.7 : 1,
-                      boxShadow: '0 4px 12px rgba(0,191,166,0.3)', transition: 'opacity 0.2s',
                     }}>
                       {saving ? 'Saving...' : '✓ Confirm — Start Building'}
                     </button>
@@ -912,12 +814,11 @@ function ResultsContent() {
                 )}
               </>
             ) : (
-              <div style={{ background: '#0A1929', borderRadius: '12px', padding: '32px', textAlign: 'center' }}>
-                <div style={{ fontSize: '36px', marginBottom: '12px' }}>🚀</div>
-                <h3 style={{ fontSize: '20px', fontWeight: 800, color: '#fff', margin: '0 0 8px 0' }}>Strategy Approved — We&apos;re On It</h3>
-                <p style={{ fontSize: '14px', color: '#94a3b8', margin: 0, lineHeight: 1.6 }}>
-                  Your positioning statement will arrive within 24 hours.
-                  Your {scan.platform_count} platform profiles and dedicated website are in production.
+              <div style={{ background: D.navy, borderRadius: '14px', padding: '40px 28px', textAlign: 'center' }}>
+                <div style={{ fontSize: '40px', marginBottom: '14px' }}>🚀</div>
+                <h3 style={{ fontSize: '22px', fontWeight: 800, color: '#fff', margin: '0 0 10px 0' }}>Strategy Approved — We&apos;re On It</h3>
+                <p style={{ fontSize: '14px', color: '#94a3b8', margin: 0, lineHeight: 1.7 }}>
+                  Your positioning statement arrives within 24 hours. Your {scan.platform_count} platform profiles and dedicated website are in production.
                 </p>
               </div>
             )}
@@ -934,7 +835,7 @@ export default function ResultsPage() {
   return (
     <Suspense fallback={
       <div style={{ minHeight: '100vh', background: '#0A1929', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <div style={{ fontSize: '14px', color: '#94a3b8' }}>Loading...</div>
+        <div style={{ fontSize: '13px', color: '#94a3b8' }}>Loading...</div>
       </div>
     }>
       <ResultsContent />
