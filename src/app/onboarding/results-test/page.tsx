@@ -439,12 +439,26 @@ function ResultsContent() {
                 <div style={{ fontSize: '13px', color: '#475569', lineHeight: 1.6 }}>&ldquo;{scan.ai_quote.response}&rdquo;</div>
               </div>
             </div>
-            {/* Result */}
-            <div style={{ padding: '12px 16px', background: '#fff5f5', display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <div style={{ width: '20px', height: '20px', borderRadius: '50%', background: '#EF4444', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontSize: '12px' }}>✕</div>
-              <div style={{ fontSize: '13px', color: '#EF4444', fontWeight: 700, lineHeight: 1.4 }}>
-                While a seller in Carmel Valley asked this question today, your name wasn&apos;t in the answer — on any model, in any market.
+            {/* Result — A: context in the card */}
+            <div style={{ padding: '12px 16px', background: '#fff5f5', borderTop: '1px solid #fee2e2' }}>
+              <div style={{ fontSize: '13px', color: '#EF4444', fontWeight: 600, lineHeight: 1.5 }}>
+                We ran that search — and 89 others just like it — across all the AI tools sellers and buyers are using right now to find agents. Your name came up 0 out of 90 times.
               </div>
+            </div>
+          </div>
+
+          {/* B: Stat block — visual gut punch */}
+          <div style={{
+            background: '#0A1929', borderRadius: '10px', padding: '20px 24px',
+            marginBottom: '20px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0',
+          }}>
+            <div style={{ textAlign: 'center', borderRight: '1px solid rgba(255,255,255,0.1)', paddingRight: '20px' }}>
+              <div style={{ fontSize: '48px', fontWeight: 900, color: '#fff', lineHeight: 1 }}>90</div>
+              <div style={{ fontSize: '12px', color: '#64748b', marginTop: '6px', lineHeight: 1.4 }}>Searches run by real sellers and buyers in your markets</div>
+            </div>
+            <div style={{ textAlign: 'center', paddingLeft: '20px' }}>
+              <div style={{ fontSize: '48px', fontWeight: 900, color: '#EF4444', lineHeight: 1 }}>0</div>
+              <div style={{ fontSize: '12px', color: '#64748b', marginTop: '6px', lineHeight: 1.4 }}>Times your name appeared</div>
             </div>
           </div>
 
