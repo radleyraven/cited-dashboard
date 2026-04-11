@@ -443,7 +443,19 @@ function ResultsContent() {
               <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
                 <div style={{ width: '3px', minWidth: '3px', background: '#EF4444', borderRadius: '2px', marginTop: '2px', alignSelf: 'stretch' }} />
                 <div style={{ fontSize: '13px', color: '#475569', lineHeight: 1.7 }}>
-                  &ldquo;{scan.ai_quote.response}&rdquo;
+                  &ldquo;{(() => {
+                    const response = scan.ai_quote.response;
+                    const competitor = primaryCompetitor?.competitor;
+                    if (!competitor || !response.includes(competitor)) {
+                      return response;
+                    }
+                    const parts = response.split(competitor);
+                    return parts.map((part, i) => (
+                      i < parts.length - 1
+                        ? <span key={i}>{part}<strong style={{ color: '#0A1929', fontWeight: 800 }}>{competitor}</strong></span>
+                        : <span key={i}>{part}</span>
+                    ));
+                  })()}&rdquo;
                 </div>
               </div>
             </div>
