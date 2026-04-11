@@ -322,287 +322,155 @@ const prospects: Record<string, ProspectData> = {
   },
 };
 
-function ScoreCircle({ score, color, size = 100 }: { score: number; color: string; size?: number }) {
-  const r = (size / 2) - 8;
-  const circumference = 2 * Math.PI * r;
-  const filled = (score / 100) * circumference;
-  const gap = circumference - filled;
-
-  return (
-    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} style={{ transform: 'rotate(-90deg)' }}>
-      {/* Track */}
-      <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke="#e2e8f0" strokeWidth="8" />
-      {/* Progress */}
-      <circle
-        cx={size / 2} cy={size / 2} r={r}
-        fill="none"
-        stroke={color}
-        strokeWidth="8"
-        strokeLinecap="round"
-        strokeDasharray={`${filled} ${gap}`}
-      />
-    </svg>
-  );
-}
+/* ── Design tokens (matched to Citation Report v9 / Cited Design System) ── */
+const D = {
+  navy: '#0A1929',
+  teal: '#00BFA6',
+  red: '#EF4444',
+  gold: '#D4A830',
+  grayBg: '#f8f9fa',
+  grayMid: '#f1f5f9',
+  textPrimary: '#0A1929',
+  textSecondary: '#475569',
+  textTertiary: '#94a3b8',
+  border: '#e2e8f0',
+};
 
 export default async function ScorePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  // Support A/B test: strip '-b' suffix to get prospect data
   const baseSlug = slug.endsWith('-b') ? slug.slice(0, -2) : slug;
-  const isVariantB = slug.endsWith('-b');
   const prospect = prospects[baseSlug];
   if (!prospect) notFound();
 
-  // Pre-fill URL params for intake form
-  const prefill = prefillData[baseSlug] || {};
-  const prefillParams = new URLSearchParams(prefill).toString();
-  const intakeUrl = `https://citedagent.com/intake${prefillParams ? '?' + prefillParams : ''}`;
-
-  const { name, brokerage, market, score, competitorScore, gaps } = prospect;
+  const { name, brokerage, market, score, competitorScore } = prospect;
   const firstName = name.split(' ')[0];
-  // Projected score protocol: floor at current+3, cap at 68, target 62-68 range
-  const rawProjected = score + gaps.reduce((acc, g) => acc + g.points, 0);
-  const projected90 = Math.min(Math.max(rawProjected, score + 3), 68);
+  const competitorSizePx = Math.round(64 * (competitorScore / 100));
+  const clientPct = (score / 100) * 100;
+  const competitorPct = (competitorScore / 100) * 100;
+  const gap = competitorScore - score;
+  // Citation Report URL — token-based when available, slug-based fallback
+  const reportUrl = `https://citedagent.com/onboarding/results`;
 
   return (
-    <div style={{ minHeight: '100vh', background: '#f0f4f8', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif' }}>
+    <div style={{ minHeight: '100vh', background: D.grayBg, fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif' }}>
 
-      {/* Header */}
-      <header style={{ background: '#0A1929', padding: '20px 28px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <div>
-          <div style={{ fontSize: '20px', fontWeight: 800, letterSpacing: '5px', color: '#00BFA6' }}>CITED</div>
-          <div style={{ fontSize: '10px', color: '#4a6380', letterSpacing: '1.5px', textTransform: 'uppercase', marginTop: '3px' }}>{isVariantB ? 'AI Citation Optimization™' : 'AI Citation Optimization™'}</div>
-        </div>
-        <div style={{ fontSize: '11px', color: '#4a6380', textAlign: 'right' }}>
-          Powered by <span style={{ color: '#00BFA6', fontWeight: 700 }}>PRISM™</span>
-        </div>
+      {/* ═══ HEADER ═══ */}
+      <header style={{ background: D.navy, padding: '24px 32px', textAlign: 'center' }}>
+        <div style={{ fontSize: '24px', fontWeight: 900, color: '#ffffff', letterSpacing: '2px', marginBottom: '4px' }}>CITED</div>
+        <div style={{ fontSize: '10px', fontWeight: 600, color: D.teal, textTransform: 'uppercase', letterSpacing: '2.5px' }}>AI Citation Optimization™</div>
       </header>
 
-      {/* Gold accent line */}
-      <div style={{ height: '3px', background: 'linear-gradient(90deg, #00BFA6, #D4A830, #00BFA6)' }} />
+      {/* Gradient bar */}
+      <div style={{ height: '3px', background: `linear-gradient(90deg, ${D.teal}, ${D.gold}, ${D.teal})` }} />
 
-      <main style={{ maxWidth: '660px', margin: '0 auto', padding: '36px 20px 48px' }}>
+      <main style={{ maxWidth: '800px', margin: '0 auto', padding: '0 24px 48px' }}>
 
-        {/* Intro + top CTA (convenience catch for already-converted visitors) */}
-        <div style={{ marginBottom: '20px' }}>
-          <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap' }}>
-            <div style={{ flex: 1, minWidth: '200px' }}>
-              <h1 style={{ fontSize: '24px', fontWeight: 700, color: '#0A1929', margin: '0 0 4px', lineHeight: 1.3 }}>
-                {firstName}, here&apos;s your AI Visibility Score for {market}.
-              </h1>
-              <p style={{ fontSize: '13px', fontStyle: 'italic', color: '#00BFA6', fontWeight: 600, margin: '0 0 4px' }}>
-                AI cites agents it already knows. We make sure it knows you.
-              </p>
-              <p style={{ fontSize: '13px', color: '#94a3b8', margin: 0 }}>
-                {brokerage} · {market} · Generated {new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
-              </p>
-            </div>
-
-          </div>
+        {/* ═══ PERSONALIZATION HEADER ═══ */}
+        <div style={{ paddingTop: '40px', marginBottom: '8px' }}>
+          <h1 style={{ fontSize: '28px', fontWeight: 800, color: D.navy, margin: '0 0 4px', lineHeight: 1.3 }}>
+            {firstName}, here&apos;s your Citation Score.
+          </h1>
+          <p style={{ fontSize: '13px', color: D.textTertiary, margin: 0 }}>
+            {brokerage} · {market} · Generated {new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+          </p>
         </div>
 
-        {/* Context block — sets up the score reveal */}
-        <div style={{ background: '#0A1929', borderRadius: '12px', padding: '22px 24px', marginBottom: '20px' }}>
-          <div style={{ display: 'flex', alignItems: 'flex-start', gap: '16px' }}>
-            <div style={{ flexShrink: 0, marginTop: '2px' }}>
-              <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: 'rgba(0,191,166,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '16px' }}>⚡</div>
-            </div>
-            <div style={{ flex: 1 }}>
-              <div style={{ fontSize: '11px', fontWeight: 700, color: '#D4A830', letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: '8px' }}>Why This Matters</div>
-              <p style={{ fontSize: '12px', color: '#94a3b8', lineHeight: 1.7, margin: 0 }}>
-                Traditional Google rankings are no longer enough. AI tools — ChatGPT, Perplexity, Google AI Overviews, Gemini — are now the first stop for sellers and buyers researching agents in {market}. These systems don&apos;t rank websites the way Google used to. They <span style={{ color: '#fff', fontWeight: 600 }}>cite agents they already know</span>, from structured signals across 14+ platforms. Your Citation Score measures how visible and citable you are across all of them — and where the gaps are.
-              </p>
-            </div>
+        {/* ═══ CONTEXT BLOCK (Research-validated 4-sentence copy) ═══ */}
+        <div style={{ background: D.navy, borderRadius: '12px', padding: '24px', marginBottom: '32px' }}>
+          <div style={{ fontSize: '11px', fontWeight: 700, color: D.gold, letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: '10px' }}>
+            What This Measures
           </div>
+          <p style={{ fontSize: '14px', color: '#94a3b8', lineHeight: 1.7, margin: 0 }}>
+            Sellers in your market are using AI — ChatGPT, Perplexity, Google AI Overviews — to search for real estate agents by name, market, and specialty. Unlike Google, AI doesn&apos;t rank websites. It <span style={{ color: '#fff', fontWeight: 600 }}>cites agents it already knows</span>, from structured signals across 12 platforms. Your Citation Score measures how visible and citable you are in those AI searches — and where the gaps are.
+          </p>
         </div>
 
-        {/* Score Circles */}
-        <div style={{ background: '#fff', borderRadius: '14px', padding: '32px 28px', marginBottom: '20px', boxShadow: '0 1px 6px rgba(0,0,0,0.07)', border: '1px solid #e8edf2' }}>
-          <div style={{ fontSize: '11px', fontWeight: 700, color: '#94a3b8', letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: '28px' }}>
-            Citation Score — {market}
+        {/* ═══ SCORE CARD — THE DOMINANT ELEMENT ═══ */}
+        <div style={{ background: '#fff', borderRadius: '14px', overflow: 'hidden', marginBottom: '32px', boxShadow: '0 4px 24px rgba(0,0,0,0.10)' }}>
+
+          {/* Score gradient scale */}
+          <div style={{ padding: '20px 24px 16px', borderBottom: `1px solid ${D.grayMid}` }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+              <div style={{ fontSize: '10px', fontWeight: 700, color: D.textTertiary, textTransform: 'uppercase', letterSpacing: '1.5px' }}>Citation Score™</div>
+              <div style={{ fontSize: '10px', color: D.textTertiary, background: D.grayBg, padding: '3px 8px', borderRadius: '4px' }}>PRISM Scan™ · {market}</div>
+            </div>
+            <div style={{ position: 'relative', height: '8px', borderRadius: '4px', background: `linear-gradient(90deg, ${D.red} 0%, #F59E0B 30%, ${D.gold} 50%, ${D.teal} 75%, ${D.navy} 100%)`, marginBottom: '6px' }}>
+              {/* Client dot */}
+              <div style={{ position: 'absolute', top: '-5px', left: `${clientPct}%`, width: '18px', height: '18px', borderRadius: '50%', background: D.navy, border: '3px solid #fff', boxShadow: '0 2px 6px rgba(0,0,0,0.2)', transform: 'translateX(-50%)' }} />
+              {/* Competitor dot */}
+              <div style={{ position: 'absolute', top: '-5px', left: `${competitorPct}%`, width: '18px', height: '18px', borderRadius: '50%', background: D.red, border: '3px solid #fff', boxShadow: '0 2px 6px rgba(0,0,0,0.2)', transform: 'translateX(-50%)' }} />
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '10px', color: D.textTertiary }}>
+              <span>Not indexed</span>
+              <span>Recommended</span>
+            </div>
           </div>
 
-          {/* Three circles — You / Competitor / 90-Day Target — all in one row */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '12px', textAlign: 'center' }}>
-
-            {/* Your score */}
-            <div>
-              <div style={{ position: 'relative', display: 'inline-block' }}>
-                <ScoreCircle score={score} color="#dc2626" size={100} />
-                <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', textAlign: 'center' }}>
-                  <div style={{ fontSize: '24px', fontWeight: 800, color: '#dc2626', lineHeight: 1 }}>{score}</div>
-                  <div style={{ fontSize: '10px', color: '#94a3b8', marginTop: '2px' }}>/100</div>
-                </div>
-              </div>
-              <div style={{ marginTop: '8px' }}>
-                <div style={{ fontSize: '12px', fontWeight: 700, color: '#0A1929' }}>You</div>
-                <div style={{ fontSize: '10px', color: '#94a3b8', marginTop: '2px' }}>Early signals building</div>
-              </div>
+          {/* Score comparison — client dominant, competitor proportional */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
+            {/* Client score — dominant */}
+            <div style={{ padding: '24px', borderRight: `1px solid ${D.grayMid}` }}>
+              <div style={{ fontSize: '10px', fontWeight: 700, color: D.textTertiary, textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '12px' }}>Your Score</div>
+              <div style={{ fontFamily: 'Georgia, serif', fontSize: '64px', fontWeight: 900, color: D.navy, lineHeight: 1 }}>{score}</div>
+              <div style={{ fontSize: '12px', color: D.textTertiary, marginTop: '4px' }}>out of 100</div>
             </div>
 
-            {/* Competitor */}
-            <div>
-              <div style={{ position: 'relative', display: 'inline-block' }}>
-                <ScoreCircle score={competitorScore} color="#64748b" size={100} />
-                <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', textAlign: 'center' }}>
-                  <div style={{ fontSize: '24px', fontWeight: 800, color: '#64748b', lineHeight: 1 }}>{competitorScore}</div>
-                  <div style={{ fontSize: '10px', color: '#94a3b8', marginTop: '2px' }}>/100</div>
-                </div>
-              </div>
-              <div style={{ marginTop: '8px' }}>
-                <div style={{ fontSize: '12px', fontWeight: 700, color: '#0A1929' }}>Competitor</div>
-                <div style={{ fontSize: '10px', color: '#00BFA6', fontWeight: 600, marginTop: '2px' }}>Recommended by AI</div>
-              </div>
+            {/* Competitor — proportional (Tufte Lie Factor) */}
+            <div style={{ padding: '24px', background: D.grayBg }}>
+              <div style={{ fontSize: '10px', fontWeight: 700, color: D.red, textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '12px' }}>Top Competitor</div>
+              <div style={{ fontFamily: 'Georgia, serif', fontSize: `${competitorSizePx}px`, fontWeight: 900, color: '#94a3b8', lineHeight: 1, minHeight: '64px', display: 'flex', alignItems: 'flex-start' }}>~{competitorScore}</div>
+              <div style={{ fontSize: '12px', color: D.textTertiary, marginTop: '4px' }}>out of 100</div>
             </div>
-
-            {/* 90-Day Target */}
-            <div>
-              <div style={{ position: 'relative', display: 'inline-block' }}>
-                <ScoreCircle score={projected90} color="#00BFA6" size={100} />
-                <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', textAlign: 'center' }}>
-                  <div style={{ fontSize: '24px', fontWeight: 800, color: '#00BFA6', lineHeight: 1 }}>{projected90}</div>
-                  <div style={{ fontSize: '10px', color: '#94a3b8', marginTop: '2px' }}>/100</div>
-                </div>
-              </div>
-              <div style={{ marginTop: '8px' }}>
-                <div style={{ fontSize: '12px', fontWeight: 700, color: '#00BFA6' }}>Day 90 Target</div>
-                <div style={{ fontSize: '10px', color: '#94a3b8', marginTop: '2px' }}>With Cited</div>
-              </div>
-            </div>
-
           </div>
 
-          {/* Gap callout */}
-          <div style={{ marginTop: '20px', padding: '12px 16px', background: '#fef2f2', borderRadius: '8px', border: '1px solid #fecaca', textAlign: 'center' }}>
-            <span style={{ fontSize: '13px', color: '#dc2626', fontWeight: 600 }}>
-              You&apos;re {competitorScore - score} points behind the top agent in {market}.
+          {/* Gap callout — loss framing */}
+          <div style={{ padding: '14px 24px', background: D.navy, textAlign: 'center' }}>
+            <span style={{ fontSize: '14px', color: '#fff', fontWeight: 600 }}>
+              {gap} points you&apos;re leaving on the table in {market}.
+            </span>
+            <span style={{ fontSize: '13px', color: D.textTertiary, marginLeft: '8px' }}>
+              AI recommends your competitor — not you.
             </span>
           </div>
         </div>
 
-        {/* Gaps + Projected breakdown */}
-        <div style={{ background: '#fff', borderRadius: '14px', padding: '28px', marginBottom: '20px', boxShadow: '0 1px 6px rgba(0,0,0,0.07)', border: '1px solid #e8edf2' }}>
-          <div style={{ fontSize: '11px', fontWeight: 700, color: '#94a3b8', letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: '16px' }}>
-            What&apos;s Holding Your Score Back
-          </div>
-
-          {/* Show top 4 gaps prominently: GBP + LinkedIn Profile + Zillow + wildcard */}
-          {gaps.filter(g => g.impact === 'High' || g.impact === 'Medium').slice(0, 4).map((gap, i) => (
-            <div key={i} style={gap.impact === 'High' ? {
-              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-              padding: '12px 14px', marginBottom: '8px', borderRadius: '4px',
-              borderLeft: '4px solid #EF4444', background: '#fff5f5',
-            } : {
-              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-              padding: '12px 14px', marginBottom: '8px', borderRadius: '4px',
-              border: '1px solid #e8edf2', background: '#f8f9fa',
-            }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                <div style={{
-                  width: '8px', height: '8px', borderRadius: '50%', flexShrink: 0,
-                  background: gap.impact === 'High' ? '#EF4444' : '#94a3b8'
-                }} />
-                <span style={{ fontSize: '14px', color: '#1a1a2e', fontWeight: 500 }}>{gap.platform}</span>
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                <span style={{ fontSize: '13px', color: '#00BFA6', fontWeight: 700 }}>+{gap.points} pts</span>
-                <span style={{
-                  fontSize: '11px', fontWeight: 700, padding: '3px 10px', borderRadius: '20px',
-                  color: gap.impact === 'High' ? '#EF4444' : '#64748b',
-                  background: gap.impact === 'High' ? '#fef2f2' : '#f1f5f9'
-                }}>
-                  {gap.impact} Impact
-                </span>
-              </div>
-            </div>
-          ))}
-          {/* Additional gaps summary */}
-          {gaps.filter(g => g.impact === 'Low').length > 0 && (
-            <div style={{ padding: '12px 0 0', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                <div style={{ width: '8px', height: '8px', borderRadius: '50%', flexShrink: 0, background: '#94a3b8' }} />
-                <span style={{ fontSize: '13px', color: '#64748b' }}>
-                  +{gaps.filter(g => g.impact === 'Low').length} additional optimizations
-                </span>
-              </div>
-              <span style={{ fontSize: '13px', color: '#00BFA6', fontWeight: 700 }}>
-                +{gaps.filter(g => g.impact === 'Low').reduce((a, g) => a + g.points, 0)} pts
-              </span>
-            </div>
-          )}
-
-          {/* Projected math */}
-          <div style={{ marginTop: '16px', padding: '14px 16px', background: '#f0fdf9', borderRadius: '8px', border: '1px solid #99f6e4' }}>
-            <div style={{ fontSize: '12px', color: '#0f766e', fontWeight: 600 }}>
-              Your score: {score} + {gaps.reduce((a, g) => a + g.points, 0)} points from closing these gaps = <strong>{projected90}/100 in 90 days</strong>
-            </div>
-          </div>
-
-          {/* Primary CTA — right after gap analysis */}
-          <div style={{ marginTop: '20px', textAlign: 'center' }}>
-            <a href={intakeUrl} style={{ display: 'inline-block', background: '#00BFA6', color: '#fff', fontWeight: 700, fontSize: '15px', padding: '14px 32px', borderRadius: '8px', textDecoration: 'none', letterSpacing: '0.3px' }}>
-              Claim My Founding Spot →
-            </a>
-          </div>
-        </div>
-
-        {/* How Cited Works */}
-        <div style={{ background: '#0A1929', borderRadius: '14px', padding: '28px', marginBottom: '20px' }}>
-          <div style={{ fontSize: '11px', fontWeight: 700, color: '#D4A830', letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: '16px' }}>
-            How Cited Closes the Gap
-          </div>
-          {[
-            { icon: '→', text: 'We handle 87% of the work. You provide ~30 minutes to get started, 15 minutes per month after that.' },
-            { icon: '→', text: 'Full platform optimization — GBP, FastExpert, LinkedIn, and more.' },
-            { icon: '→', text: 'Monthly AI-optimized articles published under your name.' },
-            { icon: '→', text: 'PRISM re-scans every 30 days so you can see the score move.' },
-          ].map((item, i) => (
-            <div key={i} style={{ display: 'flex', gap: '12px', marginBottom: i < 3 ? '12px' : 0, alignItems: 'flex-start' }}>
-              <span style={{ color: '#00BFA6', fontWeight: 700, flexShrink: 0 }}>{item.icon}</span>
-              <span style={{ fontSize: '14px', color: '#94a3b8', lineHeight: 1.6 }}>{item.text}</span>
-            </div>
-          ))}
-        </div>
-
-        {/* CTA */}
-        <div style={{ background: '#fff', borderRadius: '14px', padding: '32px 28px', textAlign: 'center', boxShadow: '0 1px 6px rgba(0,0,0,0.07)', border: '1px solid #e8edf2' }}>
-          <div style={{ fontSize: '11px', fontWeight: 700, color: '#D4A830', letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: '12px' }}>
-            Founding Client Offer
-          </div>
-          <h2 style={{ fontSize: '20px', fontWeight: 700, color: '#0A1929', margin: '0 0 8px' }}>
-            First 90 days free. Protected by The Citation Guarantee™.
-          </h2>
-          <p style={{ fontSize: '14px', color: '#64748b', margin: '0 0 24px', lineHeight: 1.6 }}>
-            3–5 founding spots available in {market}.<br />
-            After 90 days, continue at $800/month — only if the score moved.
+        {/* ═══ SINGLE CTA — ROUTES TO CITATION REPORT ═══ */}
+        <div style={{ textAlign: 'center', marginBottom: '32px' }}>
+          <a href={reportUrl} style={{
+            display: 'inline-block', background: D.teal, color: '#fff',
+            fontWeight: 700, fontSize: '16px', padding: '18px 40px', borderRadius: '10px',
+            textDecoration: 'none', boxShadow: '0 4px 16px rgba(0,191,166,0.3)',
+          }}>
+            See My Full Citation Report →
+          </a>
+          <p style={{ fontSize: '12px', color: D.textTertiary, marginTop: '12px' }}>
+            Your gaps, your markets, your 90-day path — all inside.
           </p>
-
-          {/* Primary — pre-filled with audit data */}
-          <a href={intakeUrl} style={{ display: 'block', background: '#00BFA6', color: '#fff', fontWeight: 700, fontSize: '15px', padding: '15px 36px', borderRadius: '8px', textDecoration: 'none', letterSpacing: '0.3px', marginBottom: '10px' }}>
-            Claim My Founding Spot →
-          </a>
-
-          {/* Secondary — Learn More (swapped) */}
-          <a href="/how-it-works" style={{ display: 'block', background: '#fff', color: '#0A1929', fontWeight: 600, fontSize: '14px', padding: '13px 36px', borderRadius: '8px', textDecoration: 'none', border: '1.5px solid #e2e8f0', marginBottom: '10px' }}>
-            Learn More About How Cited Works
-          </a>
-
-          {/* Tertiary — Book a Call (demoted to text link) */}
-          <a href="https://calendly.com/radleyraven/cited" style={{ display: 'block', fontSize: '13px', color: '#64748b', fontWeight: 600, textDecoration: 'none', padding: '6px 0' }}>
-            Prefer to talk first? Book a 15-min call →
-          </a>
-
-          <p style={{ fontSize: '12px', color: '#94a3b8', margin: '12px 0 0' }}>Questions? Reply directly to Radley&apos;s email.</p>
         </div>
 
-        <div style={{ textAlign: 'center', marginTop: '28px', fontSize: '11px', color: '#94a3b8', lineHeight: 2 }}>
-          <div style={{ marginBottom: '6px' }}>
-            <a href="/privacy" style={{ color: '#64748b', textDecoration: 'none', marginRight: '16px' }}>Privacy Policy</a>
-            <a href="/terms" style={{ color: '#64748b', textDecoration: 'none' }}>Terms of Service</a>
+        {/* ═══ FOUNDING MEMBER NOTE (brief, not a full offer section) ═══ */}
+        <div style={{ background: D.navy, borderRadius: '10px', padding: '20px 24px', marginBottom: '48px', textAlign: 'center' }}>
+          <div style={{ display: 'inline-block', background: 'rgba(212,168,48,0.15)', border: `1px solid ${D.gold}`, borderRadius: '20px', padding: '4px 16px', marginBottom: '12px' }}>
+            <span style={{ fontSize: '11px', fontWeight: 700, color: D.gold, letterSpacing: '1.5px', textTransform: 'uppercase' }}>★ Founding Member</span>
           </div>
-          Cited · AI Citation Optimization™ for Professionals · citedagent.com
+          <p style={{ fontSize: '14px', color: '#e2e8f0', lineHeight: 1.7, margin: '0 0 4px' }}>
+            Your first 90 days are on us. If your Citation Score doesn&apos;t improve by 20+ points, you owe nothing.
+          </p>
+          <p style={{ fontSize: '12px', color: D.textTertiary, margin: 0 }}>
+            That&apos;s the <span style={{ color: D.teal, fontWeight: 700 }}>Citation Guarantee™</span>.
+          </p>
+        </div>
+
+        {/* ═══ FOOTER ═══ */}
+        <div style={{ textAlign: 'center', fontSize: '11px', color: D.textTertiary, lineHeight: 2, paddingBottom: '24px' }}>
+          <div style={{ marginBottom: '6px' }}>
+            <a href="/how-it-works" style={{ color: '#64748b', textDecoration: 'none', marginRight: '16px' }}>How It Works</a>
+            <a href="/privacy" style={{ color: '#64748b', textDecoration: 'none', marginRight: '16px' }}>Privacy</a>
+            <a href="/terms" style={{ color: '#64748b', textDecoration: 'none' }}>Terms</a>
+          </div>
+          CITED · AI Citation Optimization™ for Professionals
           <br />
-          <span style={{ color: '#cbd5e1' }}>Powered by PRISM™ · Professional Recognition Index for Search Models</span>
+          <span style={{ color: '#cbd5e1' }}>Powered by PRISM™</span>
         </div>
       </main>
     </div>
