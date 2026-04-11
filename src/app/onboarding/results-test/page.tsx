@@ -425,40 +425,38 @@ function ResultsContent() {
             Your next client is asking AI who to call right now. Here&apos;s what came back for your primary market:
           </p>
 
-          <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '12px', overflow: 'hidden', marginBottom: '14px', boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}>
-            {/* Query header */}
-            <div style={{ background: '#f8f9fa', padding: '12px 16px', borderBottom: '1px solid #e2e8f0' }}>
-              <div style={{ fontSize: '10px', fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '4px' }}>We asked {scan.ai_quote.model}:</div>
-              <div style={{ fontSize: '15px', fontWeight: 700, color: '#0A1929', fontStyle: 'italic', lineHeight: 1.4 }}>&ldquo;{scan.ai_quote.query}&rdquo;</div>
-            </div>
-            {/* AI response */}
-            <div style={{ padding: '14px 16px', borderBottom: '1px solid #f1f5f9' }}>
-              <div style={{ fontSize: '10px', fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px' }}>ChatGPT responded:</div>
-              <div style={{ display: 'flex', gap: '10px' }}>
-                <div style={{ width: '3px', background: '#EF4444', borderRadius: '2px', flexShrink: 0 }} />
-                <div style={{ fontSize: '13px', color: '#475569', lineHeight: 1.6 }}>&ldquo;{scan.ai_quote.response}&rdquo;</div>
-              </div>
-            </div>
-            {/* Result — A: context in the card */}
-            <div style={{ padding: '12px 16px', background: '#fff5f5', borderTop: '1px solid #fee2e2' }}>
-              <div style={{ fontSize: '13px', color: '#EF4444', fontWeight: 600, lineHeight: 1.5 }}>
-                We ran that search — and 89 others just like it — across all the AI tools sellers and buyers are using right now to find agents. Your name came up 0 out of 90 times.
-              </div>
-            </div>
-          </div>
+          {/* ONE unified card — query → response → 90/0 → that's the gap */}
+          <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '14px', overflow: 'hidden', marginBottom: '20px', boxShadow: '0 2px 12px rgba(0,0,0,0.07)' }}>
 
-          {/* B: Stat block — visual gut punch */}
-          <div style={{
-            background: '#0A1929', borderRadius: '10px', padding: '20px 24px',
-            marginBottom: '20px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0',
-          }}>
-            <div style={{ textAlign: 'center', borderRight: '1px solid rgba(255,255,255,0.1)', paddingRight: '20px' }}>
-              <div style={{ fontSize: '48px', fontWeight: 900, color: '#fff', lineHeight: 1 }}>90</div>
-              <div style={{ fontSize: '12px', color: '#64748b', marginTop: '6px', lineHeight: 1.4 }}>Searches run by real sellers and buyers in your markets</div>
+            {/* Query */}
+            <div style={{ padding: '18px 20px 14px' }}>
+              <div style={{ fontSize: '10px', fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '8px' }}>
+                We asked {scan.ai_quote.model}:
+              </div>
+              <div style={{ fontSize: '16px', fontWeight: 700, color: '#0A1929', fontStyle: 'italic', lineHeight: 1.4 }}>
+                &ldquo;{scan.ai_quote.query}&rdquo;
+              </div>
             </div>
-            <div style={{ textAlign: 'center', paddingLeft: '20px' }}>
-              <div style={{ fontSize: '48px', fontWeight: 900, color: '#EF4444', lineHeight: 1 }}>0</div>
-              <div style={{ fontSize: '12px', color: '#64748b', marginTop: '6px', lineHeight: 1.4 }}>Times your name appeared</div>
+
+            {/* AI response */}
+            <div style={{ padding: '14px 20px', borderTop: '1px solid #f1f5f9', borderBottom: '1px solid #f1f5f9' }}>
+              <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
+                <div style={{ width: '3px', minWidth: '3px', background: '#EF4444', borderRadius: '2px', marginTop: '2px', alignSelf: 'stretch' }} />
+                <div style={{ fontSize: '13px', color: '#475569', lineHeight: 1.7 }}>
+                  &ldquo;{scan.ai_quote.response}&rdquo;
+                </div>
+              </div>
+            </div>
+
+            {/* 90/0 — inline, not its own block */}
+            <div style={{ padding: '16px 20px', background: '#fafbfc', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px' }}>
+              <div style={{ fontSize: '13px', color: '#64748b', lineHeight: 1.5, flex: 1 }}>
+                We ran that search — and 89 others across all the AI tools sellers are using right now. Your name appeared:
+              </div>
+              <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px', flexShrink: 0 }}>
+                <span style={{ fontSize: '36px', fontWeight: 900, color: '#EF4444', lineHeight: 1 }}>0</span>
+                <span style={{ fontSize: '13px', color: '#94a3b8' }}>/ 90 times</span>
+              </div>
             </div>
           </div>
 
