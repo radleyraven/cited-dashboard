@@ -34,6 +34,13 @@ type ScanResults = {
   ai_quote?: { text: string };
   query_count?: number;
   brokerage_discovered?: string;
+  platforms_discovered?: Record<string, { found: boolean | null; url: string }>;
+  dre_data?: {
+    agent_license_id?: string;
+    broker_license_id?: string;
+    broker_name?: string;
+    agent_mailing_address?: string;
+  };
 };
 
 type IntakeRow = {
@@ -138,6 +145,20 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
   if (market) prefillParams.set('primaryMarkets', prospect.primary_markets || market);
   // Pre-fill from scan discovered data
   if (scan?.brokerage_discovered) prefillParams.set('brokerage', scan.brokerage_discovered);
+  // Pre-fill platform URLs from scan
+  const platforms = scan?.platforms_discovered || {};
+  if (platforms.Brokerage?.url) prefillParams.set('brokerageProfileUrl', platforms.Brokerage.url);
+  if (platforms.LinkedIn?.url) prefillParams.set('linkedinUrl', platforms.LinkedIn.url);
+  if (platforms.Zillow?.url) prefillParams.set('zillowUrl', platforms.Zillow.url);
+  if (platforms.Yelp?.url) prefillParams.set('yelpUrl', platforms.Yelp.url);
+  if (platforms['Realtor.com']?.url) prefillParams.set('realtorUrl', platforms['Realtor.com'].url);
+  if (platforms.YouTube?.url) prefillParams.set('youtubeUrl', platforms.YouTube.url);
+  if (platforms.FastExpert?.url) prefillParams.set('fastexpertUrl', platforms.FastExpert.url);
+  // DRE data from scan
+  if (scan?.dre_data?.agent_license_id) prefillParams.set('licenseNumber', scan.dre_data.agent_license_id);
+  if (scan?.dre_data?.broker_license_id) prefillParams.set('brokerDre', scan.dre_data.broker_license_id);
+  if (scan?.dre_data?.broker_name) prefillParams.set('brokerName', scan.dre_data.broker_name);
+  if (scan?.dre_data?.agent_mailing_address) prefillParams.set('brokerageAddress', scan.dre_data.agent_mailing_address);
   const intakeUrl = `/intake?${prefillParams.toString()}`;
 
   return (
