@@ -374,7 +374,7 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
               <div style={{ fontSize: '10px', fontWeight: 700, color: D.textTertiary, textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '4px' }}>Foundation Score Breakdown</div>
               <div style={{ fontSize: '13px', color: D.navy }}>9 scored components</div>
             </div>
-            <span className="chevron" style={{ fontSize: '16px', color: D.textTertiary, lineHeight: 1, display: 'inline-block' }}>▾</span>
+            <span className="chevron" style={{ fontSize: '20px', color: '#00BFA6', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: '44px', height: '44px', borderRadius: '50%', background: 'rgba(0,191,166,0.1)', flexShrink: 0 }}>▾</span>
           </summary>
           <div style={{ padding: '0 24px 24px', borderTop: `1px solid ${D.grayMid}` }}>
             <div style={{ paddingTop: '16px' }}>
