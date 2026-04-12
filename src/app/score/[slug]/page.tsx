@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
-import CitedHeader from '@/components/CitedHeader';
-import CitedFooter from '@/components/CitedFooter';
+// CitedHeader/CitedFooter are 'use client' components — inline versions used here
+// to avoid server/client component boundary issues in production
 
 /*
   /score/[slug] — Score Page (Supabase-driven)
@@ -197,7 +197,20 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
     <div style={{ minHeight: '100vh', background: D.grayBg, fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif' }}>
       <style>{`details > summary { list-style: none; } details > summary::-webkit-details-marker { display: none; } details[open] > summary { background: #f0faf8 !important; } .chevron { transition: transform 0.2s; } details[open] .chevron { transform: rotate(180deg); }`}</style>
 
-      <CitedHeader variant="onboarding" userName={name} clientTier="founding_client" />
+      {/* Header — inline version matching CitedHeader component */}
+      <div style={{ background: '#0A1929', padding: '20px 32px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', maxWidth: '960px', margin: '0 auto' }}>
+          <a href="/" style={{ textDecoration: 'none' }}>
+            <div style={{ fontSize: '22px', fontWeight: 900, color: '#fff', letterSpacing: '2px', marginBottom: '2px' }}>CITED</div>
+            <div style={{ fontSize: '9px', fontWeight: 600, color: '#00BFA6', textTransform: 'uppercase', letterSpacing: '2px' }}>AI Citation Optimization™</div>
+          </a>
+          <div style={{ textAlign: 'right' }}>
+            <div style={{ fontSize: '13px', fontWeight: 700, color: '#fff', lineHeight: 1.2 }}>{name}</div>
+            <div style={{ fontSize: '10px', fontWeight: 600, color: '#D4A830', marginTop: '2px', letterSpacing: '0.5px' }}>★ Founding Member</div>
+          </div>
+        </div>
+      </div>
+      <div style={{ height: '3px', background: 'linear-gradient(90deg, #00BFA6, #D4A830, #00BFA6)' }} />
 
       <main style={{ maxWidth: '800px', margin: '0 auto', padding: '0 24px 48px' }}>
 
@@ -416,7 +429,15 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
           </p>
         </div>
 
-        <CitedFooter />
+        {/* Footer — inline version matching CitedFooter component */}
+        <div style={{ marginTop: '48px', borderTop: '1px solid #e2e8f0', paddingTop: '24px', paddingBottom: '24px', textAlign: 'center' }}>
+          <p style={{ margin: '0 0 6px 0', fontSize: '18px', fontWeight: 800, color: '#0A1929', letterSpacing: '-0.5px' }}>CITED</p>
+          <p style={{ margin: '0 0 10px 0', fontSize: '11px', fontWeight: 600, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '1.5px' }}>AI Citation Optimization™ for Professionals</p>
+          <p style={{ margin: 0, fontSize: '12px', color: '#94a3b8' }}>
+            Powered by PRISM™ · <a href="/how-it-works" style={{ color: '#00BFA6', textDecoration: 'none', fontWeight: 600 }}>How it works</a> · <a href="/privacy" style={{ color: '#00BFA6', textDecoration: 'none', fontWeight: 600 }}>Privacy</a> · <a href="/terms" style={{ color: '#00BFA6', textDecoration: 'none', fontWeight: 600 }}>Terms</a>
+          </p>
+        </div>
+        <div style={{ height: '4px', background: 'linear-gradient(90deg, #00BFA6, #D4A830, #00BFA6)', borderRadius: '2px' }} />
       </main>
     </div>
   );
