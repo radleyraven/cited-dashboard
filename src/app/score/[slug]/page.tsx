@@ -94,9 +94,10 @@ function GapCards({ gaps, totalPoints }: { gaps: Gap[]; totalPoints: number }) {
               <div style={{ flex: 1 }}>
                 <div style={{ fontSize: '15px', fontWeight: 700, color: '#0A1929' }}>{gap.title || gap.platform}</div>
                 <div style={{ fontSize: '12px', color: gap.color || '#EF4444', fontWeight: 600, marginTop: '3px' }}>{gap.status}</div>
+                <div className="see-fix" style={{ fontSize: '11px', color: '#00BFA6', fontWeight: 600, marginTop: '6px' }}>See the fix →</div>
               </div>
-              <div style={{ background: '#f0fdf9', color: '#00BFA6', fontSize: '12px', fontWeight: 700, padding: '4px 14px', borderRadius: '12px', whiteSpace: 'nowrap', flexShrink: 0, marginLeft: '12px', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                +{gap.points} <span className="chevron" style={{ fontSize: '10px', color: '#94a3b8', display: 'inline-block' }}>▾</span>
+              <div style={{ background: '#f0fdf9', color: '#00BFA6', fontSize: '14px', fontWeight: 700, padding: '6px 16px', borderRadius: '12px', whiteSpace: 'nowrap', flexShrink: 0, marginLeft: '12px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                +{gap.points} <span className="chevron" style={{ fontSize: '12px', color: '#94a3b8', display: 'inline-block' }}>▾</span>
               </div>
             </summary>
             {(gap.action || gap.outcome) && (
@@ -194,7 +195,7 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
 
   return (
     <div style={{ minHeight: '100vh', background: D.grayBg, fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif' }}>
-      <style>{`details > summary { list-style: none; } details > summary::-webkit-details-marker { display: none; } details[open] > summary { background: #f0faf8 !important; } .chevron { transition: transform 0.2s; } details[open] .chevron { transform: rotate(180deg); }`}</style>
+      <style>{`details > summary { list-style: none; cursor: pointer; } details > summary::-webkit-details-marker { display: none; } details[open] > summary { background: #f0faf8 !important; } .chevron { transition: transform 0.2s; } details[open] .chevron { transform: rotate(180deg); } .see-fix { } details[open] .see-fix { display: none; }`}</style>
 
       {/* Header — inline version matching CitedHeader component */}
       <div style={{ background: '#0A1929', padding: '20px 32px' }}>
