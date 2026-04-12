@@ -1,10 +1,13 @@
 import { notFound } from 'next/navigation';
+import CitedHeader from '@/components/CitedHeader';
+import CitedFooter from '@/components/CitedFooter';
 
 /*
   /score/[slug] — Score Page (Supabase-driven)
   Quick PRISM scan → Supabase → this page reads it. No hardcoded data.
   Slug converted to name, matched against cited_intake.full_name.
-  Built: April 12, 2026 — rewritten to remove all hardcoded prospect data.
+  Design system aligned with Citation Report v9.
+  Built: April 12, 2026
 */
 
 type Gap = {
@@ -76,7 +79,7 @@ async function fetchProspect(slug: string): Promise<IntakeRow | null> {
 // ── Gap Cards (expandable, matches Citation Report pattern) ──
 function GapCards({ gaps, totalPoints }: { gaps: Gap[]; totalPoints: number }) {
   return (
-    <div style={{ background: '#fff', borderRadius: '14px', padding: '24px', marginBottom: '24px', boxShadow: '0 2px 12px rgba(0,0,0,0.07)' }}>
+    <div style={{ background: '#fff', borderRadius: '14px', padding: '24px', marginBottom: '32px',  }}>
       <div style={{ fontSize: '10px', fontWeight: 700, color: D.textTertiary, textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '16px' }}>Where You&apos;re Losing Visibility</div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
         {gaps.map((gap, i) => (
@@ -194,12 +197,7 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
     <div style={{ minHeight: '100vh', background: D.grayBg, fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif' }}>
       <style>{`details > summary { list-style: none; } details > summary::-webkit-details-marker { display: none; } details[open] > summary { background: #f0faf8 !important; } .chevron { transition: transform 0.2s; } details[open] .chevron { transform: rotate(180deg); }`}</style>
 
-      {/* ═══ HEADER ═══ */}
-      <header style={{ background: D.navy, padding: '24px 32px', textAlign: 'center' }}>
-        <div style={{ fontSize: '24px', fontWeight: 900, color: '#ffffff', letterSpacing: '2px', marginBottom: '4px' }}>CITED</div>
-        <div style={{ fontSize: '10px', fontWeight: 600, color: D.teal, textTransform: 'uppercase', letterSpacing: '2.5px' }}>AI Citation Optimization™</div>
-      </header>
-      <div style={{ height: '3px', background: `linear-gradient(90deg, ${D.teal}, ${D.gold}, ${D.teal})` }} />
+      <CitedHeader variant="onboarding" userName={name} clientTier="founding_client" />
 
       <main style={{ maxWidth: '800px', margin: '0 auto', padding: '0 24px 48px' }}>
 
@@ -302,7 +300,7 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
         </div>
 
         {/* ═══ MARKET VISIBILITY RATE ═══ */}
-        <div style={{ background: '#fff', borderRadius: '14px', padding: '24px', marginBottom: '24px', boxShadow: '0 2px 12px rgba(0,0,0,0.07)' }}>
+        <div style={{ background: '#fff', borderRadius: '14px', padding: '24px', marginBottom: '32px',  }}>
           <div style={{ fontSize: '10px', fontWeight: 700, color: D.textTertiary, textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '4px' }}>Market Visibility Rate</div>
           <div style={{ fontSize: '13px', color: D.textSecondary, marginBottom: '20px' }}>
             How often AI recommends <strong>{name}</strong> when clients search in {market}
@@ -338,7 +336,7 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
         )}
 
         {/* ═══ NARRATIVE QUALITY (context — what AI says when it does find you) ═══ */}
-        <div style={{ background: '#fff', borderRadius: '14px', padding: '24px', marginBottom: '24px', boxShadow: '0 2px 12px rgba(0,0,0,0.07)' }}>
+        <div style={{ background: '#fff', borderRadius: '14px', padding: '24px', marginBottom: '32px',  }}>
           <div style={{ fontSize: '10px', fontWeight: 700, color: D.textTertiary, textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '4px' }}>What AI Says About You</div>
           <div style={{ fontSize: '13px', color: D.textSecondary, marginBottom: '20px' }}>
             When AI does find {firstName}, here is how it describes you:
@@ -366,7 +364,7 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
         </div>
 
         {/* ═══ FOUNDATION SCORE COMPONENTS ═══ */}
-        <details style={{ background: '#fff', borderRadius: '14px', marginBottom: '32px', boxShadow: '0 2px 12px rgba(0,0,0,0.07)', overflow: 'hidden' }}>
+        <details style={{ background: '#fff', borderRadius: '14px', marginBottom: '32px', overflow: 'hidden' }}>
           <summary style={{ padding: '20px 24px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'space-between', listStyleType: 'none' }}>
             <div>
               <div style={{ fontSize: '10px', fontWeight: 700, color: D.textTertiary, textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '4px' }}>Foundation Score Breakdown</div>
@@ -418,17 +416,7 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
           </p>
         </div>
 
-        {/* ═══ FOOTER ═══ */}
-        <div style={{ textAlign: 'center', fontSize: '11px', color: D.textTertiary, lineHeight: 2, paddingBottom: '24px' }}>
-          <div style={{ marginBottom: '6px' }}>
-            <a href="/how-it-works" style={{ color: '#64748b', textDecoration: 'none', marginRight: '16px' }}>How It Works</a>
-            <a href="/privacy" style={{ color: '#64748b', textDecoration: 'none', marginRight: '16px' }}>Privacy</a>
-            <a href="/terms" style={{ color: '#64748b', textDecoration: 'none' }}>Terms</a>
-          </div>
-          CITED · AI Citation Optimization™ for Professionals
-          <br />
-          <span style={{ color: '#cbd5e1' }}>Powered by PRISM™</span>
-        </div>
+        <CitedFooter />
       </main>
     </div>
   );
