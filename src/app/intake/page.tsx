@@ -663,8 +663,8 @@ function renderCardContent(p: CardProps) {
   if (cardId === 5) return (
     <div>
       <CardHeader title="What makes you different?"
-        subtitle="This is the most important question. It feeds your entire positioning." />
-      <FieldGroup label="" hint="Think about: your approach, your track record, what you do that others don't. Even 1–2 sentences helps — we'll craft your positioning statement from this.">
+        subtitle="Just a quick 1–2 sentences on what separates you from the pack. Don't overthink it — write what comes to mind and we'll extract the gold." />
+      <FieldGroup label="" hint="Your approach, your track record, what you do that others don't. This feeds your entire positioning — we'll craft it from here.">
         <TextArea value={form.differentiator} onChange={(v) => set("differentiator", v)} rows={4}
           placeholder={'e.g., "I specialize in off-market properties in RSF" or "My clients\u2019 homes sell 15% faster than market average."'} />
       </FieldGroup>
