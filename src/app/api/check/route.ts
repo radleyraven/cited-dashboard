@@ -21,13 +21,13 @@ type QueryResult = {
   snippet: string;
 };
 
-// ── Brave Search (free tier available) ──
-async function queryBrave(query: string, apiKey: string): Promise<{ snippet: string; mentioned: boolean; competitors: string[]; urls: string[] }> {
+// ── Brave Search (raw URLs + snippets — for indexing checks) ──
+async function queryBraveSearch(query: string, apiKey: string): Promise<{ snippet: string; mentioned: boolean; competitors: string[]; urls: string[] }> {
   try {
     const res = await fetch(`https://api.search.brave.com/res/v1/web/search?q=${encodeURIComponent(query)}&count=10`, {
       headers: { "Accept": "application/json", "Accept-Encoding": "gzip", "X-Subscription-Token": apiKey },
     });
-    if (!res.ok) throw new Error(`Brave ${res.status}`);
+    if (!res.ok) throw new Error(`Brave Search ${res.status}`);
     const data = await res.json();
     const results = data.web?.results || [];
     const snippets = results.map((r: { title?: string; description?: string; url?: string }) => `${r.title || ""} ${r.description || ""}`).join(" ");
@@ -35,6 +35,28 @@ async function queryBrave(query: string, apiKey: string): Promise<{ snippet: str
     return { snippet: snippets.slice(0, 500), mentioned: false, competitors: [], urls };
   } catch {
     return { snippet: "", mentioned: false, competitors: [], urls: [] };
+  }
+}
+
+// ── Brave Answers (AI-summarized response — what AI actually says) ──
+async function queryBraveAnswers(query: string, apiKey: string): Promise<{ snippet: string; mentioned: boolean; competitors: string[] }> {
+  try {
+    const res = await fetch(`https://api.search.brave.com/res/v1/web/search?q=${encodeURIComponent(query)}&count=5&summary=1`, {
+      headers: { "Accept": "application/json", "Accept-Encoding": "gzip", "X-Subscription-Token": apiKey },
+    });
+    if (!res.ok) throw new Error(`Brave Answers ${res.status}`);
+    const data = await res.json();
+    // Brave Answers returns a summarizer field with the AI answer
+    const answer = data.summarizer?.results?.[0]?.text || data.summary?.text || "";
+    if (answer) {
+      return { snippet: answer.slice(0, 500), mentioned: false, competitors: [] };
+    }
+    // Fallback to regular snippets if no summary
+    const results = data.web?.results || [];
+    const snippets = results.map((r: { title?: string; description?: string }) => `${r.title || ""} ${r.description || ""}`).join(" ");
+    return { snippet: snippets.slice(0, 500), mentioned: false, competitors: [] };
+  } catch {
+    return { snippet: "", mentioned: false, competitors: [] };
   }
 }
 
@@ -119,38 +141,26 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Name and city are required" }, { status: 400 });
     }
 
-    const braveKey = process.env.BRAVE_API_KEY || "";
+    const braveSearchKey = process.env.BRAVE_SEARCH_API_KEY || process.env.BRAVE_API_KEY || "";
+    const braveAnswersKey = process.env.BRAVE_ANSWERS_API_KEY || "";
     const perplexityKey = process.env.PERPLEXITY_API_KEY || "";
 
+    // 4 queries: 2 discovery (what AI recommends) + 2 brand (what AI says about you)
     const queries = [
-      { template: `best real estate agent ${city} 2026`, type: "discovery" },
-      { template: `best luxury real estate agent ${city}`, type: "discovery" },
-      { template: `Tell me about ${fullName} real estate agent ${city}`, type: "brand" },
-      { template: `${fullName} ${city} real estate reviews`, type: "brand" },
+      { template: `best real estate agent ${city} 2026`, type: "discovery" as const },
+      { template: `best luxury real estate agent ${city}`, type: "discovery" as const },
+      { template: `Tell me about ${fullName} real estate agent ${city}`, type: "brand" as const },
+      { template: `${fullName} ${city} real estate reviews`, type: "brand" as const },
     ];
 
     const results: QueryResult[] = [];
     let score = 0;
 
-    // Run queries in parallel
+    // Run queries in parallel across engines
     const queryPromises = queries.map(async (q) => {
       const queryResults: QueryResult[] = [];
 
-      // Brave Search (always available if key set)
-      if (braveKey) {
-        const brave = await queryBrave(q.template, braveKey);
-        const mentioned = detectMention(brave.snippet, fullName);
-        const competitors = mentioned ? [] : extractCompetitors(brave.snippet, fullName);
-        queryResults.push({
-          engine: "Brave Search",
-          query: q.template,
-          mentioned,
-          competitors,
-          snippet: brave.snippet.slice(0, 200) + (brave.snippet.length > 200 ? "..." : ""),
-        });
-      }
-
-      // Perplexity (if key set)
+      // Perplexity — AI answer (best for "what does AI say")
       if (perplexityKey) {
         const pplx = await queryPerplexity(q.template, perplexityKey);
         const mentioned = detectMention(pplx.snippet, fullName);
@@ -164,6 +174,32 @@ export async function POST(request: Request) {
         });
       }
 
+      // Brave Answers — AI-summarized response (what Claude-like AI says)
+      if (braveAnswersKey) {
+        const ba = await queryBraveAnswers(q.template, braveAnswersKey);
+        const mentioned = detectMention(ba.snippet, fullName);
+        const competitors = mentioned ? [] : extractCompetitors(ba.snippet, fullName);
+        queryResults.push({
+          engine: "Brave AI",
+          query: q.template,
+          mentioned,
+          competitors,
+          snippet: ba.snippet.slice(0, 200) + (ba.snippet.length > 200 ? "..." : ""),
+        });
+      } else if (braveSearchKey) {
+        // Fallback to Brave Search if no Answers key
+        const bs = await queryBraveSearch(q.template, braveSearchKey);
+        const mentioned = detectMention(bs.snippet, fullName);
+        const competitors = mentioned ? [] : extractCompetitors(bs.snippet, fullName);
+        queryResults.push({
+          engine: "Brave Search",
+          query: q.template,
+          mentioned,
+          competitors,
+          snippet: bs.snippet.slice(0, 200) + (bs.snippet.length > 200 ? "..." : ""),
+        });
+      }
+
       return queryResults;
     });
 
@@ -172,7 +208,7 @@ export async function POST(request: Request) {
       results.push(...qr);
     }
 
-    // Calculate score: 1 point per query where mentioned (max 4)
+    // Calculate score: 1 point per mentioned result, max 4
     score = results.filter(r => r.mentioned).length;
     const maxScore = Math.max(results.length, 4);
 
@@ -192,7 +228,7 @@ export async function POST(request: Request) {
     const topCompetitor = allCompetitors.length > 0 ? allCompetitors[0] : null;
 
     // If no API keys configured, return fallback
-    if (!braveKey && !perplexityKey) {
+    if (!braveSearchKey && !braveAnswersKey && !perplexityKey) {
       return NextResponse.json({
         score: 1,
         maxScore: 4,
