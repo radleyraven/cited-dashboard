@@ -351,8 +351,23 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
   // Citation Report URL — token-based when available, slug-based fallback
   const reportUrl = `https://citedagent.com/onboarding/results`;
 
+  const visibilityRate = Math.round((score / 100) * 12);
+  const benchmarkRate = 76;
+  const scoreComponents = [
+    { name: 'Platform Presence', weight: 20 },
+    { name: 'Recommendation Readiness', weight: 15 },
+    { name: 'Explanation Readiness', weight: 15 },
+    { name: 'Brand Search Volume', weight: 10 },
+    { name: 'Earned Media', weight: 10 },
+    { name: 'Entity Consistency', weight: 10 },
+    { name: 'Specialization Clarity', weight: 10 },
+    { name: 'Content Freshness', weight: 5 },
+    { name: 'Schema/Structured Data', weight: 5 },
+  ];
+
   return (
     <div style={{ minHeight: '100vh', background: D.grayBg, fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif' }}>
+      <style>{`details > summary { list-style: none; } details > summary::-webkit-details-marker { display: none; }`}</style>
 
       {/* ═══ HEADER ═══ */}
       <header style={{ background: D.navy, padding: '24px 32px', textAlign: 'center' }}>
@@ -368,7 +383,7 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
         {/* ═══ PERSONALIZATION HEADER ═══ */}
         <div style={{ paddingTop: '40px', marginBottom: '8px' }}>
           <h1 style={{ fontSize: '28px', fontWeight: 800, color: D.navy, margin: '0 0 4px', lineHeight: 1.3 }}>
-            {firstName}, here&apos;s your Citation Score.
+            {firstName}, here&apos;s your Foundation Score.
           </h1>
           <p style={{ fontSize: '13px', color: D.textTertiary, margin: 0 }}>
             {brokerage} · {market} · Generated {new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
@@ -391,7 +406,7 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
           {/* Score gradient scale */}
           <div style={{ padding: '20px 24px 16px', borderBottom: `1px solid ${D.grayMid}` }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-              <div style={{ fontSize: '10px', fontWeight: 700, color: D.textTertiary, textTransform: 'uppercase', letterSpacing: '1.5px' }}>Citation Score™</div>
+              <div style={{ fontSize: '10px', fontWeight: 700, color: D.textTertiary, textTransform: 'uppercase', letterSpacing: '1.5px' }}>Foundation Score™</div>
               <div style={{ fontSize: '10px', color: D.textTertiary, background: D.grayBg, padding: '3px 8px', borderRadius: '4px' }}>PRISM Scan™ · {market}</div>
             </div>
             <div style={{ position: 'relative', height: '8px', borderRadius: '4px', background: `linear-gradient(90deg, ${D.red} 0%, #F59E0B 30%, ${D.gold} 50%, ${D.teal} 75%, ${D.navy} 100%)`, marginBottom: '6px' }}>
@@ -433,6 +448,125 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
             </span>
           </div>
         </div>
+
+        {/* ═══ MARKET VISIBILITY RATE ═══ */}
+        <div style={{ background: '#fff', borderRadius: '14px', padding: '24px', marginBottom: '24px', boxShadow: '0 2px 12px rgba(0,0,0,0.07)' }}>
+          <div style={{ fontSize: '10px', fontWeight: 700, color: D.textTertiary, textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '4px' }}>Market Visibility Rate</div>
+          <div style={{ fontSize: '13px', color: D.textSecondary, marginBottom: '20px' }}>
+            How often AI surfaces <strong>{name}</strong> when buyers search for agents in {market}
+          </div>
+
+          {/* Bar track */}
+          <div style={{ position: 'relative', height: '14px', borderRadius: '7px', background: D.navy, marginBottom: '8px' }}>
+            {/* Client marker — teal vertical tick */}
+            <div style={{
+              position: 'absolute', top: '-7px',
+              left: `${Math.max(1, visibilityRate)}%`,
+              transform: 'translateX(-50%)',
+              width: '4px', height: '28px',
+              background: D.teal, borderRadius: '2px',
+            }} />
+            {/* Benchmark marker — gold vertical tick */}
+            <div style={{
+              position: 'absolute', top: '-7px',
+              left: `${benchmarkRate}%`,
+              transform: 'translateX(-50%)',
+              width: '4px', height: '28px',
+              background: D.gold, borderRadius: '2px',
+            }} />
+          </div>
+
+          {/* Positioned labels row */}
+          <div style={{ position: 'relative', height: '22px', marginBottom: '16px' }}>
+            <span style={{
+              position: 'absolute',
+              left: `${Math.max(1, visibilityRate)}%`,
+              transform: 'translateX(-50%)',
+              fontSize: '11px', fontWeight: 700, color: D.teal,
+              whiteSpace: 'nowrap',
+            }}>You: {visibilityRate}%</span>
+            <span style={{
+              position: 'absolute',
+              left: `${benchmarkRate}%`,
+              transform: 'translateX(-50%)',
+              fontSize: '11px', fontWeight: 700, color: D.gold,
+              whiteSpace: 'nowrap',
+            }}>Benchmark: {benchmarkRate}%</span>
+          </div>
+
+          {/* Scale labels */}
+          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            {['Invisible', 'Emerging', 'Recognized', 'Dominant'].map((label) => (
+              <span key={label} style={{ fontSize: '10px', color: D.textTertiary, textTransform: 'uppercase', letterSpacing: '1px' }}>{label}</span>
+            ))}
+          </div>
+        </div>
+
+        {/* ═══ NARRATIVE QUALITY ═══ */}
+        <div style={{ background: '#fff', borderRadius: '14px', padding: '24px', marginBottom: '24px', boxShadow: '0 2px 12px rgba(0,0,0,0.07)' }}>
+          <div style={{ fontSize: '10px', fontWeight: 700, color: D.textTertiary, textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '4px' }}>Narrative Quality</div>
+          <div style={{ fontSize: '13px', color: D.textSecondary, marginBottom: '20px' }}>
+            When AI mentions {firstName}, here is how it describes you:
+          </div>
+          <div style={{ background: D.grayBg, borderLeft: `3px solid ${D.teal}`, borderRadius: '0 8px 8px 0', padding: '16px 20px', marginBottom: '20px' }}>
+            <p style={{ fontSize: '14px', color: D.textSecondary, fontStyle: 'italic', lineHeight: 1.7, margin: 0 }}>
+              &ldquo;{name} is a real estate agent based in {market} working with {brokerage}. Limited publicly available detail on specializations or notable transactions.&rdquo;
+            </p>
+          </div>
+          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+            {[
+              { label: 'Accuracy', grade: 'B', color: '#3b82f6' },
+              { label: 'Favorability', grade: 'Neutral', color: D.textTertiary },
+              { label: 'Specificity', grade: 'Low', color: D.red },
+            ].map(({ label, grade, color }) => (
+              <div key={label} style={{
+                display: 'flex', alignItems: 'center', gap: '6px',
+                background: D.grayBg, border: `1px solid ${D.border}`,
+                borderRadius: '20px', padding: '4px 12px',
+              }}>
+                <span style={{ fontSize: '11px', color: D.textTertiary }}>{label}</span>
+                <span style={{ fontSize: '11px', fontWeight: 700, color }}>{grade}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* ═══ FOUNDATION SCORE COMPONENTS ═══ */}
+        <details style={{ background: '#fff', borderRadius: '14px', marginBottom: '32px', boxShadow: '0 2px 12px rgba(0,0,0,0.07)', overflow: 'hidden' }}>
+          <summary style={{
+            padding: '20px 24px',
+            cursor: 'pointer',
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            listStyleType: 'none',
+          }}>
+            <div>
+              <div style={{ fontSize: '10px', fontWeight: 700, color: D.textTertiary, textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '4px' }}>Foundation Score Breakdown</div>
+              <div style={{ fontSize: '13px', color: D.navy }}>9 scored components · tap to expand</div>
+            </div>
+            <span style={{ fontSize: '20px', color: D.textTertiary, lineHeight: 1 }}>›</span>
+          </summary>
+          <div style={{ padding: '0 24px 24px', borderTop: `1px solid ${D.grayMid}` }}>
+            <div style={{ paddingTop: '16px' }}>
+              {scoreComponents.map(({ name: compName, weight }) => {
+                const compScore = Math.round(score * weight / 100);
+                const fillPct = Math.round((compScore / weight) * 100);
+                return (
+                  <div key={compName} style={{ marginBottom: '14px' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px' }}>
+                      <span style={{ fontSize: '12px', color: D.textSecondary }}>{compName}</span>
+                      <span style={{ fontSize: '12px', fontWeight: 700, color: D.navy }}>
+                        {compScore}<span style={{ fontSize: '10px', fontWeight: 400, color: D.textTertiary }}>/{weight}</span>
+                      </span>
+                    </div>
+                    <div style={{ height: '5px', borderRadius: '3px', background: D.grayMid, overflow: 'hidden' }}>
+                      <div style={{ height: '100%', width: `${fillPct}%`, background: D.teal, borderRadius: '3px' }} />
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </details>
 
         {/* ═══ SINGLE CTA — ROUTES TO CITATION REPORT ═══ */}
         <div style={{ textAlign: 'center', marginBottom: '32px' }}>
