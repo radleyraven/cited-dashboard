@@ -27,7 +27,7 @@ type ScanResults = {
   foundation_tier?: string;
   foundation_components?: Record<string, number>;
   visibility_rates?: Record<string, { overall_visibility_pct: number; competitor_visibility_pct: number }>;
-  narrative_quality?: { overall_accuracy: string; overall_favorability: string };
+  narrative_quality?: { overall_accuracy: string; overall_favorability: string; query_count?: number };
   tier_name?: string;
   gaps?: Gap[];
   markets?: { name: string; competitor: string; competitor_score: string }[];
@@ -331,9 +331,9 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
         <div style={{ background: '#fff', borderRadius: '14px', padding: '24px', marginBottom: '32px' }}>
           <div style={{ fontSize: '10px', fontWeight: 700, color: D.textTertiary, textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '4px' }}>What AI Says About You</div>
           <div style={{ fontSize: '13px', color: D.textSecondary, marginBottom: '20px' }}>
-            When someone asks AI about {firstName}, this is what they get:
+            We asked AI about {firstName} directly. Out of {scan?.query_count || 30} queries, AI only described you in <span style={{ color: D.red, fontWeight: 700 }}>{scan?.narrative_quality?.query_count || 2}</span> — and this is what it said:
           </div>
-          <div style={{ background: D.grayBg, borderLeft: `3px solid ${D.teal}`, borderRadius: '0 8px 8px 0', padding: '16px 20px', marginBottom: '16px' }}>
+          <div style={{ background: D.grayBg, borderLeft: `3px solid ${visibilityRate > 20 ? D.teal : D.red}`, borderRadius: '0 8px 8px 0', padding: '16px 20px', marginBottom: '16px' }}>
             <p style={{ fontSize: '14px', color: D.textSecondary, fontStyle: 'italic', lineHeight: 1.7, margin: 0 }}>
               {scan?.ai_quote?.text
                 ? `\u201C${scan.ai_quote.text.replace(/\*\*/g, '').replace(/##\s*/g, '').replace(/\[\d+\]/g, '').replace(/\n/g, ' ').trim()}\u201D`
