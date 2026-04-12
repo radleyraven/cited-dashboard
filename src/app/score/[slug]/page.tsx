@@ -77,7 +77,7 @@ async function fetchProspect(slug: string): Promise<IntakeRow | null> {
 }
 
 // ── Gap Cards (expandable, matches Citation Report pattern) ──
-function GapCards({ gaps, totalPoints }: { gaps: Gap[]; totalPoints: number }) {
+function GapCards({ gaps }: { gaps: Gap[] }) {
   return (
     <div style={{ background: '#fff', borderRadius: '14px', padding: '24px', marginBottom: '32px',  }}>
       <div style={{ fontSize: '10px', fontWeight: 700, color: D.textTertiary, textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '16px' }}>Where You&apos;re Losing Visibility</div>
@@ -96,9 +96,7 @@ function GapCards({ gaps, totalPoints }: { gaps: Gap[]; totalPoints: number }) {
                 <div style={{ fontSize: '12px', color: gap.color || '#EF4444', fontWeight: 600, marginTop: '3px' }}>{gap.status}</div>
                 <div className="see-fix" style={{ fontSize: '11px', color: '#00BFA6', fontWeight: 600, marginTop: '6px' }}>See the fix →</div>
               </div>
-              <div style={{ background: '#f0fdf9', color: '#00BFA6', fontSize: '14px', fontWeight: 700, padding: '6px 16px', borderRadius: '12px', whiteSpace: 'nowrap', flexShrink: 0, marginLeft: '12px', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                +{gap.points} <span className="chevron" style={{ fontSize: '12px', color: '#94a3b8', display: 'inline-block' }}>▾</span>
-              </div>
+              <span className="chevron" style={{ fontSize: '16px', color: '#94a3b8', display: 'inline-block', flexShrink: 0, marginLeft: '12px' }}>▾</span>
             </summary>
             {(gap.action || gap.outcome) && (
               <div style={{ padding: '0 20px 16px 20px', borderTop: '1px solid #f1f5f9' }}>
@@ -119,11 +117,7 @@ function GapCards({ gaps, totalPoints }: { gaps: Gap[]; totalPoints: number }) {
           </details>
         ))}
       </div>
-      <div style={{ background: '#0A1929', borderRadius: '8px', padding: '12px 16px', marginTop: '12px', textAlign: 'center' }}>
-        <span style={{ fontSize: '13px', color: '#fff', fontWeight: 600 }}>
-          Points you&apos;re leaving on the table: <span style={{ color: '#00BFA6' }}>+{totalPoints}</span>
-        </span>
-      </div>
+
     </div>
   );
 }
@@ -342,7 +336,7 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
 
         {/* ═══ GAPS — expandable cards matching Citation Report ═══ */}
         {gaps.length > 0 && (
-          <GapCards gaps={gaps} totalPoints={gaps.reduce((s, g) => s + g.points, 0)} />
+          <GapCards gaps={gaps} />
         )}
 
         {/* ═══ NARRATIVE QUALITY (context — what AI says when it does find you) ═══ */}
@@ -406,10 +400,10 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
         {/* ═══ CTA ═══ */}
         <div style={{ textAlign: 'center', marginBottom: '32px' }}>
           <a href={intakeUrl} style={{ display: 'inline-block', background: D.teal, color: '#fff', fontWeight: 700, fontSize: '16px', padding: '18px 40px', borderRadius: '10px', textDecoration: 'none', boxShadow: '0 4px 16px rgba(0,191,166,0.3)' }}>
-            Claim Your Spot — Free →
+            Make AI Recommend Me →
           </a>
           <p style={{ fontSize: '12px', color: D.textTertiary, marginTop: '12px' }}>
-            Takes 5 minutes. We handle the rest.
+            Free. Takes 5 minutes. We handle the rest.
           </p>
         </div>
 
