@@ -159,7 +159,7 @@ export default function TermsOfServicePage() {
             <li><strong>Data retention:</strong> Your client data (intake information, PRISM scan results, platform URLs) will be retained for 90 days after cancellation in case you choose to reactivate. After 90 days, your data will be permanently deleted upon request.</li>
           </ul>
           <p style={{ fontSize: '15px', color: '#4a5568', lineHeight: 1.8, margin: '0 0 32px' }}>
-            Cited reserves the right to terminate or suspend your access to the Service if you violate these Terms, provide materially false information, or use the Service in any manner that is illegal or harmful.
+            Cited reserves the right to terminate or suspend your access to the Service if you violate these Terms, provide materially false information, or use the Service in any manner that is illegal or harmful. Additionally, Cited reserves the right to discontinue service to any client at the end of any billing period, for any reason, with written notice — just as clients may cancel at the end of any billing period.
           </p>
 
           {/* Section 8 */}
