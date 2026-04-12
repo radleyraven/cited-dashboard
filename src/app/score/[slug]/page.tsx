@@ -161,6 +161,41 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
   if (scan?.dre_data?.agent_mailing_address) prefillParams.set('brokerageAddress', scan.dre_data.agent_mailing_address);
   const intakeUrl = `/intake?${prefillParams.toString()}`;
 
+  // Dynamic "why this is a problem" bullets based on scan data
+  const components = scan?.foundation_components || {};
+  const problemBullets: string[] = [];
+
+  if ((components.discovery_visibility ?? 0) === 0) {
+    problemBullets.push("AI doesn't associate you with any specific market");
+  }
+  if (!scan?.ai_quote?.text || scan.ai_quote.text.includes("Limited") || scan.ai_quote.text.includes("limited")) {
+    problemBullets.push("No transaction history — AI has no proof you perform");
+  }
+  if ((components.earned_media ?? 0) < 5) {
+    problemBullets.push("No third-party mentions — 48% of AI citations come from earned media");
+  }
+  if ((components.content_freshness ?? 0) < 4) {
+    problemBullets.push("No content published in the last 30 days — AI deprioritizes stale profiles");
+  }
+  const platformCount = Object.values(scan?.platforms_discovered || {}).filter((p: any) => p?.found === true).length;
+  if (platformCount < 5) {
+    problemBullets.push(`You're only on ${platformCount} platforms — agents on 6+ get 2.8x more citations`);
+  }
+  if ((components.schema_structured_data ?? 0) === 0) {
+    problemBullets.push("No structured data — AI can't verify your expertise");
+  }
+  if ((components.recommendation_readiness ?? 0) < 4) {
+    problemBullets.push("Nothing differentiates you from every other agent");
+  }
+
+  // Always add the closer
+  problemBullets.push("88% of consumers fact-check AI — this is what they'd see");
+
+  // Take top 4 max (3 dynamic + the closer)
+  const displayBullets = problemBullets.length > 4
+    ? [...problemBullets.slice(0, 3), problemBullets[problemBullets.length - 1]]
+    : problemBullets;
+
   return (
     <div style={{ minHeight: '100vh', background: D.grayBg, fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif' }}>
       <style>{`details > summary { list-style: none; cursor: pointer; transition: background 0.15s; } details > summary::-webkit-details-marker { display: none; } details > summary:hover { background: #f0faf8; } details[open] > summary { background: #f0faf8 !important; } .chevron { transition: transform 0.2s; } details[open] .chevron { transform: rotate(180deg); } .see-fix { } details[open] .see-fix { display: none; } .gap-card { transition: box-shadow 0.15s; } .gap-card:hover { box-shadow: 0 2px 12px rgba(0,191,166,0.12); }`}</style>
@@ -350,12 +385,7 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
           <div style={{ background: 'rgba(239,68,68,0.04)', border: `1px solid rgba(239,68,68,0.12)`, borderRadius: '8px', padding: '14px 18px' }}>
             <div style={{ fontSize: '11px', fontWeight: 700, color: D.red, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px' }}>Why this is a problem</div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-              {[
-                'No mention of your markets or neighborhoods — sellers can\'t find you',
-                'No transaction stats — no proof you perform',
-                'Nothing that separates you from 1,000 other agents',
-                '88% of consumers fact-check AI — this is what they\'d see',
-              ].map((item, i) => (
+              {displayBullets.map((item, i) => (
                 <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '6px' }}>
                   <span style={{ color: D.red, fontWeight: 700, fontSize: '10px', flexShrink: 0, marginTop: '2px' }}>✗</span>
                   <span style={{ fontSize: '12px', color: D.textSecondary, lineHeight: 1.5 }}>{item}</span>
