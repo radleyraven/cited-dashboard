@@ -342,7 +342,32 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
   const prospect = prospects[baseSlug];
   if (!prospect) notFound();
 
-  const { name, brokerage, market, score, competitorScore } = prospect;
+  // ── Supabase overlay: pull live data if scan_results exist (CITED-094) ──
+  let supabaseScore: number | null = null;
+  let supabaseTier: string | null = null;
+  try {
+    const sbUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const sbKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    if (sbUrl && sbKey) {
+      const fullName = prospect.name;
+      const res = await fetch(
+        `${sbUrl}/rest/v1/cited_intake?full_name=eq.${encodeURIComponent(fullName)}&select=scan_results&limit=1`,
+        { headers: { apikey: sbKey, Authorization: `Bearer ${sbKey}` }, next: { revalidate: 300 } }
+      );
+      if (res.ok) {
+        const rows = await res.json();
+        if (rows[0]?.scan_results) {
+          const sr = rows[0].scan_results;
+          supabaseScore = sr.foundation_score ?? sr.composite_score ?? null;
+          supabaseTier = sr.foundation_tier ?? sr.tier_name ?? null;
+        }
+      }
+    }
+  } catch { /* fallback to hardcoded */ }
+
+  const { name, brokerage, market, competitorScore } = prospect;
+  const score = supabaseScore ?? prospect.score;
+  const _supabaseTier = supabaseTier; // available for future tier display
   const firstName = name.split(' ')[0];
   const competitorSizePx = Math.round(64 * (competitorScore / 100));
   const clientPct = (score / 100) * 100;
