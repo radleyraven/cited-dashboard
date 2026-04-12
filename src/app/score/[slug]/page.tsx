@@ -89,8 +89,7 @@ function GapCards({ gaps, totalPoints }: { gaps: Gap[]; totalPoints: number }) {
               padding: '16px 20px', cursor: 'pointer', listStyleType: 'none',
               background: 'none', border: 'none', transition: 'background 0.15s',
             }}
-              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = '#f0faf8'; }}
-              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'none'; }}
+
             >
               <div style={{ flex: 1 }}>
                 <div style={{ fontSize: '15px', fontWeight: 700, color: '#0A1929' }}>{gap.title || gap.platform}</div>
