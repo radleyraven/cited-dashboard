@@ -8,10 +8,14 @@ import { notFound } from 'next/navigation';
 */
 
 type Gap = {
-  platform: string;
+  title: string;
+  platform?: string;  // legacy field
   status: string;
-  impact: 'High' | 'Medium' | 'Low';
+  impact: 'High' | 'Medium' | 'Low' | string;
   points: number;
+  color?: string;
+  action?: string;
+  outcome?: string;
 };
 
 type ScanResults = {
@@ -42,7 +46,7 @@ type IntakeRow = {
 const D = {
   navy: '#0A1929',
   teal: '#00BFA6',
-  red: '#DC2626',
+  red: '#EF4444',
   gold: '#D4A830',
   grayBg: '#f8f9fa',
   grayMid: '#f1f5f9',
@@ -107,16 +111,17 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
   const gaps: Gap[] = scan?.gaps || [];
 
   // Foundation Score components
+  // v3.1 weights (LOCKED April 12, 2026)
   const scoreComponents = [
-    { name: 'Platform Presence', weight: 20, key: 'platform_presence_quality' },
-    { name: 'Recommendation Readiness', weight: 15, key: 'recommendation_readiness' },
-    { name: 'Explanation Readiness', weight: 15, key: 'explanation_readiness' },
-    { name: 'Brand Search Volume', weight: 10, key: 'brand_search_volume' },
-    { name: 'Earned Media', weight: 10, key: 'earned_media_authority' },
-    { name: 'Entity Consistency', weight: 10, key: 'entity_consistency' },
-    { name: 'Specialization Clarity', weight: 10, key: 'specialization_clarity' },
-    { name: 'Content Freshness', weight: 5, key: 'content_freshness' },
-    { name: 'Schema/Structured Data', weight: 5, key: 'schema_structured_data' },
+    { name: 'Discovery Visibility', weight: 30, key: 'discovery_visibility' },
+    { name: 'Earned Media', weight: 20, key: 'earned_media' },
+    { name: 'Brand Web Presence', weight: 12, key: 'brand_web_presence' },
+    { name: 'Content Freshness', weight: 12, key: 'content_freshness' },
+    { name: 'Platform Presence', weight: 10, key: 'platform_presence' },
+    { name: 'Recommendation Readiness', weight: 7, key: 'recommendation_readiness' },
+    { name: 'Entity Consistency', weight: 4, key: 'entity_consistency' },
+    { name: 'Schema / Structured Data', weight: 3, key: 'schema_structured_data' },
+    { name: 'Explanation Readiness', weight: 2, key: 'explanation_readiness' },
   ];
 
   // Report URL
@@ -193,23 +198,43 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
             <div style={{ padding: '24px', borderRight: `1px solid ${D.grayMid}` }}>
               <div style={{ fontSize: '10px', fontWeight: 700, color: D.textTertiary, textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '12px' }}>Your Foundation Score</div>
               <div style={{ fontFamily: 'Georgia, serif', fontSize: '64px', fontWeight: 900, color: D.navy, lineHeight: 1 }}>{score}</div>
-              <div style={{ fontSize: '12px', color: D.textTertiary, marginTop: '4px' }}>out of 100</div>
+              <div style={{ fontSize: '12px', color: D.textTertiary, marginTop: '4px', marginBottom: '12px' }}>out of 100</div>
+              {/* Why AI doesn't recommend you yet */}
+              {gaps.length > 0 && (
+                <div style={{ paddingTop: '10px', borderTop: `1px solid ${D.border}` }}>
+                  <div style={{ fontSize: '9px', fontWeight: 700, color: D.red, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '6px' }}>Why AI doesn&apos;t recommend you yet</div>
+                  {gaps.slice(0, 3).map((g, i) => (
+                    <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '5px', marginBottom: '3px' }}>
+                      <span style={{ color: D.red, fontWeight: 700, fontSize: '10px', flexShrink: 0, marginTop: '1px' }}>→</span>
+                      <span style={{ fontSize: '11px', color: D.textSecondary, lineHeight: 1.4 }}>{g.title || g.platform}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
             {competitorScore > 0 && (
               <div style={{ padding: '24px', background: D.grayBg }}>
-                <div style={{ fontSize: '10px', fontWeight: 700, color: D.red, textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '12px' }}>Top Competitor</div>
+                <div style={{ fontSize: '10px', fontWeight: 700, color: D.red, textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '12px' }}>Benchmark</div>
                 <div style={{ fontFamily: 'Georgia, serif', fontSize: `${competitorSizePx}px`, fontWeight: 900, color: '#94a3b8', lineHeight: 1, minHeight: '64px', display: 'flex', alignItems: 'flex-start' }}>~{competitorScore}</div>
-                <div style={{ fontSize: '12px', color: D.textTertiary, marginTop: '4px' }}>{competitorName}</div>
+                <div style={{ fontSize: '12px', color: D.textTertiary, marginTop: '4px' }}>Top agent in {market}</div>
               </div>
             )}
           </div>
 
-          {gap > 0 && (
-            <div style={{ padding: '14px 24px', background: D.navy, textAlign: 'center' }}>
-              <span style={{ fontSize: '14px', color: '#fff', fontWeight: 600 }}>{gap} points behind in {market}.</span>
-              <span style={{ fontSize: '13px', color: D.textTertiary, marginLeft: '8px' }}>AI recommends your competitor — not you.</span>
-            </div>
-          )}
+          {/* Discovery gap callout */}
+          <div style={{ padding: '14px 24px', background: D.navy, textAlign: 'center' }}>
+            {scan?.query_count ? (
+              <span style={{ fontSize: '14px', color: '#fff', lineHeight: 1.6 }}>
+                AI answered <span style={{ color: D.teal, fontWeight: 700 }}>{scan.query_count} queries</span> in {market}.{' '}
+                Your name appeared in <span style={{ color: D.red, fontWeight: 700 }}>{visibilityRate}%</span> of them.
+              </span>
+            ) : gap > 0 ? (
+              <>
+                <span style={{ fontSize: '14px', color: '#fff', fontWeight: 600 }}>{gap} points behind in {market}.</span>
+                <span style={{ fontSize: '13px', color: D.textTertiary, marginLeft: '8px' }}>AI recommends the benchmark — not you.</span>
+              </>
+            ) : null}
+          </div>
         </div>
 
         {/* ═══ MARKET VISIBILITY RATE ═══ */}
@@ -271,7 +296,7 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
                   <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                     <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: g.impact === 'High' ? D.red : g.impact === 'Medium' ? D.gold : D.teal, flexShrink: 0 }} />
                     <div>
-                      <div style={{ fontSize: '13px', fontWeight: 600, color: D.navy }}>{g.platform}</div>
+                      <div style={{ fontSize: '13px', fontWeight: 600, color: D.navy }}>{g.title || g.platform}</div>
                       <div style={{ fontSize: '11px', color: D.textTertiary }}>{g.status} · {g.impact} impact</div>
                     </div>
                   </div>
