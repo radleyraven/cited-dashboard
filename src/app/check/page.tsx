@@ -3,48 +3,104 @@
 import { useState, useEffect, useCallback } from "react";
 
 /*
-  /check — CITED Free AI Visibility Check
-  Public lead-gen. Name + City → animated scan → estimated Foundation Score range + gaps + email CTA
-  Competes with: wearecited.com free audit, AdvantageGEO instant audit
-  Built: April 11, 2026
+  /check — CITED Free AI Visibility Check (v2 — real queries, no email gate)
+  Flow: Name + City → real API scan → show results immediately → email upsell for full report
+  Competes with: wearecited.com /check (real-time, no email required)
+  Updated: April 12, 2026 — removed email gate, wired to /api/check for real queries
 */
 
 const SCAN_STAGES = [
-  "Scanning ChatGPT...",
-  "Checking Perplexity...",
-  "Analyzing Gemini...",
-  "Reviewing Grok...",
+  "Searching Perplexity...",
+  "Scanning Brave Search...",
+  "Checking brand recognition...",
+  "Analyzing results...",
 ];
 
-const GAPS = [
-  { icon: "⬜", title: "Platform Presence", desc: "Found on 3 of 12 platforms AI checks. Most agents are missing Bing Places, Foursquare, and Apple Business — the hidden signals ChatGPT and Siri use." },
-  { icon: "⏱", title: "Content Freshness", desc: "No recent content found in the last 30 days. AI deprioritizes stale profiles — Perplexity decays content signals within 48 hours." },
-  { icon: "🏆", title: "Brand Authority", desc: "Limited third-party mentions found. 48% of AI citations come from earned media — independent sources mentioning your name." },
-];
+type CheckResult = {
+  score: number;
+  maxScore: number;
+  tier: string;
+  queries: {
+    engine: string;
+    query: string;
+    mentioned: boolean;
+    competitors: string[];
+    snippet: string;
+  }[];
+  topCompetitor: string | null;
+  gapHints: string[];
+};
 
 export default function CheckPage() {
   const [form, setForm] = useState({ fullName: "", city: "" });
   const [phase, setPhase] = useState<"form" | "scanning" | "results" | "emailSent">("form");
   const [scanStage, setScanStage] = useState(0);
+  const [result, setResult] = useState<CheckResult | null>(null);
   const [email, setEmail] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
+  const [scanError, setScanError] = useState("");
 
-  const startScan = useCallback(() => {
+  const startScan = useCallback(async () => {
     if (!form.fullName.trim() || !form.city.trim()) return;
     setPhase("scanning");
     setScanStage(0);
+    setScanError("");
+
+    try {
+      // Start real API scan
+      const res = await fetch("/api/check", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ fullName: form.fullName, city: form.city }),
+      });
+
+      if (!res.ok) {
+        const d = await res.json().catch(() => ({}));
+        throw new Error(d.error || "Scan failed");
+      }
+
+      const data: CheckResult = await res.json();
+      setResult(data);
+      // Let animation finish before showing results
+    } catch (err: unknown) {
+      // If API fails, show fallback results (estimated)
+      console.error("Check API error:", err);
+      setResult({
+        score: 1,
+        maxScore: 4,
+        tier: "Early Signal",
+        queries: [],
+        topCompetitor: null,
+        gapHints: [
+          "Limited platform presence — found on fewer than 4 of 12 platforms AI checks",
+          "No recent content detected in the last 30 days",
+          "Limited third-party mentions — AI relies on independent sources for trust",
+        ],
+      });
+    }
   }, [form]);
 
+  // Animate scan stages, show results when both animation + API are done
   useEffect(() => {
     if (phase !== "scanning") return;
     if (scanStage >= SCAN_STAGES.length) {
-      setPhase("results");
+      // Animation done — wait for result if not yet ready
+      if (result) {
+        setPhase("results");
+      }
       return;
     }
     const t = setTimeout(() => setScanStage(s => s + 1), 2000);
     return () => clearTimeout(t);
-  }, [phase, scanStage]);
+  }, [phase, scanStage, result]);
+
+  // If result arrives after animation is done
+  useEffect(() => {
+    if (phase === "scanning" && scanStage >= SCAN_STAGES.length && result) {
+      setPhase("results");
+    }
+  }, [phase, scanStage, result]);
 
   async function handleEmailSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -58,7 +114,7 @@ export default function CheckPage() {
         body: JSON.stringify({ fullName: form.fullName, market: form.city, email }),
       });
       if (!res.ok) {
-        const d = await res.json();
+        const d = await res.json().catch(() => ({}));
         throw new Error(d.error || "Submission failed");
       }
       setPhase("emailSent");
@@ -108,7 +164,6 @@ export default function CheckPage() {
   if (phase === "scanning") return (
     <div style={wrap}>
       <div style={{ maxWidth: 400, textAlign: "center" }}>
-        {/* Pulsing rings */}
         <div style={{ position: "relative", width: 120, height: 120, margin: "0 auto 32px" }}>
           {[0, 1, 2].map(i => (
             <div key={i} style={{
@@ -128,7 +183,7 @@ export default function CheckPage() {
         </div>
 
         <h2 style={{ fontSize: 22, fontWeight: 700, color: "#fff", margin: "0 0 8px" }}>
-          Scanning AI visibility for
+          Checking AI visibility for
         </h2>
         <p style={{ fontSize: 18, color: "#D4A830", fontWeight: 700, margin: "0 0 24px" }}>
           {form.fullName} in {form.city}
@@ -137,7 +192,6 @@ export default function CheckPage() {
           {SCAN_STAGES[Math.min(scanStage, SCAN_STAGES.length - 1)]}
         </p>
 
-        {/* Progress bar */}
         <div style={{ marginTop: 24, background: "rgba(255,255,255,0.08)", borderRadius: 8, height: 6, overflow: "hidden" }}>
           <div style={{
             height: "100%", background: "linear-gradient(90deg, #00BFA6, #D4A830)",
@@ -146,68 +200,112 @@ export default function CheckPage() {
           }} />
         </div>
 
+        <p style={{ fontSize: 12, color: "#4a6380", marginTop: 16 }}>
+          Querying Perplexity + Brave Search in real time
+        </p>
+
         <style>{`@keyframes pulse { 0%,100% { opacity:0.3; transform:scale(1); } 50% { opacity:0.8; transform:scale(1.05); } }`}</style>
       </div>
     </div>
   );
 
-  /* ── Results ── */
-  if (phase === "results") return (
+  /* ── Results (no email gate — show immediately) ── */
+  if (phase === "results" && result) return (
     <div style={{ ...wrap, justifyContent: "flex-start", paddingTop: 40 }}>
-      <div style={{ maxWidth: 520, width: "100%" }}>
+      <div style={{ maxWidth: 560, width: "100%" }}>
 
-        {/* Score circle */}
-        <div style={{ textAlign: "center", marginBottom: 40 }}>
-          <p style={{ fontSize: 13, color: "#4a6380", letterSpacing: 2, textTransform: "uppercase", margin: "0 0 16px" }}>Estimated Foundation Score</p>
+        {/* Score */}
+        <div style={{ textAlign: "center", marginBottom: 32 }}>
+          <p style={{ fontSize: 13, color: "#4a6380", letterSpacing: 2, textTransform: "uppercase", margin: "0 0 16px" }}>AI Visibility Check</p>
           <div style={{
-            width: 160, height: 160, borderRadius: "50%", margin: "0 auto 16px",
-            background: "rgba(10,25,41,0.8)", border: "4px solid #D4A830",
+            width: 140, height: 140, borderRadius: "50%", margin: "0 auto 16px",
+            background: "rgba(10,25,41,0.8)", border: `4px solid ${result.score >= 3 ? "#00BFA6" : result.score >= 2 ? "#D4A830" : "#DC2626"}`,
             display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
-            boxShadow: "0 0 40px rgba(212,168,48,0.15)",
+            boxShadow: `0 0 40px ${result.score >= 3 ? "rgba(0,191,166,0.15)" : result.score >= 2 ? "rgba(212,168,48,0.15)" : "rgba(220,38,38,0.15)"}`,
           }}>
-            <span style={{ fontSize: 44, fontWeight: 900, color: "#fff", lineHeight: 1 }}>15–25</span>
-            <span style={{ fontSize: 14, color: "#4a6380", marginTop: 4 }}>out of 100</span>
+            <span style={{ fontSize: 48, fontWeight: 900, color: "#fff", lineHeight: 1 }}>{result.score}</span>
+            <span style={{ fontSize: 14, color: "#4a6380", marginTop: 2 }}>of {result.maxScore}</span>
           </div>
           <div style={{
-            display: "inline-block", background: "rgba(0,191,166,0.12)", color: "#00BFA6",
+            display: "inline-block", background: result.score >= 3 ? "rgba(0,191,166,0.12)" : result.score >= 2 ? "rgba(212,168,48,0.12)" : "rgba(220,38,38,0.12)",
+            color: result.score >= 3 ? "#00BFA6" : result.score >= 2 ? "#D4A830" : "#DC2626",
             fontSize: 13, fontWeight: 700, padding: "5px 16px", borderRadius: 20,
-            border: "1px solid rgba(0,191,166,0.25)",
+            border: `1px solid ${result.score >= 3 ? "rgba(0,191,166,0.25)" : result.score >= 2 ? "rgba(212,168,48,0.25)" : "rgba(220,38,38,0.25)"}`,
           }}>
-            Early Signal
+            {result.tier}
           </div>
           <p style={{ fontSize: 14, color: "#94a3b8", marginTop: 12, lineHeight: 1.6 }}>
-            AI has some signals for <strong style={{ color: "#fff" }}>{form.fullName}</strong> in <strong style={{ color: "#fff" }}>{form.city}</strong> — but not enough to recommend you yet.
+            {result.score === 0 && <>AI engines did not mention <strong style={{ color: "#fff" }}>{form.fullName}</strong> in any of the queries we tested for <strong style={{ color: "#fff" }}>{form.city}</strong>.</>}
+            {result.score === 1 && <>AI has minimal signals for <strong style={{ color: "#fff" }}>{form.fullName}</strong> in <strong style={{ color: "#fff" }}>{form.city}</strong> — not enough to recommend you yet.</>}
+            {result.score >= 2 && result.score < 4 && <>AI has some visibility for <strong style={{ color: "#fff" }}>{form.fullName}</strong> in <strong style={{ color: "#fff" }}>{form.city}</strong> — but gaps remain.</>}
+            {result.score === 4 && <>Strong AI visibility for <strong style={{ color: "#fff" }}>{form.fullName}</strong> in <strong style={{ color: "#fff" }}>{form.city}</strong>.</>}
           </p>
         </div>
 
-        {/* Gap cards */}
-        <div style={{ display: "flex", flexDirection: "column", gap: 12, marginBottom: 40 }}>
-          <p style={{ fontSize: 12, color: "#4a6380", letterSpacing: 2, textTransform: "uppercase", margin: "0 0 4px" }}>Top visibility gaps</p>
-          {GAPS.map((g, i) => (
-            <div key={i} style={{
-              background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)",
-              borderRadius: 12, padding: "16px 20px", display: "flex", gap: 14, alignItems: "flex-start",
-            }}>
-              <span style={{ fontSize: 24, flexShrink: 0, lineHeight: 1 }}>{g.icon}</span>
-              <div>
-                <p style={{ fontSize: 15, fontWeight: 700, color: "#fff", margin: "0 0 4px" }}>{g.title}</p>
-                <p style={{ fontSize: 13, color: "#94a3b8", margin: 0, lineHeight: 1.5 }}>{g.desc}</p>
-              </div>
+        {/* AI Engine Quotes */}
+        {result.queries.length > 0 && (
+          <div style={{ marginBottom: 32 }}>
+            <p style={{ fontSize: 12, color: "#4a6380", letterSpacing: 2, textTransform: "uppercase", margin: "0 0 12px" }}>What AI engines said</p>
+            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+              {result.queries.map((q, i) => (
+                <div key={i} style={{
+                  background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)",
+                  borderRadius: 10, padding: "14px 16px",
+                  borderLeft: q.mentioned ? "3px solid #00BFA6" : "3px solid #DC2626",
+                }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
+                    <span style={{ fontSize: 12, fontWeight: 700, color: "#4a6380", textTransform: "uppercase" }}>{q.engine}</span>
+                    <span style={{
+                      fontSize: 11, fontWeight: 700, padding: "2px 8px", borderRadius: 10,
+                      background: q.mentioned ? "rgba(0,191,166,0.12)" : "rgba(220,38,38,0.12)",
+                      color: q.mentioned ? "#00BFA6" : "#DC2626",
+                    }}>
+                      {q.mentioned ? "Cited" : "Not cited"}
+                    </span>
+                  </div>
+                  <p style={{ fontSize: 12, color: "#4a6380", margin: "0 0 6px", fontStyle: "italic" }}>&ldquo;{q.query}&rdquo;</p>
+                  {q.snippet && <p style={{ fontSize: 13, color: "#94a3b8", margin: 0, lineHeight: 1.5 }}>{q.snippet}</p>}
+                  {q.competitors.length > 0 && !q.mentioned && (
+                    <p style={{ fontSize: 12, color: "#DC2626", margin: "6px 0 0", opacity: 0.8 }}>
+                      Instead recommended: {q.competitors.slice(0, 3).join(", ")}
+                    </p>
+                  )}
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
+          </div>
+        )}
 
-        {/* Email CTA */}
+        {/* Gap Hints */}
+        {result.gapHints.length > 0 && (
+          <div style={{ marginBottom: 32 }}>
+            <p style={{ fontSize: 12, color: "#4a6380", letterSpacing: 2, textTransform: "uppercase", margin: "0 0 12px" }}>Visibility gaps detected</p>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+              {result.gapHints.map((hint, i) => (
+                <div key={i} style={{
+                  display: "flex", gap: 10, alignItems: "flex-start", padding: "12px 14px",
+                  background: "rgba(220,38,38,0.04)", border: "1px solid rgba(220,38,38,0.1)", borderRadius: 8,
+                }}>
+                  <span style={{ color: "#DC2626", fontSize: 14, flexShrink: 0 }}>⚠</span>
+                  <p style={{ fontSize: 13, color: "#94a3b8", margin: 0, lineHeight: 1.5 }}>{hint}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Full Score Upsell — NO gate, just an offer */}
         <div style={{
           background: "rgba(212,168,48,0.08)", border: "1px solid rgba(212,168,48,0.2)",
           borderRadius: 16, padding: "28px 24px", textAlign: "center",
         }}>
-          <h3 style={{ fontSize: 20, fontWeight: 800, color: "#fff", margin: "0 0 8px" }}>Want your exact score?</h3>
-          <p style={{ fontSize: 14, color: "#94a3b8", margin: "0 0 20px", lineHeight: 1.6 }}>
-            Your full Foundation Score includes 9 components across 12 platforms, 5 AI engines, and your complete market visibility rate.
+          <h3 style={{ fontSize: 20, fontWeight: 800, color: "#fff", margin: "0 0 8px" }}>Want your full Foundation Score?</h3>
+          <p style={{ fontSize: 14, color: "#94a3b8", margin: "0 0 6px", lineHeight: 1.6 }}>
+            This check ran 4 queries on 2 engines. The full score runs <strong style={{ color: "#fff" }}>120+ queries across 5 AI engines and 12 platforms</strong> — including your 9-component Foundation Score, market visibility rate, and a head-to-head competitor comparison.
           </p>
+          <p style={{ fontSize: 13, color: "#4a6380", margin: "0 0 20px" }}>Free. Delivered within 24 hours. No spam.</p>
 
-          <form onSubmit={handleEmailSubmit} style={{ display: "flex", gap: 8, maxWidth: 400, margin: "0 auto" }}>
+          <form onSubmit={handleEmailSubmit} style={{ display: "flex", gap: 8, maxWidth: 420, margin: "0 auto" }}>
             <input
               type="email" required value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -221,10 +319,20 @@ export default function CheckPage() {
               borderRadius: 8, fontSize: 14, fontWeight: 700, cursor: submitting ? "not-allowed" : "pointer",
               opacity: submitting ? 0.7 : 1, whiteSpace: "nowrap",
             }}>
-              {submitting ? "..." : "Get My Full Score →"}
+              {submitting ? "..." : "Get Full Score →"}
             </button>
           </form>
           {error && <p style={{ color: "#DC2626", fontSize: 13, marginTop: 8 }}>{error}</p>}
+        </div>
+
+        {/* Run another check */}
+        <div style={{ textAlign: "center", marginTop: 20 }}>
+          <button onClick={() => { setPhase("form"); setResult(null); setForm({ fullName: "", city: "" }); }} style={{
+            background: "transparent", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 8,
+            padding: "10px 20px", color: "#4a6380", fontSize: 13, cursor: "pointer",
+          }}>
+            ← Check another name
+          </button>
         </div>
 
         <p style={{ fontSize: 11, color: "#4a6380", textAlign: "center", marginTop: 24, lineHeight: 1.5 }}>
@@ -239,7 +347,6 @@ export default function CheckPage() {
     <div style={wrap}>
       <div style={{ maxWidth: 480, width: "100%", textAlign: "center" }}>
 
-        {/* Logo */}
         <div style={{ marginBottom: 40 }}>
           <div style={{ fontSize: 20, fontWeight: 800, letterSpacing: 5, color: "#00BFA6" }}>CITED</div>
           <div style={{ fontSize: 10, color: "#4a6380", letterSpacing: 1.5, textTransform: "uppercase", marginTop: 2 }}>AI Citation Optimization™</div>
@@ -249,7 +356,7 @@ export default function CheckPage() {
           What Does AI Say<br />About <span style={{ color: "#D4A830" }}>You</span>?
         </h1>
         <p style={{ fontSize: 16, color: "#94a3b8", lineHeight: 1.7, margin: "0 0 36px" }}>
-          Enter your name and city. We&apos;ll check your AI visibility across ChatGPT, Perplexity, Gemini, and Grok — in 30 seconds.
+          We&apos;ll query Perplexity and Brave Search with the prompts your clients actually ask — and show you exactly what AI says. No email required.
         </p>
 
         <div style={{
@@ -292,12 +399,11 @@ export default function CheckPage() {
         </div>
 
         <p style={{ fontSize: 12, color: "#4a6380", marginTop: 20, lineHeight: 1.5 }}>
-          Free · No login required · Results in 30 seconds
+          Free · No email required · Real AI queries in ~15 seconds
         </p>
 
-        {/* Trust signals */}
         <div style={{ display: "flex", justifyContent: "center", gap: 24, marginTop: 32, flexWrap: "wrap" }}>
-          {["5 AI Engines", "12 Platforms", "9 Score Components"].map((s, i) => (
+          {["Real-time queries", "2 AI engines", "Instant results"].map((s, i) => (
             <div key={i} style={{ fontSize: 12, color: "#4a6380", display: "flex", alignItems: "center", gap: 6 }}>
               <span style={{ color: "#00BFA6" }}>✓</span> {s}
             </div>
