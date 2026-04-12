@@ -278,7 +278,7 @@ export default function LandingPage() {
               },
               {
                 q: "I&apos;m busy. How much time does this actually take?",
-                a: "Intake is about 5 minutes — most fields are pre-filled from your audit. After that, your biggest time commitment is answering 3 questions for each monthly article (3 minutes). We write everything else.",
+                a: "Intake is about 5 minutes — most fields are pre-filled from your PRISM Scan. After that, your biggest time commitment is answering 3 questions for each monthly article (3 minutes). We write everything else.",
               },
               {
                 q: "What if AI visibility doesn&apos;t become a real factor in my market?",

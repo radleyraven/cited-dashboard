@@ -483,7 +483,7 @@ function IntakeForm() {
             </div>
             {preFillCount > 0 && currentCard <= 2 && (
               <p style={{ fontSize: "12px", color: "#00BFA6", margin: "6px 0 0", textAlign: "right" }}>
-                {preFillCount} fields from your audit
+                {preFillCount} fields from your PRISM Scan
               </p>
             )}
           </div>
@@ -551,7 +551,7 @@ function renderCardContent(p: CardProps) {
   if (cardId === 1) return (
     <div>
       <CardHeader title="Let's confirm your details"
-        subtitle={hasPrefill ? "Most of this is already filled in from your audit." : "Tell us about yourself so we can get started."} />
+        subtitle={hasPrefill ? "Most of this is already filled in from your PRISM Scan." : "Tell us about yourself so we can get started."} />
       <Fields>
         <FieldGroup label="Full Name" required>
           <TextInput value={form.fullName} onChange={(v) => set("fullName", v)} />
