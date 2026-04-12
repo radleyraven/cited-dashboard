@@ -254,7 +254,7 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
             <div style={{ padding: '24px', borderRight: `1px solid ${D.grayMid}` }}>
               <div style={{ fontSize: '10px', fontWeight: 700, color: D.textTertiary, textTransform: 'uppercase', letterSpacing: '1.5px', height: '16px', marginBottom: '12px' }}>Your Foundation Score</div>
               <div style={{ fontFamily: 'Georgia, serif', fontSize: '64px', fontWeight: 900, color: D.navy, lineHeight: 1, height: '64px' }}>{score}</div>
-              <div style={{ fontFamily: '-apple-system, BlinkMacSystemFont, sans-serif', fontSize: '12px', fontWeight: 400, color: D.textTertiary, height: '18px', marginTop: '6px', marginBottom: '16px' }}>out of 100</div>
+              <div style={{ fontFamily: 'var(--font-geist-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif', fontSize: '12px', fontWeight: 400, color: D.textTertiary, height: '18px', marginTop: '6px', marginBottom: '16px' }}>out of 100</div>
               <div style={{ paddingTop: '14px', borderTop: `1px solid ${D.border}` }}>
                 {gaps.length > 0 && (
                   <>
@@ -274,7 +274,7 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
               <div style={{ height: '64px', display: 'flex', alignItems: 'flex-start', paddingTop: '20px' }}>
                 <div style={{ fontFamily: 'Georgia, serif', fontSize: '36px', fontWeight: 900, color: '#94a3b8', lineHeight: 1 }}>~{benchmarkScore}</div>
               </div>
-              <div style={{ fontFamily: '-apple-system, BlinkMacSystemFont, sans-serif', fontSize: '12px', fontWeight: 400, color: D.textTertiary, height: '18px', marginTop: '6px', marginBottom: '16px' }}>Agents AI recommends</div>
+              <div style={{ fontFamily: 'var(--font-geist-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif', fontSize: '12px', fontWeight: 400, color: D.textTertiary, height: '18px', marginTop: '6px', marginBottom: '16px' }}>Agents AI recommends</div>
               <div style={{ paddingTop: '14px', borderTop: `1px solid ${D.border}` }}>
                 <div style={{ fontSize: '9px', fontWeight: 700, color: D.textTertiary, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '6px' }}>What they have that you don&apos;t</div>
                 <div style={{ display: 'flex', alignItems: 'flex-start', gap: '5px', marginBottom: '3px' }}>
