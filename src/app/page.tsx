@@ -28,7 +28,7 @@ export default function LandingPage() {
   ];
 
   const valueStack = [
-    { item: 'Citation Score Audit + PRISM Baseline Scan', value: 250 },
+    { item: 'Foundation Score Audit + PRISM Baseline Scan', value: 250 },
     { item: 'Google Business Profile claim + full optimization', value: 400 },
     { item: 'LinkedIn profile rewrite — location, markets, expertise signals', value: 350 },
     { item: 'Zillow + Realtor.com bio rewrites for AI keyword structure', value: 300 },
@@ -79,7 +79,7 @@ export default function LandingPage() {
             href="/scan"
             style={{ display: 'inline-block', background: '#00BFA6', color: '#fff', fontWeight: 700, fontSize: '17px', padding: '18px 44px', borderRadius: '8px', textDecoration: 'none', letterSpacing: '0.3px' }}
           >
-            Run My Free Citation Score →
+            Run My Free Foundation Score →
           </a>
           <div style={{ marginTop: '12px' }}>
             <a href="/intake" style={{ fontSize: '13px', color: '#4a6380', textDecoration: 'none' }}>

@@ -289,6 +289,12 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
           <a href={intakeUrl} style={{ display: 'inline-block', background: D.teal, color: '#fff', fontWeight: 700, fontSize: '15px', padding: '14px 36px', borderRadius: '10px', textDecoration: 'none', boxShadow: '0 4px 16px rgba(0,191,166,0.3)' }}>
             Make AI Recommend Me →
           </a>
+          <p style={{ fontSize: '12px', color: D.textTertiary, marginTop: '12px' }}>
+            <strong style={{ color: D.navy }}>Free for Founding Members.</strong> Takes 5 minutes. We handle the rest.
+          </p>
+          <p style={{ fontSize: '13px', color: D.textTertiary, marginTop: '8px' }}>
+            <a href="/how-it-works" style={{ color: D.teal, textDecoration: 'none', fontWeight: 600 }}>Want to know how it works? →</a>
+          </p>
         </div>
 
         {/* ═══ MARKET VISIBILITY RATE ═══ */}
@@ -366,6 +372,9 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
           </a>
           <p style={{ fontSize: '12px', color: D.textTertiary, marginTop: '12px' }}>
             <strong style={{ color: D.navy }}>Free for Founding Members.</strong> Takes 5 minutes. We handle the rest.
+          </p>
+          <p style={{ fontSize: '13px', color: D.textTertiary, marginTop: '8px' }}>
+            <a href="/how-it-works" style={{ color: D.teal, textDecoration: 'none', fontWeight: 600 }}>Want to know how it works? →</a>
           </p>
         </div>
 

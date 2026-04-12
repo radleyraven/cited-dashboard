@@ -64,7 +64,7 @@ function scoreColor(score: number) {
 }
 
 const workItems = [
-  { done: true, text: "Citation Score audit complete" },
+  { done: true, text: "Foundation Score audit complete" },
   { done: true, text: "Positioning statement delivered" },
   { done: false, text: "Optimizing Google Business Profile copy" },
   { done: false, text: "LinkedIn profile rewrite" },
@@ -135,7 +135,7 @@ export default function AuditPage() {
         {/* Section 2 — Score By Market */}
         <section className="mb-6">
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <h3 className="text-lg font-bold mb-5" style={{ color: '#0A1929' }}>Your Citation Score — By Market</h3>
+            <h3 className="text-lg font-bold mb-5" style={{ color: '#0A1929' }}>Your Foundation Score — By Market</h3>
             <div className="space-y-4">
               {marketScores.map((m) => (
                 <div key={m.market} className="rounded-xl border border-gray-100 p-5" style={{ background: '#F8F9FA' }}>

@@ -42,7 +42,7 @@ export default function CitationScore({ score, maxScore = 100, delta = 47 }: Cit
           )}
         </div>
       </div>
-      <h3 className="mt-4 text-lg font-semibold" style={{ color: '#0A1929' }}>Citation Score</h3>
+      <h3 className="mt-4 text-lg font-semibold" style={{ color: '#0A1929' }}>Foundation Score</h3>
       <p className="text-sm text-gray-500">Overall platform visibility</p>
     </div>
   );

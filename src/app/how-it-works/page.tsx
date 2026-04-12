@@ -14,7 +14,7 @@ export default function HowItWorksPage() {
     },
     {
       q: 'What happens at Day 91 if I\'m not thrilled?',
-      a: 'Nothing. You walk away, you keep everything we\'ve built (all profile optimizations, all content, all platform setups — it\'s yours). There\'s no invoice, no awkward call. If your score didn\'t move by at least 20 points, you don\'t owe us anything. If it did move and you want to continue, it\'s $800/month — and you\'ll have the data to decide if it\'s worth it.',
+      a: 'Nothing. You walk away, you keep everything we\'ve built (all profile optimizations, all content, all platform setups — it\'s yours). There\'s no invoice, no awkward call. If your score didn\'t move by at least 20 points, you don\'t owe us anything. That\'s the Citation Guarantee™.',
     },
     {
       q: 'Who else in North County San Diego is doing this?',
@@ -23,7 +23,7 @@ export default function HowItWorksPage() {
   ];
 
   const valueStack = [
-    { item: 'Citation Score Audit + PRISM Baseline Scan', value: 250 },
+    { item: 'Foundation Score Audit + PRISM Baseline Scan', value: 250 },
     { item: 'Google Business Profile claim + full optimization', value: 400 },
     { item: 'LinkedIn profile rewrite — location, markets, expertise signals', value: 350 },
     { item: 'Zillow + Realtor.com bio rewrites for AI keyword structure', value: 300 },
@@ -35,7 +35,7 @@ export default function HowItWorksPage() {
   ];
 
   const weeks = [
-    { week: 'Week 1', title: 'We audit. You do nothing.', time: '0 min', color: '#D4A830', detail: 'Full business and visibility audit — we examine your transaction history, AI footprint across 11 platforms, and market opportunity gaps. Optimization plan built.' },
+    { week: 'Week 1', title: 'We audit. You do nothing.', time: '0 min', color: '#D4A830', detail: 'Full business and visibility audit — we examine your transaction history, AI footprint across 13+ platforms, and market opportunity gaps. Optimization plan built.' },
     { week: 'Week 2', title: 'Profiles optimized. You review.', time: '15 min', color: '#00BFA6', detail: 'Your Citation Profiles written and ready in your dashboard. You review and post your Citation Profiles from your dashboard — one click per platform, paste-ready fields for everything. Your positioning approval triggers this step.' },
     { week: 'Week 3', title: 'Article written. You answer 3 questions.', time: '3 min', color: '#00BFA6', detail: 'Article brief: 3 questions, 3 minutes. We write the article in your voice. Posting it to LinkedIn IS your approval — no separate step needed.' },
     { week: 'Week 4', title: 'Article live. Score moves. You see it.', time: '5 min', color: '#D4A830', detail: 'Article live and indexing. First AI signals visible within 7-14 days on Perplexity. Full PRISM re-scan at Day 30.' },
@@ -170,7 +170,7 @@ export default function HowItWorksPage() {
             <div style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr', gap: '20px', alignItems: 'center', marginBottom: '20px' }}>
               <div style={{ textAlign: 'center' }}>
                 <div style={{ fontSize: '11px', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '6px' }}>Before</div>
-                <div style={{ fontSize: '48px', fontWeight: 800, color: '#dc2626' }}>3</div>
+                <div style={{ fontSize: '48px', fontWeight: 800, color: '#dc2626' }}>35</div>
                 <div style={{ fontSize: '13px', color: '#94a3b8' }}>/ 100</div>
                 <div style={{ fontSize: '12px', color: '#64748b', marginTop: '4px' }}>Not mentioned in any<br />AI query for Carmel Valley</div>
               </div>
@@ -197,7 +197,7 @@ export default function HowItWorksPage() {
             Here&apos;s everything you get. Here&apos;s what it&apos;s worth.
           </h2>
           <p style={{ fontSize: '15px', color: '#64748b', margin: '0 0 24px', lineHeight: 1.7 }}>
-            3–5 founding spots in North County San Diego. First 90 days free.
+            A few select agents in North County San Diego. First 90 days free.
           </p>
 
           {/* Value stack */}
@@ -231,10 +231,9 @@ export default function HowItWorksPage() {
               <div>
                 <div style={{ fontSize: '11px', color: '#D4A830', fontWeight: 700, letterSpacing: '1px', textTransform: 'uppercase', marginBottom: '4px' }}>Your Price</div>
                 <div style={{ fontSize: '32px', fontWeight: 900, color: '#fff' }}>$0 <span style={{ fontSize: '16px', color: '#64748b', fontWeight: 400 }}>for 90 days</span></div>
-                <div style={{ fontSize: '13px', color: '#64748b', marginTop: '4px' }}>Then $800/month — only if your score moved.</div>
+                <div style={{ fontSize: '13px', color: '#64748b', marginTop: '4px' }}>Founding members: completely free for 90 days.</div>
               </div>
               <div style={{ textAlign: 'right' }}>
-                <div style={{ fontSize: '11px', color: '#00BFA6', fontWeight: 700, letterSpacing: '1px', textTransform: 'uppercase', marginBottom: '4px' }}>The Citation Guarantee™</div>
                 <div style={{ fontSize: '14px', color: '#fff', fontWeight: 600, maxWidth: '200px', lineHeight: 1.5 }}>The Citation Guarantee™ — 20 points in 90 days or you owe nothing. Ever.</div>
               </div>
             </div>
@@ -271,7 +270,7 @@ export default function HowItWorksPage() {
           <div style={{ fontSize: '11px', fontWeight: 700, color: '#D4A830', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '12px' }}>Ready to start?</div>
           <h2 style={{ fontSize: '24px', fontWeight: 800, color: '#0A1929', margin: '0 0 8px' }}>Claim your founding spot.</h2>
           <p style={{ fontSize: '14px', color: '#64748b', margin: '0 0 28px', lineHeight: 1.6 }}>
-            3–5 spots available. First 90 days free.<br />Takes 5 minutes or less to get started.
+            A few select agents. First 90 days free.<br />Takes 5 minutes or less to get started.
           </p>
 
           <a href="https://citedagent.com/intake" style={{ display: 'block', background: '#00BFA6', color: '#fff', fontWeight: 700, fontSize: '16px', padding: '16px 36px', borderRadius: '8px', textDecoration: 'none', letterSpacing: '0.3px', marginBottom: '12px' }}>
@@ -288,8 +287,7 @@ export default function HowItWorksPage() {
             <a href="/privacy" style={{ color: '#64748b', textDecoration: 'none', marginRight: '16px' }}>Privacy Policy</a>
             <a href="/terms" style={{ color: '#64748b', textDecoration: 'none' }}>Terms of Service</a>
           </div>
-          Cited · AI Citation Optimization™ for Professionals · citedagent.com · Powered by PRISM™<br />
-          <span style={{ color: '#cbd5e1' }}>Powered by PRISM™ · Professional Recognition Index for Search Models</span>
+          Cited · AI Citation Optimization™ for Professionals · citedagent.com · Powered by PRISM™
         </div>
 
       </main>

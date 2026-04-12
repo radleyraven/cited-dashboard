@@ -589,7 +589,7 @@ export default function CopyKitPage() {
                   <div style={{ fontSize: '9px', color: '#4a6380', letterSpacing: '0.5px' }}>/ 100</div>
                 </div>
                 <div>
-                  <div style={{ fontSize: '10px', fontWeight: 700, color: '#00BFA6', letterSpacing: '1px', textTransform: 'uppercase' }}>Citation Score</div>
+                  <div style={{ fontSize: '10px', fontWeight: 700, color: '#00BFA6', letterSpacing: '1px', textTransform: 'uppercase' }}>Foundation Score</div>
                   <div style={{ fontSize: '9px', color: '#4a6380' }}>+2 pts · Day 13 · Apr 8</div>
                 </div>
               </div>

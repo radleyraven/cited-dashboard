@@ -470,7 +470,7 @@ function ResultsContent() {
               {/* Score spectrum bar */}
               <div style={{ padding: '16px 20px 12px', borderBottom: '1px solid #f1f5f9' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-                  <div style={{ fontSize: '11px', fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '1px' }}>Citation Score Scale</div>
+                  <div style={{ fontSize: '11px', fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '1px' }}>Foundation Score Scale</div>
                   <div style={{ fontSize: '10px', color: '#94a3b8', background: '#f0f4f8', borderRadius: '4px', padding: '3px 8px' }}>Based on {scan.query_count} queries across all AI models</div>
                 </div>
                 <div style={{ position: 'relative', height: '8px', borderRadius: '4px', background: 'linear-gradient(90deg, #EF4444 0%, #F59E0B 30%, #D4A830 50%, #00BFA6 75%, #0A1929 100%)', marginBottom: '6px' }}>

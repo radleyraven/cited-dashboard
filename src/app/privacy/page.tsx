@@ -41,7 +41,7 @@ export default function PrivacyPolicyPage() {
             <li><strong>Professional information:</strong> Brokerage name, real estate license number, years of experience, primary markets, and transaction history.</li>
             <li><strong>Platform URLs:</strong> Links to your LinkedIn, Zillow, Yelp, Realtor.com, FastExpert, HomeLight, personal website, YouTube, and other professional profiles.</li>
             <li><strong>MLS data files:</strong> Transaction documents or exports you upload for profile optimization purposes. These files are processed and then deleted (see Data Retention).</li>
-            <li><strong>PRISM™ scan results:</strong> Citation Score data, per-model visibility scores, platform status, and competitive gap analysis generated through our scanning process.</li>
+            <li><strong>PRISM™ scan results:</strong> Foundation Score data, per-model visibility scores, platform status, and competitive gap analysis generated through our scanning process.</li>
             <li><strong>Satellite website data:</strong> If Cited builds and hosts a personal website on your behalf, we store the domain registration, hosting configuration, and website content. You own the content; Cited manages the infrastructure.</li>
             <li><strong>Headshot and photos:</strong> Professional photos you provide for use on platform profiles and your satellite website.</li>
           </ul>
@@ -58,7 +58,7 @@ export default function PrivacyPolicyPage() {
             <li>Build and optimize your AI citation profile across platforms.</li>
             <li>Write professional bios and authority articles in your voice.</li>
             <li>Submit your profile to relevant directories and citation sources.</li>
-            <li>Run monthly PRISM scans across AI models to measure and track your Citation Score.</li>
+            <li>Run monthly PRISM scans across AI models to measure and track your Foundation Score.</li>
             <li>Send service updates, reports, and transactional emails related to your account.</li>
             <li>Authenticate your identity and manage your account access.</li>
           </ul>

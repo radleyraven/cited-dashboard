@@ -16,7 +16,7 @@ interface ClientItem {
 }
 
 const citedCompletedItems: CitedItem[] = [
-  { label: 'Citation Score Audit completed' },
+  { label: 'Foundation Score Audit completed' },
   { label: 'Positioning statement written' },
   { label: 'Google Business Profile optimized' },
   { label: 'LinkedIn profile rewritten', note: '(copy in My Platforms — you paste)' },

@@ -73,7 +73,7 @@ export default function CheckPage() {
         queries: [],
         topCompetitor: null,
         gapHints: [
-          "Limited platform presence — found on fewer than 4 of 12 platforms AI checks",
+          "Limited platform presence — found on fewer than 4 of 13+ platforms AI checks",
           "No recent content detected in the last 30 days",
           "Limited third-party mentions — AI relies on independent sources for trust",
         ],
@@ -153,7 +153,7 @@ export default function CheckPage() {
         </div>
         <h1 style={{ fontSize: 28, fontWeight: 800, color: "#fff", margin: "0 0 12px" }}>Your full score is being calculated.</h1>
         <p style={{ fontSize: 16, color: "#94a3b8", lineHeight: 1.7, margin: "0 0 24px" }}>
-          We&apos;re running a deep scan across 5 AI engines and 12 platforms. Your full Foundation Score — with all 9 components, your market visibility rate, and a competitor comparison — will hit your inbox within 24 hours.
+          We&apos;re running a deep scan across 5 AI engines and 13+ platforms. Your full Foundation Score — with all 9 components, your market visibility rate, and a competitor comparison — will hit your inbox within 24 hours.
         </p>
         <p style={{ fontSize: 14, color: "#4a6380" }}>Keep an eye on {email}</p>
       </div>
@@ -301,7 +301,7 @@ export default function CheckPage() {
         }}>
           <h3 style={{ fontSize: 20, fontWeight: 800, color: "#fff", margin: "0 0 8px" }}>Want your full Foundation Score?</h3>
           <p style={{ fontSize: 14, color: "#94a3b8", margin: "0 0 6px", lineHeight: 1.6 }}>
-            This check ran 4 queries on 2 engines. The full score runs <strong style={{ color: "#fff" }}>120+ queries across 5 AI engines and 12 platforms</strong> — including your 9-component Foundation Score, market visibility rate, and a head-to-head competitor comparison.
+            This check ran 4 queries on 2 engines. The full score runs <strong style={{ color: "#fff" }}>120+ queries across 5 AI engines and 13+ platforms</strong> — including your 9-component Foundation Score, market visibility rate, and a head-to-head competitor comparison.
           </p>
           <p style={{ fontSize: 13, color: "#4a6380", margin: "0 0 20px" }}>Free. Delivered within 24 hours. No spam.</p>
 

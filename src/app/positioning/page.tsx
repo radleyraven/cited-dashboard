@@ -93,7 +93,7 @@ export default function PositioningPage() {
             </div>
 
             <p style={{ fontSize: 13, color: "#94a3b8", lineHeight: 1.6, margin: "0 0 24px" }}>
-              When you approve, we&apos;ll build your copy kit — platform-specific bios for all 12 platforms, article positioning, and satellite site copy — all derived from this statement. If something doesn&apos;t feel right, request changes and we&apos;ll revise.
+              When you approve, we&apos;ll build your copy kit — platform-specific bios for all 13+ platforms, article positioning, and satellite site copy — all derived from this statement. If something doesn&apos;t feel right, request changes and we&apos;ll revise.
             </p>
 
             {/* Actions */}

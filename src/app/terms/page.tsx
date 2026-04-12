@@ -37,13 +37,13 @@ export default function TermsOfServicePage() {
             Cited provides AI Citation Optimization™ services for licensed professionals. The Service includes:
           </p>
           <ul style={{ fontSize: '15px', color: '#4a5568', lineHeight: 1.9, margin: '0 0 32px', paddingLeft: '24px' }}>
-            <li>Full PRISM™ Citation Score audit across 12 platforms and 4 AI models (ChatGPT, Perplexity, Gemini, Claude).</li>
+            <li>Full PRISM™ Foundation Score audit across 13+ platforms and 4 AI models (ChatGPT, Perplexity, Gemini, Claude).</li>
             <li>AI-optimized profile builds and rewrites across professional platforms including Google Business Profile, LinkedIn, Yelp, Bing Places, Foursquare, Zillow, Realtor.com, FastExpert, HomeLight, Apple Business Connect, Homes.com, and YouTube.</li>
             <li>AI-optimized personal website — registered, built, hosted, and maintained by Cited on a domain selected for your name and market.</li>
             <li>Public agent profile page at citedagent.com/agents/[your-name] with full structured data markup.</li>
             <li>Original content creation — authority articles written in your voice and published under your name.</li>
             <li>Directory submissions to increase your citation presence across platforms AI models reference.</li>
-            <li>Monthly PRISM™ Re-Scans — visibility assessments run across multiple AI models to measure and track your Citation Score.</li>
+            <li>Monthly PRISM™ Re-Scans — visibility assessments run across multiple AI models to measure and track your Foundation Score.</li>
             <li>Monthly performance reports with score movement, platform status, and recommended next steps.</li>
           </ul>
 
@@ -74,10 +74,10 @@ export default function TermsOfServicePage() {
             <strong>Your existing website:</strong> If you have an existing personal website, Cited will provide AI-optimized copy and structured data markup (schema) for you to implement. Cited does not take ownership of or administrative access to your existing website.
           </p>
           <p style={{ fontSize: '15px', color: '#4a5568', lineHeight: 1.8, margin: '0 0 12px' }}>
-            <strong>Aggregated data:</strong> Cited retains the right to use anonymized, aggregated performance data — such as Citation Score movements, platform response patterns, and content performance trends — for internal research, service improvement, and marketing materials (e.g., case study statistics, average score improvements). This data will never identify you individually without your written consent.
+            <strong>Aggregated data:</strong> Cited retains the right to use anonymized, aggregated performance data — such as Foundation Score movements, platform response patterns, and content performance trends — for internal research, service improvement, and marketing materials (e.g., case study statistics, average score improvements). This data will never identify you individually without your written consent.
           </p>
           <p style={{ fontSize: '15px', color: '#4a5568', lineHeight: 1.8, margin: '0 0 32px' }}>
-            <strong>Methodology:</strong> PRISM™, the Citation Score methodology, scoring algorithms, signal weights, and all internal processes are proprietary trade secrets of Cited. You agree not to reverse-engineer, reproduce, distribute, or disclose any aspects of Cited&apos;s methodology, scoring system, or internal processes to any third party.
+            <strong>Methodology:</strong> PRISM™, the Foundation Score methodology, scoring algorithms, signal weights, and all internal processes are proprietary trade secrets of Cited. You agree not to reverse-engineer, reproduce, distribute, or disclose any aspects of Cited&apos;s methodology, scoring system, or internal processes to any third party.
           </p>
 
           {/* Section 4 */}
@@ -96,14 +96,14 @@ export default function TermsOfServicePage() {
           <h2 style={{ fontSize: '18px', fontWeight: 700, color: '#0A1929', margin: '0 0 12px', paddingTop: '28px', borderTop: '2px solid #f0f4f8' }}>5. The Citation Guarantee™ &amp; Client Participation</h2>
           <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '10px', padding: '20px 24px', margin: '0 0 16px' }}>
             <p style={{ fontSize: '15px', fontWeight: 700, color: '#0A1929', margin: '0 0 8px' }}>
-              If your Citation Score does not improve by 20 or more points within 90 days of your start date, you owe nothing — not now, not ever.
+              If your Foundation Score does not improve by 20 or more points within 90 days of your start date, you owe nothing — not now, not ever.
             </p>
             <p style={{ fontSize: '14px', color: '#4a5568', lineHeight: 1.7, margin: 0 }}>
               No invoice will be issued. No awkward conversations. The relationship simply ends on good terms.
             </p>
           </div>
           <p style={{ fontSize: '15px', color: '#4a5568', lineHeight: 1.8, margin: '0 0 12px' }}>
-            Score movement is measured by Cited using PRISM™ scan results at day 0 (baseline) and at or before day 90. <strong>Cited&apos;s determination of Citation Score movement is final.</strong>
+            Score movement is measured by Cited using PRISM™ scan results at day 0 (baseline) and at or before day 90. <strong>Cited&apos;s determination of Foundation Score movement is final.</strong>
           </p>
           <p style={{ fontSize: '15px', color: '#4a5568', lineHeight: 1.8, margin: '0 0 12px' }}>
             <strong>Client participation requirement:</strong> We handle 87% of the work. The Citation Guarantee™ and all projected score outcomes assume reasonable client participation in the remaining 13%. Specifically, to remain eligible for the guarantee, you must:
@@ -128,13 +128,13 @@ export default function TermsOfServicePage() {
             Cited provides AI Citation Optimization™ services based on current understanding of AI model behavior. <strong>AI models (ChatGPT, Perplexity, Gemini, Claude) are operated by third parties and may change their algorithms, data sources, or citation behavior at any time without notice.</strong> Cited does not control these models and cannot guarantee specific placement, ranking, or recommendation in any AI model&apos;s outputs.
           </p>
           <p style={{ fontSize: '15px', color: '#4a5568', lineHeight: 1.8, margin: '0 0 12px' }}>
-            The Citation Guarantee™ is based on Citation Score improvement as measured by PRISM™, not on specific AI model outputs. Citation Score improvement does not guarantee that you will be recommended by any specific AI model for any specific query.
+            The Citation Guarantee™ is based on Foundation Score improvement as measured by PRISM™, not on specific AI model outputs. Foundation Score improvement does not guarantee that you will be recommended by any specific AI model for any specific query.
           </p>
           <p style={{ fontSize: '15px', color: '#4a5568', lineHeight: 1.8, margin: '0 0 12px' }}>
             Cited is not responsible for:
           </p>
           <ul style={{ fontSize: '15px', color: '#4a5568', lineHeight: 1.9, margin: '0 0 12px', paddingLeft: '24px' }}>
-            <li>Changes to AI model behavior, training data, or citation patterns that may affect your Citation Score.</li>
+            <li>Changes to AI model behavior, training data, or citation patterns that may affect your Foundation Score.</li>
             <li>Policy changes by Google, LinkedIn, Zillow, Yelp, or any other third-party platform that affect profile visibility or listing standards.</li>
             <li>Any specific business result, including but not limited to leads, transactions, commission income, or return on investment.</li>
             <li>Interruptions to third-party platform services that affect profile visibility.</li>

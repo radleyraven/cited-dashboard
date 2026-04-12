@@ -59,7 +59,7 @@ export default function ScanPage() {
         </div>
         <h1 style={{ fontSize: "28px", fontWeight: 800, color: "#fff", margin: "0 0 12px" }}>Your score is being calculated.</h1>
         <p style={{ fontSize: "16px", color: "#94a3b8", lineHeight: 1.7, margin: "0 0 24px" }}>
-          We&apos;re running your Citation Score now. You&apos;ll receive it by email within 24 hours — including your score, your top competitor&apos;s score, and the 3 biggest gaps holding you back.
+          We&apos;re running your Foundation Score now. You&apos;ll receive it by email within 24 hours — including your score, your top competitor&apos;s score, and the 3 biggest gaps holding you back.
         </p>
         <p style={{ fontSize: "14px", color: "#4a6380", margin: 0 }}>
           Keep an eye on {form.email}
@@ -86,14 +86,14 @@ export default function ScanPage() {
         {/* Context */}
         <div style={{ textAlign: "center", marginBottom: "40px" }}>
           <div style={{ display: "inline-block", background: "rgba(212,168,48,0.12)", color: "#D4A830", fontSize: "11px", fontWeight: 700, letterSpacing: "2px", textTransform: "uppercase", padding: "5px 14px", borderRadius: "20px", marginBottom: "20px", border: "1px solid rgba(212,168,48,0.25)" }}>
-            Free Citation Score
+            Free Foundation Score
           </div>
           <h1 style={{ fontSize: "32px", fontWeight: 900, color: "#0A1929", lineHeight: 1.2, margin: "0 0 16px", letterSpacing: "-0.5px" }}>
             Find out where AI ranks you<br />
             <span style={{ color: "#00BFA6" }}>in your market.</span>
           </h1>
           <p style={{ fontSize: "16px", color: "#4a5568", lineHeight: 1.7, margin: 0 }}>
-            We&apos;ll run your Citation Score — a 0–100 measure of your AI citation visibility — and show you exactly how you compare to the top agent in your market.
+            We&apos;ll run your Foundation Score — a 0–100 measure of your AI citation visibility — and show you exactly how you compare to the top agent in your market.
           </p>
         </div>
 
@@ -156,7 +156,7 @@ export default function ScanPage() {
                 cursor: submitting ? "not-allowed" : "pointer", opacity: submitting ? 0.7 : 1,
                 marginTop: "8px",
               }}>
-                {submitting ? "Submitting..." : "Run My Free Citation Score →"}
+                {submitting ? "Submitting..." : "Run My Free Foundation Score →"}
               </button>
 
               <p style={{ fontSize: "12px", color: "#94a3b8", textAlign: "center", margin: 0, lineHeight: 1.5 }}>
@@ -170,7 +170,7 @@ export default function ScanPage() {
         {/* What you'll get */}
         <div style={{ marginTop: "32px", display: "flex", flexDirection: "column", gap: "12px" }}>
           {[
-            { icon: "📊", text: "Your Citation Score (0–100) — how visible you are across ChatGPT, Perplexity, Gemini, and Claude" },
+            { icon: "📊", text: "Your Foundation Score (0–100) — how visible you are across ChatGPT, Perplexity, Gemini, and Claude" },
             { icon: "🥊", text: "Your top competitor's score — the gap between you and the agent AI recommends instead" },
             { icon: "🔍", text: "Your 3 biggest gaps — the specific platforms and signals holding your score back" },
           ].map((item, i) => (
