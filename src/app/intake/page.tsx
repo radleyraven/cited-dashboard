@@ -32,10 +32,10 @@ const PLATFORMS = [
 const IMPACT_LABELS = { high: "High Impact", medium: "Medium Impact", supporting: "Supporting" } as const;
 const IMPACT_COLORS = { high: "#dc2626", medium: "#ca8a04", supporting: "#16a34a" } as const;
 
-const PLATFORM_START_CARD = 12;
-const REVIEW_CARD = PLATFORM_START_CARD + PLATFORMS.length; // 24
-const SUMMARY_CARD = REVIEW_CARD + 1; // 25
-const CELEBRATION_CARD = SUMMARY_CARD + 1; // 26
+const PLATFORM_START_CARD = 9;
+const REVIEW_CARD = PLATFORM_START_CARD + PLATFORMS.length; // 22
+const SUMMARY_CARD = REVIEW_CARD + 1; // 23
+const CELEBRATION_CARD = SUMMARY_CARD + 1; // 24
 const TOTAL_CARDS = CELEBRATION_CARD;
 
 const REVIEW_OPTIONS = ["Google Business Profile", "Yelp", "Zillow", "Realtor.com"];
@@ -359,12 +359,6 @@ function IntakeForm() {
       if (!f.brokerage.trim()) errs.push("Brokerage name is required");
       if (!f.licenseNumber.trim()) errs.push("License number is required (CA DRE compliance)");
     }
-    if (id === 4) {
-      if (!f.primaryMarkets.trim()) errs.push("At least one primary market is required");
-    }
-    if (id === 6) {
-      if (!f.audienceFocus) errs.push("Please select your audience focus");
-    }
     if (id === SUMMARY_CARD) {
       if (!f.termsAccepted) errs.push("Please accept the Terms of Service and Privacy Policy");
     }
@@ -437,14 +431,12 @@ function IntakeForm() {
   function getCardTitle(id: number): string {
     if (id === 1) return "Your Details";
     if (id === 2) return "Your Practice";
-    if (id === 3 || id === 7) return "";
-    if (id === 4) return "Your Markets";
-    if (id === 5) return "Online Presence";
-    if (id === 6) return "Your Audience";
-    if (id === 8) return "What Makes You Different";
-    if (id === 9) return "Your Voice";
-    if (id === 10) return "Notable Work";
-    if (id === 11) return "Your Photos";
+    if (id === 3) return "";
+    if (id === 4) return "Online Presence";
+    if (id === 5) return "What Makes You Different";
+    if (id === 6) return "Your Voice";
+    if (id === 7) return "Notable Work";
+    if (id === 8) return "Your Photos";
     if (id >= PLATFORM_START_CARD && id < REVIEW_CARD) return PLATFORMS[id - PLATFORM_START_CARD].label;
     if (id === REVIEW_CARD) return "Reviews";
     if (id === SUMMARY_CARD) return "Review & Submit";
@@ -452,7 +444,7 @@ function IntakeForm() {
   }
 
   const isCelebration = currentCard === CELEBRATION_CARD;
-  const isReward = currentCard === 3 || currentCard === 7;
+  const isReward = currentCard === 3;
 
   // ── Render ─────────────────────────────────────────────────
 
@@ -641,35 +633,14 @@ function renderCardContent(p: CardProps) {
   // ── Card 3: Micro-Reward ───────────────────────────────────
   if (cardId === 3) return (
     <MicroReward
-      message="Great start — CITED can now begin building your optimization plan."
-      nextHint="Next up: your markets and what makes you different."
+      message="Great — we've got your details. Next up: what makes you stand out."
+      nextHint="This is the most important part of the intake."
       onContinue={next}
     />
   );
 
-  // ── Card 4: Markets ────────────────────────────────────────
+  // ── Card 4: Online Presence ────────────────────────────────
   if (cardId === 4) return (
-    <div>
-      <CardHeader title="Where do you work?" subtitle="These markets drive all your AI citation visibility targeting." />
-      <Fields>
-        <FieldGroup label="Primary markets — cities" required prefilled={isPrefilled("primaryMarkets")}
-          hint="List 1–3 cities (e.g., Carmel Valley, Carlsbad, Rancho Santa Fe)">
-          <TextArea value={form.primaryMarkets} onChange={(v) => set("primaryMarkets", v)} rows={2} />
-        </FieldGroup>
-        <FieldGroup label="Market ZIP codes" hint="List 1–5 ZIP codes, comma separated (e.g., 92130, 92009, 92067)">
-          <TextArea value={form.primaryMarketZips} onChange={(v) => set("primaryMarketZips", v)} rows={2} />
-        </FieldGroup>
-        <FieldGroup label="Specific neighborhoods" hint="List 3–5 neighborhoods you specialize in">
-          <TextArea value={form.neighborhoods} onChange={(v) => set("neighborhoods", v)} rows={2}
-            placeholder="e.g., Pacific Highlands Ranch, La Costa Oaks, Bird Rock" />
-        </FieldGroup>
-      </Fields>
-      <NextButton onClick={next} />
-    </div>
-  );
-
-  // ── Card 5: Online Presence ────────────────────────────────
-  if (cardId === 5) return (
     <div>
       <CardHeader title="Your web presence" subtitle="Links we'll use for optimization. Leave blank if you don't have these." />
       <Fields>
@@ -688,33 +659,8 @@ function renderCardContent(p: CardProps) {
     </div>
   );
 
-  // ── Card 6: Audience Focus ─────────────────────────────────
-  if (cardId === 6) return (
-    <div>
-      <CardHeader title="Who do you primarily work with?" subtitle="This drives all article framing and bio language." />
-      <RadioGroup
-        options={[
-          { value: "sellers", label: "Primarily sellers" },
-          { value: "buyers", label: "Primarily buyers" },
-          { value: "both", label: "Both equally" },
-        ]}
-        selected={form.audienceFocus} onChange={(v) => set("audienceFocus", v)}
-      />
-      <NextButton onClick={next} />
-    </div>
-  );
-
-  // ── Card 7: Micro-Reward ───────────────────────────────────
-  if (cardId === 7) return (
-    <MicroReward
-      message="We'll focus your Full PRISM Scan on your top 1–3 markets — where opportunity meets your activity — and run quick checks on the rest. Maximum impact, no wasted effort."
-      nextHint="Next up: the most important question — what makes you different."
-      onContinue={next}
-    />
-  );
-
-  // ── Card 8: Differentiator ─────────────────────────────────
-  if (cardId === 8) return (
+  // ── Card 5: Differentiator ─────────────────────────────────
+  if (cardId === 5) return (
     <div>
       <CardHeader title="What makes you different?"
         subtitle="This is the most important question. It feeds your entire positioning." />
@@ -727,8 +673,8 @@ function renderCardContent(p: CardProps) {
     </div>
   );
 
-  // ── Card 9: Voice Capture ──────────────────────────────────
-  if (cardId === 9) return (
+  // ── Card 6: Voice Capture ──────────────────────────────────
+  if (cardId === 6) return (
     <div>
       <CardHeader title="What do clients say about you?"
         subtitle="This helps us write in your voice — not a generic agent voice." />
@@ -741,8 +687,8 @@ function renderCardContent(p: CardProps) {
     </div>
   );
 
-  // ── Card 10: Notable Transaction ───────────────────────────
-  if (cardId === 10) return (
+  // ── Card 7: Notable Transaction ────────────────────────────
+  if (cardId === 7) return (
     <div>
       <CardHeader title="One deal you want to be known for"
         subtitle="This becomes the hero deal in your bio and articles." />
@@ -802,8 +748,8 @@ function renderCardContent(p: CardProps) {
     </div>
   );
 
-  // ── Card 11: Photos ────────────────────────────────────────
-  if (cardId === 11) return (
+  // ── Card 8: Photos ─────────────────────────────────────────
+  if (cardId === 8) return (
     <div>
       <CardHeader title="Your photos" subtitle="We'll resize for all 12 platforms. You can always add these later." />
       <Fields>
@@ -823,7 +769,7 @@ function renderCardContent(p: CardProps) {
     </div>
   );
 
-  // ── Cards 12-23: Individual Platform Cards ─────────────────
+  // ── Cards 9-21: Individual Platform Cards ──────────────────
   if (cardId >= PLATFORM_START_CARD && cardId < REVIEW_CARD) {
     const idx = cardId - PLATFORM_START_CARD;
     const plat = PLATFORMS[idx];
@@ -874,7 +820,7 @@ function renderCardContent(p: CardProps) {
     );
   }
 
-  // ── Card 24: Review Preferences ────────────────────────────
+  // ── Card 22: Review Preferences ────────────────────────────
   if (cardId === REVIEW_CARD) return (
     <div>
       <CardHeader title="Where should we help drive reviews?" subtitle="We'll include review links in your copy kit. Start with 1–2." />
@@ -904,7 +850,7 @@ function renderCardContent(p: CardProps) {
     </div>
   );
 
-  // ── Card 25: Summary ───────────────────────────────────────
+  // ── Card 23: Summary ───────────────────────────────────────
   if (cardId === SUMMARY_CARD) return (
     <div>
       <CardHeader title="Review & submit" subtitle="Everything look right? Tap any section to make changes." />
@@ -916,18 +862,12 @@ function renderCardContent(p: CardProps) {
           <SumRow label="Brokerage" value={form.brokerage} />
           <SumRow label="License" value={form.licenseNumber} />
         </SummarySection>
-        <SummarySection title="Markets & Audience" onEdit={() => jumpTo(4)}>
-          <SumRow label="Markets" value={form.primaryMarkets} />
-          <SumRow label="ZIP codes" value={form.primaryMarketZips || "—"} />
-          <SumRow label="Neighborhoods" value={form.neighborhoods || "—"} />
-          <SumRow label="Focus" value={form.audienceFocus === "sellers" ? "Primarily sellers" : form.audienceFocus === "buyers" ? "Primarily buyers" : form.audienceFocus === "both" ? "Both equally" : "—"} />
-        </SummarySection>
-        <SummarySection title="Your Story" onEdit={() => jumpTo(8)}>
+        <SummarySection title="Your Story" onEdit={() => jumpTo(5)}>
           <SumRow label="What makes you different" value={form.differentiator ? (form.differentiator.length > 80 ? form.differentiator.slice(0, 80) + "..." : form.differentiator) : "⚠️ Skipped"} />
           <SumRow label="Client voice" value={form.voiceCapture ? (form.voiceCapture.length > 60 ? form.voiceCapture.slice(0, 60) + "..." : form.voiceCapture) : "Skipped"} />
           <SumRow label="Notable deals" value={form.transactions.filter(Boolean).length > 0 ? `${form.transactions.filter(Boolean).length} provided` : "Skipped"} />
         </SummarySection>
-        <SummarySection title="Photos & Platforms" onEdit={() => jumpTo(11)}>
+        <SummarySection title="Photos & Platforms" onEdit={() => jumpTo(8)}>
           <SumRow label="Headshot" value={form.headshotFile ? "✅ Uploaded" : "⚠️ Not yet"} />
           <SumRow label="Landscape" value={form.landscapeFile ? "✅ Uploaded" : "Not yet"} />
           <SumRow label="Platforms" value={`${countPlatformsConfirmed(form)} confirmed`} />
@@ -967,7 +907,7 @@ function renderCardContent(p: CardProps) {
     </div>
   );
 
-  // ── Card 26: Celebration ───────────────────────────────────
+  // ── Card 24: Celebration ───────────────────────────────────
   if (cardId === CELEBRATION_CARD) {
     const firstName = form.fullName.split(" ")[0] || "there";
     return (
