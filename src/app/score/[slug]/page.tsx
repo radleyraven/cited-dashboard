@@ -96,7 +96,7 @@ function GapCards({ gaps }: { gaps: Gap[] }) {
                 <div style={{ fontSize: '12px', color: gap.color || '#EF4444', fontWeight: 600, marginTop: '3px' }}>{gap.status}</div>
                 <div className="see-fix" style={{ fontSize: '11px', color: '#00BFA6', fontWeight: 600, marginTop: '6px' }}>See the fix →</div>
               </div>
-              <span className="chevron" style={{ fontSize: '18px', color: '#00BFA6', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: '36px', height: '36px', borderRadius: '50%', background: 'rgba(0,191,166,0.1)', flexShrink: 0, marginLeft: '12px' }}>▾</span>
+              <span className="chevron" style={{ fontSize: '20px', color: '#00BFA6', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: '44px', height: '44px', borderRadius: '50%', background: 'rgba(0,191,166,0.1)', flexShrink: 0, marginLeft: '12px' }}>▾</span>
             </summary>
             {(gap.action || gap.outcome) && (
               <div style={{ padding: '0 20px 16px 20px', borderTop: '1px solid #f1f5f9' }}>
