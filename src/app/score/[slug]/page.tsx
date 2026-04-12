@@ -327,13 +327,13 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
           <GapCards gaps={gaps} />
         )}
 
-        {/* ═══ NARRATIVE QUALITY (context — what AI says when it does find you) ═══ */}
-        <div style={{ background: '#fff', borderRadius: '14px', padding: '24px', marginBottom: '32px',  }}>
+        {/* ═══ WHAT AI SAYS ABOUT YOU ═══ */}
+        <div style={{ background: '#fff', borderRadius: '14px', padding: '24px', marginBottom: '32px' }}>
           <div style={{ fontSize: '10px', fontWeight: 700, color: D.textTertiary, textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '4px' }}>What AI Says About You</div>
           <div style={{ fontSize: '13px', color: D.textSecondary, marginBottom: '20px' }}>
-            When AI does find {firstName}, here is how it describes you:
+            When someone asks AI about {firstName}, this is what they get:
           </div>
-          <div style={{ background: D.grayBg, borderLeft: `3px solid ${D.teal}`, borderRadius: '0 8px 8px 0', padding: '16px 20px', marginBottom: '20px' }}>
+          <div style={{ background: D.grayBg, borderLeft: `3px solid ${D.teal}`, borderRadius: '0 8px 8px 0', padding: '16px 20px', marginBottom: '16px' }}>
             <p style={{ fontSize: '14px', color: D.textSecondary, fontStyle: 'italic', lineHeight: 1.7, margin: 0 }}>
               {scan?.ai_quote?.text
                 ? `\u201C${scan.ai_quote.text.replace(/\*\*/g, '').replace(/##\s*/g, '').replace(/\[\d+\]/g, '').replace(/\n/g, ' ').trim()}\u201D`
@@ -341,17 +341,16 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
               }
             </p>
           </div>
-          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-            {[
-              { label: 'Accuracy', grade: narrative?.overall_accuracy || 'B', color: narrative?.overall_accuracy === 'A' ? D.teal : '#3b82f6' },
-              { label: 'Favorability', grade: narrative?.overall_favorability || 'Neutral', color: narrative?.overall_favorability === 'Positive' ? D.teal : D.textTertiary },
-              { label: 'Specificity', grade: score > 40 ? 'Medium' : 'Low', color: score > 40 ? D.gold : D.red },
-            ].map(({ label, grade, color }) => (
-              <div key={label} style={{ display: 'flex', alignItems: 'center', gap: '6px', background: D.grayBg, border: `1px solid ${D.border}`, borderRadius: '20px', padding: '4px 12px' }}>
-                <span style={{ fontSize: '11px', color: D.textTertiary }}>{label}</span>
-                <span style={{ fontSize: '11px', fontWeight: 700, color }}>{grade}</span>
-              </div>
-            ))}
+          <div style={{ background: 'rgba(239,68,68,0.04)', border: `1px solid rgba(239,68,68,0.12)`, borderRadius: '8px', padding: '14px 18px' }}>
+            <div style={{ fontSize: '11px', fontWeight: 700, color: D.red, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px' }}>What&apos;s missing from this description</div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+              {['Your market specialization and neighborhoods', 'Transaction stats and track record', 'What makes you different from every other agent', 'Why a seller should call you specifically'].map((item, i) => (
+                <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '6px' }}>
+                  <span style={{ color: D.red, fontWeight: 700, fontSize: '10px', flexShrink: 0, marginTop: '2px' }}>✗</span>
+                  <span style={{ fontSize: '12px', color: D.textSecondary, lineHeight: 1.5 }}>{item}</span>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 
