@@ -205,61 +205,20 @@ function ProgressIndicator() {
   );
 }
 
-/* ── Collapsible strength card ── */
-const STRENGTH_ICONS: Record<string, string> = {
-  'Content Freshness': '↻',
-  'Direct Name Recognition': '✓',
-  'Google Business Profile': '★',
-};
-
-function StrengthCards({ strengths }: { strengths: StrengthData[] }) {
-  const [expanded, setExpanded] = useState<number | null>(null);
+/* ── Strengths table (compact, no accordion — Tufte: data-ink ratio) ── */
+function StrengthsTable({ strengths }: { strengths: StrengthData[] }) {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-      {strengths.map((item, i) => {
-        const isOpen = expanded === i;
-        return (
-          <div key={i} style={{ background: '#fff', borderRadius: '10px', overflow: 'hidden' }}>
-            <button
-              onClick={() => setExpanded(isOpen ? null : i)}
-              style={{
-                width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                padding: '14px 18px', background: 'none', border: 'none', cursor: 'pointer', textAlign: 'left',
-                borderLeft: `4px solid ${D.teal}`, transition: 'background 0.15s',
-              }}
-              onMouseEnter={e => (e.currentTarget.style.background = '#f0faf8')}
-              onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
-            >
-              <div style={{ flex: 1 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                  <div style={{ width: '28px', height: '28px', borderRadius: '8px', background: '#f0fdf9', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '14px', color: D.teal, fontWeight: 700, flexShrink: 0 }}>
-                    {STRENGTH_ICONS[item.title] || '✓'}
-                  </div>
-                  <span style={{ fontSize: '14px', fontWeight: 600, color: D.textPrimary }}>{item.title}</span>
-                </div>
-                {!isOpen && (
-                  <div style={{ fontSize: '12px', color: D.textTertiary, marginTop: '4px', marginLeft: '38px', lineHeight: 1.4 }}>
-                    {item.detail.length > 80 ? item.detail.substring(0, 80) + '…' : item.detail}
-                  </div>
-                )}
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexShrink: 0, marginLeft: '12px' }}>
-                <span style={{ fontSize: '11px', fontWeight: 600, color: D.teal, background: '#f0fdf9', padding: '3px 10px', borderRadius: '12px' }}>{item.badge}</span>
-                <div style={{
-                  width: '22px', height: '22px', borderRadius: '6px', border: `1.5px solid ${D.border}`,
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontSize: '12px', color: D.textTertiary, transform: isOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s',
-                }}>▾</div>
-              </div>
-            </button>
-            {isOpen && (
-              <div style={{ padding: '0 18px 14px 18px', borderLeft: `4px solid ${D.teal}` }}>
-                <p style={{ fontSize: '13px', color: D.textSecondary, lineHeight: 1.7, margin: 0 }}>{item.detail}</p>
-              </div>
-            )}
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+      {strengths.map((item, i) => (
+        <div key={i} style={{ background: '#fff', borderRadius: '10px', borderLeft: `4px solid ${D.teal}`, padding: '14px 18px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flex: 1 }}>
+            <span style={{ fontSize: '13px', color: D.teal, fontWeight: 700 }}>✓</span>
+            <span style={{ fontSize: '14px', fontWeight: 600, color: D.textPrimary }}>{item.title}</span>
+            <span style={{ fontSize: '12px', color: D.textTertiary, marginLeft: '4px' }}>— {item.detail.length > 60 ? item.detail.substring(0, 60) + '…' : item.detail}</span>
           </div>
-        );
-      })}
+          <span style={{ fontSize: '11px', fontWeight: 600, color: D.teal, background: '#f0fdf9', padding: '3px 10px', borderRadius: '12px', flexShrink: 0, marginLeft: '12px' }}>{item.badge}</span>
+        </div>
+      ))}
     </div>
   );
 }
@@ -298,11 +257,18 @@ function SectionSummaryBar({ title, stats, onExpand }: { title: string; stats: {
   );
 }
 
-/* ── Re-collapse button for expanded completed sections ── */
+/* ── Re-collapse button — styled as pill, positioned at section end ── */
 function CompactButton({ onClick }: { onClick: () => void }) {
   return (
-    <div style={{ paddingTop: '12px' }}>
-      <button onClick={onClick} style={{ background: 'none', border: 'none', fontSize: '12px', color: '#94a3b8', fontWeight: 600, cursor: 'pointer', padding: 0 }}>
+    <div style={{ display: 'flex', justifyContent: 'center', paddingTop: '16px' }}>
+      <button onClick={onClick} style={{
+        background: '#f1f5f9', border: `1px solid #e2e8f0`, borderRadius: '20px',
+        fontSize: '11px', color: '#94a3b8', fontWeight: 600, cursor: 'pointer',
+        padding: '6px 16px', transition: 'background 0.15s',
+      }}
+      onMouseEnter={e => (e.currentTarget.style.background = '#e2e8f0')}
+      onMouseLeave={e => (e.currentTarget.style.background = '#f1f5f9')}
+      >
         ↑ Compact this section
       </button>
     </div>
@@ -341,23 +307,18 @@ function GapCards({ gaps, audienceFocus }: { gaps: GapData[]; audienceFocus: str
                 <div style={{ fontSize: '15px', fontWeight: 700, color: '#0A1929' }}>{swapAudience(gap.title)}</div>
                 <div style={{ fontSize: '12px', color: gap.color, fontWeight: 600, marginTop: '3px' }}>{swapAudience(gap.status)}</div>
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexShrink: 0, marginLeft: '12px' }}>
-                <div style={{ background: '#f0fdf9', color: '#00BFA6', fontSize: '12px', fontWeight: 700, padding: '4px 12px', borderRadius: '12px', whiteSpace: 'nowrap' }}>{gap.points}</div>
-                <div style={{
-                  width: '22px', height: '22px', borderRadius: '6px', border: '1.5px solid #e2e8f0',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontSize: '12px', color: '#94a3b8', transform: isOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s',
-                }}>▾</div>
+              <div style={{ background: '#f0fdf9', color: '#00BFA6', fontSize: '12px', fontWeight: 700, padding: '4px 14px', borderRadius: '12px', whiteSpace: 'nowrap', flexShrink: 0, marginLeft: '12px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                {gap.points} <span style={{ fontSize: '10px', color: '#94a3b8', transform: isOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }}>▾</span>
               </div>
             </button>
             {/* Expanded detail */}
             {isOpen && (
               <div style={{ padding: '0 20px 16px 20px', borderTop: '1px solid #f1f5f9' }}>
-                <p style={{ fontSize: '13px', color: '#475569', margin: '12px 0', lineHeight: 1.7 }}>{swapAudience(gap.impact)}</p>
-                <div style={{ background: '#f0fdf9', borderRadius: '8px', padding: '12px 14px', marginBottom: '10px' }}>
-                  <p style={{ fontSize: '13px', color: '#0A1929', margin: 0, lineHeight: 1.6 }}>{swapAudience(gap.action)}</p>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', paddingTop: '10px' }}>
+                  <div style={{ fontSize: '13px', color: '#475569', lineHeight: 1.5 }}><span style={{ color: '#94a3b8', fontWeight: 600 }}>The problem:</span> {swapAudience(gap.impact)}</div>
+                  <div style={{ fontSize: '13px', color: '#0A1929', lineHeight: 1.5 }}><span style={{ color: '#94a3b8', fontWeight: 600 }}>The fix:</span> {swapAudience(gap.action)}</div>
+                  <div style={{ fontSize: '13px', color: '#00BFA6', fontWeight: 600, lineHeight: 1.5 }}>→ {swapAudience(gap.outcome)}</div>
                 </div>
-                <p style={{ fontSize: '12px', color: '#00BFA6', fontWeight: 600, margin: 0 }}>→ {swapAudience(gap.outcome)}</p>
               </div>
             )}
           </div>
@@ -532,7 +493,7 @@ function ResultsContent() {
             {firstName ? `${firstName}, here's what we found.` : "Here's what we found."}
           </h1>
           <p style={{ fontSize: '13px', color: D.textTertiary, margin: '0 0 28px 0', lineHeight: 1.6 }}>
-            {scan.query_count} queries · {scan.platform_count} platforms audited · {scan.txn_analyzed} transactions analyzed · every query run {scan.consistency_runs}× for consistency
+            Tested across the top AI platforms sellers use · {scan.platform_count} platforms audited · {scan.txn_analyzed} transactions analyzed
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '8px', marginBottom: '28px' }}>
             {scan.stats.map((stat) => (
@@ -631,15 +592,21 @@ function ResultsContent() {
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
                 {/* Client score — dominant */}
                 <div style={{ padding: '24px', borderRight: `1px solid ${D.grayMid}` }}>
-                  <div style={{ fontSize: '10px', fontWeight: 700, color: D.textTertiary, textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '12px' }}>Your Score</div>
+                  <div style={{ fontSize: '10px', fontWeight: 700, color: D.textTertiary, textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '12px' }}>Your Citation Score</div>
                   <div style={{ fontFamily: 'Georgia, serif', fontSize: '64px', fontWeight: 900, color: D.navy, lineHeight: 1 }}>{clientScore}</div>
                   <div style={{ fontSize: '12px', color: D.textTertiary, marginTop: '4px', marginBottom: '10px' }}>out of 100</div>
-                  <div style={{ display: 'inline-block', background: D.grayBg, borderRadius: '6px', padding: '4px 10px' }}>
-                    <span style={{ fontSize: '11px', fontWeight: 600, color: D.textSecondary }}>{scan.tier_name}</span>
+                  <div style={{ fontSize: '13px', fontWeight: 700, color: D.navy, marginBottom: '2px' }}>{clientName}</div>
+                  <div style={{ fontSize: '11px', color: D.textTertiary, marginBottom: '10px' }}>{scan.stats?.[0]?.label || ''}</div>
+                  {/* Why AI doesn't recommend you yet */}
+                  <div style={{ marginTop: '10px', paddingTop: '10px', borderTop: `1px solid ${D.border}` }}>
+                    <div style={{ fontSize: '9px', fontWeight: 700, color: D.red, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '6px' }}>Why AI doesn&apos;t recommend you yet</div>
+                    {scan.gaps.slice(0, 3).map((g, i) => (
+                      <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '5px', marginBottom: '3px' }}>
+                        <span style={{ color: D.red, fontWeight: 700, fontSize: '10px', flexShrink: 0, marginTop: '1px' }}>→</span>
+                        <span style={{ fontSize: '11px', color: D.textSecondary, lineHeight: 1.4 }}>{g.title}</span>
+                      </div>
+                    ))}
                   </div>
-                  <p style={{ fontSize: '12px', color: D.textTertiary, margin: '10px 0 0 0', lineHeight: 1.5 }}>
-                    AI knows you — but doesn&apos;t recommend you in discovery searches yet.
-                  </p>
                 </div>
 
                 {/* Competitor — benchmark context */}
@@ -694,7 +661,7 @@ function ResultsContent() {
                 <p style={{ fontSize: '14px', color: D.textSecondary, margin: '0 0 20px 0', lineHeight: 1.7 }}>
                   You&apos;re not starting from zero. Our {scan.platform_count}-platform audit found real strengths to build on.
                 </p>
-                <StrengthCards strengths={scan.strengths} />
+                <StrengthsTable strengths={scan.strengths} />
                 {visibleSection < 3 && <ContinueButton onClick={() => revealNext(3)} text="See Where the Gaps Are" />}
                 {visibleSection >= 3 && <CompactButton onClick={() => setCollapsedSections(prev => new Set(prev).add(2))} />}
               </>
