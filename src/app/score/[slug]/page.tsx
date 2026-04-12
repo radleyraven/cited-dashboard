@@ -83,7 +83,7 @@ function GapCards({ gaps, totalPoints }: { gaps: Gap[]; totalPoints: number }) {
       <div style={{ fontSize: '10px', fontWeight: 700, color: D.textTertiary, textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '16px' }}>Where You&apos;re Losing Visibility</div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
         {gaps.map((gap, i) => (
-          <details key={i} style={{ background: '#fff', borderRadius: '12px', overflow: 'hidden', borderLeft: `4px solid ${gap.color || (gap.impact === 'High' ? '#EF4444' : '#D4A830')}` }}>
+          <details key={i} className="gap-card" style={{ background: '#fff', borderRadius: '12px', overflow: 'hidden', borderLeft: `4px solid ${gap.color || (gap.impact === 'High' ? '#EF4444' : '#D4A830')}` }}>
             <summary style={{
               width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
               padding: '16px 20px', cursor: 'pointer', listStyleType: 'none',
@@ -189,7 +189,7 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
 
   return (
     <div style={{ minHeight: '100vh', background: D.grayBg, fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif' }}>
-      <style>{`details > summary { list-style: none; cursor: pointer; } details > summary::-webkit-details-marker { display: none; } details[open] > summary { background: #f0faf8 !important; } .chevron { transition: transform 0.2s; } details[open] .chevron { transform: rotate(180deg); } .see-fix { } details[open] .see-fix { display: none; }`}</style>
+      <style>{`details > summary { list-style: none; cursor: pointer; transition: background 0.15s; } details > summary::-webkit-details-marker { display: none; } details > summary:hover { background: #f0faf8; } details[open] > summary { background: #f0faf8 !important; } .chevron { transition: transform 0.2s; } details[open] .chevron { transform: rotate(180deg); } .see-fix { } details[open] .see-fix { display: none; } .gap-card { transition: box-shadow 0.15s; } .gap-card:hover { box-shadow: 0 2px 12px rgba(0,191,166,0.12); }`}</style>
 
       {/* Header — inline version matching CitedHeader component */}
       <div style={{ background: '#0A1929', padding: '20px 32px' }}>
