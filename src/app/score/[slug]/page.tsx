@@ -394,13 +394,12 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
 
         {/* ═══ CTA ═══ */}
         <div style={{ textAlign: 'center', marginBottom: '32px' }}>
-          <a href={reportUrl} style={{ display: 'inline-block', background: D.teal, color: '#fff', fontWeight: 700, fontSize: '16px', padding: '18px 40px', borderRadius: '10px', textDecoration: 'none', boxShadow: '0 4px 16px rgba(0,191,166,0.3)', marginBottom: '12px' }}>
-            See My Full Citation Report →
+          <a href={intakeUrl} style={{ display: 'inline-block', background: D.teal, color: '#fff', fontWeight: 700, fontSize: '16px', padding: '18px 40px', borderRadius: '10px', textDecoration: 'none', boxShadow: '0 4px 16px rgba(0,191,166,0.3)' }}>
+            Fix My Score →
           </a>
-          <br />
-          <a href={intakeUrl} style={{ display: 'inline-block', fontSize: '13px', color: D.teal, textDecoration: 'none', marginTop: '8px' }}>
-            Start onboarding →
-          </a>
+          <p style={{ fontSize: '12px', color: D.textTertiary, marginTop: '12px' }}>
+            Takes 5 minutes. We handle the rest.
+          </p>
         </div>
 
         {/* ═══ FOUNDING MEMBER ═══ */}
