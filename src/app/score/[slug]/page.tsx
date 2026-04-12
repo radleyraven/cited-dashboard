@@ -82,16 +82,19 @@ function GapCards({ gaps, totalPoints }: { gaps: Gap[]; totalPoints: number }) {
         {gaps.map((gap, i) => (
           <details key={i} style={{ background: '#fff', borderRadius: '12px', overflow: 'hidden', borderLeft: `4px solid ${gap.color || (gap.impact === 'High' ? '#EF4444' : '#D4A830')}` }}>
             <summary style={{
-              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+              width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
               padding: '16px 20px', cursor: 'pointer', listStyleType: 'none',
-              background: 'none', border: 'none',
-            }}>
+              background: 'none', border: 'none', transition: 'background 0.15s',
+            }}
+              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = '#f0faf8'; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'none'; }}
+            >
               <div style={{ flex: 1 }}>
                 <div style={{ fontSize: '15px', fontWeight: 700, color: '#0A1929' }}>{gap.title || gap.platform}</div>
                 <div style={{ fontSize: '12px', color: gap.color || '#EF4444', fontWeight: 600, marginTop: '3px' }}>{gap.status}</div>
               </div>
-              <div style={{ background: '#f0fdf9', color: '#00BFA6', fontSize: '12px', fontWeight: 700, padding: '4px 14px', borderRadius: '12px', whiteSpace: 'nowrap', flexShrink: 0, marginLeft: '12px' }}>
-                +{gap.points}
+              <div style={{ background: '#f0fdf9', color: '#00BFA6', fontSize: '12px', fontWeight: 700, padding: '4px 14px', borderRadius: '12px', whiteSpace: 'nowrap', flexShrink: 0, marginLeft: '12px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                +{gap.points} <span className="chevron" style={{ fontSize: '10px', color: '#94a3b8', display: 'inline-block' }}>▾</span>
               </div>
             </summary>
             {(gap.action || gap.outcome) && (
@@ -189,7 +192,7 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
 
   return (
     <div style={{ minHeight: '100vh', background: D.grayBg, fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif' }}>
-      <style>{`details > summary { list-style: none; } details > summary::-webkit-details-marker { display: none; } details[open] > summary { background: #f0faf8 !important; }`}</style>
+      <style>{`details > summary { list-style: none; } details > summary::-webkit-details-marker { display: none; } details[open] > summary { background: #f0faf8 !important; } .chevron { transition: transform 0.2s; } details[open] .chevron { transform: rotate(180deg); }`}</style>
 
       {/* ═══ HEADER ═══ */}
       <header style={{ background: D.navy, padding: '24px 32px', textAlign: 'center' }}>
