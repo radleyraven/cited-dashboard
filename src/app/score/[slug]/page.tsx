@@ -320,7 +320,7 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
           <div style={{ fontSize: '13px', color: D.textSecondary, marginBottom: '20px' }}>
             How often AI recommends <strong>{name}</strong> when clients search in {market}
           </div>
-          <div style={{ position: 'relative', height: '20px', borderRadius: '10px', background: D.navy, marginBottom: '10px' }}>
+          <div style={{ position: 'relative', height: '20px', borderRadius: '10px', background: `linear-gradient(90deg, ${D.red} 0%, #F59E0B 25%, ${D.gold} 45%, ${D.teal} 70%, ${D.navy} 100%)`, marginBottom: '10px' }}>
             <div style={{ position: 'absolute', top: '-6px', left: `${Math.max(1, visibilityRate)}%`, transform: 'translateX(-50%)', width: '6px', height: '32px', background: visibilityRate < 10 ? D.red : D.teal, borderRadius: '3px', boxShadow: '0 2px 6px rgba(0,0,0,0.3)' }} />
             <div style={{ position: 'absolute', top: '-6px', left: `${benchmarkRate}%`, transform: 'translateX(-50%)', width: '6px', height: '32px', background: D.gold, borderRadius: '3px', boxShadow: '0 2px 6px rgba(0,0,0,0.3)' }} />
           </div>
