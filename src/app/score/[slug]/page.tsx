@@ -73,6 +73,55 @@ async function fetchProspect(slug: string): Promise<IntakeRow | null> {
   return rows[0] || null;
 }
 
+// ── Gap Cards (expandable, matches Citation Report pattern) ──
+function GapCards({ gaps, totalPoints }: { gaps: Gap[]; totalPoints: number }) {
+  return (
+    <div style={{ background: '#fff', borderRadius: '14px', padding: '24px', marginBottom: '24px', boxShadow: '0 2px 12px rgba(0,0,0,0.07)' }}>
+      <div style={{ fontSize: '10px', fontWeight: 700, color: D.textTertiary, textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '16px' }}>Where You&apos;re Losing Visibility</div>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+        {gaps.map((gap, i) => (
+          <details key={i} style={{ background: '#fff', borderRadius: '12px', overflow: 'hidden', borderLeft: `4px solid ${gap.color || (gap.impact === 'High' ? '#EF4444' : '#D4A830')}` }}>
+            <summary style={{
+              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+              padding: '16px 20px', cursor: 'pointer', listStyleType: 'none',
+              background: 'none', border: 'none',
+            }}>
+              <div style={{ flex: 1 }}>
+                <div style={{ fontSize: '15px', fontWeight: 700, color: '#0A1929' }}>{gap.title || gap.platform}</div>
+                <div style={{ fontSize: '12px', color: gap.color || '#EF4444', fontWeight: 600, marginTop: '3px' }}>{gap.status}</div>
+              </div>
+              <div style={{ background: '#f0fdf9', color: '#00BFA6', fontSize: '12px', fontWeight: 700, padding: '4px 14px', borderRadius: '12px', whiteSpace: 'nowrap', flexShrink: 0, marginLeft: '12px' }}>
+                +{gap.points}
+              </div>
+            </summary>
+            {(gap.action || gap.outcome) && (
+              <div style={{ padding: '0 20px 16px 20px', borderTop: '1px solid #f1f5f9' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', paddingTop: '10px' }}>
+                  {gap.action && (
+                    <div style={{ fontSize: '13px', color: '#0A1929', lineHeight: 1.5 }}>
+                      <span style={{ color: '#94a3b8', fontWeight: 600 }}>The fix:</span> {gap.action}
+                    </div>
+                  )}
+                  {gap.outcome && (
+                    <div style={{ fontSize: '13px', color: '#00BFA6', fontWeight: 600, lineHeight: 1.5 }}>
+                      → {gap.outcome}
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+          </details>
+        ))}
+      </div>
+      <div style={{ background: '#0A1929', borderRadius: '8px', padding: '12px 16px', marginTop: '12px', textAlign: 'center' }}>
+        <span style={{ fontSize: '13px', color: '#fff', fontWeight: 600 }}>
+          Points you&apos;re leaving on the table: <span style={{ color: '#00BFA6' }}>+{totalPoints}</span>
+        </span>
+      </div>
+    </div>
+  );
+}
+
 export default async function ScorePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const baseSlug = slug.endsWith('-b') ? slug.slice(0, -2) : slug;
@@ -140,7 +189,7 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
 
   return (
     <div style={{ minHeight: '100vh', background: D.grayBg, fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif' }}>
-      <style>{`details > summary { list-style: none; } details > summary::-webkit-details-marker { display: none; }`}</style>
+      <style>{`details > summary { list-style: none; } details > summary::-webkit-details-marker { display: none; } details[open] > summary { background: #f0faf8 !important; }`}</style>
 
       {/* ═══ HEADER ═══ */}
       <header style={{ background: D.navy, padding: '24px 32px', textAlign: 'center' }}>
@@ -280,30 +329,9 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
           )}
         </div>
 
-        {/* ═══ GAPS (before narrative — problem first, context second) ═══ */}
+        {/* ═══ GAPS — expandable cards matching Citation Report ═══ */}
         {gaps.length > 0 && (
-          <div style={{ background: '#fff', borderRadius: '14px', padding: '24px', marginBottom: '24px', boxShadow: '0 2px 12px rgba(0,0,0,0.07)' }}>
-            <div style={{ fontSize: '10px', fontWeight: 700, color: D.textTertiary, textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '16px' }}>Where You&apos;re Losing Visibility</div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-              {gaps.map((g, i) => (
-                <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 16px', background: D.grayBg, borderRadius: '8px' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: g.impact === 'High' ? D.red : g.impact === 'Medium' ? D.gold : D.teal, flexShrink: 0 }} />
-                    <div>
-                      <div style={{ fontSize: '13px', fontWeight: 600, color: D.navy }}>{g.title || g.platform}</div>
-                      <div style={{ fontSize: '11px', color: D.textTertiary }}>{g.status} · {g.impact} impact</div>
-                    </div>
-                  </div>
-                  <div style={{ fontSize: '13px', fontWeight: 700, color: D.teal }}>+{g.points}</div>
-                </div>
-              ))}
-            </div>
-            <div style={{ background: D.navy, borderRadius: '8px', padding: '12px 16px', marginTop: '12px', textAlign: 'center' }}>
-              <span style={{ fontSize: '13px', color: '#fff', fontWeight: 600 }}>
-                Points you&apos;re leaving on the table: <span style={{ color: D.teal }}>+{gaps.reduce((s, g) => s + g.points, 0)}</span>
-              </span>
-            </div>
-          </div>
+          <GapCards gaps={gaps} totalPoints={gaps.reduce((s, g) => s + g.points, 0)} />
         )}
 
         {/* ═══ NARRATIVE QUALITY (context — what AI says when it does find you) ═══ */}
