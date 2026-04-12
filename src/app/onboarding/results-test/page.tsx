@@ -547,7 +547,7 @@ function ResultsContent() {
         <div ref={el => { sectionRefs.current[0] = el; }} style={{ paddingTop: D.sectionGap }}>
         {collapsedSections.has(1) ? (
           <SectionSummaryBar title="The Discovery Gap" stats={[
-            { label: 'Citation Score', value: `${clientScore}/100`, color: D.red },
+            { label: 'Foundation Score', value: `${clientScore}/100`, color: D.red },
             { label: 'Behind benchmark', value: `${competitorScore - clientScore} pts`, color: D.red },
             { label: 'AI queries with your name', value: '0 of 90', color: D.red },
           ]} onExpand={() => setCollapsedSections(prev => { const n = new Set(prev); n.delete(1); return n; })} />
@@ -604,7 +604,7 @@ function ResultsContent() {
               <div style={{ padding: '20px 24px 16px', borderBottom: `1px solid ${D.grayMid}` }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
                   <div>
-                    <div style={{ fontSize: '10px', fontWeight: 700, color: D.textTertiary, textTransform: 'uppercase', letterSpacing: '1.5px' }}>Citation Score™</div>
+                    <div style={{ fontSize: '10px', fontWeight: 700, color: D.textTertiary, textTransform: 'uppercase', letterSpacing: '1.5px' }}>Foundation Score</div>
                     {scan.foundation_score !== undefined && (
                       <div style={{ fontSize: '10px', color: D.textTertiary, marginTop: '2px' }}>
                         Foundation Score: <span style={{ color: D.navy, fontWeight: 700 }}>{scan.foundation_score}/100</span>
@@ -630,7 +630,7 @@ function ResultsContent() {
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
                 {/* Client score — dominant */}
                 <div style={{ padding: '24px', borderRight: `1px solid ${D.grayMid}` }}>
-                  <div style={{ fontSize: '10px', fontWeight: 700, color: D.textTertiary, textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '12px' }}>Your Citation Score</div>
+                  <div style={{ fontSize: '10px', fontWeight: 700, color: D.textTertiary, textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '12px' }}>Your Foundation Score</div>
                   <div style={{ fontFamily: 'Georgia, serif', fontSize: '64px', fontWeight: 900, color: D.navy, lineHeight: 1 }}>{clientScore}</div>
                   <div style={{ fontSize: '12px', color: D.textTertiary, marginTop: '4px', marginBottom: '10px' }}>out of 100</div>
                   <div style={{ fontSize: '13px', fontWeight: 700, color: D.navy, marginBottom: '2px' }}>{clientName}</div>
@@ -730,6 +730,65 @@ function ResultsContent() {
                 {visibleSection < 4 && <ContinueButton onClick={() => revealNext(4)} text="See Your Market Strategy" />}
                 {visibleSection >= 4 && <CompactButton onClick={() => setCollapsedSections(prev => new Set(prev).add(3))} />}
               </>
+            )}
+          </div>
+        )}
+
+        {/* ═══ SECTION 3.5: FOUNDATION SCORE BREAKDOWN + NARRATIVE QUALITY ═══ */}
+        {visibleSection >= 3 && (
+          <div style={{ paddingTop: D.sectionGap }}>
+            {/* Foundation Score 9 Components */}
+            {scan.foundation_components && (
+              <div style={{ background: '#fff', borderRadius: '14px', padding: '20px 24px', marginBottom: '20px' }}>
+                <div style={{ fontSize: '10px', fontWeight: 700, color: D.textTertiary, textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '16px' }}>Foundation Score Breakdown</div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  {[
+                    { key: 'platform_presence_quality', label: 'Platform Presence', max: 20 },
+                    { key: 'recommendation_readiness', label: 'Recommendation Readiness', max: 15 },
+                    { key: 'explanation_readiness', label: 'Explanation Readiness', max: 15 },
+                    { key: 'brand_search_volume', label: 'Brand Search Volume', max: 10 },
+                    { key: 'earned_media_authority', label: 'Earned Media', max: 10 },
+                    { key: 'entity_consistency', label: 'Entity Consistency', max: 10 },
+                    { key: 'specialization_clarity', label: 'Specialization Clarity', max: 10 },
+                    { key: 'content_freshness', label: 'Content Freshness', max: 5 },
+                    { key: 'schema_structured_data', label: 'Schema / Structured Data', max: 5 },
+                  ].map(c => {
+                    const val = (scan.foundation_components as Record<string, number | undefined>)?.[c.key] ?? 0;
+                    const pct = (val / c.max) * 100;
+                    return (
+                      <div key={c.key} style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                        <div style={{ width: '140px', fontSize: '11px', color: D.textSecondary, fontWeight: 600, flexShrink: 0 }}>{c.label}</div>
+                        <div style={{ flex: 1, height: '6px', background: D.grayBg, borderRadius: '3px', overflow: 'hidden' }}>
+                          <div style={{ height: '100%', width: `${pct}%`, background: pct > 60 ? D.teal : pct > 30 ? '#D4A830' : D.red, borderRadius: '3px', transition: 'width 0.3s' }} />
+                        </div>
+                        <div style={{ fontSize: '11px', color: D.textTertiary, fontWeight: 600, minWidth: '36px', textAlign: 'right' }}>{val}/{c.max}</div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
+            {/* Narrative Quality */}
+            {scan.narrative_quality && (
+              <div style={{ background: '#fff', borderRadius: '14px', padding: '20px 24px', marginBottom: '20px' }}>
+                <div style={{ fontSize: '10px', fontWeight: 700, color: D.textTertiary, textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '12px' }}>Narrative Quality</div>
+                <p style={{ fontSize: '13px', color: D.textSecondary, lineHeight: 1.6, margin: '0 0 14px' }}>
+                  When AI mentions you, this is how accurately and favorably it describes you — and whether that description is specific enough to convert.
+                </p>
+                <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+                  {[
+                    { label: 'Accuracy', value: scan.narrative_quality.overall_accuracy, color: scan.narrative_quality.overall_accuracy === 'A' ? D.teal : scan.narrative_quality.overall_accuracy === 'B' ? '#D4A830' : D.red },
+                    { label: 'Favorability', value: scan.narrative_quality.overall_favorability, color: scan.narrative_quality.overall_favorability === 'Positive' ? D.teal : scan.narrative_quality.overall_favorability === 'Neutral' ? '#D4A830' : D.red },
+                    { label: 'Queries Analyzed', value: String(scan.narrative_quality.query_count), color: D.navy },
+                  ].map((badge, i) => (
+                    <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '6px', background: D.grayBg, borderRadius: '8px', padding: '6px 12px' }}>
+                      <span style={{ fontSize: '10px', color: D.textTertiary, fontWeight: 600 }}>{badge.label}:</span>
+                      <span style={{ fontSize: '12px', fontWeight: 800, color: badge.color }}>{badge.value}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
             )}
           </div>
         )}
