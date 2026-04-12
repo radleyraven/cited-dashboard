@@ -109,8 +109,38 @@ interface CompetitorValidation {
   verified: boolean;
 }
 
+interface FoundationComponents {
+  platform_presence_quality?: number;
+  recommendation_readiness?: number;
+  explanation_readiness?: number;
+  brand_search_volume?: number;
+  earned_media_authority?: number;
+  entity_consistency?: number;
+  specialization_clarity?: number;
+  content_freshness?: number;
+  schema_structured_data?: number;
+}
+
+interface VisibilityRate {
+  overall_visibility_pct: number;
+  competitor_visibility_pct: number;
+  by_platform: Record<string, { visibility_pct: number; competitor_pct: number; queries_run: number }>;
+}
+
+interface NarrativeQuality {
+  overall_accuracy: string;
+  overall_favorability: string;
+  query_count: number;
+}
+
 interface ScanResults {
   composite_score: number;
+  foundation_score?: number;
+  foundation_tier?: string;
+  foundation_tier_description?: string;
+  foundation_components?: FoundationComponents;
+  visibility_rates?: Record<string, VisibilityRate>;
+  narrative_quality?: NarrativeQuality;
   tier_name: string;
   tier_line: string;
   scan_date: string;
@@ -573,8 +603,16 @@ function ResultsContent() {
               {/* Score scale */}
               <div style={{ padding: '20px 24px 16px', borderBottom: `1px solid ${D.grayMid}` }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-                  <div style={{ fontSize: '10px', fontWeight: 700, color: D.textTertiary, textTransform: 'uppercase', letterSpacing: '1.5px' }}>Citation Score</div>
-                  <div style={{ fontSize: '10px', color: D.textTertiary, background: D.grayBg, padding: '3px 8px', borderRadius: '4px' }}>Based on {scan.query_count} queries</div>
+                  <div>
+                    <div style={{ fontSize: '10px', fontWeight: 700, color: D.textTertiary, textTransform: 'uppercase', letterSpacing: '1.5px' }}>Citation Score™</div>
+                    {scan.foundation_score !== undefined && (
+                      <div style={{ fontSize: '10px', color: D.textTertiary, marginTop: '2px' }}>
+                        Foundation Score: <span style={{ color: D.navy, fontWeight: 700 }}>{scan.foundation_score}/100</span>
+                        {scan.foundation_tier && <span style={{ color: D.textTertiary }}> · {scan.foundation_tier}</span>}
+                      </div>
+                    )}
+                  </div>
+                  <div style={{ fontSize: '10px', color: D.textTertiary, background: D.grayBg, padding: '3px 8px', borderRadius: '4px' }}>PRISM Scan™ · {scan.query_count} queries</div>
                 </div>
                 <div style={{ position: 'relative', height: '8px', borderRadius: '4px', background: `linear-gradient(90deg, ${D.red} 0%, #F59E0B 30%, #D4A830 50%, ${D.teal} 75%, ${D.navy} 100%)`, marginBottom: '6px' }}>
                   {/* Client dot */}
@@ -843,6 +881,25 @@ function ResultsContent() {
                       <div style={{ marginTop: '10px', fontSize: '13px', color: D.textSecondary, lineHeight: 1.6, padding: '8px 12px', background: D.grayBg, borderRadius: '6px' }}>
                         <strong style={{ color: D.navy }}>From our PRISM Scan™:</strong> {market.ai_signal}
                       </div>
+                      {/* Visibility Rate — shown if available */}
+                      {scan.visibility_rates && scan.visibility_rates[market.name] && (() => {
+                        const vr = scan.visibility_rates![market.name];
+                        const clientPctVis = vr.overall_visibility_pct;
+                        const compPctVis = vr.competitor_visibility_pct;
+                        return (
+                          <div style={{ marginTop: '10px', padding: '10px 12px', background: '#fff', borderRadius: '8px', border: `1px solid ${D.border}` }}>
+                            <div style={{ fontSize: '9px', fontWeight: 700, color: D.textTertiary, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px' }}>AI Visibility Rate</div>
+                            <div style={{ position: 'relative', height: '6px', borderRadius: '3px', background: `linear-gradient(90deg, ${D.red} 0%, #F59E0B 30%, #D4A830 50%, ${D.teal} 75%, ${D.navy} 100%)`, marginBottom: '4px' }}>
+                              <div style={{ position: 'absolute', top: '-4px', left: `${Math.min(clientPctVis, 99)}%`, width: '14px', height: '14px', borderRadius: '50%', background: D.navy, border: '2px solid #fff', boxShadow: '0 1px 4px rgba(0,0,0,0.2)', transform: 'translateX(-50%)' }} />
+                              <div style={{ position: 'absolute', top: '-4px', left: `${Math.min(compPctVis, 99)}%`, width: '14px', height: '14px', borderRadius: '50%', background: D.red, border: '2px solid #fff', boxShadow: '0 1px 4px rgba(0,0,0,0.2)', transform: 'translateX(-50%)' }} />
+                            </div>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '10px', color: D.textTertiary, marginTop: '4px' }}>
+                              <span><span style={{ color: D.navy, fontWeight: 700 }}>{clientPctVis}%</span> you</span>
+                              <span><span style={{ color: D.red, fontWeight: 700 }}>{compPctVis}%</span> {market.competitor}</span>
+                            </div>
+                          </div>
+                        );
+                      })()}
                       <div style={{ marginTop: '6px', fontSize: '12px', color: D.textTertiary }}>
                         <strong>Evidence:</strong> {market.txn_highlight}
                       </div>
