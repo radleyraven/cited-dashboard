@@ -224,6 +224,8 @@ function IntakeForm() {
   });
 
   const [submitting, setSubmitting] = useState(false);
+  const [dreLooking, setDreLooking] = useState(false);
+  const [dreResult, setDreResult] = useState<string>("");
   const [error, setError] = useState("");
   const [animating, setAnimating] = useState(false);
   const [slideDir, setSlideDir] = useState<"forward" | "back">("forward");
@@ -257,6 +259,33 @@ function IntakeForm() {
       skippedFields: prev.skippedFields.includes(field) ? prev.skippedFields : [...prev.skippedFields, field],
     }));
   }, []);
+
+  // ── DRE Lookup ─────────────────────────────────────────────
+
+  async function lookupDre(licenseId: string) {
+    if (!licenseId || licenseId.replace(/\D/g, '').length < 7) return;
+    setDreLooking(true);
+    setDreResult("");
+    try {
+      const res = await fetch(`/api/dre-lookup?licenseId=${encodeURIComponent(licenseId.trim())}`);
+      if (!res.ok) {
+        const d = await res.json();
+        setDreResult(`⚠ ${d.error || 'Not found'}`);
+        return;
+      }
+      const data = await res.json();
+      if (data.broker_name) set("brokerage", data.broker_name);
+      if (data.broker_license_id) set("brokerDre", data.broker_license_id);
+      if (data.broker_name) set("brokerName", data.broker_name);
+      // Agent mailing address → brokerageAddress (NAP consistency, NOT broker HQ)
+      if (data.mailing_address) set("brokerageAddress", data.mailing_address);
+      setDreResult(`✓ Found — ${data.broker_name || data.full_name}`);
+    } catch {
+      setDreResult("⚠ Lookup failed — try again");
+    } finally {
+      setDreLooking(false);
+    }
+  }
 
   // ── Navigation ─────────────────────────────────────────────
 
@@ -501,6 +530,7 @@ function IntakeForm() {
           {renderCardContent({
             cardId: currentCard, form, set, next, skip, back, jumpTo,
             handleSubmit, submitting, searchParams, isPrefilled, hasPrefill, addSkipped,
+            dreLooking, dreResult, lookupDre,
           })}
         </div>
       </div>
@@ -518,10 +548,12 @@ type CardProps = {
   searchParams: ReturnType<typeof useSearchParams>;
   isPrefilled: (f: string) => boolean; hasPrefill: boolean;
   addSkipped: (f: string) => void;
+  dreLooking: boolean; dreResult: string;
+  lookupDre: (licenseId: string) => void;
 };
 
 function renderCardContent(p: CardProps) {
-  const { cardId, form, set, next, skip, jumpTo, handleSubmit, submitting, searchParams, isPrefilled, hasPrefill } = p;
+  const { cardId, form, set, next, skip, jumpTo, handleSubmit, submitting, searchParams, isPrefilled, hasPrefill, dreLooking, dreResult, lookupDre } = p;
 
   // ── Card 1: Identity ───────────────────────────────────────
   if (cardId === 1) return (
@@ -562,7 +594,31 @@ function renderCardContent(p: CardProps) {
           <TextInput value={form.title} onChange={(v) => set("title", v)} />
         </FieldGroup>
         <FieldGroup label="Your DRE #" required hint="CA DRE # — required on all advertising">
-          <TextInput value={form.licenseNumber} onChange={(v) => set("licenseNumber", v)} />
+          <div style={{ display: "flex", gap: "8px", alignItems: "stretch" }}>
+            <div style={{ flex: 1 }}>
+              <TextInput value={form.licenseNumber} onChange={(v) => {
+                set("licenseNumber", v);
+                // Auto-lookup on blur-like behavior: when 8 digits entered
+                if (v.replace(/\D/g, '').length === 8) lookupDre(v);
+              }} />
+            </div>
+            <button onClick={() => lookupDre(form.licenseNumber)} disabled={dreLooking || form.licenseNumber.replace(/\D/g, '').length < 7}
+              style={{
+                padding: "0 16px", background: dreLooking ? "#94a3b8" : "#00BFA6", color: "#fff",
+                border: "none", borderRadius: "8px", fontSize: "13px", fontWeight: 600,
+                cursor: dreLooking ? "not-allowed" : "pointer", whiteSpace: "nowrap",
+                opacity: form.licenseNumber.replace(/\D/g, '').length < 7 ? 0.5 : 1,
+              }}>
+              {dreLooking ? "..." : "Look up"}
+            </button>
+          </div>
+          {dreResult && (
+            <p style={{
+              fontSize: "12px", margin: "6px 0 0",
+              color: dreResult.startsWith("✓") ? "#00BFA6" : "#D4A830",
+              fontWeight: 600,
+            }}>{dreResult}</p>
+          )}
         </FieldGroup>
         <FieldGroup label="Broker DRE #" prefilled={isPrefilled("brokerDre")} hint="Your brokerage's license number — required on all advertising">
           <TextInput value={form.brokerDre} onChange={(v) => set("brokerDre", v)} />
@@ -574,7 +630,7 @@ function renderCardContent(p: CardProps) {
         <FieldGroup label="Years in your market">
           <select value={form.yearsInMarket} onChange={(e) => set("yearsInMarket", e.target.value)} style={selectStyle}>
             <option value="">Select...</option>
-            {["1-3", "3-5", "5-10", "10-15", "15-20", "20+"].map((v) => <option key={v} value={v}>{v} years</option>)}
+            {["1-2", "3-4", "5-9", "10-14", "15-19", "20+"].map((v) => <option key={v} value={v}>{v} years</option>)}
           </select>
         </FieldGroup>
       </Fields>
