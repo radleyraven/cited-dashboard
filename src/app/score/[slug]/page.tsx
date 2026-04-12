@@ -415,14 +415,17 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
 
         {/* ═══ FOUNDING MEMBER ═══ */}
         <div style={{ background: D.navy, borderRadius: '10px', padding: '20px 24px', marginBottom: '48px', textAlign: 'center' }}>
-          <div style={{ display: 'inline-block', background: 'rgba(212,168,48,0.15)', border: `1px solid ${D.gold}`, borderRadius: '20px', padding: '4px 16px', marginBottom: '12px' }}>
+          <div style={{ display: 'inline-block', background: 'rgba(212,168,48,0.15)', border: `1px solid ${D.gold}`, borderRadius: '20px', padding: '4px 16px', marginBottom: '16px' }}>
             <span style={{ fontSize: '11px', fontWeight: 700, color: D.gold, letterSpacing: '1.5px', textTransform: 'uppercase' }}>★ Founding Member</span>
           </div>
-          <p style={{ fontSize: '14px', color: '#e2e8f0', lineHeight: 1.7, margin: '0 0 4px' }}>
-            We&apos;re accepting a small group of founding members in North County San Diego — free, no commitment. If your Foundation Score doesn&apos;t improve by 20+ points, you owe nothing.
+          <p style={{ fontSize: '28px', fontWeight: 900, color: '#fff', margin: '0 0 6px', lineHeight: 1.2 }}>
+            Completely <span style={{ color: D.teal }}>free</span>. No commitment.
           </p>
-          <p style={{ fontSize: '12px', color: D.textTertiary, margin: 0 }}>
-            That&apos;s the <span style={{ color: D.teal, fontWeight: 700 }}>Citation Guarantee™</span>.
+          <p style={{ fontSize: '14px', color: '#94a3b8', lineHeight: 1.7, margin: '0 0 8px' }}>
+            We&apos;re accepting a small group of founding members in North County San Diego. If your Foundation Score doesn&apos;t improve by 20+ points, you owe nothing.
+          </p>
+          <p style={{ fontSize: '13px', color: D.teal, fontWeight: 700, margin: 0 }}>
+            That&apos;s the Citation Guarantee™.
           </p>
         </div>
 
