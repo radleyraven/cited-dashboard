@@ -751,7 +751,7 @@ function renderCardContent(p: CardProps) {
   // ── Card 8: Photos ─────────────────────────────────────────
   if (cardId === 8) return (
     <div>
-      <CardHeader title="Your photos" subtitle="We'll resize for all 12 platforms. You can always add these later." />
+      <CardHeader title="Your photos" subtitle="We'll resize for all 13+ platforms. You can always add these later." />
       <Fields>
         <FieldGroup label="Professional headshot" hint="Minimum 400×400px, JPG or PNG">
           <FileInput accept="image/*" file={form.headshotFile} onChange={(f) => set("headshotFile", f)} icon={"📷"} label="Choose headshot" />
