@@ -157,19 +157,7 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
   // Gaps from scan
   const gaps: Gap[] = scan?.gaps || [];
 
-  // Foundation Score components
-  // v3.1 weights (LOCKED April 12, 2026)
-  const scoreComponents = [
-    { name: 'Discovery Visibility', weight: 30, key: 'discovery_visibility' },
-    { name: 'Earned Media', weight: 20, key: 'earned_media' },
-    { name: 'Brand Web Presence', weight: 12, key: 'brand_web_presence' },
-    { name: 'Content Freshness', weight: 12, key: 'content_freshness' },
-    { name: 'Platform Presence', weight: 10, key: 'platform_presence' },
-    { name: 'Recommendation Readiness', weight: 7, key: 'recommendation_readiness' },
-    { name: 'Entity Consistency', weight: 4, key: 'entity_consistency' },
-    { name: 'Schema / Structured Data', weight: 3, key: 'schema_structured_data' },
-    { name: 'Explanation Readiness', weight: 2, key: 'explanation_readiness' },
-  ];
+  // Foundation Score component breakdown — Citation Report only (not shown on score page)
 
   // Intake pre-fill URL
   const prefillParams = new URLSearchParams();
@@ -366,36 +354,6 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
             ))}
           </div>
         </div>
-
-        {/* ═══ FOUNDATION SCORE COMPONENTS ═══ */}
-        <details style={{ background: '#fff', borderRadius: '14px', marginBottom: '32px', overflow: 'hidden' }}>
-          <summary style={{ padding: '20px 24px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'space-between', listStyleType: 'none' }}>
-            <div>
-              <div style={{ fontSize: '10px', fontWeight: 700, color: D.textTertiary, textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '4px' }}>Foundation Score Breakdown</div>
-              <div style={{ fontSize: '13px', color: D.navy }}>9 scored components</div>
-            </div>
-            <span className="chevron" style={{ fontSize: '20px', color: '#00BFA6', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: '44px', height: '44px', borderRadius: '50%', background: 'rgba(0,191,166,0.1)', flexShrink: 0 }}>▾</span>
-          </summary>
-          <div style={{ padding: '0 24px 24px', borderTop: `1px solid ${D.grayMid}` }}>
-            <div style={{ paddingTop: '16px' }}>
-              {scoreComponents.map(({ name: compName, weight, key }) => {
-                const compScore = scan?.foundation_components?.[key] ?? Math.round(score * weight / 100);
-                const fillPct = Math.round((compScore / weight) * 100);
-                return (
-                  <div key={key} style={{ marginBottom: '14px' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px' }}>
-                      <span style={{ fontSize: '12px', color: D.textSecondary }}>{compName}</span>
-                      <span style={{ fontSize: '12px', fontWeight: 700, color: D.navy }}>{compScore}<span style={{ fontSize: '10px', fontWeight: 400, color: D.textTertiary }}>/{weight}</span></span>
-                    </div>
-                    <div style={{ height: '5px', borderRadius: '3px', background: D.grayMid, overflow: 'hidden' }}>
-                      <div style={{ height: '100%', width: `${fillPct}%`, background: fillPct > 60 ? D.teal : fillPct > 30 ? D.gold : D.red, borderRadius: '3px' }} />
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </details>
 
         {/* ═══ CTA ═══ */}
         <div style={{ textAlign: 'center', marginBottom: '32px' }}>
