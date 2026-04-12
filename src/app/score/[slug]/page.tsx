@@ -148,7 +148,6 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
   // Research basis: agents recommended by AI typically score 65-75 (SOCi, BrightLocal 2026)
   const primaryMarket = scan?.markets?.[0];
   const benchmarkScore = parseInt(primaryMarket?.competitor_score || '0') || 70; // Default 70 from research
-  const benchmarkSizePx = Math.max(24, Math.round(64 * (benchmarkScore / 100)));
   const clientPct = Math.max(1, (score / 100) * 100);
   const benchmarkPct = Math.max(1, (benchmarkScore / 100) * 100);
   const gap = benchmarkScore - score;
@@ -177,11 +176,6 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
     { name: 'Schema / Structured Data', weight: 3, key: 'schema_structured_data' },
     { name: 'Explanation Readiness', weight: 2, key: 'explanation_readiness' },
   ];
-
-  // Report URL
-  const reportUrl = prospect.onboarding_token
-    ? `https://citedagent.com/onboarding/results?token=${prospect.onboarding_token}`
-    : `https://citedagent.com/onboarding/results`;
 
   // Intake pre-fill URL
   const prefillParams = new URLSearchParams();
@@ -258,27 +252,30 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
             <div style={{ padding: '24px', borderRight: `1px solid ${D.grayMid}` }}>
-              <div style={{ fontSize: '10px', fontWeight: 700, color: D.textTertiary, textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '12px' }}>Your Foundation Score</div>
-              <div style={{ fontFamily: 'Georgia, serif', fontSize: '64px', fontWeight: 900, color: D.navy, lineHeight: 1 }}>{score}</div>
-              <div style={{ fontSize: '12px', color: D.textTertiary, marginTop: '6px', marginBottom: '16px' }}>out of 100</div>
-              {/* Why AI doesn't recommend you yet */}
-              {gaps.length > 0 && (
-                <div style={{ paddingTop: '14px', borderTop: `1px solid ${D.border}` }}>
-                  <div style={{ fontSize: '9px', fontWeight: 700, color: D.red, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '6px' }}>Why AI doesn&apos;t recommend you yet</div>
-                  {gaps.slice(0, 3).map((g, i) => (
-                    <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '5px', marginBottom: '3px' }}>
-                      <span style={{ color: D.red, fontWeight: 700, fontSize: '10px', flexShrink: 0, marginTop: '1px' }}>→</span>
-                      <span style={{ fontSize: '11px', color: D.textSecondary, lineHeight: 1.4 }}>{g.title || g.platform}</span>
-                    </div>
-                  ))}
-                </div>
-              )}
+              <div style={{ fontSize: '10px', fontWeight: 700, color: D.textTertiary, textTransform: 'uppercase', letterSpacing: '1.5px', height: '16px', marginBottom: '12px' }}>Your Foundation Score</div>
+              <div style={{ fontFamily: 'Georgia, serif', fontSize: '64px', fontWeight: 900, color: D.navy, lineHeight: 1, height: '64px' }}>{score}</div>
+              <div style={{ fontSize: '12px', color: D.textTertiary, height: '18px', marginTop: '6px', marginBottom: '16px' }}>out of 100</div>
+              <div style={{ paddingTop: '14px', borderTop: `1px solid ${D.border}` }}>
+                {gaps.length > 0 && (
+                  <>
+                    <div style={{ fontSize: '9px', fontWeight: 700, color: D.red, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '6px' }}>Why AI doesn&apos;t recommend you yet</div>
+                    {gaps.slice(0, 3).map((g, i) => (
+                      <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '5px', marginBottom: '3px' }}>
+                        <span style={{ color: D.red, fontWeight: 700, fontSize: '10px', flexShrink: 0, marginTop: '1px' }}>→</span>
+                        <span style={{ fontSize: '11px', color: D.textSecondary, lineHeight: 1.4 }}>{g.title || g.platform}</span>
+                      </div>
+                    ))}
+                  </>
+                )}
+              </div>
             </div>
             <div style={{ padding: '24px', background: D.grayBg }}>
-              <div style={{ fontSize: '10px', fontWeight: 700, color: D.red, textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '12px' }}>Market Benchmark</div>
-              <div style={{ fontFamily: 'Georgia, serif', fontSize: '36px', fontWeight: 900, color: '#94a3b8', lineHeight: 1 }}>~{benchmarkScore}</div>
-              <div style={{ fontSize: '12px', color: D.textTertiary, marginTop: '6px', marginBottom: '16px' }}>Agents AI recommends</div>
-              <div style={{ paddingTop: '10px', borderTop: `1px solid ${D.border}` }}>
+              <div style={{ fontSize: '10px', fontWeight: 700, color: D.red, textTransform: 'uppercase', letterSpacing: '1.5px', height: '16px', marginBottom: '12px' }}>Market Benchmark</div>
+              <div style={{ display: 'flex', alignItems: 'center', height: '64px' }}>
+                <div style={{ fontFamily: 'Georgia, serif', fontSize: '36px', fontWeight: 900, color: '#94a3b8', lineHeight: 1 }}>~{benchmarkScore}</div>
+              </div>
+              <div style={{ fontSize: '12px', color: D.textTertiary, height: '18px', marginTop: '6px', marginBottom: '16px' }}>Agents AI recommends</div>
+              <div style={{ paddingTop: '14px', borderTop: `1px solid ${D.border}` }}>
                 <div style={{ fontSize: '9px', fontWeight: 700, color: D.textTertiary, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '6px' }}>What they have that you don&apos;t</div>
                 <div style={{ display: 'flex', alignItems: 'flex-start', gap: '5px', marginBottom: '3px' }}>
                   <span style={{ color: D.teal, fontWeight: 700, fontSize: '10px', flexShrink: 0 }}>✓</span>
@@ -409,7 +406,7 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
         {/* ═══ CTA ═══ */}
         <div style={{ textAlign: 'center', marginBottom: '32px' }}>
           <a href={intakeUrl} style={{ display: 'inline-block', background: D.teal, color: '#fff', fontWeight: 700, fontSize: '16px', padding: '18px 40px', borderRadius: '10px', textDecoration: 'none', boxShadow: '0 4px 16px rgba(0,191,166,0.3)' }}>
-            Fix My Score →
+            Claim Your Spot — Free →
           </a>
           <p style={{ fontSize: '12px', color: D.textTertiary, marginTop: '12px' }}>
             Takes 5 minutes. We handle the rest.
@@ -422,7 +419,7 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
             <span style={{ fontSize: '11px', fontWeight: 700, color: D.gold, letterSpacing: '1.5px', textTransform: 'uppercase' }}>★ Founding Member</span>
           </div>
           <p style={{ fontSize: '14px', color: '#e2e8f0', lineHeight: 1.7, margin: '0 0 4px' }}>
-            We&apos;re accepting a small group of founding members in North County San Diego. Your first 90 days are on us. If your Foundation Score doesn&apos;t improve by 20+ points, you owe nothing.
+            We&apos;re accepting a small group of founding members in North County San Diego — free, no commitment. If your Foundation Score doesn&apos;t improve by 20+ points, you owe nothing.
           </p>
           <p style={{ fontSize: '12px', color: D.textTertiary, margin: 0 }}>
             That&apos;s the <span style={{ color: D.teal, fontWeight: 700 }}>Citation Guarantee™</span>.
