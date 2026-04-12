@@ -40,7 +40,7 @@ const TOTAL_CARDS = CELEBRATION_CARD;
 
 const REVIEW_OPTIONS = ["Google Business Profile", "Yelp", "Zillow", "Realtor.com"];
 
-// Fields that came from PRISM scan (show "From your audit" badge)
+// Fields that came from PRISM scan (show "From CITED PRISM Scan" badge)
 const PRISM_FOUND_FIELDS = new Set([
   "brokerage", "brokerageAddress", "primaryMarkets",
   "brokerDre", "brokerName",
@@ -1068,7 +1068,7 @@ function FieldGroup({ label, required, hint, prefilled, children }: {
             <span style={{
               fontSize: "11px", fontWeight: 600, color: "#00BFA6",
               background: "rgba(0,191,166,0.08)", padding: "2px 8px", borderRadius: "10px",
-            }}>From your audit</span>
+            }}>From CITED PRISM Scan</span>
           )}
         </div>
       )}
