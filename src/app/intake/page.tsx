@@ -920,8 +920,8 @@ function renderCardContent(p: CardProps) {
         We&apos;ll be in touch personally within 24 hours.
       </p>
 
-      <a href="/" style={{ display: "inline-block", background: "#00BFA6", color: "#fff", fontWeight: 700, fontSize: "15px", padding: "14px 36px", borderRadius: "10px", textDecoration: "none" }}>
-        Back to CITED →
+      <a href={`/score/${form.fullName.toLowerCase().replace(/\s+/g, '-')}`} style={{ display: "inline-block", background: "#00BFA6", color: "#fff", fontWeight: 700, fontSize: "15px", padding: "14px 36px", borderRadius: "10px", textDecoration: "none" }}>
+        View My Score →
       </a>
     </div>
   );}
