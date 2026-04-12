@@ -329,7 +329,7 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
 
         {/* ═══ WHAT AI SAYS ABOUT YOU ═══ */}
         <div style={{ background: '#fff', borderRadius: '14px', padding: '24px', marginBottom: '32px' }}>
-          <div style={{ fontSize: '10px', fontWeight: 700, color: D.red, textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '4px' }}>Someone Just Asked AI About You</div>
+          <div style={{ fontSize: '10px', fontWeight: 700, color: D.textTertiary, textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '4px' }}>This Is What AI Says About You</div>
           <div style={{ fontSize: '13px', color: D.textSecondary, marginBottom: '20px' }}>
             We asked AI about {firstName} directly. Out of {scan?.query_count || 30} queries, AI only described you in <span style={{ color: D.red, fontWeight: 700 }}>{scan?.narrative_quality?.query_count || 2}</span> — and this is what it said:
           </div>
@@ -342,9 +342,14 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
             </p>
           </div>
           <div style={{ background: 'rgba(239,68,68,0.04)', border: `1px solid rgba(239,68,68,0.12)`, borderRadius: '8px', padding: '14px 18px' }}>
-            <div style={{ fontSize: '11px', fontWeight: 700, color: D.red, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px' }}>What&apos;s missing from this description</div>
+            <div style={{ fontSize: '11px', fontWeight: 700, color: D.red, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px' }}>Why this is a problem</div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-              {['Your market specialization and neighborhoods', 'Transaction stats and track record', 'What makes you different from every other agent', 'Why a seller should call you specifically'].map((item, i) => (
+              {[
+                'No mention of your markets or neighborhoods — sellers can\'t find you',
+                'No transaction stats — no proof you perform',
+                'Nothing that separates you from 1,000 other agents',
+                '88% of consumers fact-check AI — this is what they\'d see',
+              ].map((item, i) => (
                 <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '6px' }}>
                   <span style={{ color: D.red, fontWeight: 700, fontSize: '10px', flexShrink: 0, marginTop: '2px' }}>✗</span>
                   <span style={{ fontSize: '12px', color: D.textSecondary, lineHeight: 1.5 }}>{item}</span>
