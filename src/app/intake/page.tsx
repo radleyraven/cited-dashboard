@@ -733,7 +733,7 @@ function renderCardContent(p: CardProps) {
               <span style={{ fontSize: "13px", color: "#0A1929", fontWeight: 500 }}>MLS transaction data</span>
             </div>
             <span style={{ fontSize: "12px", color: form.mlsDoneForYou ? "#00BFA6" : "#94a3b8", fontWeight: 600 }}>
-              {form.mlsDoneForYou ? "Done for you" : "Upload needed"}
+              {form.mlsDoneForYou ? "CITED handles this" : "Upload needed"}
             </span>
           </div>
           {!form.mlsDoneForYou && (
