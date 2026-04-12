@@ -365,7 +365,7 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
             Make AI Recommend Me →
           </a>
           <p style={{ fontSize: '12px', color: D.textTertiary, marginTop: '12px' }}>
-            Free. Takes 5 minutes. We handle the rest.
+            <strong style={{ color: D.navy }}>Free.</strong> Takes 5 minutes. We handle the rest.
           </p>
         </div>
 
