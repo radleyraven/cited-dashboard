@@ -14,31 +14,32 @@ import { createSupabaseBrowserClient } from "@/lib/supabase-browser";
 // ── Platform definitions ───────────────────────────────────────
 
 const PLATFORMS = [
+  // High Impact
+  { key: "personalsite", label: "Personal Website", impact: "high" as const, statusKey: "personalsiteStatus", urlKey: "personalWebsiteUrl" },
   { key: "gbp", label: "Google Business Profile", impact: "high" as const, statusKey: "gbpStatus", urlKey: "gbpUrl" },
   { key: "linkedin", label: "LinkedIn", impact: "high" as const, statusKey: "linkedinStatus", urlKey: "linkedinUrl" },
   { key: "yelp", label: "Yelp", impact: "high" as const, statusKey: "yelpStatus", urlKey: "yelpUrl" },
   { key: "bing", label: "Bing Places", impact: "high" as const, statusKey: "bingStatus", urlKey: "bingUrl" },
-  { key: "foursquare", label: "Foursquare", impact: "medium" as const, statusKey: "foursquareStatus", urlKey: "foursquareUrl" },
+  // Medium Impact
   { key: "zillow", label: "Zillow", impact: "medium" as const, statusKey: "zillowStatus", urlKey: "zillowUrl" },
   { key: "realtor", label: "Realtor.com", impact: "medium" as const, statusKey: "realtorStatus", urlKey: "realtorUrl" },
-  { key: "youtube", label: "YouTube", impact: "medium" as const, statusKey: "youtubeStatus", urlKey: "youtubeUrl" },
   { key: "fastexpert", label: "FastExpert", impact: "medium" as const, statusKey: "fastexpertStatus", urlKey: "fastexpertUrl" },
+  { key: "foursquare", label: "Foursquare", impact: "medium" as const, statusKey: "foursquareStatus", urlKey: "foursquareUrl" },
+  { key: "youtube", label: "YouTube", impact: "medium" as const, statusKey: "youtubeStatus", urlKey: "youtubeUrl" },
+  // Supporting
+  { key: "homescom", label: "Homes.com", impact: "supporting" as const, statusKey: "homescomStatus", urlKey: "homescomUrl" },
   { key: "homelight", label: "HomeLight", impact: "supporting" as const, statusKey: "homelightStatus", urlKey: "homelightUrl" },
   { key: "apple", label: "Apple Business Connect", impact: "supporting" as const, statusKey: "appleStatus", urlKey: "appleUrl" },
-  { key: "homescom", label: "Homes.com", impact: "supporting" as const, statusKey: "homescomStatus", urlKey: "homescomUrl" },
   { key: "x", label: "X (Twitter)", impact: "supporting" as const, statusKey: "xStatus", urlKey: "xUrl" },
 ] as const;
 
 const IMPACT_LABELS = { high: "High Impact", medium: "Medium Impact", supporting: "Supporting" } as const;
 const IMPACT_COLORS = { high: "#dc2626", medium: "#ca8a04", supporting: "#16a34a" } as const;
 
-const PLATFORM_START_CARD = 9;
-const REVIEW_CARD = PLATFORM_START_CARD + PLATFORMS.length; // 22
-const SUMMARY_CARD = REVIEW_CARD + 1; // 23
-const CELEBRATION_CARD = SUMMARY_CARD + 1; // 24
+const PLATFORM_START_CARD = 8;
+const SUMMARY_CARD = PLATFORM_START_CARD + PLATFORMS.length; // 22
+const CELEBRATION_CARD = SUMMARY_CARD + 1; // 23
 const TOTAL_CARDS = CELEBRATION_CARD;
-
-const REVIEW_OPTIONS = ["Google Business Profile", "Yelp", "Zillow", "Realtor.com"];
 
 // Fields that came from PRISM scan (show "From CITED PRISM Scan" badge)
 const PRISM_FOUND_FIELDS = new Set([
@@ -91,6 +92,7 @@ type FormData = {
   appleStatus: string; appleUrl: string;
   homescomStatus: string; homescomUrl: string;
   xStatus: string; xUrl: string;
+  personalsiteStatus: string;
   additionalPlatforms: string;
   reviewPlatforms: string[];
   reviewOther: string;
@@ -152,6 +154,7 @@ function getInitialForm(sp: ReturnType<typeof useSearchParams>): FormData {
     homescomStatus: "",
     homescomUrl: "",
     xStatus: "",
+    personalsiteStatus: sp.get("personalWebsiteUrl") ? "yes" : "",
     xUrl: "",
     additionalPlatforms: "",
     reviewPlatforms: [],
@@ -432,13 +435,11 @@ function IntakeForm() {
     if (id === 1) return "Your Details";
     if (id === 2) return "Your Practice";
     if (id === 3) return "";
-    if (id === 4) return "Online Presence";
-    if (id === 5) return "What Makes You Different";
-    if (id === 6) return "Your Voice";
-    if (id === 7) return "Notable Work";
-    if (id === 8) return "Your Photos";
-    if (id >= PLATFORM_START_CARD && id < REVIEW_CARD) return PLATFORMS[id - PLATFORM_START_CARD].label;
-    if (id === REVIEW_CARD) return "Reviews";
+    if (id === 4) return "What Makes You Different";
+    if (id === 5) return "Your Voice";
+    if (id === 6) return "Notable Work";
+    if (id === 7) return "Your Photos";
+    if (id >= PLATFORM_START_CARD && id < SUMMARY_CARD) return PLATFORMS[id - PLATFORM_START_CARD].label;
     if (id === SUMMARY_CARD) return "Review & Submit";
     return "";
   }
@@ -639,28 +640,8 @@ function renderCardContent(p: CardProps) {
     />
   );
 
-  // ── Card 4: Online Presence ────────────────────────────────
+  // ── Card 4: Differentiator ─────────────────────────────────
   if (cardId === 4) return (
-    <div>
-      <CardHeader title="Your web presence" subtitle="Links we'll use for optimization. Leave blank if you don't have these." />
-      <Fields>
-        <FieldGroup label="Brokerage profile page" prefilled={isPrefilled("brokerageProfileUrl")}
-          hint="Your page on your brokerage website">
-          <TextInput value={form.brokerageProfileUrl} onChange={(v) => set("brokerageProfileUrl", v)} type="url"
-            placeholder="https://yourbrokerage.com/agents/your-name" />
-        </FieldGroup>
-        <FieldGroup label="Personal agent website" hint="Your own domain — highest AI citation value. Leave blank if not live.">
-          <TextInput value={form.personalWebsiteUrl} onChange={(v) => set("personalWebsiteUrl", v)} type="url"
-            placeholder="https://yourname.com" />
-        </FieldGroup>
-      </Fields>
-      <NextButton onClick={next} />
-      <SkipButton onClick={() => skip("onlinePresence")} />
-    </div>
-  );
-
-  // ── Card 5: Differentiator ─────────────────────────────────
-  if (cardId === 5) return (
     <div>
       <CardHeader title="What makes you different?"
         subtitle="Just a quick 1–2 sentences on what separates you from the pack. Don't overthink it — write what comes to mind and we'll extract the gold." />
@@ -673,8 +654,8 @@ function renderCardContent(p: CardProps) {
     </div>
   );
 
-  // ── Card 6: Voice Capture ──────────────────────────────────
-  if (cardId === 6) return (
+  // ── Card 5: Voice Capture ──────────────────────────────────
+  if (cardId === 5) return (
     <div>
       <CardHeader title="What do clients say about you?"
         subtitle="This helps us write in your voice — not a generic agent voice." />
@@ -687,8 +668,8 @@ function renderCardContent(p: CardProps) {
     </div>
   );
 
-  // ── Card 7: Notable Transaction ────────────────────────────
-  if (cardId === 7) return (
+  // ── Card 6: Notable Transaction ────────────────────────────
+  if (cardId === 6) return (
     <div>
       <CardHeader title="One deal you want to be known for"
         subtitle="This becomes the hero deal in your bio and articles." />
@@ -748,8 +729,8 @@ function renderCardContent(p: CardProps) {
     </div>
   );
 
-  // ── Card 8: Photos ─────────────────────────────────────────
-  if (cardId === 8) return (
+  // ── Card 7: Photos ─────────────────────────────────────────
+  if (cardId === 7) return (
     <div>
       <CardHeader title="Your photos" subtitle="We'll resize for all 13+ platforms. You can always add these later." />
       <Fields>
@@ -769,8 +750,8 @@ function renderCardContent(p: CardProps) {
     </div>
   );
 
-  // ── Cards 9-21: Individual Platform Cards ──────────────────
-  if (cardId >= PLATFORM_START_CARD && cardId < REVIEW_CARD) {
+  // ── Cards 8-21: Individual Platform Cards ──────────────────
+  if (cardId >= PLATFORM_START_CARD && cardId < SUMMARY_CARD) {
     const idx = cardId - PLATFORM_START_CARD;
     const plat = PLATFORMS[idx];
     const statusVal = form[plat.statusKey] as string;
@@ -820,37 +801,7 @@ function renderCardContent(p: CardProps) {
     );
   }
 
-  // ── Card 22: Review Preferences ────────────────────────────
-  if (cardId === REVIEW_CARD) return (
-    <div>
-      <CardHeader title="Where should we help drive reviews?" subtitle="We'll include review links in your copy kit. Start with 1–2." />
-      <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-        {REVIEW_OPTIONS.map((platform) => (
-          <label key={platform} style={{
-            display: "flex", alignItems: "center", gap: "10px", cursor: "pointer",
-            padding: "12px 14px", borderRadius: "10px",
-            background: form.reviewPlatforms.includes(platform) ? "rgba(0,191,166,0.06)" : "#fff",
-            border: `2px solid ${form.reviewPlatforms.includes(platform) ? "#00BFA6" : "#e2e8f0"}`,
-            transition: "all 0.15s",
-          }}>
-            <input type="checkbox" checked={form.reviewPlatforms.includes(platform)}
-              onChange={() => {
-                const updated = form.reviewPlatforms.includes(platform)
-                  ? form.reviewPlatforms.filter((x) => x !== platform)
-                  : [...form.reviewPlatforms, platform];
-                set("reviewPlatforms", updated);
-              }}
-              style={{ accentColor: "#00BFA6", width: "18px", height: "18px" }} />
-            <span style={{ fontSize: "14px", color: "#0A1929" }}>{platform}</span>
-          </label>
-        ))}
-      </div>
-      <NextButton onClick={next} />
-      <SkipButton onClick={() => skip("reviewPreferences")} />
-    </div>
-  );
-
-  // ── Card 23: Summary ───────────────────────────────────────
+  // ── Summary Card ────────────────────────────────────────────
   if (cardId === SUMMARY_CARD) return (
     <div>
       <CardHeader title="Review & submit" subtitle="Everything look right? Tap any section to make changes." />
@@ -862,12 +813,12 @@ function renderCardContent(p: CardProps) {
           <SumRow label="Brokerage" value={form.brokerage} />
           <SumRow label="License" value={form.licenseNumber} />
         </SummarySection>
-        <SummarySection title="Your Story" onEdit={() => jumpTo(5)}>
+        <SummarySection title="Your Story" onEdit={() => jumpTo(4)}>
           <SumRow label="What makes you different" value={form.differentiator ? (form.differentiator.length > 80 ? form.differentiator.slice(0, 80) + "..." : form.differentiator) : "⚠️ Skipped"} />
           <SumRow label="Client voice" value={form.voiceCapture ? (form.voiceCapture.length > 60 ? form.voiceCapture.slice(0, 60) + "..." : form.voiceCapture) : "Skipped"} />
           <SumRow label="Notable deals" value={form.transactions.filter(Boolean).length > 0 ? `${form.transactions.filter(Boolean).length} provided` : "Skipped"} />
         </SummarySection>
-        <SummarySection title="Photos & Platforms" onEdit={() => jumpTo(8)}>
+        <SummarySection title="Photos & Platforms" onEdit={() => jumpTo(7)}>
           <SumRow label="Headshot" value={form.headshotFile ? "✅ Uploaded" : "⚠️ Not yet"} />
           <SumRow label="Landscape" value={form.landscapeFile ? "✅ Uploaded" : "Not yet"} />
           <SumRow label="Platforms" value={`${countPlatformsConfirmed(form)} confirmed`} />
@@ -907,7 +858,7 @@ function renderCardContent(p: CardProps) {
     </div>
   );
 
-  // ── Card 24: Celebration ───────────────────────────────────
+  // ── Celebration Card ────────────────────────────────────────
   if (cardId === CELEBRATION_CARD) {
     const firstName = form.fullName.split(" ")[0] || "there";
     return (
