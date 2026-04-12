@@ -301,7 +301,7 @@ export default function CheckPage() {
         }}>
           <h3 style={{ fontSize: 20, fontWeight: 800, color: "#fff", margin: "0 0 8px" }}>Want your full Foundation Score?</h3>
           <p style={{ fontSize: 14, color: "#94a3b8", margin: "0 0 6px", lineHeight: 1.6 }}>
-            This check ran 4 queries on 2 engines. The full score runs <strong style={{ color: "#fff" }}>120+ queries across 5 AI engines and 13+ platforms</strong> — including your 9-component Foundation Score, market visibility rate, and a head-to-head competitor comparison.
+            This check ran 4 queries on 2 engines. The full report runs <strong style={{ color: "#fff" }}>300+ queries across 5 AI engines and 13+ platforms</strong> — including your 9-component Foundation Score, market visibility rate, and a head-to-head competitor comparison.
           </p>
           <p style={{ fontSize: 13, color: "#4a6380", margin: "0 0 20px" }}>Free. Delivered within 24 hours. No spam.</p>
 

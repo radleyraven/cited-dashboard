@@ -549,7 +549,7 @@ function ResultsContent() {
           <SectionSummaryBar title="The Discovery Gap" stats={[
             { label: 'Foundation Score', value: `${clientScore}/100`, color: D.red },
             { label: 'Behind benchmark', value: `${competitorScore - clientScore} pts`, color: D.red },
-            { label: 'AI queries with your name', value: '0 of 90', color: D.red },
+            { label: 'AI queries with your name', value: `0 of ${scan?.query_count || 300}`, color: D.red },
           ]} onExpand={() => setCollapsedSections(prev => { const n = new Set(prev); n.delete(1); return n; })} />
         ) : (<>
           <h2 style={{ fontSize: '22px', fontWeight: 800, color: D.navy, margin: '0 0 6px 0' }}>The Discovery Gap</h2>
