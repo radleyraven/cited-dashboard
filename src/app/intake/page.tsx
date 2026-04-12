@@ -905,7 +905,7 @@ function renderCardContent(p: CardProps) {
       <div style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: "14px", padding: "24px", marginBottom: "24px", textAlign: "left" }}>
         <p style={{ fontSize: "11px", fontWeight: 700, color: "#64748b", letterSpacing: "1.5px", margin: "0 0 16px", textTransform: "uppercase" }}>What happens next</p>
         {[
-          ["①", "We're analyzing your markets, your competitors, and your current AI footprint right now."],
+          ["①", "We're analyzing your markets, your competitors, and your current AI visibility right now."],
           ["②", "Your positioning statement will be ready for review within 48 hours."],
           ["③", "Your optimized profiles and first article brief follow from there."],
         ].map(([num, text], i) => (
@@ -920,18 +920,9 @@ function renderCardContent(p: CardProps) {
         We&apos;ll be in touch personally within 24 hours.
       </p>
 
-      <GoogleSignInButton redirectTo="https://citedagent.com/auth/callback?next=/copy-kit" />
-
-      <div style={{ display: "flex", alignItems: "center", gap: "12px", margin: "16px 0" }}>
-        <div style={{ flex: 1, height: "1px", background: "rgba(255,255,255,0.1)" }} />
-        <span style={{ fontSize: "12px", color: "#4a6380" }}>or</span>
-        <div style={{ flex: 1, height: "1px", background: "rgba(255,255,255,0.1)" }} />
-      </div>
-
-      <p style={{ fontSize: "13px", color: "#4a6380", margin: 0 }}>
-        Check your email for a dashboard access link, or{" "}
-        <a href="/login" style={{ color: "#00BFA6", textDecoration: "none", fontWeight: 600 }}>go to the login page →</a>
-      </p>
+      <a href="/" style={{ display: "inline-block", background: "#00BFA6", color: "#fff", fontWeight: 700, fontSize: "15px", padding: "14px 36px", borderRadius: "10px", textDecoration: "none" }}>
+        Back to CITED →
+      </a>
     </div>
   );}
 
