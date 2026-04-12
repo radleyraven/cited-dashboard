@@ -89,15 +89,14 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
   const score = scan?.foundation_score ?? scan?.composite_score ?? 0;
   const tier = scan?.foundation_tier ?? scan?.tier_name ?? 'Not scanned';
 
-  // Competitor from scan data
+  // Benchmark — the agent AI DOES recommend in this market
+  // Research basis: agents recommended by AI typically score 65-75 (SOCi, BrightLocal 2026)
   const primaryMarket = scan?.markets?.[0];
-  const competitorName = primaryMarket?.competitor || 'Top competitor';
-  const competitorScore = parseInt(primaryMarket?.competitor_score || '0') || 0;
-
-  const competitorSizePx = Math.max(24, Math.round(64 * (competitorScore / 100)));
+  const benchmarkScore = parseInt(primaryMarket?.competitor_score || '0') || 70; // Default 70 from research
+  const benchmarkSizePx = Math.max(24, Math.round(64 * (benchmarkScore / 100)));
   const clientPct = Math.max(1, (score / 100) * 100);
-  const competitorPct = Math.max(1, (competitorScore / 100) * 100);
-  const gap = competitorScore - score;
+  const benchmarkPct = Math.max(1, (benchmarkScore / 100) * 100);
+  const gap = benchmarkScore - score;
 
   // Visibility
   const visibilityData = scan?.visibility_rates?.[market];
@@ -186,7 +185,7 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
             </div>
             <div style={{ position: 'relative', height: '8px', borderRadius: '4px', background: `linear-gradient(90deg, ${D.red} 0%, #F59E0B 30%, ${D.gold} 50%, ${D.teal} 75%, ${D.navy} 100%)`, marginBottom: '6px' }}>
               <div style={{ position: 'absolute', top: '-5px', left: `${clientPct}%`, width: '18px', height: '18px', borderRadius: '50%', background: D.navy, border: '3px solid #fff', boxShadow: '0 2px 6px rgba(0,0,0,0.2)', transform: 'translateX(-50%)' }} />
-              {competitorScore > 0 && <div style={{ position: 'absolute', top: '-5px', left: `${competitorPct}%`, width: '18px', height: '18px', borderRadius: '50%', background: D.red, border: '3px solid #fff', boxShadow: '0 2px 6px rgba(0,0,0,0.2)', transform: 'translateX(-50%)' }} />}
+              {benchmarkScore > 0 && <div style={{ position: 'absolute', top: '-5px', left: `${benchmarkPct}%`, width: '18px', height: '18px', borderRadius: '50%', background: D.red, border: '3px solid #fff', boxShadow: '0 2px 6px rgba(0,0,0,0.2)', transform: 'translateX(-50%)' }} />}
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '10px', color: D.textTertiary }}>
               <span>Not indexed</span>
@@ -212,13 +211,26 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
                 </div>
               )}
             </div>
-            {competitorScore > 0 && (
-              <div style={{ padding: '24px', background: D.grayBg }}>
-                <div style={{ fontSize: '10px', fontWeight: 700, color: D.red, textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '12px' }}>Benchmark</div>
-                <div style={{ fontFamily: 'Georgia, serif', fontSize: `${competitorSizePx}px`, fontWeight: 900, color: '#94a3b8', lineHeight: 1, minHeight: '64px', display: 'flex', alignItems: 'flex-start' }}>~{competitorScore}</div>
-                <div style={{ fontSize: '12px', color: D.textTertiary, marginTop: '4px' }}>Top agent in {market}</div>
+            <div style={{ padding: '24px', background: D.grayBg }}>
+              <div style={{ fontSize: '10px', fontWeight: 700, color: D.red, textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '12px' }}>Market Benchmark</div>
+              <div style={{ fontFamily: 'Georgia, serif', fontSize: `${benchmarkSizePx}px`, fontWeight: 900, color: '#94a3b8', lineHeight: 1, minHeight: '64px', display: 'flex', alignItems: 'flex-start' }}>~{benchmarkScore}</div>
+              <div style={{ fontSize: '12px', color: D.textTertiary, marginTop: '4px', marginBottom: '10px' }}>Agents AI recommends</div>
+              <div style={{ paddingTop: '10px', borderTop: `1px solid ${D.border}` }}>
+                <div style={{ fontSize: '9px', fontWeight: 700, color: D.textTertiary, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '6px' }}>What they have that you don&apos;t</div>
+                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '5px', marginBottom: '3px' }}>
+                  <span style={{ color: D.teal, fontWeight: 700, fontSize: '10px', flexShrink: 0 }}>✓</span>
+                  <span style={{ fontSize: '11px', color: D.textSecondary, lineHeight: 1.4 }}>Earned media mentions</span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '5px', marginBottom: '3px' }}>
+                  <span style={{ color: D.teal, fontWeight: 700, fontSize: '10px', flexShrink: 0 }}>✓</span>
+                  <span style={{ fontSize: '11px', color: D.textSecondary, lineHeight: 1.4 }}>Fresh content (last 30 days)</span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '5px' }}>
+                  <span style={{ color: D.teal, fontWeight: 700, fontSize: '10px', flexShrink: 0 }}>✓</span>
+                  <span style={{ fontSize: '11px', color: D.textSecondary, lineHeight: 1.4 }}>Optimized platform presence</span>
+                </div>
               </div>
-            )}
+            </div>
           </div>
 
           {/* Discovery gap callout */}
