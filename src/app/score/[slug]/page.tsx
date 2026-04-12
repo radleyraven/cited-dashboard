@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 /*
   /score/[slug] — Score Page (Supabase-driven)
   Quick PRISM scan → Supabase → this page reads it. No hardcoded data.
-  Slug matches cited_intake.slug or prefill_data.slug.
+  Slug converted to name, matched against cited_intake.full_name.
   Built: April 12, 2026 — rewritten to remove all hardcoded prospect data.
 */
 
@@ -26,6 +26,7 @@ type ScanResults = {
   markets?: { name: string; competitor: string; competitor_score: string }[];
   ai_quote?: { text: string };
   query_count?: number;
+  brokerage_discovered?: string;
 };
 
 type IntakeRow = {
@@ -35,8 +36,7 @@ type IntakeRow = {
   brokerage?: string;
   primary_markets?: string;
   scan_results?: ScanResults;
-  prefill_data?: Record<string, string>;
-  token?: string;
+  onboarding_token?: string;
 };
 
 const D = {
@@ -60,7 +60,7 @@ async function fetchProspect(slug: string): Promise<IntakeRow | null> {
   const slugName = slug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
 
   const res = await fetch(
-    `${sbUrl}/rest/v1/cited_intake?or=(full_name.ilike.${encodeURIComponent(slugName)})&select=id,full_name,email,brokerage,primary_markets,scan_results,prefill_data,token&limit=1`,
+    `${sbUrl}/rest/v1/cited_intake?or=(full_name.ilike.${encodeURIComponent(slugName)})&select=id,full_name,email,brokerage,primary_markets,scan_results,onboarding_token&limit=1`,
     { headers: { apikey: sbKey, Authorization: `Bearer ${sbKey}` }, next: { revalidate: 120 } }
   );
 
@@ -77,12 +77,11 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
   if (!prospect) notFound();
 
   const scan = prospect.scan_results;
-  const prefill = prospect.prefill_data || {};
 
   const name = prospect.full_name;
   const firstName = name.split(' ')[0];
-  const brokerage = prospect.brokerage || prefill.brokerage || '';
-  const market = prospect.primary_markets?.split(',')[0]?.trim() || prefill.primaryMarkets?.split(',')[0]?.trim() || '';
+  const brokerage = prospect.brokerage || scan?.brokerage_discovered || '';
+  const market = prospect.primary_markets?.split(',')[0]?.trim() || '';
   const score = scan?.foundation_score ?? scan?.composite_score ?? 0;
   const tier = scan?.foundation_tier ?? scan?.tier_name ?? 'Not scanned';
 
@@ -121,8 +120,8 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
   ];
 
   // Report URL
-  const reportUrl = prospect.token
-    ? `https://citedagent.com/onboarding/results?token=${prospect.token}`
+  const reportUrl = prospect.onboarding_token
+    ? `https://citedagent.com/onboarding/results?token=${prospect.onboarding_token}`
     : `https://citedagent.com/onboarding/results`;
 
   // Intake pre-fill URL
@@ -131,7 +130,8 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
   if (prospect.email) prefillParams.set('email', prospect.email);
   if (brokerage) prefillParams.set('brokerage', brokerage);
   if (market) prefillParams.set('primaryMarkets', prospect.primary_markets || market);
-  Object.entries(prefill).forEach(([k, v]) => { if (v && !prefillParams.has(k)) prefillParams.set(k, v); });
+  // Pre-fill from scan discovered data
+  if (scan?.brokerage_discovered) prefillParams.set('brokerage', scan.brokerage_discovered);
   const intakeUrl = `/intake?${prefillParams.toString()}`;
 
   return (
