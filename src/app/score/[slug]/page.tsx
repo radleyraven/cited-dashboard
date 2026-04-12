@@ -280,38 +280,10 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
           )}
         </div>
 
-        {/* ═══ NARRATIVE QUALITY ═══ */}
-        <div style={{ background: '#fff', borderRadius: '14px', padding: '24px', marginBottom: '24px', boxShadow: '0 2px 12px rgba(0,0,0,0.07)' }}>
-          <div style={{ fontSize: '10px', fontWeight: 700, color: D.textTertiary, textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '4px' }}>Narrative Quality</div>
-          <div style={{ fontSize: '13px', color: D.textSecondary, marginBottom: '20px' }}>
-            When AI mentions {firstName}, here is how it describes you:
-          </div>
-          <div style={{ background: D.grayBg, borderLeft: `3px solid ${D.teal}`, borderRadius: '0 8px 8px 0', padding: '16px 20px', marginBottom: '20px' }}>
-            <p style={{ fontSize: '14px', color: D.textSecondary, fontStyle: 'italic', lineHeight: 1.7, margin: 0 }}>
-              {scan?.ai_quote?.text
-                ? `"${scan.ai_quote.text}"`
-                : `"${name} is a real estate agent based in ${market}${brokerage ? ` working with ${brokerage}` : ''}. Limited publicly available detail on specializations or notable transactions."`
-              }
-            </p>
-          </div>
-          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-            {[
-              { label: 'Accuracy', grade: narrative?.overall_accuracy || 'B', color: narrative?.overall_accuracy === 'A' ? D.teal : '#3b82f6' },
-              { label: 'Favorability', grade: narrative?.overall_favorability || 'Neutral', color: narrative?.overall_favorability === 'Positive' ? D.teal : D.textTertiary },
-              { label: 'Specificity', grade: score > 40 ? 'Medium' : 'Low', color: score > 40 ? D.gold : D.red },
-            ].map(({ label, grade, color }) => (
-              <div key={label} style={{ display: 'flex', alignItems: 'center', gap: '6px', background: D.grayBg, border: `1px solid ${D.border}`, borderRadius: '20px', padding: '4px 12px' }}>
-                <span style={{ fontSize: '11px', color: D.textTertiary }}>{label}</span>
-                <span style={{ fontSize: '11px', fontWeight: 700, color }}>{grade}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* ═══ GAPS ═══ */}
+        {/* ═══ GAPS (before narrative — problem first, context second) ═══ */}
         {gaps.length > 0 && (
           <div style={{ background: '#fff', borderRadius: '14px', padding: '24px', marginBottom: '24px', boxShadow: '0 2px 12px rgba(0,0,0,0.07)' }}>
-            <div style={{ fontSize: '10px', fontWeight: 700, color: D.textTertiary, textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '16px' }}>Platform Gaps</div>
+            <div style={{ fontSize: '10px', fontWeight: 700, color: D.textTertiary, textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '16px' }}>Where You&apos;re Losing Visibility</div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
               {gaps.map((g, i) => (
                 <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 16px', background: D.grayBg, borderRadius: '8px' }}>
@@ -333,6 +305,34 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
             </div>
           </div>
         )}
+
+        {/* ═══ NARRATIVE QUALITY (context — what AI says when it does find you) ═══ */}
+        <div style={{ background: '#fff', borderRadius: '14px', padding: '24px', marginBottom: '24px', boxShadow: '0 2px 12px rgba(0,0,0,0.07)' }}>
+          <div style={{ fontSize: '10px', fontWeight: 700, color: D.textTertiary, textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '4px' }}>What AI Says About You</div>
+          <div style={{ fontSize: '13px', color: D.textSecondary, marginBottom: '20px' }}>
+            When AI does find {firstName}, here is how it describes you:
+          </div>
+          <div style={{ background: D.grayBg, borderLeft: `3px solid ${D.teal}`, borderRadius: '0 8px 8px 0', padding: '16px 20px', marginBottom: '20px' }}>
+            <p style={{ fontSize: '14px', color: D.textSecondary, fontStyle: 'italic', lineHeight: 1.7, margin: 0 }}>
+              {scan?.ai_quote?.text
+                ? `\u201C${scan.ai_quote.text.replace(/\*\*/g, '').replace(/##\s*/g, '').replace(/\[\d+\]/g, '').replace(/\n/g, ' ').trim()}\u201D`
+                : `\u201C${name} is a real estate agent based in ${market}${brokerage ? ` working with ${brokerage}` : ''}. Limited publicly available detail on specializations or notable transactions.\u201D`
+              }
+            </p>
+          </div>
+          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+            {[
+              { label: 'Accuracy', grade: narrative?.overall_accuracy || 'B', color: narrative?.overall_accuracy === 'A' ? D.teal : '#3b82f6' },
+              { label: 'Favorability', grade: narrative?.overall_favorability || 'Neutral', color: narrative?.overall_favorability === 'Positive' ? D.teal : D.textTertiary },
+              { label: 'Specificity', grade: score > 40 ? 'Medium' : 'Low', color: score > 40 ? D.gold : D.red },
+            ].map(({ label, grade, color }) => (
+              <div key={label} style={{ display: 'flex', alignItems: 'center', gap: '6px', background: D.grayBg, border: `1px solid ${D.border}`, borderRadius: '20px', padding: '4px 12px' }}>
+                <span style={{ fontSize: '11px', color: D.textTertiary }}>{label}</span>
+                <span style={{ fontSize: '11px', fontWeight: 700, color }}>{grade}</span>
+              </div>
+            ))}
+          </div>
+        </div>
 
         {/* ═══ FOUNDATION SCORE COMPONENTS ═══ */}
         <details style={{ background: '#fff', borderRadius: '14px', marginBottom: '32px', boxShadow: '0 2px 12px rgba(0,0,0,0.07)', overflow: 'hidden' }}>
