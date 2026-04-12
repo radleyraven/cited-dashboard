@@ -588,7 +588,7 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
             <span style={{ fontSize: '11px', fontWeight: 700, color: D.gold, letterSpacing: '1.5px', textTransform: 'uppercase' }}>★ Founding Member</span>
           </div>
           <p style={{ fontSize: '14px', color: '#e2e8f0', lineHeight: 1.7, margin: '0 0 4px' }}>
-            Your first 90 days are on us. If your Citation Score doesn&apos;t improve by 20+ points, you owe nothing.
+            We&apos;re accepting a small group of founding members in North County San Diego. Your first 90 days are on us. If your Foundation Score doesn&apos;t improve by 20+ points, you owe nothing.
           </p>
           <p style={{ fontSize: '12px', color: D.textTertiary, margin: 0 }}>
             That&apos;s the <span style={{ color: D.teal, fontWeight: 700 }}>Citation Guarantee™</span>.

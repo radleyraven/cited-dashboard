@@ -26,6 +26,7 @@ const PLATFORMS = [
   { key: "homelight", label: "HomeLight", impact: "supporting" as const, statusKey: "homelightStatus", urlKey: "homelightUrl" },
   { key: "apple", label: "Apple Business Connect", impact: "supporting" as const, statusKey: "appleStatus", urlKey: "appleUrl" },
   { key: "homescom", label: "Homes.com", impact: "supporting" as const, statusKey: "homescomStatus", urlKey: "homescomUrl" },
+  { key: "x", label: "X (Twitter)", impact: "supporting" as const, statusKey: "xStatus", urlKey: "xUrl" },
 ] as const;
 
 const IMPACT_LABELS = { high: "High Impact", medium: "Medium Impact", supporting: "Supporting" } as const;
@@ -89,6 +90,7 @@ type FormData = {
   homelightStatus: string; homelightUrl: string;
   appleStatus: string; appleUrl: string;
   homescomStatus: string; homescomUrl: string;
+  xStatus: string; xUrl: string;
   additionalPlatforms: string;
   reviewPlatforms: string[];
   reviewOther: string;
@@ -149,6 +151,8 @@ function getInitialForm(sp: ReturnType<typeof useSearchParams>): FormData {
     appleUrl: "",
     homescomStatus: "",
     homescomUrl: "",
+    xStatus: "",
+    xUrl: "",
     additionalPlatforms: "",
     reviewPlatforms: [],
     reviewOther: "",

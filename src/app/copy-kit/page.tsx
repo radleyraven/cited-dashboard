@@ -12,7 +12,7 @@ interface CopyFieldDef {
 interface Platform {
   id: string;
   name: string;
-  badge: 'You Update';
+  badge: 'You Update' | 'Cited Posts';
   platformLink: string;
   sections: { title?: string; text: string }[];
   instructions?: string[];
@@ -396,6 +396,36 @@ Radley is a licensed agent with The Oppenheim Group in La Jolla, one of the most
     copyFields: [
       { label: 'Review Request URL', value: 'https://www.homelight.com/reviews/new/radley-raven-ca-02041346' },
     ],
+  },
+  {
+    id: 'x-twitter',
+    name: 'X (Twitter)',
+    badge: 'Cited Posts',
+    platformLink: 'https://x.com',
+    sections: [
+      {
+        title: 'Bio (160 characters)',
+        text: `Luxury listing specialist in Carmel Valley & Carlsbad | Oppenheim Group | $91M+ in coastal transactions | radleyraven.com`,
+      },
+      {
+        title: 'Pinned Post',
+        text: `Carmel Valley sellers: 28-day median DOM, 96% sale-to-list ratio, 24% of deals above asking. That's what the right pricing strategy and market timing look like.\n\nFull breakdown of what's happening in North County San Diego → radleyraven.com`,
+      },
+    ],
+    instructions: [
+      'Update your bio at x.com/settings/profile (160 char limit)',
+      'Pin the post above (or your best-performing market insight) to your profile',
+      'Cited will post 2-4x/month via OAuth — market updates + article shares',
+      'You can post independently anytime — we coordinate, not replace',
+    ],
+    additionalItems: [
+      'Profile photo — same professional headshot as all platforms',
+      'Header image — market/lifestyle photo from Drive media library',
+      'Location — "La Jolla, CA" or "North County San Diego"',
+      'Website link — your satellite site URL',
+      'Why X matters: Grok (xAI) uses X posts as a unique co-citation signal. No other AI engine has this.',
+    ],
+    copyFields: [],
   },
 ];
 
