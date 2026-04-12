@@ -300,7 +300,7 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
             </div>
             <div style={{ background: D.navy, borderRadius: '8px', padding: '12px 16px', marginTop: '12px', textAlign: 'center' }}>
               <span style={{ fontSize: '13px', color: '#fff', fontWeight: 600 }}>
-                Total recoverable: <span style={{ color: D.teal }}>+{gaps.reduce((s, g) => s + g.points, 0)} points</span>
+                Points you&apos;re leaving on the table: <span style={{ color: D.teal }}>+{gaps.reduce((s, g) => s + g.points, 0)}</span>
               </span>
             </div>
           </div>
