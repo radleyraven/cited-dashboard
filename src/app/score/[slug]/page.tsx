@@ -76,48 +76,19 @@ async function fetchProspect(slug: string): Promise<IntakeRow | null> {
   return rows[0] || null;
 }
 
-// ── Gap Cards (expandable, matches Citation Report pattern) ──
+// ── Gap Cards (flat list — no expandable, no chevrons, score page only) ──
 function GapCards({ gaps }: { gaps: Gap[] }) {
   return (
-    <div style={{ background: '#fff', borderRadius: '14px', padding: '24px', marginBottom: '32px',  }}>
+    <div style={{ background: '#fff', borderRadius: '14px', padding: '24px', marginBottom: '32px' }}>
       <div style={{ fontSize: '10px', fontWeight: 700, color: D.textTertiary, textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '16px' }}>Where You&apos;re Losing Visibility</div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
         {gaps.map((gap, i) => (
-          <details key={i} className="gap-card" style={{ background: '#fff', borderRadius: '12px', overflow: 'hidden', borderLeft: `4px solid ${gap.color || (gap.impact === 'High' ? '#EF4444' : '#D4A830')}` }}>
-            <summary style={{
-              width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-              padding: '16px 20px', cursor: 'pointer', listStyleType: 'none',
-              background: 'none', border: 'none', transition: 'background 0.15s',
-            }}
-
-            >
-              <div style={{ flex: 1 }}>
-                <div style={{ fontSize: '15px', fontWeight: 700, color: '#0A1929' }}>{gap.title || gap.platform}</div>
-                <div style={{ fontSize: '12px', color: gap.color || '#EF4444', fontWeight: 600, marginTop: '3px' }}>{gap.status}</div>
-                <div className="see-fix" style={{ fontSize: '11px', color: '#00BFA6', fontWeight: 600, marginTop: '6px' }}>See the fix →</div>
-              </div>
-              <span className="chevron" style={{ fontSize: '20px', color: '#00BFA6', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: '44px', height: '44px', borderRadius: '50%', background: 'rgba(0,191,166,0.1)', flexShrink: 0, marginLeft: '12px' }}>▾</span>
-            </summary>
-            {(gap.action || gap.outcome) && (
-              <div style={{ padding: '0 20px 16px 20px', borderTop: '1px solid #f1f5f9' }}>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', paddingTop: '10px' }}>
-                  {gap.action && (
-                    <div style={{ fontSize: '13px', color: '#0A1929', lineHeight: 1.5 }}>
-                      <span style={{ color: '#94a3b8', fontWeight: 600 }}>The fix:</span> {gap.action}
-                    </div>
-                  )}
-                  {gap.outcome && (
-                    <div style={{ fontSize: '13px', color: '#00BFA6', fontWeight: 600, lineHeight: 1.5 }}>
-                      → {gap.outcome}
-                    </div>
-                  )}
-                </div>
-              </div>
-            )}
-          </details>
+          <div key={i} style={{ borderLeft: `4px solid ${gap.color || (gap.impact === 'High' ? '#EF4444' : '#D4A830')}`, padding: '14px 20px', borderRadius: '0 12px 12px 0', background: D.grayBg }}>
+            <div style={{ fontSize: '15px', fontWeight: 700, color: '#0A1929' }}>{gap.title || gap.platform}</div>
+            <div style={{ fontSize: '12px', color: gap.color || '#EF4444', fontWeight: 600, marginTop: '3px' }}>{gap.status}</div>
+          </div>
         ))}
       </div>
-
     </div>
   );
 }
@@ -289,6 +260,14 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
               </>
             ) : null}
           </div>
+        </div>
+
+        {/* ═══ MID-PAGE CTA ═══ */}
+        <div style={{ textAlign: 'center', marginBottom: '32px' }}>
+          <p style={{ fontSize: '15px', color: D.textSecondary, marginBottom: '14px' }}>Ready to fix this?</p>
+          <a href={intakeUrl} style={{ display: 'inline-block', background: D.teal, color: '#fff', fontWeight: 700, fontSize: '15px', padding: '14px 36px', borderRadius: '10px', textDecoration: 'none', boxShadow: '0 4px 16px rgba(0,191,166,0.3)' }}>
+            Make AI Recommend Me →
+          </a>
         </div>
 
         {/* ═══ MARKET VISIBILITY RATE ═══ */}
