@@ -253,21 +253,31 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
         <div style={{ background: '#fff', borderRadius: '14px', padding: '24px', marginBottom: '24px', boxShadow: '0 2px 12px rgba(0,0,0,0.07)' }}>
           <div style={{ fontSize: '10px', fontWeight: 700, color: D.textTertiary, textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '4px' }}>Market Visibility Rate</div>
           <div style={{ fontSize: '13px', color: D.textSecondary, marginBottom: '20px' }}>
-            How often AI surfaces <strong>{name}</strong> when buyers search in {market}
+            How often AI recommends <strong>{name}</strong> when clients search in {market}
           </div>
-          <div style={{ position: 'relative', height: '14px', borderRadius: '7px', background: D.navy, marginBottom: '8px' }}>
-            <div style={{ position: 'absolute', top: '-7px', left: `${Math.max(1, visibilityRate)}%`, transform: 'translateX(-50%)', width: '4px', height: '28px', background: D.teal, borderRadius: '2px' }} />
-            <div style={{ position: 'absolute', top: '-7px', left: `${benchmarkRate}%`, transform: 'translateX(-50%)', width: '4px', height: '28px', background: D.gold, borderRadius: '2px' }} />
+          <div style={{ position: 'relative', height: '20px', borderRadius: '10px', background: D.navy, marginBottom: '10px' }}>
+            <div style={{ position: 'absolute', top: '-6px', left: `${Math.max(1, visibilityRate)}%`, transform: 'translateX(-50%)', width: '6px', height: '32px', background: visibilityRate < 10 ? D.red : D.teal, borderRadius: '3px', boxShadow: '0 2px 6px rgba(0,0,0,0.3)' }} />
+            <div style={{ position: 'absolute', top: '-6px', left: `${benchmarkRate}%`, transform: 'translateX(-50%)', width: '6px', height: '32px', background: D.gold, borderRadius: '3px', boxShadow: '0 2px 6px rgba(0,0,0,0.3)' }} />
           </div>
           <div style={{ position: 'relative', height: '22px', marginBottom: '16px' }}>
-            <span style={{ position: 'absolute', left: `${Math.max(1, visibilityRate)}%`, transform: 'translateX(-50%)', fontSize: '11px', fontWeight: 700, color: D.teal, whiteSpace: 'nowrap' }}>You: {visibilityRate}%</span>
-            <span style={{ position: 'absolute', left: `${benchmarkRate}%`, transform: 'translateX(-50%)', fontSize: '11px', fontWeight: 700, color: D.gold, whiteSpace: 'nowrap' }}>Benchmark: {benchmarkRate}%</span>
+            <span style={{ position: 'absolute', left: `${Math.max(1, visibilityRate)}%`, transform: 'translateX(-50%)', fontSize: '12px', fontWeight: 800, color: visibilityRate < 10 ? D.red : D.teal, whiteSpace: 'nowrap' }}>You: {visibilityRate}%</span>
+            <span style={{ position: 'absolute', left: `${benchmarkRate}%`, transform: 'translateX(-50%)', fontSize: '12px', fontWeight: 700, color: D.gold, whiteSpace: 'nowrap' }}>Benchmark: {benchmarkRate}%</span>
           </div>
-          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: visibilityRate < 10 ? '16px' : '0' }}>
             {['Invisible', 'Emerging', 'Recognized', 'Dominant'].map((l) => (
               <span key={l} style={{ fontSize: '10px', color: D.textTertiary, textTransform: 'uppercase', letterSpacing: '1px' }}>{l}</span>
             ))}
           </div>
+          {visibilityRate < 10 && (
+            <div style={{ background: 'rgba(239,68,68,0.06)', border: `1px solid rgba(239,68,68,0.15)`, borderRadius: '8px', padding: '12px 16px', textAlign: 'center' }}>
+              <p style={{ fontSize: '14px', fontWeight: 700, color: D.red, margin: 0 }}>
+                You are invisible to AI in {market}.
+              </p>
+              <p style={{ fontSize: '12px', color: D.textSecondary, margin: '4px 0 0' }}>
+                AI recommends agents in your market to 45% of consumers. None of those recommendations include you.
+              </p>
+            </div>
+          )}
         </div>
 
         {/* ═══ NARRATIVE QUALITY ═══ */}
