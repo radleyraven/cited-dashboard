@@ -539,7 +539,7 @@ function NeighborhoodsContent() {
               Neighborhoods Confirmed — Full Scan Running
             </h3>
             <p style={{ fontSize: '14px', color: '#64748b', margin: 0 }}>
-              Your Full PRISM Scan is running across {totalConfirmed} neighborhoods and 4 AI models.
+              Your Full PRISM Scan is running across {totalConfirmed} neighborhoods and 5 AI models.
               You'll receive your results and positioning statement within 24 hours.
             </p>
           </div>

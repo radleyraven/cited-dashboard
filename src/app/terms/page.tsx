@@ -37,7 +37,7 @@ export default function TermsOfServicePage() {
             Cited provides AI Citation Optimization™ services for licensed professionals. The Service includes:
           </p>
           <ul style={{ fontSize: '15px', color: '#4a5568', lineHeight: 1.9, margin: '0 0 32px', paddingLeft: '24px' }}>
-            <li>Full PRISM™ Foundation Score audit across 13+ platforms and 4 AI models (ChatGPT, Perplexity, Gemini, Claude).</li>
+            <li>Full PRISM™ Foundation Score audit across 13+ platforms and 5 AI models (ChatGPT, Perplexity, Gemini, Claude, Grok).</li>
             <li>AI-optimized profile builds and rewrites across professional platforms including Google Business Profile, LinkedIn, Yelp, Bing Places, Foursquare, Zillow, Realtor.com, FastExpert, HomeLight, Apple Business Connect, Homes.com, and YouTube.</li>
             <li>AI-optimized personal website — registered, built, hosted, and maintained by Cited on a domain selected for your name and market.</li>
             <li>Public agent profile page at citedagent.com/agents/[your-name] with full structured data markup.</li>

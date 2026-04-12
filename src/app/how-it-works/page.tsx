@@ -30,7 +30,7 @@ export default function HowItWorksPage() {
     { item: 'FastExpert + Bing Places + Apple Business profile builds', value: 300 },
     { item: 'AI-optimized personal website — built, hosted, and maintained by Cited', value: 500 },
     { item: 'Month 1 authority article (written in your voice, published)', value: 500 },
-    { item: 'Monthly PRISM re-scans across 4 AI models (3 months)', value: 450 },
+    { item: 'Monthly PRISM re-scans across 5 AI models (3 months)', value: 450 },
     { item: 'Monthly performance reports — score, platform, next steps (3 months)', value: 300 },
   ];
 
@@ -90,7 +90,7 @@ export default function HowItWorksPage() {
             {[
               { num: '01', title: 'Optimize', desc: 'We fix every platform AI reads — GBP, LinkedIn, Zillow, FastExpert, Bing, Apple. Each one structured for AI citation.' },
               { num: '02', title: 'Create', desc: 'One AI-optimized article per month, written in your voice, targeting your markets. Published under your name after you approve.' },
-              { num: '03', title: 'Monitor', desc: 'Monthly PRISM re-scans across 4 AI models. You see exactly what moved, what\'s next, and how you compare to competitors.' },
+              { num: '03', title: 'Monitor', desc: 'Monthly PRISM re-scans across 5 AI models. You see exactly what moved, what\'s next, and how you compare to competitors.' },
             ].map((item, i) => (
               <div key={i} style={{ background: '#0A1929', borderRadius: '12px', padding: '24px 20px' }}>
                 <div style={{ fontSize: '28px', fontWeight: 800, color: '#D4A830', marginBottom: '8px' }}>{item.num}</div>
