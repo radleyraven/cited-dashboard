@@ -536,7 +536,14 @@ function renderCardContent(p: CardProps) {
           <TextInput value={form.email} onChange={(v) => set("email", v)} type="email" />
         </FieldGroup>
         <FieldGroup label="Phone" required>
-          <TextInput value={form.phone} onChange={(v) => set("phone", v)} type="tel" />
+          <TextInput value={form.phone} onChange={(v) => {
+            const digits = v.replace(/\D/g, '').slice(0, 10);
+            let formatted = digits;
+            if (digits.length > 6) formatted = `(${digits.slice(0,3)}) ${digits.slice(3,6)}-${digits.slice(6)}`;
+            else if (digits.length > 3) formatted = `(${digits.slice(0,3)}) ${digits.slice(3)}`;
+            else if (digits.length > 0) formatted = `(${digits}`;
+            set("phone", formatted);
+          }} type="tel" placeholder="(858) 555-1234" />
         </FieldGroup>
       </Fields>
       <NextButton onClick={next} />
