@@ -276,7 +276,7 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
             </div>
             <div style={{ padding: '24px', background: D.grayBg }}>
               <div style={{ fontSize: '10px', fontWeight: 700, color: D.red, textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '12px' }}>Market Benchmark</div>
-              <div style={{ fontFamily: 'Georgia, serif', fontSize: '64px', fontWeight: 900, color: '#94a3b8', lineHeight: 1 }}>~{benchmarkScore}</div>
+              <div style={{ fontFamily: 'Georgia, serif', fontSize: '40px', fontWeight: 900, color: '#94a3b8', lineHeight: 1, marginTop: '12px' }}>~{benchmarkScore}</div>
               <div style={{ fontSize: '12px', color: D.textTertiary, marginTop: '4px', marginBottom: '10px' }}>Agents AI recommends</div>
               <div style={{ paddingTop: '10px', borderTop: `1px solid ${D.border}` }}>
                 <div style={{ fontSize: '9px', fontWeight: 700, color: D.textTertiary, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '6px' }}>What they have that you don&apos;t</div>
