@@ -329,7 +329,7 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
 
         {/* ═══ WHAT AI SAYS ABOUT YOU ═══ */}
         <div style={{ background: '#fff', borderRadius: '14px', padding: '24px', marginBottom: '32px' }}>
-          <div style={{ fontSize: '10px', fontWeight: 700, color: D.textTertiary, textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '4px' }}>What AI Tells Your Clients</div>
+          <div style={{ fontSize: '10px', fontWeight: 700, color: D.red, textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '4px' }}>A Seller Just Asked AI About You</div>
           <div style={{ fontSize: '13px', color: D.textSecondary, marginBottom: '20px' }}>
             We asked AI about {firstName} directly. Out of {scan?.query_count || 30} queries, AI only described you in <span style={{ color: D.red, fontWeight: 700 }}>{scan?.narrative_quality?.query_count || 2}</span> — and this is what it said:
           </div>
