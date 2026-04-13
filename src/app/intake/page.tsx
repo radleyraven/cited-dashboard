@@ -457,7 +457,7 @@ function IntakeForm() {
           <div style={{ maxWidth: "640px", margin: "0 auto", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
             <span style={{ color: "#00BFA6", fontSize: "15px", fontWeight: 800, letterSpacing: "1.5px" }}>CITED</span>
             <span style={{ color: "#94a3b8", fontSize: "13px" }}>
-              Step {Math.min(currentCard, TOTAL_CARDS - 1)} of {TOTAL_CARDS - 1}
+              {progressPercent}% complete
               {getCardTitle(currentCard) && ` — ${getCardTitle(currentCard)}`}
             </span>
           </div>
