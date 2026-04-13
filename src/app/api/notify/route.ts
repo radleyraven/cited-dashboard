@@ -2,12 +2,13 @@ import { NextResponse } from 'next/server';
 
 export async function POST(request: Request) {
   const body = await request.json();
-  const { client_name, client_email, event, skipped_fields } = body;
+  const { client_name, client_email, event, skipped_fields, license_number } = body;
 
-  // Build notification message with skipped fields context
+  // Build notification message with skipped fields context + DRE#
   const skipped: string[] = skipped_fields || [];
   const skippedNote = skipped.length > 0 ? ` Skipped: ${skipped.join(', ')}.` : '';
-  const message = `🔴 ${client_name} submitted intake.${skippedNote} MLS data needed.`;
+  const dreNote = license_number && license_number !== 'pending' ? ` DRE# ${license_number}.` : '';
+  const message = `🔴 ${client_name} submitted intake.${dreNote}${skippedNote} MLS data needed. Pull CRS report and email to rrmacmini@gmail.com as "MLS: ${client_name}"`;
 
   // Log notification event to cited_events
   // Future: send Telegram notification, trigger email sequence

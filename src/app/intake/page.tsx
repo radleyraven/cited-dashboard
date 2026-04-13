@@ -454,6 +454,7 @@ function IntakeForm() {
         body: JSON.stringify({
           client_name: form.fullName,
           client_email: form.email,
+          license_number: form.licenseNumber,
           event: 'intake_completed',
           skipped_fields: form.skippedFields,
         }),
