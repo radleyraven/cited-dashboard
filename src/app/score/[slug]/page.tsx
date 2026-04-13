@@ -396,6 +396,22 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
           </div>
         </div>
 
+        {/* ═══ TRY IT YOURSELF ═══ */}
+        <div style={{ background: '#fff', borderRadius: '14px', padding: '24px', marginBottom: '32px' }}>
+          <div style={{ fontSize: '10px', fontWeight: 700, color: D.textTertiary, textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '12px' }}>See For Yourself</div>
+          <p style={{ fontSize: '15px', color: D.textSecondary, lineHeight: 1.7, margin: '0 0 16px' }}>
+            Don&apos;t take our word for it. Open ChatGPT right now and ask:
+          </p>
+          <div style={{ background: D.grayBg, borderRadius: '10px', padding: '16px 20px', marginBottom: '16px', borderLeft: `3px solid ${D.gold}` }}>
+            <p style={{ fontSize: '15px', color: D.navy, fontWeight: 700, fontStyle: 'italic', margin: 0 }}>
+              &ldquo;Who is the best luxury real estate agent in {market}?&rdquo;
+            </p>
+          </div>
+          <p style={{ fontSize: '14px', color: D.textSecondary, lineHeight: 1.7, margin: 0 }}>
+            If your name isn&apos;t in the answer, that&apos;s what your buyers see too. Your Foundation Score measures exactly why — and what to fix.
+          </p>
+        </div>
+
         {/* ═══ CTA ═══ */}
         <div style={{ textAlign: 'center', marginBottom: '32px' }}>
           <TrackedLink href={intakeUrl} slug={slug} name={name} eventType="cta_click" eventData={{ page: 'score', cta: 'bottom' }} style={{ display: 'inline-block', background: D.teal, color: '#fff', fontWeight: 700, fontSize: '16px', padding: '18px 40px', borderRadius: '10px', textDecoration: 'none', boxShadow: '0 4px 16px rgba(0,191,166,0.3)' }}>
