@@ -1,4 +1,6 @@
 import { notFound } from 'next/navigation';
+import ScorePageTracker from '@/components/ScorePageTracker';
+import TrackedLink from '@/components/TrackedLink';
 // CitedHeader/CitedFooter are 'use client' components — inline versions used here
 // to avoid server/client component boundary issues in production
 
@@ -199,6 +201,7 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
   return (
     <div style={{ minHeight: '100vh', background: D.grayBg, fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif' }}>
       <style>{`details > summary { list-style: none; cursor: pointer; transition: background 0.15s; } details > summary::-webkit-details-marker { display: none; } details > summary:hover { background: #f0faf8; } details[open] > summary { background: #f0faf8 !important; } .chevron { transition: transform 0.2s; } details[open] .chevron { transform: rotate(180deg); } .see-fix { } details[open] .see-fix { display: none; } .gap-card { transition: box-shadow 0.15s; } .gap-card:hover { box-shadow: 0 2px 12px rgba(0,191,166,0.12); }`}</style>
+      <ScorePageTracker slug={slug} name={name} />
 
       {/* Header — inline version matching CitedHeader component */}
       <div style={{ background: '#0A1929', padding: '20px 32px' }}>
@@ -319,9 +322,9 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
         {/* ═══ MID-PAGE CTA ═══ */}
         <div style={{ textAlign: 'center', marginBottom: '32px' }}>
           <p style={{ fontSize: '15px', color: D.textSecondary, marginBottom: '14px' }}>Ready to fix this?</p>
-          <a href={intakeUrl} style={{ display: 'inline-block', background: D.teal, color: '#fff', fontWeight: 700, fontSize: '15px', padding: '14px 36px', borderRadius: '10px', textDecoration: 'none', boxShadow: '0 4px 16px rgba(0,191,166,0.3)' }}>
+          <TrackedLink href={intakeUrl} slug={slug} name={name} eventType="cta_click" eventData={{ page: 'score', cta: 'mid_page' }} style={{ display: 'inline-block', background: D.teal, color: '#fff', fontWeight: 700, fontSize: '15px', padding: '14px 36px', borderRadius: '10px', textDecoration: 'none', boxShadow: '0 4px 16px rgba(0,191,166,0.3)' }}>
             Make AI Recommend Me →
-          </a>
+          </TrackedLink>
           <p style={{ fontSize: '12px', color: D.textTertiary, marginTop: '12px' }}>
             <strong style={{ color: D.navy }}>Free for Founding Members.</strong> Takes 5 minutes. We handle the rest.
           </p>
@@ -395,9 +398,9 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
 
         {/* ═══ CTA ═══ */}
         <div style={{ textAlign: 'center', marginBottom: '32px' }}>
-          <a href={intakeUrl} style={{ display: 'inline-block', background: D.teal, color: '#fff', fontWeight: 700, fontSize: '16px', padding: '18px 40px', borderRadius: '10px', textDecoration: 'none', boxShadow: '0 4px 16px rgba(0,191,166,0.3)' }}>
+          <TrackedLink href={intakeUrl} slug={slug} name={name} eventType="cta_click" eventData={{ page: 'score', cta: 'bottom' }} style={{ display: 'inline-block', background: D.teal, color: '#fff', fontWeight: 700, fontSize: '16px', padding: '18px 40px', borderRadius: '10px', textDecoration: 'none', boxShadow: '0 4px 16px rgba(0,191,166,0.3)' }}>
             Make AI Recommend Me →
-          </a>
+          </TrackedLink>
           <p style={{ fontSize: '12px', color: D.textTertiary, marginTop: '12px' }}>
             <strong style={{ color: D.navy }}>Free for Founding Members.</strong> Takes 5 minutes. We handle the rest.
           </p>

@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 import { createSupabaseBrowserClient } from "@/lib/supabase-browser";
+import { trackEvent } from "@/lib/track";
 
 /* ═══════════════════════════════════════════════════════════════
    CITED Intake Form — Progressive Disclosure (Template 17)
@@ -269,6 +270,15 @@ function IntakeForm() {
     return () => { if (saveTimer.current) clearTimeout(saveTimer.current); };
   }, [form, currentCard]);
 
+  // Track intake_started on mount
+  const trackedStart = useRef(false);
+  useEffect(() => {
+    if (trackedStart.current) return;
+    trackedStart.current = true;
+    const slug = form.fullName ? form.fullName.toLowerCase().replace(/\s+/g, '-') : 'unknown';
+    trackEvent(slug, 'intake_started', { page: 'intake' }, form.fullName || undefined);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
   function set<K extends keyof FormData>(key: K, value: FormData[K]) {
     setForm((prev) => ({ ...prev, [key]: value }));
   }
@@ -429,6 +439,25 @@ function IntakeForm() {
         try { await supabase.storage.from("mls-uploads").upload(`${email}/${Date.now()}-mls-${form.mlsFile.name}`, form.mlsFile, { cacheControl: "3600", upsert: false }); } catch { /* non-blocking */ }
       }
       try { await supabase.auth.signInWithOtp({ email, options: { emailRedirectTo: "https://citedagent.com/auth/callback?next=/copy-kit" } }); } catch { /* non-blocking */ }
+
+      // Track intake_completed + fire notification
+      const slug = form.fullName.toLowerCase().replace(/\s+/g, '-');
+      trackEvent(slug, 'intake_completed', {
+        page: 'intake',
+        skipped_fields: form.skippedFields,
+        platforms_confirmed: countPlatformsConfirmed(form),
+      }, form.fullName);
+
+      fetch('/api/notify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          client_name: form.fullName,
+          client_email: form.email,
+          event: 'intake_completed',
+          skipped_fields: form.skippedFields,
+        }),
+      }).catch(() => {});
 
       localStorage.removeItem(STORAGE_KEY);
       localStorage.removeItem(STORAGE_KEY + "-card");
