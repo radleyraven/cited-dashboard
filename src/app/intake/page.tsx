@@ -37,9 +37,9 @@ const PLATFORMS = [
 const IMPACT_LABELS = { high: "High Impact", medium: "Medium Impact", supporting: "Supporting" } as const;
 const IMPACT_COLORS = { high: "#dc2626", medium: "#ca8a04", supporting: "#16a34a" } as const;
 
-const PLATFORM_START_CARD = 8;
-const SUMMARY_CARD = PLATFORM_START_CARD + PLATFORMS.length; // 22
-const CELEBRATION_CARD = SUMMARY_CARD + 1; // 23
+const PLATFORM_START_CARD = 7;
+const SUMMARY_CARD = PLATFORM_START_CARD + PLATFORMS.length; // 21
+const CELEBRATION_CARD = SUMMARY_CARD + 1; // 22
 const TOTAL_CARDS = CELEBRATION_CARD;
 
 // Fields that came from PRISM scan (show "From CITED PRISM Scan" badge)
@@ -241,7 +241,7 @@ function IntakeForm() {
     'fullName', 'email', 'phone', 'brokerage', 'title', 'licenseNumber',
     'brokerDre', 'brokerName', 'brokerageAddress', 'yearsInMarket',
     'brokerageProfileUrl', 'personalWebsiteUrl',
-    'differentiator', 'voiceCapture',
+    'differentiator',
     'gbpStatus', 'linkedinStatus', 'yelpStatus', 'bingStatus',
     'foursquareStatus', 'zillowStatus', 'realtorStatus', 'youtubeStatus',
     'fastexpertStatus', 'homelightStatus', 'appleStatus', 'homescomStatus', 'xStatus',
@@ -482,9 +482,8 @@ function IntakeForm() {
     if (id === 2) return "Your Practice";
     if (id === 3) return "";
     if (id === 4) return "What Makes You Different";
-    if (id === 5) return "Your Voice";
-    if (id === 6) return "Notable Work";
-    if (id === 7) return "Your Photos";
+    if (id === 5) return "Notable Work";
+    if (id === 6) return "Your Photos";
     if (id >= PLATFORM_START_CARD && id < SUMMARY_CARD) return PLATFORMS[id - PLATFORM_START_CARD].label;
     if (id === SUMMARY_CARD) return "Review & Submit";
     return "";
@@ -700,22 +699,8 @@ function renderCardContent(p: CardProps) {
     </div>
   );
 
-  // ── Card 5: Voice Capture ──────────────────────────────────
+  // ── Card 5: Notable Transaction ────────────────────────────
   if (cardId === 5) return (
-    <div>
-      <CardHeader title="What do clients say about you?"
-        subtitle="This helps us write in your voice — not a generic agent voice." />
-      <FieldGroup label="" hint="What's the compliment you hear most? What do clients tell their friends?">
-        <TextArea value={form.voiceCapture} onChange={(v) => set("voiceCapture", v)} rows={3}
-          placeholder={'e.g., "Clients always say I made a stressful process feel easy."'} />
-      </FieldGroup>
-      <NextButton onClick={next} />
-      <SkipButton onClick={() => skip("voiceCapture")} />
-    </div>
-  );
-
-  // ── Card 6: Notable Transaction ────────────────────────────
-  if (cardId === 6) return (
     <div>
       <CardHeader title="One deal you want to be known for"
         subtitle="This becomes the hero deal in your bio and articles." />
@@ -775,8 +760,8 @@ function renderCardContent(p: CardProps) {
     </div>
   );
 
-  // ── Card 7: Photos ─────────────────────────────────────────
-  if (cardId === 7) return (
+  // ── Card 6: Photos ─────────────────────────────────────────
+  if (cardId === 6) return (
     <div>
       <CardHeader title="Your photos" subtitle="We'll resize for all 13+ platforms. You can always add these later." />
       <Fields>
@@ -796,7 +781,7 @@ function renderCardContent(p: CardProps) {
     </div>
   );
 
-  // ── Cards 8-21: Individual Platform Cards ──────────────────
+  // ── Cards 7-20: Individual Platform Cards ──────────────────
   if (cardId >= PLATFORM_START_CARD && cardId < SUMMARY_CARD) {
     const idx = cardId - PLATFORM_START_CARD;
     const plat = PLATFORMS[idx];
@@ -861,10 +846,9 @@ function renderCardContent(p: CardProps) {
         </SummarySection>
         <SummarySection title="Your Story" onEdit={() => jumpTo(4)}>
           <SumRow label="What makes you different" value={form.differentiator ? (form.differentiator.length > 80 ? form.differentiator.slice(0, 80) + "..." : form.differentiator) : "⚠️ Skipped"} />
-          <SumRow label="Client voice" value={form.voiceCapture ? (form.voiceCapture.length > 60 ? form.voiceCapture.slice(0, 60) + "..." : form.voiceCapture) : "Skipped"} />
           <SumRow label="Notable deals" value={form.transactions.filter(Boolean).length > 0 ? `${form.transactions.filter(Boolean).length} provided` : "Skipped"} />
         </SummarySection>
-        <SummarySection title="Photos & Platforms" onEdit={() => jumpTo(7)}>
+        <SummarySection title="Photos & Platforms" onEdit={() => jumpTo(6)}>
           <SumRow label="Headshot" value={form.headshotFile ? "✅ Uploaded" : "⚠️ Not yet"} />
           <SumRow label="Landscape" value={form.landscapeFile ? "✅ Uploaded" : "Not yet"} />
           <SumRow label="Platforms" value={`${countPlatformsConfirmed(form)} confirmed`} />
