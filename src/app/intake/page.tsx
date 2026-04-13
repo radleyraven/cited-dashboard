@@ -235,7 +235,24 @@ function IntakeForm() {
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const progressPercent = Math.max(7, Math.round(((currentCard - 1) / (TOTAL_CARDS - 1)) * 100));
+  // --- Progress: blend field completion (60%) with card position (40%) ---
+  const ALL_FIELDS = [
+    'fullName', 'email', 'phone', 'brokerage', 'title', 'licenseNumber',
+    'brokerDre', 'brokerName', 'brokerageAddress', 'yearsInMarket',
+    'brokerageProfileUrl', 'personalWebsiteUrl',
+    'differentiator', 'voiceCapture',
+    'gbpStatus', 'linkedinStatus', 'yelpStatus', 'bingStatus',
+    'foursquareStatus', 'zillowStatus', 'realtorStatus', 'youtubeStatus',
+    'fastexpertStatus', 'homelightStatus', 'appleStatus', 'homescomStatus', 'xStatus',
+    'personalsiteStatus',
+  ];
+  const filledCount = ALL_FIELDS.filter(f => {
+    const val = (form as Record<string, unknown>)[f];
+    return typeof val === 'string' && val.trim().length > 0;
+  }).length;
+  const fieldPercent = Math.round((filledCount / ALL_FIELDS.length) * 100);
+  const cardPercent = Math.round(((currentCard - 1) / (TOTAL_CARDS - 1)) * 100);
+  const progressPercent = Math.max(7, Math.round(fieldPercent * 0.6 + cardPercent * 0.4));
 
   // Debounced auto-save on every form change (500ms)
   useEffect(() => {
