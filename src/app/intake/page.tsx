@@ -37,9 +37,9 @@ const PLATFORMS = [
 const IMPACT_LABELS = { high: "High Impact", medium: "Medium Impact", supporting: "Supporting" } as const;
 const IMPACT_COLORS = { high: "#dc2626", medium: "#ca8a04", supporting: "#16a34a" } as const;
 
-const PLATFORM_START_CARD = 7;
-const SUMMARY_CARD = PLATFORM_START_CARD + PLATFORMS.length; // 21
-const CELEBRATION_CARD = SUMMARY_CARD + 1; // 22
+const PLATFORM_START_CARD = 8;
+const SUMMARY_CARD = PLATFORM_START_CARD + PLATFORMS.length; // 22
+const CELEBRATION_CARD = SUMMARY_CARD + 1; // 23
 const TOTAL_CARDS = CELEBRATION_CARD;
 
 // Fields that came from PRISM scan (show "From CITED PRISM Scan" badge)
@@ -483,14 +483,15 @@ function IntakeForm() {
     if (id === 3) return "";
     if (id === 4) return "What Makes You Different";
     if (id === 5) return "Notable Work";
-    if (id === 6) return "Your Photos";
+    if (id === 6) return "";
+    if (id === 7) return "Your Photos";
     if (id >= PLATFORM_START_CARD && id < SUMMARY_CARD) return PLATFORMS[id - PLATFORM_START_CARD].label;
     if (id === SUMMARY_CARD) return "Review & Submit";
     return "";
   }
 
   const isCelebration = currentCard === CELEBRATION_CARD;
-  const isReward = currentCard === 3;
+  const isReward = currentCard === 3 || currentCard === 6;
 
   // ── Render ─────────────────────────────────────────────────
 
@@ -730,29 +731,23 @@ function renderCardContent(p: CardProps) {
             cursor: "pointer", width: "100%",
           }}>+ Add another notable deal</button>
         )}
-        {/* MLS — done for CA/WA, upload for others */}
+
+        {/* MLS — passive display for RE clients (CA/WA) */}
         <div style={{ marginTop: "8px", padding: "12px 16px", background: "#f0fdf9", borderRadius: "8px", border: "1px solid rgba(0,191,166,0.15)" }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
             <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-              <div onClick={() => set("mlsDoneForYou", !form.mlsDoneForYou)} style={{
-                width: "20px", height: "20px", borderRadius: "4px", cursor: "pointer", flexShrink: 0,
-                background: form.mlsDoneForYou ? "#00BFA6" : "#fff",
-                border: `2px solid ${form.mlsDoneForYou ? "#00BFA6" : "#cbd5e1"}`,
+              <div style={{
+                width: "20px", height: "20px", borderRadius: "4px", flexShrink: 0,
+                background: "#00BFA6",
+                border: "2px solid #00BFA6",
                 display: "flex", alignItems: "center", justifyContent: "center",
               }}>
-                {form.mlsDoneForYou && <span style={{ color: "#fff", fontSize: "14px", lineHeight: 1 }}>✓</span>}
+                <span style={{ color: "#fff", fontSize: "14px", lineHeight: 1 }}>✓</span>
               </div>
               <span style={{ fontSize: "13px", color: "#0A1929", fontWeight: 500 }}>MLS transaction data</span>
             </div>
-            <span style={{ fontSize: "12px", color: form.mlsDoneForYou ? "#00BFA6" : "#94a3b8", fontWeight: 600 }}>
-              {form.mlsDoneForYou ? "CITED handles this" : "Upload needed"}
-            </span>
+            <span style={{ fontSize: "12px", color: "#00BFA6", fontWeight: 600 }}>CITED handles this</span>
           </div>
-          {!form.mlsDoneForYou && (
-            <div style={{ marginTop: "12px" }}>
-              <FileInput accept=".csv,.pdf,.xlsx,.xls" file={form.mlsFile} onChange={(f) => set("mlsFile", f)} icon={"📎"} label="Upload MLS export (CSV, PDF, or Excel)" />
-            </div>
-          )}
         </div>
       </Fields>
       <NextButton onClick={next} />
@@ -760,8 +755,17 @@ function renderCardContent(p: CardProps) {
     </div>
   );
 
-  // ── Card 6: Photos ─────────────────────────────────────────
+  // ── Card 6: Micro-Reward ───────────────────────────────────
   if (cardId === 6) return (
+    <MicroReward
+      message="Almost there. We have what we need to build your strategy — just a couple more things and we take it from here."
+      nextHint="Photos and platform confirmations — fast taps from here."
+      onContinue={next}
+    />
+  );
+
+  // ── Card 7: Photos ─────────────────────────────────────────
+  if (cardId === 7) return (
     <div>
       <CardHeader title="Your photos" subtitle="We'll resize for all 13+ platforms. You can always add these later." />
       <Fields>
@@ -781,7 +785,7 @@ function renderCardContent(p: CardProps) {
     </div>
   );
 
-  // ── Cards 7-20: Individual Platform Cards ──────────────────
+  // ── Cards 8-21: Individual Platform Cards ──────────────────
   if (cardId >= PLATFORM_START_CARD && cardId < SUMMARY_CARD) {
     const idx = cardId - PLATFORM_START_CARD;
     const plat = PLATFORMS[idx];
