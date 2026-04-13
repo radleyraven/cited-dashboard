@@ -241,9 +241,7 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
               <div>
                 <div style={{ fontSize: '10px', fontWeight: 700, color: D.textTertiary, textTransform: 'uppercase', letterSpacing: '1.5px' }}>Foundation Score</div>
-                {tier !== 'Not scanned' && (
-                  <div style={{ fontSize: '10px', color: D.textTertiary, marginTop: '2px' }}>{tier}</div>
-                )}
+
               </div>
               <div style={{ fontSize: '10px', color: D.textTertiary, background: D.grayBg, padding: '3px 8px', borderRadius: '4px' }}>
                 PRISM Scan™{scan?.query_count ? ` · ${scan.query_count} queries` : ''}
