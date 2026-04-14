@@ -207,6 +207,13 @@ function IntakeForm() {
   const [form, setForm] = useState<FormData>(() => {
     if (typeof window !== "undefined") {
       try {
+        // If a token param is present (personalized link), always start fresh — clear stale localStorage
+        const hasToken = searchParams.get("token");
+        if (hasToken) {
+          localStorage.removeItem(STORAGE_KEY);
+          localStorage.removeItem(STORAGE_KEY + "-card");
+          return getInitialForm(searchParams);
+        }
         const saved = localStorage.getItem(STORAGE_KEY);
         if (saved) {
           const parsed = JSON.parse(saved);
@@ -220,6 +227,8 @@ function IntakeForm() {
   const [currentCard, setCurrentCard] = useState<number>(() => {
     if (typeof window !== "undefined") {
       try {
+        // If token param present, always start at Card 1
+        if (searchParams.get("token")) return 1;
         const saved = localStorage.getItem(STORAGE_KEY + "-card");
         if (saved) return parseInt(saved, 10) || 1;
       } catch { /* ignore */ }
@@ -253,7 +262,7 @@ function IntakeForm() {
   }).length;
   const fieldPercent = Math.round((filledCount / ALL_FIELDS.length) * 100);
   const cardPercent = Math.round(((currentCard - 1) / (TOTAL_CARDS - 1)) * 100);
-  const progressPercent = Math.max(7, Math.round(fieldPercent * 0.6 + cardPercent * 0.4));
+  const progressPercent = Math.min(100, Math.max(7, Math.round(fieldPercent * 0.6 + cardPercent * 0.4)));
 
   // Debounced auto-save on every form change (500ms)
   useEffect(() => {
