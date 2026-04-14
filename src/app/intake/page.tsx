@@ -32,6 +32,7 @@ const PLATFORMS = [
   { key: "homelight", label: "HomeLight", impact: "supporting" as const, statusKey: "homelightStatus", urlKey: "homelightUrl" },
   { key: "apple", label: "Apple Business Connect", impact: "supporting" as const, statusKey: "appleStatus", urlKey: "appleUrl" },
   { key: "x", label: "X (Twitter)", impact: "supporting" as const, statusKey: "xStatus", urlKey: "xUrl" },
+  { key: "instagram", label: "Instagram", impact: "medium" as const, statusKey: "instagramStatus", urlKey: "instagramUrl" },
 ] as const;
 
 const IMPACT_LABELS = { high: "High Impact", medium: "Medium Impact", supporting: "Supporting" } as const;
@@ -47,7 +48,7 @@ const PRISM_FOUND_FIELDS = new Set([
   "brokerage", "brokerageAddress", "primaryMarkets",
   "brokerDre", "brokerName",
   "gbpUrl", "linkedinUrl", "zillowUrl", "yelpUrl", "realtorUrl",
-  "fastexpertUrl", "youtubeUrl", "brokerageProfileUrl",
+  "fastexpertUrl", "youtubeUrl", "brokerageProfileUrl", "instagramUrl",
 ]);
 
 const STORAGE_KEY = "cited-intake-v2";
@@ -93,6 +94,7 @@ type FormData = {
   appleStatus: string; appleUrl: string;
   homescomStatus: string; homescomUrl: string;
   xStatus: string; xUrl: string;
+  instagramStatus: string; instagramUrl: string;
   personalsiteStatus: string;
   additionalPlatforms: string;
   reviewPlatforms: string[];
@@ -155,6 +157,8 @@ function getInitialForm(sp: ReturnType<typeof useSearchParams>): FormData {
     homescomStatus: "",
     homescomUrl: "",
     xStatus: "",
+    instagramStatus: "",
+    instagramUrl: sp.get("instagramUrl") || "",
     personalsiteStatus: sp.get("personalWebsiteUrl") ? "yes" : "",
     xUrl: "",
     additionalPlatforms: "",
@@ -345,6 +349,8 @@ function IntakeForm() {
           youtubeStatus: data.youtube_url ? "yes" : prev.youtubeStatus,
           gbpUrl: data.gbp_url ?? prev.gbpUrl,
           gbpStatus: data.gbp_status ?? prev.gbpStatus,
+          instagramUrl: data.instagram_url ?? prev.instagramUrl,
+          instagramStatus: data.instagram_url ? "yes" : prev.instagramStatus,
           additionalPlatforms: data.additional_platforms ?? prev.additionalPlatforms,
           reviewPlatforms: data.review_platforms ?? prev.reviewPlatforms,
           reviewOther: data.review_other ?? prev.reviewOther,
@@ -444,7 +450,7 @@ function IntakeForm() {
           topTransactions: f.transactions.filter(Boolean).map(t => t.replace("||", " — ")).join("\n"),
           gbpStatus: f.gbpStatus, linkedinUrl: f.linkedinUrl, zillowUrl: f.zillowUrl,
           yelpUrl: f.yelpUrl, realtorUrl: f.realtorUrl, fastexpertUrl: f.fastexpertUrl,
-          youtubeUrl: f.youtubeUrl, skippedFields: f.skippedFields,
+          youtubeUrl: f.youtubeUrl, instagramUrl: f.instagramUrl, skippedFields: f.skippedFields,
           intakeCompletionPct: Math.round((cardNum / TOTAL_CARDS) * 100),
           reviewPlatforms: f.reviewPlatforms,
         }),
@@ -518,7 +524,7 @@ function IntakeForm() {
           gbpStatus: form.gbpStatus,
           linkedinUrl: form.linkedinUrl, zillowUrl: form.zillowUrl, yelpUrl: form.yelpUrl,
           realtorUrl: form.realtorUrl, fastexpertUrl: form.fastexpertUrl,
-          youtubeUrl: form.youtubeUrl, additionalPlatforms: form.additionalPlatforms,
+          youtubeUrl: form.youtubeUrl, instagramUrl: form.instagramUrl, additionalPlatforms: form.additionalPlatforms,
           skippedFields: form.skippedFields, intakeCompletionPct: 100, termsAccepted: form.termsAccepted,
         }),
       });

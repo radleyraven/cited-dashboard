@@ -130,6 +130,7 @@ export async function POST(request: Request) {
       realtor_url: body.realtorUrl?.trim() || null,
       fastexpert_url: body.fastexpertUrl?.trim() || null,
       youtube_url: body.youtubeUrl?.trim() || null,
+      instagram_url: body.instagramUrl?.trim() || null,
       additional_platforms: body.additionalPlatforms?.trim() || null,
       gbp_status: body.gbpStatus?.trim() || null,
       gbp_url: body.gbpUrl?.trim() || null,
