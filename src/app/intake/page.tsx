@@ -1048,237 +1048,213 @@ function renderCardContent(p: CardProps) {
 
 // ── Helper: count platforms confirmed ────────────────────────
 
+// CITED-185: confirmed = "yes" OR URL present (matches isConfirmed logic in PlatformsChecklist)
 function countPlatformsConfirmed(form: FormData): number {
-  return PLATFORMS.filter((p) => form[p.statusKey] === "yes").length;
+  return PLATFORMS.filter((p) => form[p.statusKey] === "yes" || !!(form[p.urlKey] as string)?.trim()).length;
 }
 
 // ═══════════════════════════════════════════════════════════════
 // CONSOLIDATED PLATFORMS CHECKLIST
 // ═══════════════════════════════════════════════════════════════
 
-const IMPACT_GROUPS: { impact: "high" | "medium" | "supporting"; label: string; color: string; defaultOpen: boolean }[] = [
-  { impact: "high", label: "HIGH IMPACT", color: "#dc2626", defaultOpen: true },
-  { impact: "medium", label: "MEDIUM IMPACT", color: "#ca8a04", defaultOpen: false },
-  { impact: "supporting", label: "SUPPORTING", color: "#16a34a", defaultOpen: false },
-];
+// CITED-185 — Platform impact lines (locked per spec)
+const PLATFORM_IMPACT_LINES: Record<string, string> = {
+  personalsite: "Entity anchor — most important for AI confidence",
+  gbp: "Perplexity's #1 source for local recommendations",
+  linkedin: "Professional authority — AI verifies you here first",
+  yelp: "Powers 33% of AI search results",
+  bing: "Feeds Microsoft Copilot — underrated AI source",
+  zillow: "RE-specific — cited by ChatGPT in agent searches",
+  realtor: "Industry directory — feeds multiple AI models",
+  fastexpert: "Verified agent database — AI uses for credentials",
+  foursquare: "Powers 60-70% of ChatGPT local results",
+  youtube: "Video authority — growing AI citation source",
+  homescom: "",
+  homelight: "Top 5% agent directory — AI trusts curated lists",
+  apple: "Feeds Siri + Apple Maps — growing AI share",
+  x: "Entity signal — confirms professional identity",
+  instagram: "Public profile — AI cites follower count as authority",
+};
 
-function PlatformsChecklist({ form, set, next, isPrefilled, searchParams }: {
+// CITED-185 — PlatformsChecklist (redesigned per spec)
+function PlatformsChecklist({ form, set, next, isPrefilled }: {
   form: FormData;
   set: <K extends keyof FormData>(key: K, value: FormData[K]) => void;
   next: () => void;
   isPrefilled: (f: string) => boolean;
   searchParams: ReturnType<typeof useSearchParams>;
 }) {
-  const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({
-    high: true, medium: false, supporting: false,
-  });
   const [editingUrl, setEditingUrl] = useState<string | null>(null);
 
-  // Count pre-filled platforms (URL exists from scan)
-  const preFilledCount = PLATFORMS.filter((p) => {
-    const url = form[p.urlKey] as string;
-    return url && url.trim().length > 0;
-  }).length;
-
-  const toggleSection = (impact: string) => {
-    setExpandedSections((prev) => ({ ...prev, [impact]: !prev[impact] }));
+  // CITED-185: isConfirmed = "yes" OR URL present
+  const isConfirmed = (p: typeof PLATFORMS[number]): boolean => {
+    return form[p.statusKey] === "yes" || !!(form[p.urlKey] as string)?.trim();
   };
 
-  const getSectionPlatforms = (impact: string) => PLATFORMS.filter((p) => p.impact === impact);
-
-  const getSectionFoundCount = (impact: string) => {
-    return getSectionPlatforms(impact).filter((p) => {
-      const status = form[p.statusKey] as string;
-      return status === "yes";
-    }).length;
+  // CITED-185: Not Sure treated as No
+  const isDeclined = (p: typeof PLATFORMS[number]): boolean => {
+    return form[p.statusKey] === "no" || form[p.statusKey] === "not_sure";
   };
+
+  const confirmedPlatforms = PLATFORMS.filter(isConfirmed);
+  const toCheckPlatforms = PLATFORMS.filter((p) => !isConfirmed(p));
+  const confirmedCount = confirmedPlatforms.length;
+  const toCheckCount = toCheckPlatforms.length;
 
   return (
     <div>
       {/* Header */}
       <div style={{ marginBottom: "20px" }}>
         <h2 style={{ fontSize: "22px", fontWeight: 800, color: "#0A1929", margin: "0 0 6px", letterSpacing: "-0.3px" }}>Your Platforms</h2>
-        <p style={{ fontSize: "14px", color: "#64748b", margin: "0 0 16px", lineHeight: 1.5 }}>
-          We found {preFilledCount} of these during your PRISM Scan. Confirm what you have — we handle the rest.
+        {/* CITED-185: count format — "N confirmed · M to check" */}
+        <p style={{ fontSize: "14px", color: "#64748b", margin: 0, lineHeight: 1.5 }}>
+          <span style={{ color: "#00BFA6", fontWeight: 700 }}>{confirmedCount} confirmed</span>
+          {" · "}
+          <span style={{ fontWeight: 600 }}>{toCheckCount} to check</span>
         </p>
       </div>
 
-      {/* PRISM scan summary */}
-      {preFilledCount > 0 && (
-        <div style={{
-          background: "rgba(0,191,166,0.04)", border: "1px solid rgba(0,191,166,0.15)",
-          borderRadius: "10px", padding: "14px 16px", marginBottom: "20px",
-        }}>
-          <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "4px" }}>
-            <span style={{ fontSize: "18px" }}>✅</span>
-            <span style={{ fontSize: "15px", fontWeight: 700, color: "#0A1929" }}>
-              {preFilledCount} platform{preFilledCount !== 1 ? "s" : ""} already found from your PRISM Scan
-            </span>
-          </div>
-          <p style={{ fontSize: "13px", color: "#64748b", margin: 0, paddingLeft: "26px" }}>
-            {preFilledCount >= 5
-              ? "Most of the work is done — just confirm below."
-              : "Confirm what you have — we'll find and set up the rest."}
-          </p>
-        </div>
-      )}
+      {/* CITED-185: All platforms visible — no expand/collapse grouping */}
+      <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
 
-      {/* Impact groups */}
-      <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-        {IMPACT_GROUPS.map((group) => {
-          const platforms = getSectionPlatforms(group.impact);
-          const foundCount = getSectionFoundCount(group.impact);
-          const isOpen = expandedSections[group.impact];
+        {/* Confirmed platforms — green tint, checkmark, no buttons */}
+        {confirmedPlatforms.map((plat) => {
+          const urlVal = (form[plat.urlKey] as string) || "";
+          const isPrefilledUrl = plat.urlKey ? isPrefilled(plat.urlKey) : false;
+          return (
+            <div key={plat.key} style={{
+              padding: "12px 16px",
+              borderRadius: "10px",
+              background: "rgba(0,191,166,0.08)",
+              border: "1px solid rgba(0,191,166,0.25)",
+              borderLeft: "3px solid #00BFA6",
+            }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                <span style={{ color: "#00BFA6", fontSize: "16px", flexShrink: 0 }}>✓</span>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "8px", flexWrap: "wrap" }}>
+                    <span style={{ fontSize: "14px", fontWeight: 600, color: "#0A1929" }}>{plat.label}</span>
+                    {isPrefilledUrl && (
+                      <span style={{
+                        fontSize: "10px", fontWeight: 700, color: "#00BFA6",
+                        background: "rgba(0,191,166,0.12)", padding: "2px 8px", borderRadius: "10px",
+                        flexShrink: 0,
+                      }}>Found</span>
+                    )}
+                  </div>
+                  {urlVal.trim() && (
+                    <span style={{ fontSize: "12px", color: "#94a3b8", display: "block", marginTop: "2px" }}>
+                      {urlVal.length > 50 ? urlVal.slice(0, 50) + "..." : urlVal}
+                    </span>
+                  )}
+                </div>
+              </div>
+            </div>
+          );
+        })}
+
+        {/* To-check platforms — white card, impact line, two buttons */}
+        {toCheckPlatforms.map((plat) => {
+          const statusVal = form[plat.statusKey] as string;
+          const urlVal = (form[plat.urlKey] as string) || "";
+          const hasUrl = urlVal.trim().length > 0;
+          const declined = isDeclined(plat);
+          const isEditing = editingUrl === plat.key;
+          const impactLine = PLATFORM_IMPACT_LINES[plat.key] || "";
 
           return (
-            <div key={group.impact} style={{
-              border: "1px solid #e2e8f0", borderRadius: "10px", overflow: "hidden",
+            <div key={plat.key} style={{
+              padding: "14px 16px",
+              borderRadius: "10px",
+              background: "#ffffff",
+              border: "1px solid #e2e8f0",
+              transition: "all 0.15s",
             }}>
-              {/* Section header */}
-              <button onClick={() => toggleSection(group.impact)} style={{
-                width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between",
-                padding: "12px 16px", background: "#fafafa", border: "none", cursor: "pointer",
-              }}>
-                <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                  <span style={{
-                    fontSize: "10px", fontWeight: 800, color: group.color,
-                    background: `${group.color}10`, padding: "3px 10px", borderRadius: "10px",
-                    letterSpacing: "0.8px", textTransform: "uppercase",
+              {/* Platform name + impact line */}
+              <div style={{ marginBottom: "10px" }}>
+                <span style={{ fontSize: "15px", fontWeight: 700, color: "#0A1929" }}>{plat.label}</span>
+                {impactLine && (
+                  <p style={{ fontSize: "12px", color: "#94a3b8", fontStyle: "italic", margin: "3px 0 0", lineHeight: 1.4 }}>
+                    {impactLine}
+                  </p>
+                )}
+              </div>
+
+              {/* Declined state — helper text only */}
+              {declined ? (
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "8px" }}>
+                  {/* CITED-185: "We'll help you create one →" in teal */}
+                  <p style={{ fontSize: "12px", color: "#00BFA6", margin: 0, fontWeight: 500 }}>
+                    We&apos;ll help you create one →
+                  </p>
+                  <button onClick={() => set(plat.statusKey as keyof FormData, "")} style={{
+                    background: "none", border: "none", cursor: "pointer", padding: "2px 6px",
+                    fontSize: "11px", color: "#94a3b8",
                   }}>
-                    {group.label}
-                  </span>
-                  <span style={{ fontSize: "12px", color: "#94a3b8", fontWeight: 500 }}>
-                    {foundCount} of {platforms.length} found
-                  </span>
+                    ✕
+                  </button>
                 </div>
-                <div style={{
-                  width: "32px", height: "32px", borderRadius: "50%",
-                  background: "rgba(0,191,166,0.08)", display: "flex", alignItems: "center", justifyContent: "center",
-                  transition: "transform 0.2s",
-                  transform: isOpen ? "rotate(0deg)" : "rotate(-90deg)",
-                }}>
-                  <span style={{ color: "#00BFA6", fontSize: "16px", lineHeight: 1 }}>▾</span>
-                </div>
-              </button>
+              ) : (
+                <>
+                  {/* Two-button row — CITED-185: Yes / I don't have it only */}
+                  <div style={{ display: "flex", gap: "8px" }}>
+                    <button onClick={() => {
+                      set(plat.statusKey as keyof FormData, "yes");
+                      if (!hasUrl) setEditingUrl(plat.key);
+                    }} style={{
+                      flex: 1, padding: "8px 12px", borderRadius: "20px", fontSize: "13px", fontWeight: 600,
+                      border: "1.5px solid #00BFA6",
+                      background: statusVal === "yes" ? "rgba(0,191,166,0.08)" : "#fff",
+                      color: "#00BFA6",
+                      cursor: "pointer", transition: "all 0.15s",
+                    }}>
+                      Yes, I have it
+                    </button>
+                    <button onClick={() => {
+                      set(plat.statusKey as keyof FormData, "no");
+                      setEditingUrl(null);
+                    }} style={{
+                      flex: 1, padding: "8px 12px", borderRadius: "20px", fontSize: "13px", fontWeight: 600,
+                      border: "1.5px solid #e2e8f0",
+                      background: "#fff",
+                      color: "#64748b",
+                      cursor: "pointer", transition: "all 0.15s",
+                    }}>
+                      I don&apos;t have it
+                    </button>
+                  </div>
 
-              {/* Platform rows */}
-              {isOpen && (
-                <div style={{ padding: "0" }}>
-                  {platforms.map((plat, i) => {
-                    const statusVal = form[plat.statusKey] as string;
-                    const urlVal = plat.urlKey ? (form[plat.urlKey] as string) : "";
-                    const hasUrl = urlVal && urlVal.trim().length > 0;
-                    const isPrefilledUrl = plat.urlKey ? isPrefilled(plat.urlKey) : false;
-                    const isDimmed = statusVal === "no" || statusVal === "not_sure";
-                    const isEditing = editingUrl === plat.key;
-
-                    return (
-                      <div key={plat.key} style={{
-                        borderTop: i === 0 ? "1px solid #f1f5f9" : "none",
-                        borderBottom: i < platforms.length - 1 ? "1px solid #f1f5f9" : "none",
-                        padding: "12px 16px",
-                        borderLeft: hasUrl && statusVal === "yes" ? "3px solid #00BFA6" : "3px solid transparent",
-                        background: hasUrl && statusVal === "yes" ? "rgba(0,191,166,0.04)" : "transparent",
-                        opacity: isDimmed ? 0.55 : 1,
-                        transition: "all 0.15s",
-                      }}>
-                        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "8px" }}>
-                          {/* Platform name + found badge */}
-                          <div style={{ display: "flex", alignItems: "center", gap: "8px", flex: 1, minWidth: 0 }}>
-                            {statusVal === "yes" && hasUrl && (
-                              <span style={{ color: "#00BFA6", fontSize: "16px", flexShrink: 0 }}>✅</span>
-                            )}
-                            <span style={{ fontSize: "14px", fontWeight: 500, color: "#0A1929" }}>{plat.label}</span>
-                            {statusVal === "yes" && hasUrl && isPrefilledUrl && (
-                              <span style={{
-                                fontSize: "10px", fontWeight: 700, color: "#00BFA6",
-                                background: "rgba(0,191,166,0.1)", padding: "2px 8px", borderRadius: "10px",
-                                flexShrink: 0,
-                              }}>Found</span>
-                            )}
-                          </div>
-
-                          {/* Status pills or checkmark */}
-                          {statusVal === "yes" && hasUrl && !isEditing ? (
-                            <button onClick={() => setEditingUrl(plat.key)} style={{
-                              background: "none", border: "none", cursor: "pointer", padding: 0,
-                            }}>
-                              <span style={{ fontSize: "12px", color: "#94a3b8", maxWidth: "140px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", display: "block" }}>
-                                {urlVal.length > 40 ? urlVal.slice(0, 40) + "..." : urlVal}
-                              </span>
-                            </button>
-                          ) : statusVal === "yes" && !hasUrl ? null : statusVal === "no" || statusVal === "not_sure" ? (
-                            <button onClick={() => set(plat.statusKey as keyof FormData, "")} style={{
-                              background: "none", border: "none", cursor: "pointer", padding: "2px 8px",
-                              fontSize: "11px", color: "#94a3b8",
-                            }}>
-                              {statusVal === "no" ? "No" : "Not sure"} ✕
-                            </button>
-                          ) : (
-                            <div style={{ display: "flex", gap: "4px", flexShrink: 0 }}>
-                              {(["yes", "no", "not_sure"] as const).map((val) => (
-                                <button key={val} onClick={() => {
-                                  set(plat.statusKey as keyof FormData, val);
-                                  if (val === "yes" && !hasUrl) setEditingUrl(plat.key);
-                                }} style={{
-                                  padding: "6px 14px", borderRadius: "20px", fontSize: "12px", fontWeight: 600,
-                                  border: `1.5px solid ${statusVal === val ? "#00BFA6" : "#e2e8f0"}`,
-                                  background: statusVal === val ? "rgba(0,191,166,0.06)" : "#fff",
-                                  color: statusVal === val ? "#00BFA6" : "#64748b",
-                                  cursor: "pointer", transition: "all 0.15s", whiteSpace: "nowrap",
-                                }}>
-                                  {val === "yes" ? "Yes" : val === "no" ? "No" : "Not Sure"}
-                                </button>
-                              ))}
-                            </div>
-                          )}
-                        </div>
-
-                        {/* URL input — shown when editing or when yes + no URL yet */}
-                        {((statusVal === "yes" && !hasUrl) || isEditing) && plat.urlKey && (
-                          <div style={{ marginTop: "8px" }}>
-                            <input
-                              type="url"
-                              value={urlVal}
-                              onChange={(e) => set(plat.urlKey as keyof FormData, e.target.value)}
-                              placeholder={`https://${plat.label.toLowerCase().replace(/\s+/g, "")}.com/...`}
-                              style={{
-                                width: "100%", padding: "10px 12px", borderRadius: "8px",
-                                border: "1px solid #D1D5DB", fontSize: "13px", color: "#0A1929",
-                                background: "#FAFAFA", outline: "none", boxSizing: "border-box",
-                              }}
-                              onFocus={(e) => { e.target.style.borderColor = "#00BFA6"; }}
-                              onBlur={(e) => {
-                                e.target.style.borderColor = "#D1D5DB";
-                                if (isEditing) setEditingUrl(null);
-                              }}
-                              autoFocus={isEditing}
-                            />
-                            {!hasUrl && (
-                              <button onClick={() => {
-                                setEditingUrl(null);
-                              }} style={{
-                                background: "none", border: "none", fontSize: "11px", color: "#94a3b8",
-                                cursor: "pointer", padding: "4px 0", marginTop: "2px",
-                              }}>
-                                Skip URL — CITED will find it
-                              </button>
-                            )}
-                          </div>
-                        )}
-
-                        {/* Show URL below if pre-filled and not editing */}
-                        {statusVal === "yes" && hasUrl && !isEditing && (
-                          <div style={{ marginTop: "4px", paddingLeft: statusVal === "yes" && hasUrl ? "24px" : "0" }}>
-                            <span style={{ fontSize: "12px", color: "#94a3b8" }}>
-                              {urlVal.length > 50 ? urlVal.slice(0, 50) + "..." : urlVal}
-                            </span>
-                          </div>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
+                  {/* URL input — shown when "yes" + no URL yet, or editing */}
+                  {((statusVal === "yes" && !hasUrl) || isEditing) && plat.urlKey && (
+                    <div style={{ marginTop: "10px" }}>
+                      <input
+                        type="url"
+                        value={urlVal}
+                        onChange={(e) => set(plat.urlKey as keyof FormData, e.target.value)}
+                        placeholder={`https://${plat.label.toLowerCase().replace(/\s+/g, "")}.com/...`}
+                        style={{
+                          width: "100%", padding: "10px 12px", borderRadius: "8px",
+                          border: "1px solid #D1D5DB", fontSize: "13px", color: "#0A1929",
+                          background: "#FAFAFA", outline: "none", boxSizing: "border-box",
+                        }}
+                        onFocus={(e) => { e.target.style.borderColor = "#00BFA6"; }}
+                        onBlur={(e) => {
+                          e.target.style.borderColor = "#D1D5DB";
+                          if (isEditing) setEditingUrl(null);
+                        }}
+                        autoFocus={isEditing}
+                      />
+                      {!hasUrl && (
+                        <button onClick={() => setEditingUrl(null)} style={{
+                          background: "none", border: "none", fontSize: "11px", color: "#94a3b8",
+                          cursor: "pointer", padding: "4px 0", marginTop: "2px",
+                        }}>
+                          Skip URL — CITED will find it
+                        </button>
+                      )}
+                    </div>
+                  )}
+                </>
               )}
             </div>
           );
