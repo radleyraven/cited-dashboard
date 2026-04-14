@@ -243,6 +243,7 @@ function IntakeForm() {
   const [animating, setAnimating] = useState(false);
   const [slideDir, setSlideDir] = useState<"forward" | "back">("forward");
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
+  const [isTokenLoading, setIsTokenLoading] = useState<boolean>(false);
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // --- Progress: blend field completion (60%) with card position (40%) ---
@@ -251,10 +252,6 @@ function IntakeForm() {
     'brokerDre', 'brokerName', 'brokerageAddress', 'yearsInMarket',
     'brokerageProfileUrl', 'personalWebsiteUrl',
     'differentiator',
-    'gbpStatus', 'linkedinStatus', 'yelpStatus', 'bingStatus',
-    'foursquareStatus', 'zillowStatus', 'realtorStatus', 'youtubeStatus',
-    'fastexpertStatus', 'homelightStatus', 'appleStatus', 'homescomStatus', 'xStatus',
-    'personalsiteStatus',
   ];
   const filledCount = ALL_FIELDS.filter(f => {
     const val = (form as Record<string, unknown>)[f];
@@ -286,6 +283,97 @@ function IntakeForm() {
     trackedStart.current = true;
     const slug = form.fullName ? form.fullName.toLowerCase().replace(/\s+/g, '-') : 'unknown';
     trackEvent(slug, 'intake_started', { page: 'intake' }, form.fullName || undefined);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // ── Token → Supabase fetch + resume at last incomplete card ──
+  useEffect(() => {
+    const token = searchParams.get("token");
+    if (!token) return;
+
+    setIsTokenLoading(true);
+    const supabase = createSupabaseBrowserClient();
+
+    supabase
+      .from("cited_intake")
+      .select("*")
+      .eq("onboarding_token", token)
+      .maybeSingle()
+      .then(({ data, error: fetchError }) => {
+        if (fetchError || !data) {
+          // Token not found or expired — fall through to empty form at Card 1
+          setIsTokenLoading(false);
+          return;
+        }
+
+        // Populate form from Supabase row
+        setForm((prev) => ({
+          ...prev,
+          fullName: data.full_name ?? prev.fullName,
+          email: data.email ?? prev.email,
+          signupEmail: data.email ?? prev.signupEmail,
+          phone: data.phone ?? prev.phone,
+          brokerage: data.brokerage ?? prev.brokerage,
+          title: data.title ?? prev.title,
+          licenseNumber: data.license_number ?? prev.licenseNumber,
+          brokerDre: data.broker_dre ?? prev.brokerDre,
+          brokerName: data.broker_name ?? prev.brokerName,
+          brokerageAddress: data.brokerage_address ?? prev.brokerageAddress,
+          yearsInMarket: data.years_in_market ?? prev.yearsInMarket,
+          primaryMarkets: data.primary_markets ?? prev.primaryMarkets,
+          primaryMarketZips: data.primary_market_zip ?? prev.primaryMarketZips,
+          neighborhoods: data.neighborhoods ?? prev.neighborhoods,
+          brokerageProfileUrl: data.brokerage_profile_url ?? prev.brokerageProfileUrl,
+          personalWebsiteUrl: data.personal_website_url ?? prev.personalWebsiteUrl,
+          audienceFocus: data.audience_focus ?? prev.audienceFocus,
+          differentiator: data.differentiator ?? prev.differentiator,
+          voiceCapture: data.voice_capture ?? prev.voiceCapture,
+          transactions: data.top_transactions
+            ? data.top_transactions.split("\n").filter(Boolean).map((t: string) => t.replace(" — ", "||"))
+            : prev.transactions,
+          // Platform URLs
+          linkedinUrl: data.linkedin_url ?? prev.linkedinUrl,
+          linkedinStatus: data.linkedin_url ? "yes" : prev.linkedinStatus,
+          zillowUrl: data.zillow_url ?? prev.zillowUrl,
+          zillowStatus: data.zillow_url ? "yes" : prev.zillowStatus,
+          yelpUrl: data.yelp_url ?? prev.yelpUrl,
+          yelpStatus: data.yelp_url ? "yes" : prev.yelpStatus,
+          realtorUrl: data.realtor_url ?? prev.realtorUrl,
+          realtorStatus: data.realtor_url ? "yes" : prev.realtorStatus,
+          fastexpertUrl: data.fastexpert_url ?? prev.fastexpertUrl,
+          fastexpertStatus: data.fastexpert_url ? "yes" : prev.fastexpertStatus,
+          youtubeUrl: data.youtube_url ?? prev.youtubeUrl,
+          youtubeStatus: data.youtube_url ? "yes" : prev.youtubeStatus,
+          gbpUrl: data.gbp_url ?? prev.gbpUrl,
+          gbpStatus: data.gbp_status ?? prev.gbpStatus,
+          additionalPlatforms: data.additional_platforms ?? prev.additionalPlatforms,
+          reviewPlatforms: data.review_platforms ?? prev.reviewPlatforms,
+          reviewOther: data.review_other ?? prev.reviewOther,
+        }));
+
+        // Determine resume card: first card where a required field is empty
+        const fullName = data.full_name ?? "";
+        const email = data.email ?? "";
+        const brokerage = data.brokerage ?? "";
+        const licenseNumber = data.license_number ?? "";
+        const differentiator = data.differentiator ?? "";
+        const topTransactions = data.top_transactions ?? "";
+
+        let resumeCard: number;
+        if (!fullName.trim() || !email.trim()) {
+          resumeCard = 1;
+        } else if (!brokerage.trim() || !licenseNumber.trim()) {
+          resumeCard = 2;
+        } else if (!differentiator.trim()) {
+          resumeCard = 4;
+        } else if (!topTransactions.trim()) {
+          resumeCard = 5;
+        } else {
+          resumeCard = PLATFORM_START_CARD; // Card 8
+        }
+
+        setCurrentCard(resumeCard);
+        setIsTokenLoading(false);
+      });
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   function set<K extends keyof FormData>(key: K, value: FormData[K]) {
@@ -505,6 +593,19 @@ function IntakeForm() {
 
   // ── Render ─────────────────────────────────────────────────
 
+  if (isTokenLoading) {
+    return (
+      <div style={{ minHeight: "100vh", background: "#f8f9fa", display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", gap: "16px" }}>
+        <div style={{
+          width: "40px", height: "40px", border: "3px solid #e2e8f0", borderTopColor: "#00BFA6",
+          borderRadius: "50%", animation: "spin 0.8s linear infinite",
+        }} />
+        <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+        <p style={{ color: "#64748b", fontSize: "14px", margin: 0 }}>Loading your profile...</p>
+      </div>
+    );
+  }
+
   return (
     <div style={{ minHeight: "100vh", background: isCelebration ? "#0A1929" : "#f8f9fa" }}>
       {/* Top header - CITED logo + step */}
@@ -543,6 +644,18 @@ function IntakeForm() {
                 {preFillCount} fields from your PRISM Scan
               </p>
             )}
+          </div>
+        )}
+
+        {/* Back to score link — shown for clients arriving from a score page */}
+        {!isCelebration && !isTokenLoading && (searchParams.get('slug') || searchParams.get('email') || (searchParams.get('token') && form.email)) && (
+          <div style={{ textAlign: 'center', padding: '8px 0', borderBottom: '1px solid #f1f5f9' }}>
+            <a
+              href={`/score/${searchParams.get('slug') || form.email.toLowerCase().replace(/\s+/g, '-')}`}
+              style={{ fontSize: '13px', color: '#64748b', textDecoration: 'none' }}
+            >
+              ← Back to your score
+            </a>
           </div>
         )}
 

@@ -53,6 +53,8 @@ type IntakeRow = {
   primary_markets?: string;
   scan_results?: ScanResults;
   onboarding_token?: string;
+  intake_completion_pct?: number;
+  status?: string;
 };
 
 const D = {
@@ -76,7 +78,7 @@ async function fetchProspect(slug: string): Promise<IntakeRow | null> {
   const slugName = slug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
 
   const res = await fetch(
-    `${sbUrl}/rest/v1/cited_intake?or=(full_name.ilike.${encodeURIComponent(slugName)})&select=id,full_name,email,brokerage,primary_markets,scan_results,onboarding_token&limit=1`,
+    `${sbUrl}/rest/v1/cited_intake?or=(full_name.ilike.${encodeURIComponent(slugName)})&select=id,full_name,email,brokerage,primary_markets,scan_results,onboarding_token,intake_completion_pct,status&limit=1`,
     { headers: { apikey: sbKey, Authorization: `Bearer ${sbKey}` }, next: { revalidate: 120 } }
   );
 
@@ -162,6 +164,26 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
   if (scan?.dre_data?.broker_name) prefillParams.set('brokerName', scan.dre_data.broker_name);
   if (scan?.dre_data?.agent_mailing_address) prefillParams.set('brokerageAddress', scan.dre_data.agent_mailing_address);
   const intakeUrl = `/intake?${prefillParams.toString()}`;
+
+  // ── Dynamic CTA logic (CITED-176) ──
+  const foundingActive = process.env.NEXT_PUBLIC_FOUNDING_ACTIVE === 'true';
+  const intakePct = prospect.intake_completion_pct ?? 0;
+  const intakeComplete = intakePct === 100 || prospect.status === 'complete';
+  const intakeStarted = intakePct > 0;
+
+  let ctaText: string;
+  let ctaHref: string = intakeUrl;
+
+  if (intakeComplete) {
+    ctaText = 'View My Report →';
+    ctaHref = '/onboarding/results';
+  } else if (intakeStarted) {
+    ctaText = 'Complete Your Intake →';
+  } else if (foundingActive) {
+    ctaText = 'Claim My Founding Spot →';
+  } else {
+    ctaText = 'Get Cited →';
+  }
 
   // Dynamic "why this is a problem" bullets based on scan data
   const components = scan?.foundation_components || {};
@@ -322,8 +344,8 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
         {/* ═══ MID-PAGE CTA ═══ */}
         <div style={{ textAlign: 'center', marginBottom: '32px' }}>
           <p style={{ fontSize: '15px', color: D.textSecondary, marginBottom: '14px' }}>Ready to fix this?</p>
-          <TrackedLink href={intakeUrl} slug={slug} name={name} eventType="cta_click" eventData={{ page: 'score', cta: 'mid_page' }} style={{ display: 'inline-block', background: D.teal, color: '#fff', fontWeight: 700, fontSize: '15px', padding: '14px 36px', borderRadius: '10px', textDecoration: 'none', boxShadow: '0 4px 16px rgba(0,191,166,0.3)' }}>
-            Make AI Recommend Me →
+          <TrackedLink href={ctaHref} slug={slug} name={name} eventType="cta_click" eventData={{ page: 'score', cta: 'mid_page' }} style={{ display: 'inline-block', background: D.teal, color: '#fff', fontWeight: 700, fontSize: '15px', padding: '14px 36px', borderRadius: '10px', textDecoration: 'none', boxShadow: '0 4px 16px rgba(0,191,166,0.3)' }}>
+            {ctaText}
           </TrackedLink>
           <p style={{ fontSize: '12px', color: D.textTertiary, marginTop: '12px' }}>
             <strong style={{ color: D.navy }}>Free for Founding Members.</strong> Takes 5 minutes. We handle the rest.
@@ -414,8 +436,8 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
 
         {/* ═══ CTA ═══ */}
         <div style={{ textAlign: 'center', marginBottom: '32px' }}>
-          <TrackedLink href={intakeUrl} slug={slug} name={name} eventType="cta_click" eventData={{ page: 'score', cta: 'bottom' }} style={{ display: 'inline-block', background: D.teal, color: '#fff', fontWeight: 700, fontSize: '16px', padding: '18px 40px', borderRadius: '10px', textDecoration: 'none', boxShadow: '0 4px 16px rgba(0,191,166,0.3)' }}>
-            Make AI Recommend Me →
+          <TrackedLink href={ctaHref} slug={slug} name={name} eventType="cta_click" eventData={{ page: 'score', cta: 'bottom' }} style={{ display: 'inline-block', background: D.teal, color: '#fff', fontWeight: 700, fontSize: '16px', padding: '18px 40px', borderRadius: '10px', textDecoration: 'none', boxShadow: '0 4px 16px rgba(0,191,166,0.3)' }}>
+            {ctaText}
           </TrackedLink>
           <p style={{ fontSize: '12px', color: D.textTertiary, marginTop: '12px' }}>
             <strong style={{ color: D.navy }}>Free for Founding Members.</strong> Takes 5 minutes. We handle the rest.

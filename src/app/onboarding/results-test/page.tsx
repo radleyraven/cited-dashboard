@@ -808,7 +808,7 @@ function ResultsContent() {
               {[
                 { icon: '📋', label: 'Your Input', desc: 'Markets you identified' },
                 { icon: '📊', label: 'Your Transactions', desc: `${scan.txn_analyzed} sales analyzed` },
-                { icon: '🔍', label: 'PRISM SCAN™', desc: `5 AI models · ${scan.platform_count} platforms audited` },
+                { icon: '🔍', label: 'PRISM SCAN™', desc: `9 AI engines · ${scan.platform_count} platforms audited` },
               ].map(s => (
                 <div key={s.label} style={{ background: '#fff', borderRadius: '8px', padding: '12px 14px', textAlign: 'center' }}>
                   <div style={{ fontSize: '18px', marginBottom: '4px' }}>{s.icon}</div>

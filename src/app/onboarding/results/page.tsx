@@ -516,8 +516,8 @@ function ResultsContent() {
                 {/* Competitor */}
                 <div style={{ padding: '20px', background: '#fafbfc' }}>
                   <div style={{ fontSize: '10px', color: '#EF4444', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '12px' }}>Benchmark</div>
-                  <div style={{ fontSize: '48px', fontWeight: 900, color: '#EF4444', lineHeight: 1 }}>~55</div>
-                  <div style={{ fontSize: '12px', color: '#94a3b8', marginTop: '4px', marginBottom: '12px' }}>out of 100</div>
+                  {/* Competitor score removed — no estimates. Name only on score page. Score comparison in Citation Report. */}
+                  <div style={{ fontSize: '14px', color: '#EF4444', fontWeight: 700, lineHeight: 1.4, marginBottom: '12px' }}>Currently recommended by AI in this market</div>
                   <div style={{ fontSize: '13px', fontWeight: 700, color: '#0A1929', marginBottom: '2px' }}>{primaryCompetitor.competitor}</div>
                   <div style={{ fontSize: '11px', color: '#94a3b8', marginBottom: '10px' }}>{primaryCompetitor.competitor_brokerage}</div>
                   <div style={{ fontSize: '12px', color: '#94a3b8', lineHeight: 1.5 }}>
@@ -529,7 +529,7 @@ function ResultsContent() {
               {/* What the gap means */}
               <div style={{ padding: '14px 20px', background: '#0A1929', display: 'flex', alignItems: 'center', gap: '12px' }}>
                 <div style={{ fontSize: '13px', color: '#94a3b8', lineHeight: 1.5, flex: 1 }}>
-                  Our goal isn&apos;t just to match Felicia at ~55 — it&apos;s to make you the <span style={{ color: '#00BFA6', fontWeight: 700 }}>most recommended agent</span> in your market.
+                  Our goal is to make you the <span style={{ color: '#00BFA6', fontWeight: 700 }}>most recommended agent</span> in your market.
                   Our analysis shows exactly where your <span style={{ color: '#00BFA6', fontWeight: 700 }}>+41 points</span> are coming from.
                 </div>
               </div>

@@ -37,7 +37,7 @@ export default function TermsOfServicePage() {
             Cited provides AI Citation Optimization™ services for licensed professionals. The Service includes:
           </p>
           <ul style={{ fontSize: '15px', color: '#4a5568', lineHeight: 1.9, margin: '0 0 32px', paddingLeft: '24px' }}>
-            <li>Full PRISM™ Foundation Score audit across 13+ platforms and 5 AI models (ChatGPT, Perplexity, Gemini, Claude, Grok).</li>
+            <li>Full PRISM™ Foundation Score audit across 13+ platforms and multiple AI engines, including major commercial AI assistants and AI-powered search platforms.</li>
             <li>AI-optimized profile builds and rewrites across professional platforms including Google Business Profile, LinkedIn, Yelp, Bing Places, Foursquare, Zillow, Realtor.com, FastExpert, HomeLight, Apple Business Connect, Homes.com, and YouTube.</li>
             <li>AI-optimized personal website — registered, built, hosted, and maintained by Cited on a domain selected for your name and market.</li>
             <li>Public agent profile page at citedagent.com/agents/[your-name] with full structured data markup.</li>
@@ -125,7 +125,7 @@ export default function TermsOfServicePage() {
           {/* Section 6 */}
           <h2 style={{ fontSize: '18px', fontWeight: 700, color: '#0A1929', margin: '0 0 12px', paddingTop: '28px', borderTop: '2px solid #f0f4f8' }}>6. Limitation of Liability &amp; Results Disclaimer</h2>
           <p style={{ fontSize: '15px', color: '#4a5568', lineHeight: 1.8, margin: '0 0 12px' }}>
-            Cited provides AI Citation Optimization™ services based on current understanding of AI model behavior. <strong>AI models (ChatGPT, Perplexity, Gemini, Claude) are operated by third parties and may change their algorithms, data sources, or citation behavior at any time without notice.</strong> Cited does not control these models and cannot guarantee specific placement, ranking, or recommendation in any AI model&apos;s outputs.
+            Cited provides AI Citation Optimization™ services based on current understanding of AI model behavior. <strong>AI models used in the PRISM™ scan are operated by third parties and may change their algorithms, data sources, or citation behavior at any time without notice.</strong> Cited does not control these models and cannot guarantee specific placement, ranking, or recommendation in any AI model&apos;s outputs.
           </p>
           <p style={{ fontSize: '15px', color: '#4a5568', lineHeight: 1.8, margin: '0 0 12px' }}>
             The Citation Guarantee™ is based on Foundation Score improvement as measured by PRISM™, not on specific AI model outputs. Foundation Score improvement does not guarantee that you will be recommended by any specific AI model for any specific query.
