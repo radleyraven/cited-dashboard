@@ -124,6 +124,15 @@ interface ScanResults {
   competitor_validation?: CompetitorValidation;
 }
 
+/* ── Default deliverables (fallback when Deep Scan v2 output omits this field) ── */
+const DEFAULT_DELIVERABLES: DeliverableData[] = [
+  { icon: 'profiles', title: 'Google Business Profile Optimization', desc: 'Claim, verify, and fully optimize your GBP — the #1 signal Gemini uses for local agent recommendations.', color: '#00BFA6' },
+  { icon: 'star', title: 'Yelp Profile + Review Strategy', desc: 'Optimize your Yelp profile and build your review count — Perplexity\'s #1 data source for local recommendations.', color: '#D4A830' },
+  { icon: 'article', title: 'Market Authority Articles', desc: 'Two market-specific articles per month written collaboratively in your voice, targeting your exact markets and neighborhoods.', color: '#0A1929' },
+  { icon: 'globe', title: 'Satellite Site + Schema', desc: 'A dedicated authority site with RealEstateAgent schema markup — required for Gemini and ChatGPT visibility.', color: '#64748b' },
+  { icon: 'chart', title: 'Monthly PRISM Scan + Report', desc: 'Full 9-engine rescan every 30 days. You see exactly what moved, what AI says about you, and what\'s next.', color: '#EF4444' },
+];
+
 /* ── Tier config ── */
 const TIER_CONFIG: Record<string, { label: string; color: string; bg: string; border: string; desc: string }> = {
   primary: { label: 'Primary Market', color: '#00BFA6', bg: '#f0fdf9', border: '#00BFA6', desc: 'Your headline market. Deepest evidence, highest optimization priority.' },
@@ -268,6 +277,49 @@ function StrengthCards({ strengths }: { strengths: StrengthData[] }) {
   );
 }
 
+/* ── normalizeScanResults — bridges Deep Scan v2 output → ScanResults interface ── */
+function normalizeScanResults(sr: Record<string, unknown>): ScanResults {
+  // Adapter: maps Deep Scan v2 field names → ScanResults interface
+  // This bridges the gap between cited-prism-score-v2.py output and the page contract
+  return {
+    ...sr,
+    // Score fields
+    composite_score: (sr.composite_score as number) ?? (sr.foundation_score as number) ?? 0,
+    tier_name: (sr.tier_name as string) ?? (sr.foundation_tier as string) ?? 'Early Signal',
+    tier_line: (sr.tier_line as string) ?? `Foundation Score: ${(sr.foundation_score as number) ?? 0}/100`,
+    // Deliverables — required for Section 6, absent from Deep Scan output
+    deliverables: (sr.deliverables as unknown[]) ?? DEFAULT_DELIVERABLES,
+    // Platform/scan metadata
+    platform_count: (sr.platform_count as number) ?? 12,
+    scan_completion: (sr.scan_completion as string) ?? `PRISM Deep Scan — 9 engines — ${(sr.scan_date as string) ?? 'Recent'}`,
+    consistency_runs: (sr.consistency_runs as number) ?? (sr.queries_completed as number) ?? 0,
+    // ai_quote shape: Deep Scan outputs {text:string} OR narrative.ai_quote
+    // Page expects {model, query, response} — normalize to what exists
+    ai_quote: (() => {
+      if (sr.ai_quote && typeof (sr.ai_quote as Record<string,unknown>).text === 'string') {
+        return { model: 'Multiple AI engines', query: 'Brand recognition query', response: (sr.ai_quote as Record<string,unknown>).text as string };
+      }
+      const narr = sr.narrative as Record<string,unknown> | undefined;
+      if (narr?.ai_quote && typeof (narr.ai_quote as Record<string,unknown>).text === 'string') {
+        return { model: 'Multiple AI engines', query: 'Brand recognition query', response: (narr.ai_quote as Record<string,unknown>).text as string };
+      }
+      return (sr.ai_quote as {model:string,query:string,response:string}) ?? { model: '', query: '', response: '' };
+    })(),
+    // Transaction count for stats display
+    txn_analyzed: (sr.txn_analyzed as number) ?? (sr.deal_map as Record<string,unknown>)?.closed_count as number ?? 0,
+    // gaps.points: ensure string type if page expects it
+    gaps: Array.isArray(sr.gaps) ? (sr.gaps as Record<string,unknown>[]).map(g => ({
+      ...g,
+      points: String(g.points ?? ''),
+    })) : [],
+    stats: Array.isArray(sr.stats) ? sr.stats : [],
+    strengths: Array.isArray(sr.strengths) ? sr.strengths : [],
+    trajectory: Array.isArray(sr.trajectory) ? sr.trajectory : [],
+    query_count: (sr.query_count as number) ?? 0,
+    neighborhood_count: (sr.neighborhood_count as number) ?? (Array.isArray(sr.markets) ? (sr.markets as Record<string,unknown>[]).reduce((n, m) => n + ((m.neighborhoods as unknown[])?.length ?? 0), 0) : 0),
+  } as ScanResults;
+}
+
 /* ════════════════════════════════════════════════════════════
    MAIN COMPONENT
    ════════════════════════════════════════════════════════════ */
@@ -306,8 +358,8 @@ function ResultsContent() {
         if (data.audience_focus) setAudienceFocus(data.audience_focus);
         if (data.scan_results) {
           const sr = data.scan_results as ScanResults;
-          setScan(sr);
-          setMarketConfirms(sr.markets.map(() => false));
+          setScan(normalizeScanResults(sr as unknown as Record<string, unknown>));
+          setMarketConfirms((sr.markets || []).map(() => false));
         }
       }
     }

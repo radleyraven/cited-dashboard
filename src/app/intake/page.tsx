@@ -28,7 +28,7 @@ const PLATFORMS = [
   { key: "foursquare", label: "Foursquare", impact: "medium" as const, statusKey: "foursquareStatus", urlKey: "foursquareUrl" },
   { key: "youtube", label: "YouTube", impact: "medium" as const, statusKey: "youtubeStatus", urlKey: "youtubeUrl" },
   // Supporting
-  { key: "homescom", label: "Homes.com", impact: "supporting" as const, statusKey: "homescomStatus", urlKey: "homescomUrl" },
+  { key: "redfin", label: "Redfin", impact: "supporting" as const, statusKey: "redfin_Status", urlKey: "redfinUrl" },
   { key: "homelight", label: "HomeLight", impact: "supporting" as const, statusKey: "homelightStatus", urlKey: "homelightUrl" },
   { key: "apple", label: "Apple Business Connect", impact: "supporting" as const, statusKey: "appleStatus", urlKey: "appleUrl" },
   { key: "x", label: "X (Twitter)", impact: "supporting" as const, statusKey: "xStatus", urlKey: "xUrl" },
