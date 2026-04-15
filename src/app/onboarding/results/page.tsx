@@ -312,14 +312,21 @@ function normalizeScanResults(sr: Record<string, unknown>): ScanResults {
     // ai_quote shape: Deep Scan outputs {text:string} OR narrative.ai_quote
     // Page expects {model, query, response} — normalize to what exists
     ai_quote: (() => {
-      if (sr.ai_quote && typeof (sr.ai_quote as Record<string,unknown>).text === 'string') {
-        return { model: 'Multiple AI engines', query: `Who is ${sr.client_name ?? 'this agent'}?`, response: (sr.ai_quote as Record<string,unknown>).text as string };
+      const aq = sr.ai_quote as Record<string,unknown> | undefined;
+      // If ai_quote already has model+query+response (full object from Supabase) — use directly
+      if (aq?.model && aq?.query && aq?.response) {
+        return aq as {model:string,query:string,response:string,client_mentioned?:boolean};
       }
+      // Fallback: narrative ai_quote text shape
       const narr = sr.narrative as Record<string,unknown> | undefined;
-      if (narr?.ai_quote && typeof (narr.ai_quote as Record<string,unknown>).text === 'string') {
-        return { model: 'Multiple AI engines', query: `Who is ${sr.client_name ?? 'this agent'}?`, response: (narr.ai_quote as Record<string,unknown>).text as string };
+      const narrativeText = (narr?.ai_quote as Record<string,unknown>)?.text as string | undefined
+        ?? (aq?.text as string | undefined);
+      if (narrativeText) {
+        const primaryMarket = (sr.markets as Array<{name:string,tier:string}>)?.find(m => m.tier === 'primary')?.name
+          ?? (sr.markets as Array<{name:string}>)?.[0]?.name ?? 'Carlsbad';
+        return { model: 'Multiple AI engines', query: `Who is the best real estate agent in ${primaryMarket}?`, response: narrativeText, client_mentioned: false };
       }
-      return (sr.ai_quote as {model:string,query:string,response:string}) ?? { model: '', query: '', response: '' };
+      return { model: 'Multiple AI engines', query: '', response: '', client_mentioned: false };
     })(),
     // Transaction count for stats display
     txn_analyzed: (sr.txn_analyzed as number) ?? (sr.deal_map as Record<string,unknown>)?.closed_count as number ?? 0,
@@ -553,7 +560,7 @@ function ResultsContent() {
       <ProgressIndicator />
 
       {/* ═══ BLOCK 0: MILESTONE CARD ═══ */}
-      {false && safeScan.milestone_to_celebrate && !milestonePopupDismissed && (
+      {safeScan.milestone_to_celebrate && !milestonePopupDismissed && (
         <MilestoneCard
           milestone={safeScan.milestone_to_celebrate as unknown as MilestoneData}
           onDismiss={() => setMilestonePopupDismissed(true)}
