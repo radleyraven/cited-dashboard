@@ -6,6 +6,7 @@ import { Suspense } from 'react';
 import { createSupabaseBrowserClient } from '@/lib/supabase-browser';
 import CitedHeader from '@/components/CitedHeader';
 import CitedFooter from '@/components/CitedFooter';
+import MilestoneCard, { type MilestoneData } from '@/components/MilestoneCard';
 
 /* ═══════════════════════════════════════════════════════════════
    Citation Report — v7.0
@@ -122,10 +123,20 @@ interface ScanResults {
   trajectory: TrajectoryData[];
   deliverables: DeliverableData[];
   competitor_validation?: CompetitorValidation;
+  milestone_to_celebrate?: Record<string, unknown> | null;
+  client_mentioned_count?: number;
+  deal_map?: Record<string, unknown>;
+  mls_stats?: {
+    median_dom?: number;
+    list_to_sale_ratio?: number;
+    above_asking_rate?: number;
+    above_asking_count?: number;
+  } | null;
 }
 
 /* ── Default deliverables (fallback when Deep Scan v2 output omits this field) ── */
 const DEFAULT_DELIVERABLES: DeliverableData[] = [
+  { icon: 'profiles', title: 'Platform Profile Optimization', desc: 'LinkedIn, Bing Places, Zillow, Realtor.com, and FastExpert — every platform AI pulls from, fully optimized.', color: '#0A1929' },
   { icon: 'profiles', title: 'Google Business Profile Optimization', desc: 'Claim, verify, and fully optimize your GBP — the #1 signal Gemini uses for local agent recommendations.', color: '#00BFA6' },
   { icon: 'star', title: 'Yelp Profile + Review Strategy', desc: 'Optimize your Yelp profile and build your review count — Perplexity\'s #1 data source for local recommendations.', color: '#D4A830' },
   { icon: 'article', title: 'Market Authority Articles', desc: 'Two market-specific articles per month written collaboratively in your voice, targeting your exact markets and neighborhoods.', color: '#0A1929' },
@@ -281,6 +292,11 @@ function StrengthCards({ strengths }: { strengths: StrengthData[] }) {
 function normalizeScanResults(sr: Record<string, unknown>): ScanResults {
   // Adapter: maps Deep Scan v2 field names → ScanResults interface
   // This bridges the gap between cited-prism-score-v2.py output and the page contract
+  const primaryMarket = (Array.isArray(sr.markets)
+    ? (sr.markets as Array<{name: string; tier: string}>).find(m => m.tier === 'primary')?.name
+    : null)
+    ?? (Array.isArray(sr.markets) ? (sr.markets as Array<{name: string}>)[0]?.name : null)
+    ?? 'your market';
   return {
     ...sr,
     // Score fields
@@ -290,18 +306,18 @@ function normalizeScanResults(sr: Record<string, unknown>): ScanResults {
     // Deliverables — required for Section 6, absent from Deep Scan output
     deliverables: (sr.deliverables as unknown[]) ?? DEFAULT_DELIVERABLES,
     // Platform/scan metadata
-    platform_count: (sr.platform_count as number) ?? 12,
+    platform_count: (sr.platform_count as number) ?? 13,
     scan_completion: (sr.scan_completion as string) ?? `PRISM Deep Scan — 9 engines — ${(sr.scan_date as string) ?? 'Recent'}`,
     consistency_runs: (sr.consistency_runs as number) ?? (sr.queries_completed as number) ?? 0,
     // ai_quote shape: Deep Scan outputs {text:string} OR narrative.ai_quote
     // Page expects {model, query, response} — normalize to what exists
     ai_quote: (() => {
       if (sr.ai_quote && typeof (sr.ai_quote as Record<string,unknown>).text === 'string') {
-        return { model: 'Multiple AI engines', query: 'Brand recognition query', response: (sr.ai_quote as Record<string,unknown>).text as string };
+        return { model: 'Multiple AI engines', query: `Who is the best real estate agent in ${primaryMarket}?`, response: (sr.ai_quote as Record<string,unknown>).text as string };
       }
       const narr = sr.narrative as Record<string,unknown> | undefined;
       if (narr?.ai_quote && typeof (narr.ai_quote as Record<string,unknown>).text === 'string') {
-        return { model: 'Multiple AI engines', query: 'Brand recognition query', response: (narr.ai_quote as Record<string,unknown>).text as string };
+        return { model: 'Multiple AI engines', query: `Who is the best real estate agent in ${primaryMarket}?`, response: (narr.ai_quote as Record<string,unknown>).text as string };
       }
       return (sr.ai_quote as {model:string,query:string,response:string}) ?? { model: '', query: '', response: '' };
     })(),
@@ -314,10 +330,87 @@ function normalizeScanResults(sr: Record<string, unknown>): ScanResults {
     })) : [],
     stats: Array.isArray(sr.stats) ? sr.stats : [],
     strengths: Array.isArray(sr.strengths) ? sr.strengths : [],
-    trajectory: Array.isArray(sr.trajectory) ? sr.trajectory : [],
+    trajectory: Array.isArray(sr.trajectory) && (sr.trajectory as unknown[]).length > 0
+      ? sr.trajectory
+      : (() => {
+          const base = (sr.foundation_score as number) ?? (sr.composite_score as number) ?? 0;
+          return [
+            { day: 'Day 0', score: String(base), color: base < 35 ? '#DC2626' : '#D4A830', headline: 'Baseline established', outcomes: ['AI citation footprint mapped', 'Competitor gap identified'] },
+            { day: 'Day 30', score: String(Math.min(100, base + 19)), color: '#D4A830', headline: 'Platform foundation built', outcomes: ['GBP + Yelp optimized', 'First market article published', 'Day 30 score update delivered'] },
+            { day: 'Day 60', score: String(Math.min(100, base + 33)), color: '#D4A830', headline: 'Content & media momentum', outcomes: ['3+ earned media mentions', 'AI connects your name to your markets', 'Entity signals locked'] },
+            { day: 'Day 90', score: String(Math.min(100, base + 46)) + '+', color: '#00BFA6', headline: 'AI starts recommending you', outcomes: [`First time AI recommends you in ${(sr.markets as Array<{name:string,tier:string}>)?.find(m=>m.tier==='primary')?.name ?? 'your market'}`, 'Foundation Score verified', 'Citation Guarantee™ check'] },
+          ];
+        })(),
+    mls_stats: (() => {
+      const statsRaw = (sr as Record<string,unknown>).mls_stats as Record<string,unknown> | undefined;
+      const statsAlt = (sr as Record<string,unknown>).stats as Record<string,unknown> | undefined;
+      const s = statsRaw ?? (Array.isArray(statsAlt) ? undefined : statsAlt);
+      if (!s) return null;
+      return {
+        median_dom: s.median_dom as number | undefined,
+        list_to_sale_ratio: s.list_to_sale_ratio as number | undefined,
+        above_asking_rate: s.above_asking_rate as number | undefined,
+        above_asking_count: s.above_asking_count as number | undefined,
+      };
+    })(),
     query_count: (sr.query_count as number) ?? 0,
     neighborhood_count: (sr.neighborhood_count as number) ?? (Array.isArray(sr.markets) ? (sr.markets as Record<string,unknown>[]).reduce((n, m) => n + ((m.neighborhoods as unknown[])?.length ?? 0), 0) : 0),
+    milestone_to_celebrate: (sr.milestone_to_celebrate as ScanResults['milestone_to_celebrate']) ?? null,
   } as ScanResults;
+}
+
+/* ── selectGoldStats — determines which hero stats get gold color ── */
+function selectGoldStats(scan: ScanResults): Set<string> {
+  const gold = new Set<string>();
+  const mls = scan.mls_stats;
+  const dealMap = scan.deal_map as Record<string,unknown> | undefined;
+
+  // Always gold: career volume
+  if (dealMap?.career_volume || scan.stats?.find((s: {label:string}) => s.label === 'Career Volume')) {
+    gold.add('Career Volume');
+  }
+
+  // Gold if median_dom present
+  if (mls?.median_dom != null) gold.add('Median DOM');
+
+  // Gold if list_to_sale >= 95%
+  if (mls?.list_to_sale_ratio != null && mls.list_to_sale_ratio >= 0.95) gold.add('List-to-Sale');
+
+  // Gold if above_asking_rate >= 20%
+  if (mls?.above_asking_rate != null && mls.above_asking_rate >= 0.20) gold.add('Above Asking');
+
+  // Cap at 3 — keep first 3 added
+  const capped = new Set<string>();
+  for (const k of gold) {
+    if (capped.size >= 3) break;
+    capped.add(k);
+  }
+  return capped;
+}
+
+/* ── Condensed bar ── */
+function CondensedBar({ num, summary, onClick }: { num: number; summary: string; onClick: () => void }) {
+  return (
+    <div
+      onClick={onClick}
+      style={{
+        background: '#f8f9fa',
+        borderRadius: '8px',
+        padding: '10px 16px',
+        marginBottom: '12px',
+        cursor: 'pointer',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        border: '1px solid #e2e8f0',
+      }}
+    >
+      <span style={{ fontSize: '13px', color: '#0A1929', fontWeight: 600 }}>
+        {num}. {summary}
+      </span>
+      <span style={{ fontSize: '11px', color: '#00BFA6', fontWeight: 600 }}>Expand ↑</span>
+    </div>
+  );
 }
 
 /* ════════════════════════════════════════════════════════════
@@ -336,6 +429,7 @@ function ResultsContent() {
   const [showApprovePanel, setShowApprovePanel] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [audienceFocus, setAudienceFocus] = useState<string>('sellers');
+  const [expandedSection, setExpandedSection] = useState<number | null>(null);
 
   const searchParams = useSearchParams();
   const sectionRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -388,7 +482,11 @@ function ResultsContent() {
   function approveAllMarkets() { setMarketConfirms(prev => prev.map(() => true)); }
 
   function handleApproveClick() {
-    if (!allMarketsConfirmed) { setShowModal(true); return; }
+    if (!allMarketsConfirmed) {
+      setShowModal(true);
+      scrollToMarkets();
+      return;
+    }
     setShowApprovePanel(true);
     setTimeout(() => {
       if (approvePanelRef.current) approvePanelRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -432,13 +530,30 @@ function ResultsContent() {
   );
 
   const primaryCompetitor = scan.markets.find(m => m.tier === 'primary');
+  const primaryMarket = scan.markets?.find(m => m.tier === 'primary')?.name ?? scan.markets?.[0]?.name ?? 'Carlsbad';
+
+  const primaryMarketForCondense = scan?.markets?.find(m => m.tier === 'primary')?.name ?? scan?.markets?.[0]?.name ?? 'Carlsbad';
+  const totalRecoverablePoints = scan?.gaps?.reduce((sum: number, g: {points: string | number}) => sum + Number(String(g.points).replace(' pts', '')), 0) ?? 0;
+  const day90Score = scan ? Math.min(100, scan.composite_score + 46) : 0;
+
+  function isCondensed(sectionNum: number): boolean {
+    // A section is condensed if: it has been revealed AND a later section is now visible AND user hasn't re-expanded it
+    return visibleSection > sectionNum && expandedSection !== sectionNum;
+  }
 
   return (
     <div style={{ minHeight: '100vh', background: '#f8f9fa' }}>
-      {showModal && <Modal onClose={scrollToMarkets} onConfirm={() => { setShowModal(false); setShowApprovePanel(true); }} />}
+      {showModal && <Modal onClose={scrollToMarkets} onConfirm={() => { setShowModal(false); if (allMarketsConfirmed) setShowApprovePanel(true); }} />}
 
       <CitedHeader variant="onboarding" userEmail="" userName={clientName} clientTier="founding_client" />
       <ProgressIndicator />
+
+      {/* ═══ BLOCK 0: MILESTONE CARD ═══ */}
+      {scan?.milestone_to_celebrate && (
+        <div style={{ maxWidth: '680px', margin: '0 auto', padding: '32px 24px 0' }}>
+          <MilestoneCard milestone={scan.milestone_to_celebrate as unknown as MilestoneData} />
+        </div>
+      )}
 
       {/* ═══ HERO ═══ */}
       <div style={{ background: '#0A1929', padding: '44px 24px 40px', textAlign: 'center' }}>
@@ -450,17 +565,22 @@ function ResultsContent() {
             {firstName ? `${firstName}, here's what we found.` : "Here's what we found."}
           </h1>
           <p style={{ fontSize: '13px', color: '#64748b', margin: '0 0 24px 0', lineHeight: 1.5 }}>
-            We ran {scan.query_count} queries across the top AI models {audienceFocus === 'buyers' ? 'buyers and sellers' : 'sellers and buyers'} use, audited {scan.platform_count} platforms,
-            analyzed {scan.txn_analyzed} of your transactions, and mapped {scan.neighborhood_count} neighborhoods — every query
-            run {scan.consistency_runs}x for consistency.
+            We ran {scan.query_count} queries across {scan.model_count} AI engines {audienceFocus === 'buyers' ? 'buyers and sellers' : 'sellers and buyers'} use, audited {scan.platform_count} platforms,
+            and analyzed {scan.txn_analyzed} transactions across your markets.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '8px', marginBottom: '24px' }}>
-            {scan.stats.map((stat) => (
-              <div key={stat.label} style={{ background: 'rgba(255,255,255,0.05)', borderRadius: '10px', padding: '12px 8px' }}>
-                <div style={{ fontSize: '22px', fontWeight: 900, color: '#00BFA6' }}>{stat.value}</div>
-                <div style={{ fontSize: '10px', color: '#94a3b8', marginTop: '3px' }}>{stat.label}</div>
-              </div>
-            ))}
+            {(() => {
+              const goldStats = selectGoldStats(scan);
+              return scan.stats.map((stat) => {
+                const isGold = goldStats.has(stat.label);
+                return (
+                  <div key={stat.label} style={{ background: 'rgba(255,255,255,0.05)', borderRadius: '10px', padding: '12px 8px' }}>
+                    <div style={{ fontSize: '22px', fontWeight: 900, color: isGold ? '#D4A830' : '#00BFA6' }}>{stat.value}</div>
+                    <div style={{ fontSize: '10px', color: '#94a3b8', marginTop: '3px' }}>{stat.label}</div>
+                  </div>
+                );
+              });
+            })()}
           </div>
           <p style={{ fontSize: '15px', color: '#94a3b8', lineHeight: 1.6, margin: 0, maxWidth: '520px', marginLeft: 'auto', marginRight: 'auto' }}>
             These numbers tell the story of a top-performing luxury agent. But when {audienceFocus === 'buyers' ? 'buyers and sellers' : 'sellers and buyers'} ask AI who to call —{' '}
@@ -474,7 +594,20 @@ function ResultsContent() {
 
         {/* ═══ SECTION 1: DISCOVERY GAP ═══ */}
         <div ref={el => { sectionRefs.current[0] = el; }} style={{ paddingTop: '36px' }}>
-          <SectionHeader num="1" title="The Discovery Gap" color="#0A1929" />
+          {isCondensed(1) ? (
+            <CondensedBar
+              num={1}
+              summary={`Foundation Score: ${scan.composite_score}/100 · ${primaryMarketForCondense}`}
+              onClick={() => {
+                setExpandedSection(1);
+                setTimeout(() => {
+                  const ref = sectionRefs.current[0];
+                  if (ref) ref.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 100);
+              }}
+            />
+          ) : (
+          <><SectionHeader num="1" title="The Discovery Gap" color="#0A1929" />
           <p style={{ fontSize: '14px', color: '#64748b', margin: '0 0 16px 0', lineHeight: 1.5 }}>
             Your next client is asking AI who to {audienceFocus === 'buyers' ? 'buy with' : 'list with'} right now. Here&apos;s what one of those queries returned:
           </p>
@@ -496,23 +629,28 @@ function ResultsContent() {
             {/* Result — context + stat inline */}
             <div style={{ padding: '12px 16px', background: '#fff5f5', borderTop: '1px solid #fee2e2' }}>
               <div style={{ fontSize: '13px', color: '#EF4444', fontWeight: 600, lineHeight: 1.5 }}>
-                We ran that search — and 89 others just like it — across all the AI tools {audienceFocus === 'buyers' ? 'buyers and sellers' : 'sellers and buyers'} are using right now to find agents. Your name came up 0 out of 90 times.
+                We ran that search — and {(scan.query_count - 1).toLocaleString()} others just like it — across all the AI tools {audienceFocus === 'buyers' ? 'buyers and sellers' : 'sellers and buyers'} are using right now to find agents.
               </div>
             </div>
           </div>
 
-          {/* 90/0 Stat Block */}
-          <div style={{
-            background: '#0A1929', borderRadius: '10px', padding: '20px 24px',
-            marginBottom: '20px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0',
-          }}>
-            <div style={{ textAlign: 'center', borderRight: '1px solid rgba(255,255,255,0.1)', paddingRight: '20px' }}>
-              <div style={{ fontSize: '48px', fontWeight: 900, color: '#fff', lineHeight: 1 }}>90</div>
-              <div style={{ fontSize: '12px', color: '#64748b', marginTop: '6px', lineHeight: 1.4 }}>Searches sellers and buyers run in your markets</div>
+          {/* Discovery Stat Block — A-8/Flag 1 */}
+          <div style={{ background: '#0A1929', borderRadius: '10px', padding: '20px 24px', marginBottom: '20px' }}>
+            <div style={{ fontSize: '18px', fontWeight: 800, color: '#fff', textAlign: 'center', marginBottom: '16px', lineHeight: 1.3 }}>
+              AI recognizes your name. AI doesn&apos;t recommend you.
             </div>
-            <div style={{ textAlign: 'center', paddingLeft: '20px' }}>
-              <div style={{ fontSize: '48px', fontWeight: 900, color: '#EF4444', lineHeight: 1 }}>0</div>
-              <div style={{ fontSize: '12px', color: '#64748b', marginTop: '6px', lineHeight: 1.4 }}>Times your name appeared</div>
+            <div style={{ display: 'flex', gap: '24px', justifyContent: 'center', marginBottom: '12px' }}>
+              <div style={{ textAlign: 'center' }}>
+                <div style={{ fontSize: '48px', fontWeight: 900, color: '#00BFA6', lineHeight: 1 }}>{scan.client_mentioned_count ?? 0}</div>
+                <div style={{ fontSize: '12px', color: '#64748b', marginTop: '6px', lineHeight: 1.4 }}>times AI recognized your name</div>
+              </div>
+              <div style={{ textAlign: 'center' }}>
+                <div style={{ fontSize: '48px', fontWeight: 900, color: '#EF4444', lineHeight: 1 }}>0</div>
+                <div style={{ fontSize: '12px', color: '#64748b', marginTop: '6px', lineHeight: 1.4 }}>times AI recommended you in {primaryMarket}</div>
+              </div>
+            </div>
+            <div style={{ fontSize: '13px', color: '#94a3b8', textAlign: 'center' }}>
+              We ran {scan.query_count.toLocaleString()} queries across 9 AI engines.
             </div>
           </div>
 
@@ -533,13 +671,7 @@ function ResultsContent() {
                     border: '2px solid #fff', boxShadow: '0 1px 4px rgba(0,0,0,0.2)',
                     transform: 'translateX(-50%)',
                   }} />
-                  {/* Competitor marker */}
-                  <div style={{
-                    position: 'absolute', top: '-4px', left: '55%',
-                    width: '16px', height: '16px', borderRadius: '50%', background: '#EF4444',
-                    border: '2px solid #fff', boxShadow: '0 1px 4px rgba(0,0,0,0.2)',
-                    transform: 'translateX(-50%)',
-                  }} />
+                  {/* Competitor dot removed — no score estimates on score page per spec */}
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '10px', color: '#94a3b8', marginTop: '4px' }}>
                   <span>0 — Not Indexed</span>
@@ -581,20 +713,34 @@ function ResultsContent() {
               {/* What the gap means */}
               <div style={{ padding: '14px 20px', background: '#0A1929', display: 'flex', alignItems: 'center', gap: '12px' }}>
                 <div style={{ fontSize: '13px', color: '#94a3b8', lineHeight: 1.5, flex: 1 }}>
-                  Our goal is to make you the <span style={{ color: '#00BFA6', fontWeight: 700 }}>most recommended agent</span> in your market.
-                  Our analysis shows exactly where your <span style={{ color: '#00BFA6', fontWeight: 700 }}>+41 points</span> are coming from.
+                  <span style={{ color: '#fff', fontWeight: 700 }}>46 points you&apos;re leaving on the table.</span>
                 </div>
               </div>
             </div>
           )}
 
           {visibleSection < 2 && <ContinueButton onClick={() => revealNext(2)} text="See What's Working" />}
+          </>
+          )}
         </div>
 
         {/* ═══ SECTION 2: STRENGTHS ═══ */}
         {visibleSection >= 2 && (
           <div ref={el => { sectionRefs.current[1] = el; }} style={{ paddingTop: '36px' }}>
-            <SectionHeader num="2" title="What's Already Working" color="#00BFA6" />
+            {isCondensed(2) ? (
+              <CondensedBar
+                num={2}
+                summary={`${scan.strengths?.length ?? 0} strengths identified`}
+                onClick={() => {
+                  setExpandedSection(2);
+                  setTimeout(() => {
+                    const ref = sectionRefs.current[1];
+                    if (ref) ref.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                  }, 100);
+                }}
+              />
+            ) : (
+            <><SectionHeader num="2" title="What's Already Working" color="#00BFA6" />
             <p style={{ fontSize: '14px', color: '#64748b', margin: '0 0 4px 0', lineHeight: 1.5 }}>
               You&apos;re not starting from zero. Our {scan.platform_count}-platform audit found real strengths to build on.
             </p>
@@ -606,17 +752,32 @@ function ResultsContent() {
               Now you know your foundation. Next: the specific gaps costing you AI recommendations.
             </div>
             {visibleSection < 3 && <ContinueButton onClick={() => revealNext(3)} text="See Where the Gaps Are" />}
+            </>
+            )}
           </div>
         )}
 
         {/* ═══ SECTION 3: GAPS ═══ */}
         {visibleSection >= 3 && (
           <div ref={el => { sectionRefs.current[2] = el; }} style={{ paddingTop: '36px' }}>
-            <SectionHeader num="3" title="Where the Gaps Are" color="#EF4444" />
+            {isCondensed(3) ? (
+              <CondensedBar
+                num={3}
+                summary={`${scan.gaps?.length ?? 0} gaps · ${totalRecoverablePoints} pts available`}
+                onClick={() => {
+                  setExpandedSection(3);
+                  setTimeout(() => {
+                    const ref = sectionRefs.current[2];
+                    if (ref) ref.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                  }, 100);
+                }}
+              />
+            ) : (
+            <><SectionHeader num="3" title="Where the Gaps Are" color="#EF4444" />
             <p style={{ fontSize: '14px', color: '#64748b', margin: '0 0 4px 0', lineHeight: 1.5 }}>
               {scan.gaps.length} specific gaps are keeping you out of AI recommendations. Each one has a measurable fix.
             </p>
-            <div style={{ marginBottom: '16px' }}><DepthBadge text={`${scan.query_count} queries · ${scan.platform_count} platforms · ${scan.consistency_runs}x consistency runs per query`} /></div>
+            <div style={{ marginBottom: '16px' }}><DepthBadge text={`${scan.query_count.toLocaleString()} queries · 9 AI engines · ${scan.platform_count} platforms audited`} /></div>
 
             {scan.gaps.map((gap, i) => (
               <div key={i} style={{ background: '#fff', borderRadius: '12px', marginBottom: '12px', overflow: 'hidden', boxShadow: '0 1px 4px rgba(0,0,0,0.06)', border: '1px solid #e2e8f0' }}>
@@ -629,9 +790,13 @@ function ResultsContent() {
                       <div style={{ fontSize: '11px', color: gap.color, fontWeight: 600, marginTop: '1px' }}>{gap.status}</div>
                     </div>
                   </div>
-                  <div style={{ textAlign: 'center', background: gap.color === '#EF4444' ? '#fff5f5' : '#fffdf5', borderRadius: '10px', padding: '6px 12px', minWidth: '56px' }}>
-                    <div style={{ fontSize: '18px', fontWeight: 900, color: gap.color, lineHeight: 1 }}>{gap.points.replace(' pts', '')}</div>
-                    <div style={{ fontSize: '9px', color: gap.color, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>pts</div>
+                  <div style={{ textAlign: 'center', background: gap.color === '#EF4444' ? '#fff5f5' : '#fffdf5', borderRadius: '10px', padding: '6px 12px', minWidth: '80px' }}>
+                    <div style={{ fontSize: '13px', color: gap.color, fontWeight: 700 }}>
+                      +{String(gap.points).replace(' pts', '')} pts available
+                    </div>
+                    <div style={{ fontSize: '11px', color: '#94a3b8', marginTop: '2px' }}>
+                      Fixing this: {scan.composite_score} → {Math.min(100, scan.composite_score + Number(String(gap.points).replace(' pts', '')))}
+                    </div>
                   </div>
                 </div>
 
@@ -655,17 +820,32 @@ function ResultsContent() {
             ))}
 
             <div style={{ background: '#0A1929', borderRadius: '8px', padding: '14px 18px', marginTop: '14px', textAlign: 'center' }}>
-              <span style={{ fontSize: '14px', color: '#fff', fontWeight: 600 }}>Total recoverable: <span style={{ color: '#00BFA6' }}>+46 points</span></span>
+              <span style={{ fontSize: '14px', color: '#fff', fontWeight: 600 }}>46 points you&apos;re leaving on the table</span>
               <span style={{ fontSize: '13px', color: '#64748b', marginLeft: '10px' }}>— enough to move from {scan.composite_score} to 65+ in 90 days</span>
             </div>
             {visibleSection < 4 && <ContinueButton onClick={() => revealNext(4)} text="See Your Market Strategy" />}
+            </>
+            )}
           </div>
         )}
 
         {/* ═══ SECTION 4: MARKETS — Hybrid original style + confirm ═══ */}
         {visibleSection >= 4 && (
           <div ref={el => { sectionRefs.current[3] = el; }} style={{ paddingTop: '36px' }}>
-            <div ref={marketsRef}>
+            {isCondensed(4) ? (
+              <CondensedBar
+                num={4}
+                summary={`${confirmedCount}/${scan.markets?.length ?? 0} markets confirmed`}
+                onClick={() => {
+                  setExpandedSection(4);
+                  setTimeout(() => {
+                    const ref = sectionRefs.current[3];
+                    if (ref) ref.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                  }, 100);
+                }}
+              />
+            ) : (
+            <><div ref={marketsRef}>
               <SectionHeader num="4" title="Your Market Strategy" color="#D4A830" />
             </div>
             <p style={{ fontSize: '14px', color: '#64748b', margin: '0 0 16px 0', lineHeight: 1.5 }}>
@@ -678,7 +858,7 @@ function ResultsContent() {
               {[
                 { label: 'Your Input', icon: '📋', desc: 'Markets you identified' },
                 { label: 'Your Transactions', icon: '📊', desc: `${scan.txn_analyzed} sales analyzed` },
-                { label: 'Our Analysis', icon: '🔍', desc: `${scan.query_count} AI queries run` },
+                { label: 'PRISM™ Scan', icon: '🔍', desc: `${scan.query_count} AI queries run` },
               ].map(s => (
                 <div key={s.label} style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '12px', textAlign: 'center' }}>
                   <div style={{ fontSize: '20px', marginBottom: '4px' }}>{s.icon}</div>
@@ -700,7 +880,13 @@ function ResultsContent() {
               </div>
             )}
 
-            {scan.markets.map((market, idx) => {
+            {(() => {
+              const sortedMarkets = [...(scan.markets ?? [])].sort((a, b) => {
+                const order = { primary: 0, secondary: 1, growth: 2 };
+                return (order[a.tier as keyof typeof order] ?? 3) - (order[b.tier as keyof typeof order] ?? 3);
+              });
+              return sortedMarkets;
+            })().map((market, idx) => {
               const tier = TIER_CONFIG[market.tier] || TIER_CONFIG.growth;
               const isConfirmed = approved || marketConfirms[idx];
               const isExpanded = expandedMarket === idx;
@@ -758,7 +944,7 @@ function ResultsContent() {
 
                     {/* AI signal */}
                     <div style={{ fontSize: '13px', color: '#475569', lineHeight: 1.5, padding: '8px 12px', background: '#f8f9fa', borderRadius: '6px', marginBottom: '8px' }}>
-                      <strong style={{ color: '#0A1929' }}>From our analysis:</strong> {market.ai_signal}
+                      <strong style={{ color: '#0A1929' }}>From PRISM™ Scan:</strong> {market.ai_signal}
                     </div>
 
                     {/* Evidence */}
@@ -766,13 +952,15 @@ function ResultsContent() {
                       <strong>Your evidence:</strong> {market.txn_highlight}
                     </div>
 
-                    {/* Neighborhoods toggle */}
-                    <button onClick={() => setExpandedMarket(isExpanded ? null : idx)} style={{
-                      background: 'none', border: 'none', fontSize: '13px', color: '#00BFA6',
-                      fontWeight: 600, cursor: 'pointer', padding: '2px 0',
-                    }}>
-                      {isExpanded ? '▾ Hide neighborhoods' : `▸ See ${hoods.length} recommended neighborhoods`}
-                    </button>
+                    {/* Neighborhoods toggle — only show when neighborhoods exist */}
+                    {(hoods.length ?? 0) > 0 && (
+                      <button onClick={() => setExpandedMarket(isExpanded ? null : idx)} style={{
+                        background: 'none', border: 'none', fontSize: '13px', color: '#00BFA6',
+                        fontWeight: 600, cursor: 'pointer', padding: '2px 0',
+                      }}>
+                        {isExpanded ? '▾ Hide neighborhoods' : `▸ See ${hoods.length} recommended neighborhoods`}
+                      </button>
+                    )}
                   </div>
 
                   {/* Neighborhoods — recommended list, not checkboxes */}
@@ -824,13 +1012,28 @@ function ResultsContent() {
             })}
 
             {visibleSection < 5 && <ContinueButton onClick={() => revealNext(5)} text="See Your 90-Day Path" />}
+            </>
+            )}
           </div>
         )}
 
         {/* ═══ SECTION 5: 90-DAY PATH ═══ */}
         {visibleSection >= 5 && (
           <div ref={el => { sectionRefs.current[4] = el; }} style={{ paddingTop: '36px' }}>
-            <SectionHeader num="5" title={`From ${scan.composite_score} to 65+ — Your 90-Day Path`} color="#0A1929" />
+            {isCondensed(5) ? (
+              <CondensedBar
+                num={5}
+                summary={`90-day path: ${scan.composite_score} → ${day90Score}+`}
+                onClick={() => {
+                  setExpandedSection(5);
+                  setTimeout(() => {
+                    const ref = sectionRefs.current[4];
+                    if (ref) ref.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                  }, 100);
+                }}
+              />
+            ) : (
+            <><SectionHeader num="5" title={`From ${scan.composite_score} to 65+ — Your 90-Day Path`} color="#0A1929" />
 
             <div style={{ position: 'relative', paddingLeft: '30px' }}>
               <div style={{ position: 'absolute', left: '11px', top: '0', bottom: '0', width: '2px', background: 'linear-gradient(180deg, #EF4444, #D4A830, #00BFA6)' }} />
@@ -861,17 +1064,32 @@ function ResultsContent() {
               ))}
             </div>
 
+            {visibleSection < 6 && <ContinueButton onClick={() => revealNext(6)} text="See What We're Building" />}
             <div style={{ background: '#f0fdf9', borderRadius: '8px', padding: '12px 16px', fontSize: '14px', color: '#0A1929', textAlign: 'center', marginTop: '10px', border: '1px solid #00BFA6' }}>
               <strong>Citation Guarantee™:</strong> +20 points in 90 days or you owe nothing. Ever.
             </div>
-            {visibleSection < 6 && <ContinueButton onClick={() => revealNext(6)} text="See What We're Building" />}
+            </>
+            )}
           </div>
         )}
 
         {/* ═══ SECTION 6: DELIVERABLES — SVG icons ═══ */}
         {visibleSection >= 6 && (
           <div ref={el => { sectionRefs.current[5] = el; }} style={{ paddingTop: '36px' }}>
-            <SectionHeader num="6" title="What We're Building For You" color="#00BFA6" />
+            {isCondensed(6) ? (
+              <CondensedBar
+                num={6}
+                summary={`${scan.deliverables?.length ?? DEFAULT_DELIVERABLES.length} deliverables in your plan`}
+                onClick={() => {
+                  setExpandedSection(6);
+                  setTimeout(() => {
+                    const ref = sectionRefs.current[5];
+                    if (ref) ref.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                  }, 100);
+                }}
+              />
+            ) : (
+            <><SectionHeader num="6" title="What We're Building For You" color="#00BFA6" />
             <p style={{ fontSize: '14px', color: '#64748b', margin: '0 0 16px 0', lineHeight: 1.5 }}>
               Everything in your founding package — built from your scan data, your transactions, and your markets.
             </p>
@@ -890,6 +1108,8 @@ function ResultsContent() {
               ))}
             </div>
             {visibleSection < 7 && <ContinueButton onClick={() => revealNext(7)} text="Approve Your Strategy" />}
+            </>
+            )}
           </div>
         )}
 
