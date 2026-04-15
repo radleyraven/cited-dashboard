@@ -51,12 +51,14 @@ export default function MilestoneCard({ milestone, onDismiss }: MilestoneCardPro
     return () => window.removeEventListener('keydown', handler);
   }, [onDismiss]);
 
-  // Body scroll lock
+  // Body scroll lock (guarded for SSR safety)
   useEffect(() => {
-    document.body.style.overflow = 'hidden';
-    return () => {
-      document.body.style.overflow = '';
-    };
+    if (typeof document !== 'undefined') {
+      document.body.style.overflow = 'hidden';
+      return () => {
+        document.body.style.overflow = '';
+      };
+    }
   }, []);
 
   if (!milestone) return null;
@@ -103,7 +105,7 @@ export default function MilestoneCard({ milestone, onDismiss }: MilestoneCardPro
       onClick={onDismiss}
       style={{
         position: 'fixed',
-        inset: 0,
+        top: 0, right: 0, bottom: 0, left: 0,
         background: visible ? 'rgba(0,0,0,0.80)' : 'rgba(0,0,0,0)',
         zIndex: 1000,
         display: 'flex',
