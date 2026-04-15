@@ -117,15 +117,15 @@ export default function MilestoneCard({ milestone, onDismiss }: MilestoneCardPro
         <div style={{ fontSize: 11, color: '#94a3b8', fontWeight: 600, letterSpacing: 1, textTransform: 'uppercase', marginBottom: 12 }}>
           Before your report...
         </div>
-        {/* Sub-copy (announcement) first — "Holy sh*t." lands before the stat */}
-        {subCopy && (
-          <div style={{ fontSize: '16px', color: '#CBD5E1', marginBottom: '12px', lineHeight: 1.5, fontWeight: 600 }}>{subCopy}</div>
-        )}
-        {/* Trophy inline with stat */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', margin: '4px 0 8px' }}>
+        {/* Trophy inline with stat — hero moment lands first */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', margin: '4px 0 10px' }}>
           <div style={{ fontSize: '36px', lineHeight: 1 }}>{icon}</div>
           <div style={{ fontSize: '52px', fontWeight: 900, color: accentColor, lineHeight: 1 }}>{stat}</div>
         </div>
+        {/* Sub-copy reaction — "Holy sh*t." lands after the stat */}
+        {subCopy && (
+          <div style={{ fontSize: '16px', color: '#CBD5E1', marginBottom: '10px', lineHeight: 1.5, fontWeight: 600 }}>{subCopy}</div>
+        )}
         <div style={{ fontSize: '19px', fontWeight: 700, color: '#ffffff', lineHeight: 1.4 }}>{milestone.headline}</div>
         <button
           onClick={onDismiss}
