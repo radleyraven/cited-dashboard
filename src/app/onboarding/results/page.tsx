@@ -651,13 +651,7 @@ function ResultsContent() {
                 })()}&rdquo;</div>
               </div>
             </div>
-            {/* Not mentioned callout */}
-            {scan.ai_quote.client_mentioned === false && (
-              <div style={{ padding: '10px 16px', background: '#1a0a0a', borderTop: '1px solid #fee2e2', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span style={{ fontSize: '16px' }}>⚠️</span>
-                <span style={{ fontSize: '13px', color: '#EF4444', fontWeight: 700 }}>{clientName || 'You'}: not mentioned.</span>
-              </div>
-            )}
+            {/* Not mentioned callout removed — conveyed via discovery stat block below */}
             {/* Result — context + stat inline */}
             <div style={{ padding: '12px 16px', background: '#fff5f5', borderTop: '1px solid #fee2e2' }}>
               <div style={{ fontSize: '13px', color: '#EF4444', fontWeight: 600, lineHeight: 1.5 }}>
