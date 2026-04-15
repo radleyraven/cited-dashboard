@@ -530,6 +530,9 @@ function ResultsContent() {
     </div>
   );
 
+  // scan is non-null beyond this point (TypeScript narrowing via explicit cast)
+  const safeScan = scan as ScanResults;
+
   const primaryCompetitor = scan.markets?.find(m => m.tier === 'primary') ?? scan.markets?.[0];
   const primaryMarket = scan.markets?.find(m => m.tier === 'primary')?.name ?? scan.markets?.[0]?.name ?? 'Carlsbad';
 
@@ -550,9 +553,9 @@ function ResultsContent() {
       <ProgressIndicator />
 
       {/* ═══ BLOCK 0: MILESTONE CARD ═══ */}
-      {false && scan != null && scan.milestone_to_celebrate && !milestonePopupDismissed && (
+      {false && safeScan.milestone_to_celebrate && !milestonePopupDismissed && (
         <MilestoneCard
-          milestone={scan.milestone_to_celebrate as unknown as MilestoneData}
+          milestone={safeScan.milestone_to_celebrate as unknown as MilestoneData}
           onDismiss={() => setMilestonePopupDismissed(true)}
         />
       )}
