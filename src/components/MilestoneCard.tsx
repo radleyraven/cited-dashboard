@@ -108,28 +108,24 @@ export default function MilestoneCard({ milestone, onDismiss }: MilestoneCardPro
           background: '#0A1929',
           borderLeft: `4px solid ${accentColor}`,
           borderRadius: '12px',
-          padding: '28px 32px',
+          padding: '36px 32px',
           transform: visible ? 'scale(1)' : 'scale(0.85)',
           opacity: visible ? 1 : 0,
           transition: 'transform 350ms cubic-bezier(0.34, 1.56, 0.64, 1), opacity 250ms ease-out',
         }}
       >
-        {/* Sub-copy first — "Holy sh*t." is the opener */}
+        {/* Sub-copy opener — centered */}
         {subCopy && (
-          <div style={{ fontSize: '18px', color: '#CBD5E1', marginBottom: '14px', lineHeight: 1.4, fontWeight: 700 }}>{subCopy}</div>
+          <div style={{ fontSize: '17px', color: '#CBD5E1', marginBottom: '20px', lineHeight: 1.4, fontWeight: 700, textAlign: 'center' }}>{subCopy}</div>
         )}
-        {/* Trophy + stat + "in career sales" label inline */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', margin: '0 0 10px' }}>
-          <div style={{ fontSize: '36px', lineHeight: 1 }}>{icon}</div>
-          <div>
-            <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
-              <div style={{ fontSize: '52px', fontWeight: 900, color: accentColor, lineHeight: 1 }}>{stat}</div>
-              <div style={{ fontSize: '13px', color: '#94a3b8', fontWeight: 500, lineHeight: 1.3 }}>in career<br/>sales</div>
-            </div>
-          </div>
+        {/* Trophy small, stat huge — centered */}
+        <div style={{ textAlign: 'center', marginBottom: '6px' }}>
+          <div style={{ fontSize: '24px', lineHeight: 1, marginBottom: '8px' }}>{icon}</div>
+          <div style={{ fontSize: '68px', fontWeight: 900, color: accentColor, lineHeight: 1 }}>{stat}</div>
+          <div style={{ fontSize: '13px', color: '#94a3b8', fontWeight: 500, marginTop: '6px', letterSpacing: '0.5px' }}>in career sales</div>
         </div>
-        <div style={{ fontSize: '16px', fontWeight: 700, color: '#ffffff', lineHeight: 1.4, marginBottom: '4px' }}>{milestone.headline}</div>
-        <div style={{ fontSize: '18px', fontWeight: 800, color: accentColor }}>Way to go! 🎉</div>
+        {/* Way to go — centered, gold, prominent */}
+        <div style={{ fontSize: '22px', fontWeight: 800, color: accentColor, textAlign: 'center', margin: '20px 0 4px', letterSpacing: '0.3px' }}>Way to go! 🎉</div>
         <button
           onClick={onDismiss}
           style={{ marginTop: 24, width: '100%', padding: '14px', background: isGold ? '#D4A830' : '#00BFA6', color: '#0A1929', fontWeight: 800, fontSize: 15, borderRadius: 8, border: 'none', cursor: 'pointer', letterSpacing: 0.3 }}
