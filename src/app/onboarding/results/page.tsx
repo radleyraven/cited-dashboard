@@ -131,6 +131,26 @@ interface ScanResults {
     list_to_sale_ratio?: number;
     above_asking_rate?: number;
     above_asking_count?: number;
+    above_asking_avg_dollars_over?: number;
+    at_asking_count?: number;
+    below_asking_count?: number;
+    below_asking_avg_dollars_under?: number;
+    price_reduction_count?: number;
+    price_reduction_rate?: number;
+    price_reduction_avg_amount?: number;
+    total_dollar_difference?: number;
+    sl_transaction_count?: number;
+    concentration_band?: string;
+    concentration_pct?: number;
+    concentration_count?: number;
+    listing_pct?: number;
+    volume_trend_label?: string;
+    price_trend_vs_market?: string;
+    price_trend_label?: string;
+    annual_volume_12mo?: number;
+    annual_transactions_12mo?: number;
+    luxury_pct?: number;
+    price_band_distribution?: Array<{band: string; count: number}>;
   } | null;
 }
 
@@ -353,12 +373,8 @@ function normalizeScanResults(sr: Record<string, unknown>): ScanResults {
       const statsAlt = (sr as Record<string,unknown>).stats as Record<string,unknown> | undefined;
       const s = statsRaw ?? (Array.isArray(statsAlt) ? undefined : statsAlt);
       if (!s) return null;
-      return {
-        median_dom: s.median_dom as number | undefined,
-        list_to_sale_ratio: s.list_to_sale_ratio as number | undefined,
-        above_asking_rate: s.above_asking_rate as number | undefined,
-        above_asking_count: s.above_asking_count as number | undefined,
-      };
+      // Pass through all fields — Block 1-4 fields flow through automatically
+      return s as ScanResults['mls_stats'];
     })(),
     query_count: (sr.query_count as number) ?? 0,
     neighborhood_count: (sr.neighborhood_count as number) ?? (Array.isArray(sr.markets) ? (sr.markets as Record<string,unknown>[]).reduce((n, m) => n + ((m.neighborhoods as unknown[])?.length ?? 0), 0) : 0),
@@ -600,6 +616,112 @@ function ResultsContent() {
               });
             })()}
           </div>
+          {/* Block 2 — Pricing Performance */}
+          {scan.mls_stats?.sl_transaction_count && scan.mls_stats.sl_transaction_count > 0 && (
+            <div style={{ marginBottom: '20px' }}>
+              <div style={{ fontSize: '10px', color: '#94a3b8', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '12px' }}>
+                Your Listing Performance
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '8px', marginBottom: '10px' }}>
+                {/* Above asking */}
+                <div style={{ background: 'rgba(255,255,255,0.05)', borderRadius: '10px', padding: '12px 8px', textAlign: 'center' }}>
+                  <div style={{ fontSize: '22px', fontWeight: 900, color: '#00BFA6' }}>{scan.mls_stats.above_asking_count}</div>
+                  <div style={{ fontSize: '10px', color: '#94a3b8', marginTop: '3px', lineHeight: 1.3 }}>above asking</div>
+                  {scan.mls_stats.above_asking_avg_dollars_over && (
+                    <div style={{ fontSize: '10px', color: '#00BFA6', fontWeight: 600, marginTop: '2px' }}>
+                      avg +${Math.round(scan.mls_stats.above_asking_avg_dollars_over / 1000)}K
+                    </div>
+                  )}
+                </div>
+                {/* At asking */}
+                <div style={{ background: 'rgba(255,255,255,0.05)', borderRadius: '10px', padding: '12px 8px', textAlign: 'center' }}>
+                  <div style={{ fontSize: '22px', fontWeight: 900, color: '#94a3b8' }}>{scan.mls_stats.at_asking_count}</div>
+                  <div style={{ fontSize: '10px', color: '#94a3b8', marginTop: '3px', lineHeight: 1.3 }}>at asking</div>
+                </div>
+                {/* Below asking */}
+                <div style={{ background: 'rgba(255,255,255,0.05)', borderRadius: '10px', padding: '12px 8px', textAlign: 'center' }}>
+                  <div style={{ fontSize: '22px', fontWeight: 900, color: '#94a3b8' }}>{scan.mls_stats.below_asking_count}</div>
+                  <div style={{ fontSize: '10px', color: '#94a3b8', marginTop: '3px', lineHeight: 1.3 }}>below asking</div>
+                </div>
+              </div>
+              <div style={{ fontSize: '12px', color: '#94a3b8', lineHeight: 1.5 }}>
+                {(() => {
+                  const noReduceRate = scan.mls_stats!.sl_transaction_count! > 0
+                    ? Math.round(((scan.mls_stats!.sl_transaction_count! - (scan.mls_stats!.price_reduction_count ?? 0)) / scan.mls_stats!.sl_transaction_count!) * 100)
+                    : 0;
+                  const listingLabel = (scan.mls_stats!.listing_pct ?? 0) >= 0.75
+                    ? `${Math.round((scan.mls_stats!.listing_pct ?? 0) * 100)}% listing-side — seller specialist`
+                    : (scan.mls_stats!.listing_pct ?? 0) >= 0.60
+                    ? `${Math.round((scan.mls_stats!.listing_pct ?? 0) * 100)}% listing-side`
+                    : 'balanced buyer/seller';
+                  return `${noReduceRate}% of listings sold without a price reduction · ${listingLabel}`;
+                })()}
+              </div>
+            </div>
+          )}
+
+          {/* Block 3 — Market Concentration */}
+          {scan.mls_stats?.price_band_distribution && scan.mls_stats.price_band_distribution.length > 0 && (
+            <div style={{ marginBottom: '20px' }}>
+              <div style={{ fontSize: '10px', color: '#94a3b8', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '12px' }}>
+                Where Your Deals Concentrate
+              </div>
+              {(() => {
+                const bands = [...scan.mls_stats!.price_band_distribution!]
+                  .filter(b => b.count > 0)
+                  .sort((a, b) => b.count - a.count)
+                  .slice(0, 5);
+                const maxCount = bands[0]?.count ?? 1;
+                const total = bands.reduce((s, b) => s + b.count, 0);
+                return bands.map((band, i) => (
+                  <div key={band.band} style={{ marginBottom: '6px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <div style={{ fontSize: '10px', color: '#94a3b8', width: '80px', flexShrink: 0 }}>{band.band}</div>
+                    <div style={{ flex: 1, background: 'rgba(255,255,255,0.05)', borderRadius: '3px', height: '8px', overflow: 'hidden' }}>
+                      <div style={{ width: `${Math.round((band.count / maxCount) * 100)}%`, height: '100%', background: i === 0 ? '#D4A830' : '#00BFA6', borderRadius: '3px' }} />
+                    </div>
+                    <div style={{ fontSize: '10px', color: i === 0 ? '#D4A830' : '#94a3b8', width: '50px', flexShrink: 0, textAlign: 'right' }}>
+                      {band.count} ({Math.round((band.count / total) * 100)}%)
+                    </div>
+                  </div>
+                ));
+              })()}
+              <div style={{ fontSize: '12px', color: '#D4A830', fontWeight: 600, marginTop: '8px', lineHeight: 1.5 }}>
+                Core market: {scan.mls_stats.price_band_distribution.filter(b => b.count > 0).sort((a,b) => b.count - a.count)[0]?.band} ({Math.round((scan.mls_stats.price_band_distribution.filter(b=>b.count>0).sort((a,b)=>b.count-a.count)[0]?.count / scan.mls_stats.price_band_distribution.reduce((s,b)=>s+b.count,0)) * 100)}% of deals)
+              </div>
+            </div>
+          )}
+
+          {/* Block 4 — Momentum */}
+          {(scan.mls_stats?.volume_trend_label || scan.mls_stats?.price_trend_vs_market) && (
+            <div style={{ marginBottom: '20px' }}>
+              <div style={{ fontSize: '10px', color: '#94a3b8', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '12px' }}>
+                Your Market Momentum
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginBottom: '10px' }}>
+                {scan.mls_stats.annual_volume_12mo && (
+                  <div style={{ background: 'rgba(255,255,255,0.05)', borderRadius: '10px', padding: '12px 8px', textAlign: 'center' }}>
+                    <div style={{ fontSize: '22px', fontWeight: 900, color: '#00BFA6' }}>
+                      ${(scan.mls_stats.annual_volume_12mo / 1e6).toFixed(1)}M
+                    </div>
+                    <div style={{ fontSize: '10px', color: '#94a3b8', marginTop: '3px', lineHeight: 1.3 }}>last 12 months volume</div>
+                  </div>
+                )}
+                {scan.mls_stats.price_trend_vs_market && (
+                  <div style={{ background: 'rgba(255,255,255,0.05)', borderRadius: '10px', padding: '12px 8px', textAlign: 'center' }}>
+                    <div style={{ fontSize: '18px', fontWeight: 900, color: '#00BFA6', lineHeight: 1.2 }}>{scan.mls_stats.price_trend_vs_market.split(' ')[0]}</div>
+                    <div style={{ fontSize: '10px', color: '#94a3b8', marginTop: '3px', lineHeight: 1.3 }}>above market avg appreciation</div>
+                  </div>
+                )}
+              </div>
+              {scan.mls_stats.volume_trend_label && (
+                <div style={{ fontSize: '12px', color: '#94a3b8', lineHeight: 1.5 }}>
+                  {scan.mls_stats.volume_trend_label === 'growing' ? '📈' : scan.mls_stats.volume_trend_label === 'declining' ? '📉' : '➡️'} Volume trending: {scan.mls_stats.volume_trend_label}
+                  {(scan.mls_stats.luxury_pct ?? 0) >= 0.50 && ` · ${Math.round((scan.mls_stats.luxury_pct ?? 0) * 100)}% of deals are $1M+`}
+                </div>
+              )}
+            </div>
+          )}
+
           <p style={{ fontSize: '15px', color: '#94a3b8', lineHeight: 1.6, margin: 0, maxWidth: '520px', marginLeft: 'auto', marginRight: 'auto' }}>
             These numbers tell the story of a top-performing luxury agent. But when {audienceFocus === 'buyers' ? 'buyers and sellers' : 'sellers and buyers'} ask AI who to call —{' '}
             <span style={{ color: '#fff', fontWeight: 600 }}>your name doesn&apos;t come up. Let&apos;s fix that.</span>
