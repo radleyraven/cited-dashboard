@@ -117,12 +117,16 @@ export default function MilestoneCard({ milestone, onDismiss }: MilestoneCardPro
         <div style={{ fontSize: 11, color: '#94a3b8', fontWeight: 600, letterSpacing: 1, textTransform: 'uppercase', marginBottom: 12 }}>
           Before your report...
         </div>
-        <div style={{ fontSize: '32px' }}>{icon}</div>
-        <div style={{ fontSize: '52px', fontWeight: 900, color: accentColor, margin: '8px 0 4px' }}>{stat}</div>
-        <div style={{ fontSize: '19px', fontWeight: 700, color: '#ffffff', lineHeight: 1.4 }}>{milestone.headline}</div>
+        {/* Sub-copy (announcement) first — "Holy sh*t." lands before the stat */}
         {subCopy && (
-          <div style={{ fontSize: '14px', color: '#CBD5E1', marginTop: '8px', lineHeight: 1.6 }}>{subCopy}</div>
+          <div style={{ fontSize: '16px', color: '#CBD5E1', marginBottom: '12px', lineHeight: 1.5, fontWeight: 600 }}>{subCopy}</div>
         )}
+        {/* Trophy inline with stat */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', margin: '4px 0 8px' }}>
+          <div style={{ fontSize: '36px', lineHeight: 1 }}>{icon}</div>
+          <div style={{ fontSize: '52px', fontWeight: 900, color: accentColor, lineHeight: 1 }}>{stat}</div>
+        </div>
+        <div style={{ fontSize: '19px', fontWeight: 700, color: '#ffffff', lineHeight: 1.4 }}>{milestone.headline}</div>
         <button
           onClick={onDismiss}
           style={{ marginTop: 24, width: '100%', padding: '14px', background: isGold ? '#D4A830' : '#00BFA6', color: '#0A1929', fontWeight: 800, fontSize: 15, borderRadius: 8, border: 'none', cursor: 'pointer', letterSpacing: 0.3 }}
