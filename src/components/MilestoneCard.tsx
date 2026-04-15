@@ -27,11 +27,20 @@ interface MilestoneCardProps {
 
 export default function MilestoneCard({ milestone, onDismiss }: MilestoneCardProps) {
   const [visible, setVisible] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
-  // Entrance animation: mount → rAF → setVisible(true)
+  // Delayed mount: wait 1800ms after page load, then animate in
   useEffect(() => {
-    requestAnimationFrame(() => setVisible(true));
+    const mountTimer = setTimeout(() => {
+      setMounted(true);
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => setVisible(true));
+      });
+    }, 1800);
+    return () => clearTimeout(mountTimer);
   }, []);
+
+  if (!mounted) return null;
 
   // ESC key dismiss
   useEffect(() => {
@@ -95,11 +104,12 @@ export default function MilestoneCard({ milestone, onDismiss }: MilestoneCardPro
       style={{
         position: 'fixed',
         inset: 0,
-        background: 'rgba(0,0,0,0.75)',
+        background: visible ? 'rgba(0,0,0,0.80)' : 'rgba(0,0,0,0)',
         zIndex: 1000,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
+        transition: 'background 300ms ease-out',
       }}
     >
       <div
@@ -111,9 +121,9 @@ export default function MilestoneCard({ milestone, onDismiss }: MilestoneCardPro
           borderLeft: `4px solid ${accentColor}`,
           borderRadius: '12px',
           padding: '28px 32px',
-          transform: visible ? 'scale(1)' : 'scale(0.95)',
+          transform: visible ? 'scale(1)' : 'scale(0.85)',
           opacity: visible ? 1 : 0,
-          transition: 'transform 200ms ease-out, opacity 200ms ease-out',
+          transition: 'transform 350ms cubic-bezier(0.34, 1.56, 0.64, 1), opacity 250ms ease-out',
         }}
       >
         {/* Pre-header */}
