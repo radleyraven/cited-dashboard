@@ -114,18 +114,15 @@ export default function MilestoneCard({ milestone, onDismiss }: MilestoneCardPro
           transition: 'transform 350ms cubic-bezier(0.34, 1.56, 0.64, 1), opacity 250ms ease-out',
         }}
       >
-        <div style={{ fontSize: 11, color: '#94a3b8', fontWeight: 600, letterSpacing: 1, textTransform: 'uppercase', marginBottom: 12 }}>
-          Before your report...
-        </div>
-        {/* Trophy inline with stat — hero moment lands first */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', margin: '4px 0 10px' }}>
+        {/* Sub-copy first — "Holy sh*t." is the opener */}
+        {subCopy && (
+          <div style={{ fontSize: '18px', color: '#CBD5E1', marginBottom: '14px', lineHeight: 1.4, fontWeight: 700 }}>{subCopy}</div>
+        )}
+        {/* Trophy inline with stat */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', margin: '0 0 10px' }}>
           <div style={{ fontSize: '36px', lineHeight: 1 }}>{icon}</div>
           <div style={{ fontSize: '52px', fontWeight: 900, color: accentColor, lineHeight: 1 }}>{stat}</div>
         </div>
-        {/* Sub-copy reaction — "Holy sh*t." lands after the stat */}
-        {subCopy && (
-          <div style={{ fontSize: '16px', color: '#CBD5E1', marginBottom: '10px', lineHeight: 1.5, fontWeight: 600 }}>{subCopy}</div>
-        )}
         <div style={{ fontSize: '19px', fontWeight: 700, color: '#ffffff', lineHeight: 1.4 }}>{milestone.headline}</div>
         <button
           onClick={onDismiss}
