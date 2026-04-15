@@ -895,11 +895,24 @@ function ResultsContent() {
                 )}
               </div>
                 {scan.mls_stats.volume_trend_label && (
-                <div style={{ fontSize: '12px', color: '#94a3b8', lineHeight: 1.5 }}>
-                    {scan.mls_stats.volume_trend_label === 'growing' ? '📈' : scan.mls_stats.volume_trend_label === 'declining' ? '📉' : '➡️'} Volume trending: {scan.mls_stats.volume_trend_label}
-                  {(scan.mls_stats.luxury_pct ?? 0) >= 0.50 && ` · ${Math.round((scan.mls_stats.luxury_pct ?? 0) * 100)}% of deals are $1M+`}
-                </div>
-              )}
+                  <div style={{ fontSize: '12px', color: '#94a3b8', lineHeight: 1.5 }}>
+                    {(() => {
+                      const txns = scan.mls_stats!.annual_transactions_12mo;
+                      const vol = scan.mls_stats!.annual_volume_12mo;
+                      const lux = scan.mls_stats!.luxury_pct ?? 0;
+                      const trend = scan.mls_stats!.volume_trend_label;
+                      const arrow = trend === 'growing' ? '📈' : trend === 'declining' ? '📉' : '➡️';
+                      let line = '';
+                      if (txns && vol) {
+                        line = `${arrow} ${txns} closings in the last 12 months totaling $${(vol/1e6).toFixed(1)}M`;
+                      } else {
+                        line = `${arrow} Volume trending: ${trend}`;
+                      }
+                      if (lux >= 0.50) line += ` · ${Math.round(lux * 100)}% luxury ($1M+)`;
+                      return line;
+                    })()}
+                  </div>
+                )}
             </div>
           )}
 
