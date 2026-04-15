@@ -205,6 +205,9 @@ function GoogleSignInButton({ redirectTo }: { redirectTo: string }) {
 
 function IntakeForm() {
   const searchParams = useSearchParams();
+  const utmSource = searchParams.get('utm_source') || ''
+  const utmCampaign = searchParams.get('utm_campaign') || ''
+  const utmMedium = searchParams.get('utm_medium') || ''
   const preFillCount = countPreFilled(searchParams);
   const hasPrefill = preFillCount > 0;
 
@@ -526,6 +529,9 @@ function IntakeForm() {
           realtorUrl: form.realtorUrl, fastexpertUrl: form.fastexpertUrl,
           youtubeUrl: form.youtubeUrl, instagramUrl: form.instagramUrl, additionalPlatforms: form.additionalPlatforms,
           skippedFields: form.skippedFields, intakeCompletionPct: 100, termsAccepted: form.termsAccepted,
+          ...(utmSource ? { utm_source: utmSource } : {}),
+          ...(utmMedium ? { utm_medium: utmMedium } : {}),
+          ...(utmCampaign ? { utm_campaign: utmCampaign } : {}),
         }),
       });
       if (!res.ok) { const d = await res.json(); throw new Error(d.error || "Submission failed"); }
