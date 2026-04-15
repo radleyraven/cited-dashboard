@@ -875,18 +875,18 @@ function ResultsContent() {
                 Your Market Momentum
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginBottom: '10px' }}>
-                  {scan.mls_stats.annual_volume_12mo && (
-                  <div style={{ background: 'rgba(255,255,255,0.05)', borderRadius: '10px', padding: '12px 8px', textAlign: 'center' }}>
-                    <div style={{ fontSize: '22px', fontWeight: 900, color: '#00BFA6' }}>
+                {scan.mls_stats.annual_volume_12mo && (
+                  <div style={{ background: 'rgba(255,255,255,0.05)', borderRadius: '10px', padding: '14px 8px', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                    <div style={{ fontSize: '22px', fontWeight: 900, color: '#00BFA6', lineHeight: 1 }}>
                       ${(scan.mls_stats.annual_volume_12mo / 1e6).toFixed(1)}M
                     </div>
-                    <div style={{ fontSize: '10px', color: '#94a3b8', marginTop: '3px', lineHeight: 1.3 }}>last 12 months volume</div>
+                    <div style={{ fontSize: '10px', color: '#94a3b8', marginTop: '4px', lineHeight: 1.3 }}>last 12 months volume</div>
                   </div>
                 )}
-                  {scan.mls_stats.price_trend_vs_market && (
-                  <div style={{ background: 'rgba(255,255,255,0.05)', borderRadius: '10px', padding: '12px 8px', textAlign: 'center' }}>
-                    <div style={{ fontSize: '18px', fontWeight: 900, color: '#00BFA6', lineHeight: 1.2 }}>{scan.mls_stats.price_trend_vs_market.split(' ')[0]}</div>
-                    <div style={{ fontSize: '10px', color: '#94a3b8', marginTop: '3px', lineHeight: 1.3 }}>above market avg appreciation</div>
+                {scan.mls_stats.price_trend_vs_market && (
+                  <div style={{ background: 'rgba(255,255,255,0.05)', borderRadius: '10px', padding: '14px 8px', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                    <div style={{ fontSize: '22px', fontWeight: 900, color: '#00BFA6', lineHeight: 1 }}>{scan.mls_stats.price_trend_vs_market.split(' ')[0]}</div>
+                    <div style={{ fontSize: '10px', color: '#94a3b8', marginTop: '4px', lineHeight: 1.3 }}>above market avg appreciation</div>
                   </div>
                 )}
               </div>
