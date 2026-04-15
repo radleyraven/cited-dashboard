@@ -313,11 +313,11 @@ function normalizeScanResults(sr: Record<string, unknown>): ScanResults {
     // Page expects {model, query, response} — normalize to what exists
     ai_quote: (() => {
       if (sr.ai_quote && typeof (sr.ai_quote as Record<string,unknown>).text === 'string') {
-        return { model: 'Multiple AI engines', query: `Who is the best real estate agent in ${primaryMarket}?`, response: (sr.ai_quote as Record<string,unknown>).text as string };
+        return { model: 'Multiple AI engines', query: `Who is ${sr.client_name ?? 'this agent'}?`, response: (sr.ai_quote as Record<string,unknown>).text as string };
       }
       const narr = sr.narrative as Record<string,unknown> | undefined;
       if (narr?.ai_quote && typeof (narr.ai_quote as Record<string,unknown>).text === 'string') {
-        return { model: 'Multiple AI engines', query: `Who is the best real estate agent in ${primaryMarket}?`, response: (narr.ai_quote as Record<string,unknown>).text as string };
+        return { model: 'Multiple AI engines', query: `Who is ${sr.client_name ?? 'this agent'}?`, response: (narr.ai_quote as Record<string,unknown>).text as string };
       }
       return (sr.ai_quote as {model:string,query:string,response:string}) ?? { model: '', query: '', response: '' };
     })(),
@@ -623,7 +623,14 @@ function ResultsContent() {
               <div style={{ fontSize: '10px', fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px' }}>{scan.ai_quote.model} responded:</div>
               <div style={{ display: 'flex', gap: '10px' }}>
                 <div style={{ width: '3px', background: '#EF4444', borderRadius: '2px', flexShrink: 0 }} />
-                <div style={{ fontSize: '13px', color: '#475569', lineHeight: 1.6 }}>&ldquo;{scan.ai_quote.response}&rdquo;</div>
+                <div style={{ fontSize: '13px', color: '#475569', lineHeight: 1.6 }}>&ldquo;{(() => {
+                  const text = scan.ai_quote.response;
+                  if (!text || text.length <= 280) return text;
+                  // Truncate at last sentence boundary before 280 chars
+                  const trimmed = text.slice(0, 280);
+                  const lastPeriod = Math.max(trimmed.lastIndexOf('. '), trimmed.lastIndexOf('." '), trimmed.lastIndexOf('."'));
+                  return lastPeriod > 150 ? text.slice(0, lastPeriod + 1) + '...' : trimmed.slice(0, trimmed.lastIndexOf(' ')) + '...';
+                })()}&rdquo;</div>
               </div>
             </div>
             {/* Result — context + stat inline */}
