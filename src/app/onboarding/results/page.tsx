@@ -731,11 +731,13 @@ function ResultsContent() {
                   <div style={{ fontSize: '10px', color: '#94a3b8', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '12px' }}>Your Score</div>
                   <div style={{ fontSize: '48px', fontWeight: 900, color: '#0A1929', lineHeight: 1 }}>{scan.composite_score}</div>
                   <div style={{ fontSize: '12px', color: '#94a3b8', marginTop: '4px', marginBottom: '12px' }}>out of 100</div>
-                  <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: '#f0f4f8', borderRadius: '20px', padding: '4px 12px', marginBottom: '10px' }}>
-                    <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#64748b' }} />
-                    <span style={{ fontSize: '11px', fontWeight: 600, color: '#475569' }}>{scan.tier_name}</span>
+                  <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                    <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: '#f0f4f8', borderRadius: '20px', padding: '4px 12px', marginBottom: '4px', alignSelf: 'flex-start' }}>
+                      <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#64748b' }} />
+                      <span style={{ fontSize: '11px', fontWeight: 600, color: '#475569' }}>{scan.tier_name}</span>
+                    </div>
                   </div>
-                  <div style={{ fontSize: '12px', color: '#94a3b8', lineHeight: 1.5, marginTop: 'auto' }}>
+                  <div style={{ fontSize: '12px', color: '#94a3b8', lineHeight: 1.5 }}>
                     AI knows you — but doesn&apos;t recommend you in discovery searches yet.
                   </div>
                 </div>
@@ -746,9 +748,11 @@ function ResultsContent() {
                   {/* Score aligned with left panel */}
                   <div style={{ fontSize: '48px', fontWeight: 900, color: '#EF4444', lineHeight: 1 }}>{primaryCompetitor?.competitor_score ?? '~52'}</div>
                   <div style={{ fontSize: '12px', color: '#94a3b8', marginTop: '4px', marginBottom: '12px' }}>est. Foundation Score</div>
-                  <div style={{ fontSize: '13px', fontWeight: 700, color: '#0A1929', marginBottom: '2px' }}>{primaryCompetitor?.competitor ?? 'Top Local Agent'}</div>
-                  <div style={{ fontSize: '11px', color: '#94a3b8', marginBottom: '8px' }}>{primaryCompetitor?.competitor_brokerage ?? ''}</div>
-                  <div style={{ fontSize: '12px', color: '#94a3b8', lineHeight: 1.5, marginTop: 'auto' }}>
+                  <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                    <div style={{ fontSize: '13px', fontWeight: 700, color: '#0A1929', marginBottom: '2px' }}>{primaryCompetitor?.competitor ?? 'Top Local Agent'}</div>
+                    <div style={{ fontSize: '11px', color: '#94a3b8' }}>{primaryCompetitor?.competitor_brokerage ?? ''}</div>
+                  </div>
+                  <div style={{ fontSize: '12px', color: '#94a3b8', lineHeight: 1.5 }}>
                     AI recommends them in {primaryCompetitor?.name ?? primaryMarket} — the position we&apos;re building you into.
                   </div>
                 </div>
