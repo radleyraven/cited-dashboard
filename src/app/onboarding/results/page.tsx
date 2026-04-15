@@ -560,7 +560,7 @@ function ResultsContent() {
       <ProgressIndicator />
 
       {/* ═══ BLOCK 0: MILESTONE CARD ═══ */}
-      {safeScan.milestone_to_celebrate && !milestonePopupDismissed && (
+      {false && safeScan.milestone_to_celebrate && !milestonePopupDismissed && (
         <MilestoneCard
           milestone={safeScan.milestone_to_celebrate as unknown as MilestoneData}
           onDismiss={() => setMilestonePopupDismissed(true)}
