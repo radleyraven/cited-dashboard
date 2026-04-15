@@ -118,12 +118,18 @@ export default function MilestoneCard({ milestone, onDismiss }: MilestoneCardPro
         {subCopy && (
           <div style={{ fontSize: '18px', color: '#CBD5E1', marginBottom: '14px', lineHeight: 1.4, fontWeight: 700 }}>{subCopy}</div>
         )}
-        {/* Trophy inline with stat */}
+        {/* Trophy + stat + "in career sales" label inline */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', margin: '0 0 10px' }}>
           <div style={{ fontSize: '36px', lineHeight: 1 }}>{icon}</div>
-          <div style={{ fontSize: '52px', fontWeight: 900, color: accentColor, lineHeight: 1 }}>{stat}</div>
+          <div>
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
+              <div style={{ fontSize: '52px', fontWeight: 900, color: accentColor, lineHeight: 1 }}>{stat}</div>
+              <div style={{ fontSize: '13px', color: '#94a3b8', fontWeight: 500, lineHeight: 1.3 }}>in career<br/>sales</div>
+            </div>
+          </div>
         </div>
-        <div style={{ fontSize: '19px', fontWeight: 700, color: '#ffffff', lineHeight: 1.4 }}>{milestone.headline}</div>
+        <div style={{ fontSize: '16px', fontWeight: 700, color: '#ffffff', lineHeight: 1.4, marginBottom: '4px' }}>{milestone.headline}</div>
+        <div style={{ fontSize: '18px', fontWeight: 800, color: accentColor }}>Way to go! 🎉</div>
         <button
           onClick={onDismiss}
           style={{ marginTop: 24, width: '100%', padding: '14px', background: isGold ? '#D4A830' : '#00BFA6', color: '#0A1929', fontWeight: 800, fontSize: 15, borderRadius: 8, border: 'none', cursor: 'pointer', letterSpacing: 0.3 }}
