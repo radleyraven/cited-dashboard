@@ -573,12 +573,18 @@ function ResultsContent() {
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '8px', marginBottom: '24px' }}>
             {(() => {
               const goldStats = selectGoldStats(scan);
-              return scan.stats.map((stat) => {
+              // Sort: gold stats first, then others. Cap at 6, show 2 rows of 3.
+              const allStats = scan.stats ?? [];
+              const sorted = [
+                ...allStats.filter(s => goldStats.has(s.label)),
+                ...allStats.filter(s => !goldStats.has(s.label)),
+              ].slice(0, 6);
+              return sorted.map((stat) => {
                 const isGold = goldStats.has(stat.label);
                 return (
                   <div key={stat.label} style={{ background: 'rgba(255,255,255,0.05)', borderRadius: '10px', padding: '12px 8px' }}>
                     <div style={{ fontSize: '22px', fontWeight: 900, color: isGold ? '#D4A830' : '#00BFA6' }}>{stat.value}</div>
-                    <div style={{ fontSize: '10px', color: '#94a3b8', marginTop: '3px' }}>{stat.label}</div>
+                    <div style={{ fontSize: '10px', color: '#94a3b8', marginTop: '3px', lineHeight: 1.3 }}>{stat.label}</div>
                   </div>
                 );
               });
