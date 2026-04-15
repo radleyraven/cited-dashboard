@@ -761,7 +761,8 @@ function ResultsContent() {
               {/* What the gap means */}
               <div style={{ padding: '14px 20px', background: '#0A1929', display: 'flex', alignItems: 'center', gap: '12px' }}>
                 <div style={{ fontSize: '13px', color: '#94a3b8', lineHeight: 1.5, flex: 1 }}>
-                  <span style={{ color: '#fff', fontWeight: 700 }}>46 points you&apos;re leaving on the table.</span>
+                  <span style={{ color: '#fff', fontWeight: 700 }}>46 points you&apos;re leaving on the table</span>
+                  <span> — enough to move from {scan.composite_score} to 65+ in 90 days.</span>
                 </div>
               </div>
             </div>
