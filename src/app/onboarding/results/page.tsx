@@ -530,7 +530,7 @@ function ResultsContent() {
     </div>
   );
 
-  const primaryCompetitor = scan.markets.find(m => m.tier === 'primary');
+  const primaryCompetitor = scan.markets?.find(m => m.tier === 'primary') ?? scan.markets?.[0];
   const primaryMarket = scan.markets?.find(m => m.tier === 'primary')?.name ?? scan.markets?.[0]?.name ?? 'Carlsbad';
 
   const primaryMarketForCondense = scan?.markets?.find(m => m.tier === 'primary')?.name ?? scan?.markets?.[0]?.name ?? 'Carlsbad';
@@ -550,7 +550,7 @@ function ResultsContent() {
       <ProgressIndicator />
 
       {/* ═══ BLOCK 0: MILESTONE CARD ═══ */}
-      {false && scan?.milestone_to_celebrate && !milestonePopupDismissed && (
+      {false && scan != null && scan.milestone_to_celebrate && !milestonePopupDismissed && (
         <MilestoneCard
           milestone={scan.milestone_to_celebrate as unknown as MilestoneData}
           onDismiss={() => setMilestonePopupDismissed(true)}
@@ -724,10 +724,10 @@ function ResultsContent() {
                   <div style={{ fontSize: '10px', color: '#EF4444', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '12px' }}>Benchmark</div>
                   {/* Competitor score removed — no estimates. Name only on score page. Score comparison in Citation Report. */}
                   <div style={{ fontSize: '14px', color: '#EF4444', fontWeight: 700, lineHeight: 1.4, marginBottom: '12px' }}>Currently recommended by AI in this market</div>
-                  <div style={{ fontSize: '13px', fontWeight: 700, color: '#0A1929', marginBottom: '2px' }}>{primaryCompetitor.competitor}</div>
-                  <div style={{ fontSize: '11px', color: '#94a3b8', marginBottom: '10px' }}>{primaryCompetitor.competitor_brokerage}</div>
+                  <div style={{ fontSize: '13px', fontWeight: 700, color: '#0A1929', marginBottom: '2px' }}>{primaryCompetitor?.competitor ?? 'Top Local Agent'}</div>
+                  <div style={{ fontSize: '11px', color: '#94a3b8', marginBottom: '10px' }}>{primaryCompetitor?.competitor_brokerage ?? ''}</div>
                   <div style={{ fontSize: '12px', color: '#94a3b8', lineHeight: 1.5 }}>
-                    Currently recommended by AI in {primaryCompetitor.name} — the position we&apos;re building you into.
+                    Currently recommended by AI in {primaryCompetitor?.name ?? primaryMarket} — the position we&apos;re building you into.
                   </div>
                 </div>
               </div>
