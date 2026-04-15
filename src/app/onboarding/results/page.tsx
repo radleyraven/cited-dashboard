@@ -430,6 +430,7 @@ function ResultsContent() {
   const [showModal, setShowModal] = useState(false);
   const [audienceFocus, setAudienceFocus] = useState<string>('sellers');
   const [expandedSection, setExpandedSection] = useState<number | null>(null);
+  const [milestonePopupDismissed, setMilestonePopupDismissed] = useState(false);
 
   const searchParams = useSearchParams();
   const sectionRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -549,10 +550,11 @@ function ResultsContent() {
       <ProgressIndicator />
 
       {/* ═══ BLOCK 0: MILESTONE CARD ═══ */}
-      {scan?.milestone_to_celebrate && (
-        <div style={{ maxWidth: '680px', margin: '0 auto', padding: '32px 24px 0' }}>
-          <MilestoneCard milestone={scan.milestone_to_celebrate as unknown as MilestoneData} />
-        </div>
+      {scan?.milestone_to_celebrate && !milestonePopupDismissed && (
+        <MilestoneCard
+          milestone={scan.milestone_to_celebrate as unknown as MilestoneData}
+          onDismiss={() => setMilestonePopupDismissed(true)}
+        />
       )}
 
       {/* ═══ HERO ═══ */}
@@ -633,6 +635,13 @@ function ResultsContent() {
                 })()}&rdquo;</div>
               </div>
             </div>
+            {/* Not mentioned callout */}
+            {scan.ai_quote.client_mentioned === false && (
+              <div style={{ padding: '10px 16px', background: '#1a0a0a', borderTop: '1px solid #fee2e2', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ fontSize: '16px' }}>⚠️</span>
+                <span style={{ fontSize: '13px', color: '#EF4444', fontWeight: 700 }}>{clientName || 'You'}: not mentioned.</span>
+              </div>
+            )}
             {/* Result — context + stat inline */}
             <div style={{ padding: '12px 16px', background: '#fff5f5', borderTop: '1px solid #fee2e2' }}>
               <div style={{ fontSize: '13px', color: '#EF4444', fontWeight: 600, lineHeight: 1.5 }}>

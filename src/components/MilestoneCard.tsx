@@ -1,5 +1,7 @@
 'use client';
 
+import { useState, useEffect } from 'react';
+
 export interface MilestoneData {
   headline: string;
   celebration_copy?: string;
@@ -20,9 +22,34 @@ export interface MilestoneData {
 
 interface MilestoneCardProps {
   milestone: MilestoneData | null | undefined;
+  onDismiss: () => void;
 }
 
-export default function MilestoneCard({ milestone }: MilestoneCardProps) {
+export default function MilestoneCard({ milestone, onDismiss }: MilestoneCardProps) {
+  const [visible, setVisible] = useState(false);
+
+  // Entrance animation: mount → rAF → setVisible(true)
+  useEffect(() => {
+    requestAnimationFrame(() => setVisible(true));
+  }, []);
+
+  // ESC key dismiss
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onDismiss();
+    };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, [onDismiss]);
+
+  // Body scroll lock
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, []);
+
   if (!milestone) return null;
 
   // Card type logic
@@ -35,7 +62,8 @@ export default function MilestoneCard({ milestone }: MilestoneCardProps) {
     return 'gold';
   })();
 
-  const accentColor = cardType === 'teal' ? '#00BFA6' : '#D4A830';
+  const isGold = cardType === 'gold';
+  const accentColor = isGold ? '#D4A830' : '#00BFA6';
 
   // Stat display: value_label → stat → ""
   const stat = milestone.value_label ?? milestone.stat ?? '';
@@ -62,14 +90,44 @@ export default function MilestoneCard({ milestone }: MilestoneCardProps) {
   })();
 
   return (
-    <>
-      <div style={{
-        background: '#0A1929',
-        borderLeft: `4px solid ${accentColor}`,
-        borderRadius: '12px',
-        padding: '28px 32px',
-        marginBottom: '24px',
-      }}>
+    <div
+      onClick={onDismiss}
+      style={{
+        position: 'fixed',
+        inset: 0,
+        background: 'rgba(0,0,0,0.75)',
+        zIndex: 1000,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        style={{
+          maxWidth: 480,
+          width: '90%',
+          background: '#0A1929',
+          borderLeft: `4px solid ${accentColor}`,
+          borderRadius: '12px',
+          padding: '28px 32px',
+          transform: visible ? 'scale(1)' : 'scale(0.95)',
+          opacity: visible ? 1 : 0,
+          transition: 'transform 200ms ease-out, opacity 200ms ease-out',
+        }}
+      >
+        {/* Pre-header */}
+        <div style={{
+          fontSize: 11,
+          color: '#94a3b8',
+          fontWeight: 600,
+          letterSpacing: 1,
+          textTransform: 'uppercase',
+          marginBottom: 12,
+        }}>
+          Before your report...
+        </div>
+
         <div style={{ fontSize: '32px' }}>{icon}</div>
         <div style={{ fontSize: '52px', fontWeight: 900, color: accentColor, margin: '8px 0 4px' }}>
           {stat}
@@ -82,10 +140,27 @@ export default function MilestoneCard({ milestone }: MilestoneCardProps) {
             {subCopy}
           </div>
         )}
+
+        {/* CTA button */}
+        <button
+          onClick={onDismiss}
+          style={{
+            marginTop: 24,
+            width: '100%',
+            padding: '14px',
+            background: isGold ? '#D4A830' : '#00BFA6',
+            color: '#0A1929',
+            fontWeight: 800,
+            fontSize: 15,
+            borderRadius: 8,
+            border: 'none',
+            cursor: 'pointer',
+            letterSpacing: 0.3,
+          }}
+        >
+          Continue to my report →
+        </button>
       </div>
-      <p style={{ fontSize: '11px', color: '#94a3b8', fontStyle: 'italic', textAlign: 'center', margin: '-12px 0 32px' }}>
-        ↓ Your full report below
-      </p>
-    </>
+    </div>
   );
 }
