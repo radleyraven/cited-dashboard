@@ -441,6 +441,7 @@ function CondensedBar({ num, summary, onClick }: { num: number; summary: string;
    ════════════════════════════════════════════════════════════ */
 function ResultsContent() {
   const [clientName, setClientName] = useState('');
+  const [clientEmail, setClientEmail] = useState('');
   const [approved, setApproved] = useState(false);
   const [saving, setSaving] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -451,7 +452,7 @@ function ResultsContent() {
   const [expandedMarket, setExpandedMarket] = useState<number | null>(null);
   const [showApprovePanel, setShowApprovePanel] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const [audienceFocus, setAudienceFocus] = useState<string>('sellers');
+  const [audienceFocus, setAudienceFocus] = useState<string>(''); // Empty until client actively selects — loaded from Supabase if previously set
   const [expandedSection, setExpandedSection] = useState<number | null>(null);
   const [milestonePopupDismissed, setMilestonePopupDismissed] = useState(false);
 
@@ -467,11 +468,12 @@ function ResultsContent() {
     const token = searchParams.get('token');
     if (token) {
       const { data } = await supabase.from('cited_intake')
-        .select('id, full_name, markets_approved, scan_results, audience_focus')
+        .select('id, full_name, email, markets_approved, scan_results, audience_focus')
         .eq('onboarding_token', token).single();
       if (data) {
         setRecordId(data.id);
         setClientName(data.full_name || '');
+        setClientEmail(data.email || '');
         if (data.markets_approved) { setApproved(true); setVisibleSection(8); setShowApprovePanel(true); }
         if (data.audience_focus) setAudienceFocus(data.audience_focus);
         if (data.scan_results) {
@@ -553,14 +555,46 @@ function ResultsContent() {
 
   async function handleFinalApprove() {
     if (!recordId || !scan) return;
+    if (!audienceFocus) return; // Guard — button should be disabled but double-check
     setSaving(true);
     const supabase = createSupabaseBrowserClient();
-    await supabase.from('cited_intake').update({
+
+    // Derive confirmed neighborhoods
+    const primaryMarket = safeScan.markets?.find(m => m.tier === 'primary');
+    const neighborhoods =
+      (primaryMarket?.recommended_neighborhoods?.map((n: {name: string}) => n.name) ||
+       primaryMarket?.neighborhoods?.map((n: {name: string}) => n.name) ||
+       []);
+
+    const { error } = await supabase.from('cited_intake').update({
       markets_approved: true,
       markets_approved_at: new Date().toISOString(),
       neighborhoods_confirmed: true,
       neighborhoods_confirmed_at: new Date().toISOString(),
+      audience_focus: audienceFocus,
+      confirmed_neighborhoods: neighborhoods,
     }).eq('id', recordId);
+
+    if (!error) {
+      // Send strategy confirmed email
+      const markets = safeScan.markets ?? [];
+      const primary = markets.find(m => m.tier === 'primary')?.name ?? '';
+      const secondary = markets.find(m => m.tier === 'secondary')?.name ?? '';
+      const growth = markets.find(m => m.tier === 'growth')?.name ?? '';
+
+      fetch('/api/strategy-confirmed', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          client_name: clientName,
+          email: clientEmail,
+          primary_market: primary,
+          secondary_market: secondary,
+          growth_market: growth,
+        }),
+      }).catch(() => {}); // silent fail
+    }
+
     setApproved(true);
     setSaving(false);
   }
@@ -1366,10 +1400,35 @@ function ResultsContent() {
                         </div>
                       ))}
                     </div>
-                    <button onClick={handleFinalApprove} disabled={saving} style={{
+                    {/* Audience focus selector */}
+                    <div style={{ marginBottom: '20px' }}>
+                      <div style={{ fontSize: '13px', fontWeight: 700, color: '#0A1929', marginBottom: '12px' }}>
+                        Who do you primarily represent?
+                      </div>
+                      <div style={{ display: 'flex', gap: '8px' }}>
+                        {(['sellers', 'buyers', 'both'] as const).map(opt => (
+                          <button
+                            key={opt}
+                            onClick={() => setAudienceFocus(opt)}
+                            style={{
+                              flex: 1, padding: '10px 8px',
+                              background: audienceFocus === opt ? '#0A1929' : '#f8f9fa',
+                              color: audienceFocus === opt ? '#fff' : '#475569',
+                              border: audienceFocus === opt ? '2px solid #0A1929' : '2px solid #e2e8f0',
+                              borderRadius: '8px', fontWeight: 600, fontSize: '13px',
+                              cursor: 'pointer', textTransform: 'capitalize',
+                            }}
+                          >
+                            {opt === 'both' ? 'Both equally' : opt.charAt(0).toUpperCase() + opt.slice(1)}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                    <button onClick={handleFinalApprove} disabled={saving || !audienceFocus} style={{
                       width: '100%', padding: '18px 24px', background: '#00BFA6', color: '#fff',
                       fontSize: '16px', fontWeight: 700, border: 'none', borderRadius: '10px',
-                      cursor: saving ? 'wait' : 'pointer', opacity: saving ? 0.7 : 1,
+                      cursor: !audienceFocus ? 'not-allowed' : saving ? 'wait' : 'pointer',
+                      opacity: !audienceFocus ? 0.5 : saving ? 0.7 : 1,
                       boxShadow: '0 4px 12px rgba(0,191,166,0.3)', transition: 'opacity 0.2s',
                     }}>
                       {saving ? 'Saving...' : '✓ Confirm — Start Building'}
