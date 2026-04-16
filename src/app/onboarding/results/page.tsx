@@ -628,7 +628,7 @@ function ResultsContent() {
       <div style={{ maxWidth: '680px', margin: '0 auto', padding: '0 24px 32px' }}>
 
         {/* ═══ SECTION 1: DISCOVERY GAP ═══ */}
-        <div ref={el => { sectionRefs.current[0] = el; }} style={{ paddingTop: '36px' }}>
+        <div ref={el => { sectionRefs.current[0] = el; }} style={{ paddingTop: isCondensed(1) ? '4px' : '36px' }}>
           {isCondensed(1) ? (
             <CondensedBar
               num={1}
@@ -775,7 +775,7 @@ function ResultsContent() {
 
         {/* ═══ SECTION 2: STRENGTHS ═══ */}
         {visibleSection >= 2 && (
-          <div ref={el => { sectionRefs.current[1] = el; }} style={{ paddingTop: '36px' }}>
+          <div ref={el => { sectionRefs.current[1] = el; }} style={{ paddingTop: isCondensed(2) ? '4px' : '36px' }}>
             {isCondensed(2) ? (
               <CondensedBar
                 num={2}
@@ -928,7 +928,7 @@ function ResultsContent() {
 
         {/* ═══ SECTION 3: GAPS ═══ */}
         {visibleSection >= 3 && (
-          <div ref={el => { sectionRefs.current[2] = el; }} style={{ paddingTop: '36px' }}>
+          <div ref={el => { sectionRefs.current[2] = el; }} style={{ paddingTop: isCondensed(3) ? '4px' : '36px' }}>
             {isCondensed(3) ? (
               <CondensedBar
                 num={3}
@@ -1000,7 +1000,7 @@ function ResultsContent() {
 
         {/* ═══ SECTION 4: MARKETS — Hybrid original style + confirm ═══ */}
         {visibleSection >= 4 && (
-          <div ref={el => { sectionRefs.current[3] = el; }} style={{ paddingTop: '36px' }}>
+          <div ref={el => { sectionRefs.current[3] = el; }} style={{ paddingTop: isCondensed(4) ? '4px' : '36px' }}>
             {isCondensed(4) ? (
               <CondensedBar
                 num={4}
@@ -1188,7 +1188,7 @@ function ResultsContent() {
 
         {/* ═══ SECTION 5: 90-DAY PATH ═══ */}
         {visibleSection >= 5 && (
-          <div ref={el => { sectionRefs.current[4] = el; }} style={{ paddingTop: '36px' }}>
+          <div ref={el => { sectionRefs.current[4] = el; }} style={{ paddingTop: isCondensed(5) ? '4px' : '36px' }}>
             {isCondensed(5) ? (
               <CondensedBar
                 num={5}
@@ -1244,7 +1244,7 @@ function ResultsContent() {
 
         {/* ═══ SECTION 6: DELIVERABLES — SVG icons ═══ */}
         {visibleSection >= 6 && (
-          <div ref={el => { sectionRefs.current[5] = el; }} style={{ paddingTop: '36px' }}>
+          <div ref={el => { sectionRefs.current[5] = el; }} style={{ paddingTop: isCondensed(6) ? '4px' : '36px' }}>
             {isCondensed(6) ? (
               <CondensedBar
                 num={6}
@@ -1304,7 +1304,10 @@ function ResultsContent() {
                     </button>
                     {!allMarketsConfirmed && (
                       <p style={{ textAlign: 'center', fontSize: '12px', color: '#94a3b8', marginTop: '10px' }}>
-                        {confirmedCount}/{scan.markets.length} markets confirmed · <button onClick={scrollToMarkets} style={{ background: 'none', border: 'none', color: '#00BFA6', fontSize: '12px', fontWeight: 600, cursor: 'pointer', padding: 0 }}>go back</button>
+                        {confirmedCount < scan.markets.length
+                          ? <button onClick={scrollToMarkets} style={{ background: 'none', border: 'none', color: '#00BFA6', fontSize: '13px', fontWeight: 700, cursor: 'pointer', padding: 0 }}>→ Confirm your {scan.markets.length - confirmedCount} remaining market{scan.markets.length - confirmedCount > 1 ? 's' : ''} first</button>
+                          : `${confirmedCount}/${scan.markets.length} markets confirmed ✓`
+                        }
                       </p>
                     )}
                   </>
