@@ -479,6 +479,19 @@ function ResultsContent() {
           setScan(normalizeScanResults(sr as unknown as Record<string, unknown>));
           setMarketConfirms((sr.markets || []).map(() => false));
         }
+        // Fire report_viewed event
+        const slug = (data.full_name || '').toLowerCase().replace(/\s+/g, '_');
+        fetch('/api/events', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            client_slug: slug,
+            client_name: data.full_name,
+            event_type: 'report_viewed',
+            event_data: { token, timestamp: new Date().toISOString() },
+            source: 'citation_report',
+          }),
+        }).catch(() => {}); // silent fail — never block the page
       }
     }
     setLoading(false);
@@ -490,7 +503,22 @@ function ResultsContent() {
       const ref = sectionRefs.current[sectionNum - 1];
       if (ref) ref.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }, 100);
-  }, []);
+    // Track section advancement
+    if (clientName) {
+      const slug = clientName.toLowerCase().replace(/\s+/g, '_');
+      fetch('/api/events', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          client_slug: slug,
+          client_name: clientName,
+          event_type: 'section_advanced',
+          event_data: { section: sectionNum, timestamp: new Date().toISOString() },
+          source: 'citation_report',
+        }),
+      }).catch(() => {});
+    }
+  }, [clientName]);
 
   function scrollToMarkets() {
     setShowModal(false);
