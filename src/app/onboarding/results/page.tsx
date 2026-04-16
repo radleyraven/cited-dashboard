@@ -494,9 +494,15 @@ function ResultsContent() {
 
   function scrollToMarkets() {
     setShowModal(false);
+    setExpandedSection(4); // Re-expand markets section if condensed
     setTimeout(() => {
       if (marketsRef.current) marketsRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }, 100);
+      else {
+        // Fallback: scroll to section 4 ref
+        const ref = sectionRefs.current[3];
+        if (ref) ref.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 150);
   }
 
   function toggleMarket(i: number) {
