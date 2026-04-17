@@ -844,19 +844,73 @@ function renderCardContent(p: CardProps) {
     </div>
   );
 
-  // ── Card 5: Voice Capture ──────────────────────────────────
-  if (cardId === 5) return (
-    <div>
-      <CardHeader title="How would your best client describe you to a friend?"
-        subtitle="Write it like they'd actually say it out loud — not a marketing blurb. One or two sentences." />
-      <FieldGroup label="" hint="This is the most powerful voice signal we can capture. AI cites agents described in human terms, not corporate taglines.">
-        <TextArea value={form.voiceCapture} onChange={(v) => set("voiceCapture", v)} rows={4}
-          placeholder={'e.g., "She\'s the person who actually answers her phone and tells you the truth about a property, even if it kills the deal."'} />
-      </FieldGroup>
-      <NextButton onClick={next} />
-      <SkipButton onClick={() => skip("voiceCapture")} label={"Skip for now — I'll think about this →"} />
-    </div>
-  );
+  // ── Card 5: Voice Capture (pick 2 archetypes) ──────────────
+  if (cardId === 5) {
+    const VOICE_ARCHETYPES = [
+      { key: 'professional', label: 'Professional', blurb: 'Buttoned-up, data-driven, highest level of expertise.' },
+      { key: 'friendly', label: 'Friendly', blurb: 'Warm, patient, makes the whole process feel easy.' },
+      { key: 'direct', label: 'Direct & Honest', blurb: 'Tells you the truth, even when it kills the deal.' },
+      { key: 'insider', label: 'Insider / Connected', blurb: 'Knows every listing before it hits the MLS.' },
+      { key: 'concierge', label: 'Concierge', blurb: 'White-glove service — handles everything.' },
+      { key: 'educator', label: 'Educator / Strategic', blurb: "Explains the market like you're in her class." },
+      { key: 'advocate', label: 'Fierce Advocate', blurb: 'Goes to war for her clients in negotiation.' },
+      { key: 'luxury', label: 'Luxury Specialist', blurb: 'Discreet, polished, understands high-end buyers.' },
+    ];
+    const selected = form.voiceCapture ? form.voiceCapture.split(',').map((s: string) => s.trim()).filter(Boolean) : [];
+    const toggle = (key: string) => {
+      const isSelected = selected.includes(key);
+      let nextSel: string[];
+      if (isSelected) {
+        nextSel = selected.filter((k: string) => k !== key);
+      } else if (selected.length >= 2) {
+        return;
+      } else {
+        nextSel = [...selected, key];
+      }
+      set('voiceCapture', nextSel.join(','));
+    };
+    return (
+      <div>
+        <CardHeader title="How would your best clients describe you?"
+          subtitle="Pick the two that sound most like you. This shapes how AI learns to describe you to future clients." />
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '10px', marginTop: '16px' }}>
+          {VOICE_ARCHETYPES.map(opt => {
+            const isSelected = selected.includes(opt.key);
+            const atMax = selected.length >= 2 && !isSelected;
+            return (
+              <button
+                key={opt.key}
+                type="button"
+                onClick={() => toggle(opt.key)}
+                disabled={atMax}
+                style={{
+                  textAlign: 'left',
+                  padding: '14px 16px',
+                  borderRadius: '10px',
+                  border: isSelected ? '2px solid #00BFA6' : '1px solid #e2e8f0',
+                  background: isSelected ? 'rgba(0,191,166,0.06)' : '#fff',
+                  cursor: atMax ? 'not-allowed' : 'pointer',
+                  opacity: atMax ? 0.5 : 1,
+                  transition: 'all 0.15s',
+                }}
+              >
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
+                  <span style={{ fontSize: '14px', fontWeight: 700, color: '#0A1929' }}>{opt.label}</span>
+                  {isSelected && <span style={{ fontSize: '12px', fontWeight: 700, color: '#00BFA6' }}>✓ Selected</span>}
+                </div>
+                <div style={{ fontSize: '12px', color: '#64748b', lineHeight: 1.5 }}>{opt.blurb}</div>
+              </button>
+            );
+          })}
+        </div>
+        <div style={{ fontSize: '12px', color: '#94a3b8', marginTop: '12px', textAlign: 'center' }}>
+          {selected.length}/2 selected
+        </div>
+        <NextButton onClick={next} />
+        <SkipButton onClick={() => skip("voiceCapture")} label={"Skip for now →"} />
+      </div>
+    );
+  }
 
   // ── Card 6: Notable Transaction ────────────────────────────
   if (cardId === 6) return (
