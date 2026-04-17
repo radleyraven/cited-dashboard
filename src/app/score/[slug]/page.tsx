@@ -152,6 +152,9 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
   // S-3: Named competitor (CITED-207)
   const primaryCompetitorName = scan?.markets?.find(m => m.tier === 'primary')?.competitor ?? null;
   const primaryCompetitorBrokerage = scan?.markets?.find(m => m.tier === 'primary')?.competitor_brokerage ?? null;
+  const primaryCompetitorVerified = (scan?.markets?.find(m => m.tier === 'primary') as Record<string,unknown>)?.competitor_verified as boolean ?? false;
+  const primaryCompetitorFrequency = (scan?.markets?.find(m => m.tier === 'primary') as Record<string,unknown>)?.competitor_frequency as number ?? 0;
+  const primaryCompetitorTotal = (scan?.markets?.find(m => m.tier === 'primary') as Record<string,unknown>)?.competitor_total_queries as number ?? 0;
   const isRealPersonName = (n: string | null) => n && n.length > 3 && /[A-Z][a-z]/.test(n) && n.includes(' ');
   const clientPct = Math.max(1, (score / 100) * 100);
   const benchmarkPct = Math.max(1, (benchmarkScore / 100) * 100);
@@ -351,6 +354,19 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
               </div>
               <div style={{ fontFamily: 'var(--font-geist-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif', fontSize: '12px', fontWeight: 400, color: D.textTertiary, height: '18px', marginTop: '6px', marginBottom: '16px' }}>Average Foundation Score</div>
 
+              {/* Verified competitor name + frequency */}
+              {primaryCompetitorName && isRealPersonName(primaryCompetitorName) && (
+                <div style={{ marginBottom: '16px' }}>
+                  <div style={{ fontSize: '14px', fontWeight: 700, color: '#0A1929', marginBottom: '2px' }}>
+                    {primaryCompetitorName}
+                  </div>
+                  {primaryCompetitorFrequency > 0 && (
+                    <div style={{ fontSize: '11px', color: '#94a3b8' }}>
+                      appeared in {primaryCompetitorFrequency} of {primaryCompetitorTotal} queries
+                    </div>
+                  )}
+                </div>
+              )}
               <div style={{ paddingTop: '14px', borderTop: `1px solid ${D.border}` }}>
                 <div style={{ fontSize: '9px', fontWeight: 700, color: D.textTertiary, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '6px' }}>What they have</div>
                 <div style={{ display: 'flex', alignItems: 'flex-start', gap: '5px', marginBottom: '3px' }}>
