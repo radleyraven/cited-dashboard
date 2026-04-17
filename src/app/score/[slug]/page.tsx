@@ -348,25 +348,12 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
               </div>
             </div>
             <div style={{ padding: '24px', background: D.grayBg }}>
-              <div style={{ fontSize: '10px', fontWeight: 700, color: D.red, textTransform: 'uppercase', letterSpacing: '1.5px', height: '20px', whiteSpace: 'nowrap', marginBottom: '12px' }}>AI-Recommended Agents</div>
+              <div style={{ fontSize: '10px', fontWeight: 700, color: D.red, textTransform: 'uppercase', letterSpacing: '1.5px', height: '20px', whiteSpace: 'nowrap', marginBottom: '12px' }}>Who AI recommends</div>
               <div style={{ height: '64px', display: 'flex', alignItems: 'center' }}>
-                <div style={{ fontFamily: 'Georgia, serif', fontSize: '48px', fontWeight: 700, color: '#94a3b8', lineHeight: 1 }}>~{benchmarkScore}</div>
+                <div style={{ fontFamily: 'Georgia, serif', fontSize: '64px', fontWeight: 900, color: '#94a3b8', lineHeight: 1 }}>~{benchmarkScore}</div>
               </div>
               <div style={{ fontFamily: 'var(--font-geist-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif', fontSize: '12px', fontWeight: 400, color: D.textTertiary, height: '18px', marginTop: '6px', marginBottom: '16px' }}>Average Foundation Score</div>
 
-              {/* Verified competitor name + frequency */}
-              {primaryCompetitorName && isRealPersonName(primaryCompetitorName) && (
-                <div style={{ marginBottom: '16px' }}>
-                  <div style={{ fontSize: '14px', fontWeight: 700, color: '#0A1929', marginBottom: '2px' }}>
-                    {primaryCompetitorName}
-                  </div>
-                  {primaryCompetitorFrequency > 0 && (
-                    <div style={{ fontSize: '11px', color: '#94a3b8' }}>
-                      appeared in {primaryCompetitorFrequency} of {primaryCompetitorTotal} queries
-                    </div>
-                  )}
-                </div>
-              )}
               <div style={{ paddingTop: '14px', borderTop: `1px solid ${D.border}` }}>
                 <div style={{ fontSize: '9px', fontWeight: 700, color: D.textTertiary, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '6px' }}>What they have</div>
                 <div style={{ display: 'flex', alignItems: 'flex-start', gap: '5px', marginBottom: '3px' }}>
@@ -385,13 +372,24 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
             </div>
           </div>
 
-          {/* Discovery gap callout */}
-          <div style={{ padding: '14px 24px', background: D.navy, textAlign: 'center' }}>
+          {/* Discovery gap callout — with competitor name if verified */}
+          <div style={{ padding: '16px 24px', background: D.navy, textAlign: 'center' }}>
             {scan?.query_count ? (
-              <span style={{ fontSize: '14px', color: '#fff', lineHeight: 1.6 }}>
-                AI answered <span style={{ color: D.teal, fontWeight: 700 }}>{scan.query_count} queries</span> in {market}.{' '}
-                Your name appeared in <span style={{ color: D.red, fontWeight: 700 }}>{visibilityRate === 0 ? '0 of them' : `${visibilityRate}%`}</span>.
-              </span>
+              <div>
+                {primaryCompetitorName && isRealPersonName(primaryCompetitorName) && primaryCompetitorFrequency > 0 ? (
+                  <div style={{ marginBottom: '6px' }}>
+                    <span style={{ fontSize: '14px', color: '#fff', lineHeight: 1.6 }}>
+                      AI recommended <span style={{ color: D.red, fontWeight: 700 }}>{primaryCompetitorName}</span> in <span style={{ color: D.red, fontWeight: 700 }}>{primaryCompetitorFrequency} of {primaryCompetitorTotal} queries</span>.{' '}
+                      AI did not recommend you at all.
+                    </span>
+                  </div>
+                ) : (
+                  <span style={{ fontSize: '14px', color: '#fff', lineHeight: 1.6 }}>
+                    AI answered <span style={{ color: D.teal, fontWeight: 700 }}>{scan.query_count} queries</span> in {market}.{' '}
+                    Your name appeared in <span style={{ color: D.red, fontWeight: 700 }}>{visibilityRate === 0 ? '0 of them' : `${visibilityRate}%`}</span>.
+                  </span>
+                )}
+              </div>
             ) : gap > 0 ? (
               <>
                 <span style={{ fontSize: '14px', color: '#fff', fontWeight: 600 }}>{gap} points behind in {market}.</span>
