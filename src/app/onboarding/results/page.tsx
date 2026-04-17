@@ -124,6 +124,7 @@ interface ScanResults {
   deliverables: DeliverableData[];
   competitor_validation?: CompetitorValidation;
   milestone_to_celebrate?: Record<string, unknown> | null;
+  market_type?: 'urban_condo' | 'suburban_sfr' | 'mixed' | null;
   client_mentioned_count?: number;
   deal_map?: Record<string, unknown>;
   mls_stats?: {
@@ -378,6 +379,7 @@ function normalizeScanResults(sr: Record<string, unknown>): ScanResults {
     })(),
     query_count: (sr.query_count as number) ?? 0,
     neighborhood_count: (sr.neighborhood_count as number) ?? (Array.isArray(sr.markets) ? (sr.markets as Record<string,unknown>[]).reduce((n, m) => n + ((m.neighborhoods as unknown[])?.length ?? 0), 0) : 0),
+    market_type: (sr.market_type as ScanResults['market_type']) ?? null,
     milestone_to_celebrate: (() => {
       if (sr.milestone_to_celebrate) return sr.milestone_to_celebrate as ScanResults['milestone_to_celebrate'];
       const careerVol = ((sr.deal_map as Record<string,unknown>)?.career_volume as number) ?? 0;
@@ -648,6 +650,12 @@ function ResultsContent() {
 
   // scan is non-null beyond this point (TypeScript narrowing via explicit cast)
   const safeScan = scan as ScanResults;
+
+  const neighborhoodLabel = safeScan.market_type === 'urban_condo'
+    ? 'Your Key Buildings'
+    : safeScan.market_type === 'mixed'
+    ? 'Your Markets'
+    : 'Your Neighborhoods';
 
   const primaryCompetitor = scan.markets?.find(m => m.tier === 'primary') ?? scan.markets?.[0];
   const primaryMarket = scan.markets?.find(m => m.tier === 'primary')?.name ?? scan.markets?.[0]?.name ?? 'Carlsbad';
@@ -1229,7 +1237,7 @@ function ResultsContent() {
                         background: 'none', border: 'none', fontSize: '13px', color: '#00BFA6',
                         fontWeight: 600, cursor: 'pointer', padding: '2px 0',
                       }}>
-                        {isExpanded ? '▾ Hide neighborhoods' : `▸ See ${hoods.length} recommended neighborhoods`}
+                        {isExpanded ? `▾ Hide ${neighborhoodLabel.toLowerCase()}` : `▸ See ${hoods.length} ${neighborhoodLabel.toLowerCase()}`}
                       </button>
                     )}
                   </div>
@@ -1238,7 +1246,7 @@ function ResultsContent() {
                   {isExpanded && (
                     <div style={{ borderTop: '1px solid #f1f5f9', padding: '16px 20px', background: '#fafbfc' }}>
                       <div style={{ fontSize: '11px', fontWeight: 700, color: '#0A1929', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '6px' }}>
-                        Recommended Neighborhoods
+                        {neighborhoodLabel}
                       </div>
                       <p style={{ fontSize: '12px', color: '#64748b', margin: '0 0 10px 0', lineHeight: 1.4 }}>
                         We recommend these {hoods.length} neighborhoods based on your transaction history and our analysis:
