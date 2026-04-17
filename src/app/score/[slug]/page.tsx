@@ -340,7 +340,7 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
                     {gaps.slice(0, 3).map((g, i) => (
                       <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '5px', marginBottom: '3px' }}>
                         <span style={{ color: D.red, fontWeight: 700, fontSize: '10px', flexShrink: 0, marginTop: '1px' }}>→</span>
-                        <span style={{ fontSize: '11px', color: D.textSecondary, lineHeight: 1.4 }}>{g.title === 'AI Discovery' ? 'AI Discovery presence' : g.title === 'Yelp Best Of' ? 'Yelp Best Of recognition' : g.title === 'Content' ? 'Published content signal' : g.title || g.platform}</span>
+                        <span style={{ fontSize: '11px', color: D.textSecondary, lineHeight: 1.4 }}>{g.title || g.platform}</span>
                       </div>
                     ))}
                   </>
@@ -356,15 +356,15 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
                 <div style={{ fontSize: '9px', fontWeight: 700, color: D.textTertiary, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '6px' }}>What they have</div>
                 <div style={{ display: 'flex', alignItems: 'flex-start', gap: '5px', marginBottom: '3px' }}>
                   <span style={{ color: D.teal, fontWeight: 700, fontSize: '10px', flexShrink: 0 }}>✓</span>
-                  <span style={{ fontSize: '11px', color: D.textSecondary, lineHeight: 1.4 }}>Earned media</span>
+                  <span style={{ fontSize: '11px', color: D.textSecondary, lineHeight: 1.4 }}>Earned media mentions</span>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'flex-start', gap: '5px', marginBottom: '3px' }}>
                   <span style={{ color: D.teal, fontWeight: 700, fontSize: '10px', flexShrink: 0 }}>✓</span>
-                  <span style={{ fontSize: '11px', color: D.textSecondary, lineHeight: 1.4 }}>Fresh content</span>
+                  <span style={{ fontSize: '11px', color: D.textSecondary, lineHeight: 1.4 }}>Published market content</span>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'flex-start', gap: '5px' }}>
                   <span style={{ color: D.teal, fontWeight: 700, fontSize: '10px', flexShrink: 0 }}>✓</span>
-                  <span style={{ fontSize: '11px', color: D.textSecondary, lineHeight: 1.4 }}>Platform presence</span>
+                  <span style={{ fontSize: '11px', color: D.textSecondary, lineHeight: 1.4 }}>Verified platform presence</span>
                 </div>
               </div>
             </div>
