@@ -330,7 +330,6 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
               <div style={{ fontSize: '10px', fontWeight: 700, color: D.textTertiary, textTransform: 'uppercase', letterSpacing: '1.5px', height: '20px', whiteSpace: 'nowrap', marginBottom: '12px' }}>Your Foundation Score</div>
               <div style={{ fontFamily: 'Georgia, serif', fontSize: '64px', fontWeight: 900, color: D.navy, lineHeight: 1, height: '64px' }}>{score}</div>
               <div style={{ fontFamily: 'var(--font-geist-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif', fontSize: '12px', fontWeight: 400, color: D.textTertiary, height: '18px', marginTop: '6px', marginBottom: '16px' }}>out of 100</div>
-              <div style={{ minHeight: '52px' }} />{/* spacer to align dividers */}
               <div style={{ paddingTop: '14px', borderTop: `1px solid ${D.border}` }}>
                 {gaps.length > 0 && (
                   <>
@@ -346,26 +345,12 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
               </div>
             </div>
             <div style={{ padding: '24px', background: D.grayBg }}>
-              <div style={{ fontSize: '10px', fontWeight: 700, color: D.red, textTransform: 'uppercase', letterSpacing: '1.5px', height: '20px', whiteSpace: 'nowrap', marginBottom: '12px' }}>Market Benchmark</div>
+              <div style={{ fontSize: '10px', fontWeight: 700, color: D.red, textTransform: 'uppercase', letterSpacing: '1.5px', height: '20px', whiteSpace: 'nowrap', marginBottom: '12px' }}>AI-Recommended Agents</div>
               <div style={{ height: '64px', display: 'flex', alignItems: 'center' }}>
                 <div style={{ fontFamily: 'Georgia, serif', fontSize: '48px', fontWeight: 700, color: '#94a3b8', lineHeight: 1 }}>~{benchmarkScore}</div>
               </div>
-              <div style={{ fontFamily: 'var(--font-geist-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif', fontSize: '12px', fontWeight: 400, color: D.textTertiary, height: '18px', marginTop: '6px', marginBottom: '16px' }}>Avg. score, AI-recommended agents</div>
-              {/* S-3: Named competitor (CITED-207) */}
-              {isRealPersonName(primaryCompetitorName) && (
-                <>
-                  {primaryCompetitorName && (
-                    <div style={{ fontSize: '13px', fontWeight: 700, color: '#1a1a1a', marginBottom: 2 }}>
-                      {primaryCompetitorName}
-                    </div>
-                  )}
-                  {primaryCompetitorBrokerage && (
-                    <div style={{ fontSize: '11px', color: '#94a3b8', marginBottom: 8 }}>
-                      {primaryCompetitorBrokerage}
-                    </div>
-                  )}
-                </>
-              )}
+              <div style={{ fontFamily: 'var(--font-geist-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif', fontSize: '12px', fontWeight: 400, color: D.textTertiary, height: '18px', marginTop: '6px', marginBottom: '16px' }}>Average Foundation Score</div>
+
               <div style={{ paddingTop: '14px', borderTop: `1px solid ${D.border}` }}>
                 <div style={{ fontSize: '9px', fontWeight: 700, color: D.textTertiary, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '6px' }}>What they have</div>
                 <div style={{ display: 'flex', alignItems: 'flex-start', gap: '5px', marginBottom: '3px' }}>
