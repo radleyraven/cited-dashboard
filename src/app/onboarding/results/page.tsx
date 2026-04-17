@@ -363,9 +363,9 @@ function normalizeScanResults(sr: Record<string, unknown>): ScanResults {
           const base = (sr.foundation_score as number) ?? (sr.composite_score as number) ?? 0;
           return [
             { day: 'Day 0', score: String(base), color: base < 35 ? '#DC2626' : '#D4A830', headline: 'Baseline established', outcomes: ['AI citation footprint mapped', 'Competitor gap identified'] },
-            { day: 'Day 30', score: String(Math.min(100, base + 19)), color: '#D4A830', headline: 'Platform foundation built', outcomes: ['GBP + Yelp optimized', 'First market article published', 'Day 30 score update delivered'] },
-            { day: 'Day 60', score: String(Math.min(100, base + 33)), color: '#D4A830', headline: 'Content & media momentum', outcomes: ['3+ earned media mentions', 'AI connects your name to your markets', 'Entity signals locked'] },
-            { day: 'Day 90', score: String(Math.min(100, base + 46)) + '+', color: '#00BFA6', headline: 'AI starts recommending you', outcomes: [`First time AI recommends you in ${(sr.markets as Array<{name:string,tier:string}>)?.find(m=>m.tier==='primary')?.name ?? 'your market'}`, 'Foundation Score verified', 'Citation Guarantee™ check'] },
+            { day: 'Day 30', score: String(Math.min(100, base + 19)), color: '#D4A830', headline: 'Platform foundation built', outcomes: ['Your profiles are optimized — AI starts seeing the signals', 'First article published in your voice', 'Day 30 score update delivered'] },
+            { day: 'Day 60', score: String(Math.min(100, base + 33)), color: '#D4A830', headline: 'Content & media momentum', outcomes: ['Your name appears in early discovery queries', 'Competitor gap starts closing', 'AI connects your name to your markets'] },
+            { day: 'Day 90', score: String(Math.min(100, base + 46)) + '+', color: '#00BFA6', headline: 'AI starts recommending you', outcomes: [`AI recommends you in ${primaryMarket} — measurable, verifiable`, 'Foundation Score verified', 'Citation Guarantee™ check'] },
           ];
         })(),
     mls_stats: (() => {
@@ -378,8 +378,33 @@ function normalizeScanResults(sr: Record<string, unknown>): ScanResults {
     })(),
     query_count: (sr.query_count as number) ?? 0,
     neighborhood_count: (sr.neighborhood_count as number) ?? (Array.isArray(sr.markets) ? (sr.markets as Record<string,unknown>[]).reduce((n, m) => n + ((m.neighborhoods as unknown[])?.length ?? 0), 0) : 0),
-    milestone_to_celebrate: (sr.milestone_to_celebrate as ScanResults['milestone_to_celebrate']) ?? null,
+    milestone_to_celebrate: (() => {
+      if (sr.milestone_to_celebrate) return sr.milestone_to_celebrate as ScanResults['milestone_to_celebrate'];
+      const careerVol = ((sr.deal_map as Record<string,unknown>)?.career_volume as number) ?? 0;
+      if (careerVol >= 100_000_000) {
+        const volLabel = careerVol >= 200_000_000
+          ? `$${Math.round(careerVol/1e6)}M+`
+          : '$100M+';
+        return {
+          type: 'career_volume_auto',
+          headline: `You've closed ${volLabel} in career sales.`,
+          sub_copy: `Most agents never get here. AI doesn't know it yet — but it will.`,
+          value_label: volLabel,
+          card_type: 'gold' as const,
+          icon: '🏆',
+        };
+      }
+      return null;
+    })(),
   } as ScanResults;
+}
+
+/* ── isVeteranAgent — detects high-volume / high-experience agents ── */
+function isVeteranAgent(scan: ScanResults | null): boolean {
+  if (!scan) return false;
+  const careerVolume = ((scan.deal_map as Record<string,unknown>)?.career_volume as number) ?? 0;
+  const closedCount = ((scan.deal_map as Record<string,unknown>)?.closed_count as number) ?? 0;
+  return careerVolume >= 50_000_000 || closedCount >= 50;
 }
 
 /* ── selectGoldStats — determines which hero stats get gold color ── */
@@ -626,6 +651,7 @@ function ResultsContent() {
 
   const primaryCompetitor = scan.markets?.find(m => m.tier === 'primary') ?? scan.markets?.[0];
   const primaryMarket = scan.markets?.find(m => m.tier === 'primary')?.name ?? scan.markets?.[0]?.name ?? 'Carlsbad';
+  const displayFocus = audienceFocus || 'sellers';
 
   const primaryMarketForCondense = scan?.markets?.find(m => m.tier === 'primary')?.name ?? scan?.markets?.[0]?.name ?? 'Carlsbad';
   const totalRecoverablePoints = scan?.gaps?.reduce((sum: number, g: {points: string | number}) => sum + Number(String(g.points).replace(' pts', '')), 0) ?? 0;
@@ -655,7 +681,10 @@ function ResultsContent() {
       <div style={{ background: '#0A1929', padding: '44px 24px 40px', textAlign: 'center' }}>
         <div style={{ maxWidth: '680px', margin: '0 auto' }}>
           <div style={{ fontSize: '12px', color: '#00BFA6', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '14px' }}>
-            Your Citation Report is Ready
+            {isVeteranAgent(safeScan)
+              ? `${firstName}, we ran ${(safeScan.query_count ?? 0).toLocaleString()} queries. Here's what AI thinks of you.`
+              : `${firstName} — your Citation Report is ready.`
+            }
           </div>
           <h1 style={{ fontSize: '26px', fontWeight: 800, color: '#fff', lineHeight: 1.3, margin: '0 0 6px 0' }}>
             {firstName ? `${firstName}, here's what we found.` : "Here's what we found."}
@@ -686,8 +715,11 @@ function ResultsContent() {
           </div>
 
           <p style={{ fontSize: '15px', color: '#94a3b8', lineHeight: 1.6, margin: 0, maxWidth: '520px', marginLeft: 'auto', marginRight: 'auto' }}>
-            These numbers tell the story of a top-performing luxury agent. But when {audienceFocus === 'buyers' ? 'buyers and sellers' : 'sellers and buyers'} ask AI who to call —{' '}
-            <span style={{ color: '#fff', fontWeight: 600 }}>your name doesn&apos;t come up. Let&apos;s fix that.</span>
+            {isVeteranAgent(safeScan)
+              ? `Strong volume. Deep market roots. And when a buyer in ${primaryMarket} opens ChatGPT and asks who to call — you're not in the answer.`
+              : <>You&apos;ve built a foundation. But when {displayFocus === 'buyers' ? 'buyers' : 'sellers'} ask AI who to call —{' '}
+                <span style={{ color: '#fff', fontWeight: 600 }}>your name doesn&apos;t come up. Let&apos;s fix that.</span></>
+            }
           </p>
         </div>
       </div>
@@ -725,7 +757,7 @@ function ResultsContent() {
             <div style={{ padding: '14px 16px', borderBottom: '1px solid #f1f5f9' }}>
               <div style={{ fontSize: '10px', fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px' }}>{scan.ai_quote.model} responded:</div>
               <div style={{ display: 'flex', gap: '10px' }}>
-                <div style={{ width: '3px', background: '#EF4444', borderRadius: '2px', flexShrink: 0 }} />
+                <div style={{ width: '3px', borderRadius: '2px', flexShrink: 0, background: scan.ai_quote?.client_mentioned === false ? '#EF4444' : '#00BFA6' }} />
                 <div style={{ fontSize: '13px', color: '#475569', lineHeight: 1.6 }}>&ldquo;{(() => {
                   const text = scan.ai_quote.response;
                   if (!text || text.length <= 280) return text;
@@ -740,7 +772,7 @@ function ResultsContent() {
             {/* Result — context + stat inline */}
             <div style={{ padding: '12px 16px', background: '#fff5f5', borderTop: '1px solid #fee2e2' }}>
               <div style={{ fontSize: '13px', color: '#EF4444', fontWeight: 600, lineHeight: 1.5 }}>
-                We ran that search — and {(scan.query_count - 1).toLocaleString()} others just like it — across all the AI tools {audienceFocus === 'buyers' ? 'buyers and sellers' : 'sellers and buyers'} are using right now to find agents.
+                We ran that search — and {((safeScan.query_count ?? 1) - 1).toLocaleString()} more — across {safeScan.model_count ?? 9} AI engines. Your name came up {safeScan.client_mentioned_count ?? 0} times. Zero times as a recommendation.
               </div>
             </div>
           </div>
@@ -829,7 +861,7 @@ function ResultsContent() {
               {/* What the gap means */}
               <div style={{ padding: '14px 20px', background: '#0A1929', display: 'flex', alignItems: 'center', gap: '12px' }}>
                 <div style={{ fontSize: '13px', color: '#94a3b8', lineHeight: 1.5, flex: 1 }}>
-                  <span style={{ color: '#fff', fontWeight: 700 }}>46 points you&apos;re leaving on the table</span>
+                  <span style={{ color: '#fff', fontWeight: 700 }}>{totalRecoverablePoints} points you&apos;re leaving on the table</span>
                   <span> — enough to move from {scan.composite_score} to 65+ in 90 days.</span>
                 </div>
               </div>
@@ -985,9 +1017,11 @@ function ResultsContent() {
           )}
 
 
-            <div style={{ background: '#f0fdf9', borderRadius: '8px', padding: '12px 16px', marginTop: '12px', fontSize: '13px', color: '#0A1929', textAlign: 'center', fontWeight: 500 }}>
-              Now you know your foundation. Next: the specific gaps costing you AI recommendations.
-            </div>
+            {isVeteranAgent(safeScan) && (
+              <div style={{ fontSize: '12px', color: '#94a3b8', fontStyle: 'italic', margin: '8px 0 16px', lineHeight: 1.5 }}>
+                This is your real-world track record. Here&apos;s why AI can&apos;t find it yet.
+              </div>
+            )}
             {visibleSection < 3 && <ContinueButton onClick={() => revealNext(3)} text="See Where the Gaps Are" />}
             </>
             )}
@@ -1040,9 +1074,9 @@ function ResultsContent() {
                 {/* Impact */}
                 <div style={{ padding: '12px 16px 0', fontSize: '13px', color: '#475569', lineHeight: 1.6 }}>{gap.impact}</div>
 
-                {/* What we do */}
+                {/* What changes */}
                 <div style={{ margin: '12px 16px', padding: '10px 14px', background: '#f0fdf9', borderRadius: '8px', borderLeft: '3px solid #00BFA6' }}>
-                  <div style={{ fontSize: '10px', fontWeight: 700, color: '#00BFA6', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '4px' }}>What we do</div>
+                  <div style={{ fontSize: '10px', fontWeight: 700, color: '#00BFA6', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '4px' }}>What changes</div>
                   <div style={{ fontSize: '13px', color: '#0A1929', lineHeight: 1.5 }}>{gap.action}</div>
                 </div>
 
@@ -1057,7 +1091,7 @@ function ResultsContent() {
             ))}
 
             <div style={{ background: '#0A1929', borderRadius: '8px', padding: '14px 18px', marginTop: '14px', textAlign: 'center' }}>
-              <span style={{ fontSize: '14px', color: '#fff', fontWeight: 600 }}>46 points you&apos;re leaving on the table</span>
+              <span style={{ fontSize: '14px', color: '#fff', fontWeight: 600 }}>{totalRecoverablePoints} points available</span>
               <span style={{ fontSize: '13px', color: '#64748b', marginLeft: '10px' }}>— enough to move from {scan.composite_score} to 65+ in 90 days</span>
             </div>
             {visibleSection < 4 && <ContinueButton onClick={() => revealNext(4)} text="See Your Market Strategy" />}

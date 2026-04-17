@@ -32,10 +32,11 @@ type ScanResults = {
   narrative_quality?: { overall_accuracy: string; overall_favorability: string; query_count?: number };
   tier_name?: string;
   gaps?: Gap[];
-  markets?: { name: string; competitor: string; competitor_score: string }[];
+  markets?: { name: string; competitor: string; competitor_score: string; tier?: string; competitor_brokerage?: string }[];
   ai_quote?: { text: string };
   query_count?: number;
   brokerage_discovered?: string;
+  deal_map?: Record<string, unknown>;
   platforms_discovered?: Record<string, { found: boolean | null; url: string }>;
   dre_data?: {
     agent_license_id?: string;
@@ -87,6 +88,14 @@ async function fetchProspect(slug: string): Promise<IntakeRow | null> {
   return rows[0] || null;
 }
 
+// ── S-1: Veteran agent detection (CITED-207) ──
+function isVeteranAgent(scan: IntakeRow['scan_results']): boolean {
+  if (!scan) return false;
+  const careerVolume = (scan.deal_map?.career_volume as number) ?? 0;
+  const closedCount = (scan.deal_map?.closed_count as number) ?? 0;
+  return careerVolume >= 50_000_000 || closedCount >= 50;
+}
+
 // ── Gap Cards (flat list — no expandable, no chevrons, score page only) ──
 function GapCards({ gaps }: { gaps: Gap[] }) {
   return (
@@ -118,12 +127,32 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
   const brokerage = prospect.brokerage || scan?.brokerage_discovered || '';
   const market = prospect.primary_markets?.split(',')[0]?.trim() || '';
   const score = scan?.foundation_score ?? scan?.composite_score ?? 0;
-  const tier = scan?.foundation_tier ?? scan?.tier_name ?? 'Not scanned';
+
+  // S-2: Veteran framing variables (CITED-207)
+  const veteran = isVeteranAgent(scan);
+  const careerVolume = (scan?.deal_map?.career_volume as number) ?? 0;
+  const primaryMarketName = scan?.markets?.find(m => m.tier === 'primary')?.name ?? name.split(' ')[0]?.concat("'s market") ?? 'your market';
+  const scanDate = new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+  const subheaderText = veteran && careerVolume > 0
+    ? `${Math.round(careerVolume/1e6)}M+ in career sales. And yet — AI has no idea who you are.`
+    : `${brokerage}${brokerage && market ? ' · ' : ''}${market}${market ? ' · ' : ''}Generated ${scanDate}`;
+
+  // S-5: Tier label — veteran segment (CITED-207)
+  const tierDisplay = veteran && ((scan?.foundation_score ?? scan?.composite_score ?? 0) < 35)
+    ? 'AI-Invisible'
+    : (scan?.foundation_tier ?? scan?.tier_name ?? 'Early Signal');
+  // Keep legacy tier variable for any other references
+  const tier = tierDisplay;
 
   // Benchmark — the agent AI DOES recommend in this market
   // Research basis: agents recommended by AI typically score 65-75 (SOCi, BrightLocal 2026)
   const primaryMarket = scan?.markets?.[0];
   const benchmarkScore = parseInt(primaryMarket?.competitor_score || '0') || 70; // Default 70 from research
+
+  // S-3: Named competitor (CITED-207)
+  const primaryCompetitorName = scan?.markets?.find(m => m.tier === 'primary')?.competitor ?? null;
+  const primaryCompetitorBrokerage = scan?.markets?.find(m => m.tier === 'primary')?.competitor_brokerage ?? null;
+  const isRealPersonName = (n: string | null) => n && n.length > 3 && /[A-Z][a-z]/.test(n) && n.includes(' ');
   const clientPct = Math.max(1, (score / 100) * 100);
   const benchmarkPct = Math.max(1, (benchmarkScore / 100) * 100);
   const gap = benchmarkScore - score;
@@ -187,33 +216,47 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
 
   // Dynamic "why this is a problem" bullets based on scan data
   const components = scan?.foundation_components || {};
-  const problemBullets: string[] = [];
 
-  if ((components.discovery_visibility ?? 0) === 0) {
-    problemBullets.push("AI doesn't associate you with any specific market");
-  }
-  if (!scan?.ai_quote?.text || scan.ai_quote.text.includes("Limited") || scan.ai_quote.text.includes("limited")) {
-    problemBullets.push("No transaction history — AI has no proof you perform");
-  }
-  if ((components.earned_media ?? 0) < 5) {
-    problemBullets.push("No third-party mentions — 48% of AI citations come from earned media");
-  }
-  if ((components.content_freshness ?? 0) < 4) {
-    problemBullets.push("No content published in the last 30 days — AI deprioritizes stale profiles");
-  }
-  const platformCount = Object.values(scan?.platforms_discovered || {}).filter((p: any) => p?.found === true).length;
-  if (platformCount < 5) {
-    problemBullets.push(`You're only on ${platformCount} platforms — agents on 6+ get 2.8x more citations`);
-  }
-  if ((components.schema_structured_data ?? 0) === 0) {
-    problemBullets.push("No structured data — AI can't verify your expertise");
-  }
-  if ((components.recommendation_readiness ?? 0) < 4) {
-    problemBullets.push("Nothing differentiates you from every other agent");
-  }
+  // S-4: Veteran vs. emerging problem bullets (CITED-207)
+  const closedCount = (scan?.deal_map?.closed_count as number) ?? 0;
+  let problemBullets: string[];
 
-  // Always add the closer
-  problemBullets.push("88% of consumers fact-check AI — this is what they'd see");
+  if (veteran) {
+    problemBullets = [
+      closedCount > 0
+        ? `Your ${closedCount} transactions aren't in the sources AI reads — to AI, your track record doesn't exist`
+        : `Your transaction history isn't in AI-readable formats yet`,
+      `Your market expertise hasn't been published in AI-citable formats`,
+      `AI treats you like a generic agent in ${primaryMarketName} — it can't find your specialization`,
+      "88% of consumers fact-check AI — this is what they'd see",
+    ];
+  } else {
+    problemBullets = [];
+    if ((components.discovery_visibility ?? 0) === 0) {
+      problemBullets.push("AI doesn't associate you with any specific market");
+    }
+    if (!scan?.ai_quote?.text || scan.ai_quote.text.includes("Limited") || scan.ai_quote.text.includes("limited")) {
+      problemBullets.push("No transaction history — AI has no proof you perform");
+    }
+    if ((components.earned_media ?? 0) < 5) {
+      problemBullets.push("No third-party mentions — 48% of AI citations come from earned media");
+    }
+    if ((components.content_freshness ?? 0) < 4) {
+      problemBullets.push("No content published in the last 30 days — AI deprioritizes stale profiles");
+    }
+    const platformCount = Object.values(scan?.platforms_discovered || {}).filter((p: any) => p?.found === true).length;
+    if (platformCount < 5) {
+      problemBullets.push(`You're only on ${platformCount} platforms — agents on 6+ get 2.8x more citations`);
+    }
+    if ((components.schema_structured_data ?? 0) === 0) {
+      problemBullets.push("No structured data — AI can't verify your expertise");
+    }
+    if ((components.recommendation_readiness ?? 0) < 4) {
+      problemBullets.push("Nothing differentiates you from every other agent");
+    }
+    // Always add the closer
+    problemBullets.push("88% of consumers fact-check AI — this is what they'd see");
+  }
 
   // Take top 4 max (3 dynamic + the closer)
   const displayBullets = problemBullets.length > 4
@@ -248,7 +291,7 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
             {firstName}, here&apos;s your Foundation Score.
           </h1>
           <p style={{ fontSize: '13px', color: D.textTertiary, margin: 0 }}>
-            {brokerage}{brokerage && market ? ' · ' : ''}{market}{market ? ' · ' : ''}Generated {new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+            {subheaderText}
           </p>
         </div>
 
@@ -307,6 +350,21 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
                 <div style={{ fontFamily: 'Georgia, serif', fontSize: '36px', fontWeight: 900, color: '#94a3b8', lineHeight: 1 }}>~{benchmarkScore}</div>
               </div>
               <div style={{ fontFamily: 'var(--font-geist-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif', fontSize: '12px', fontWeight: 400, color: D.textTertiary, height: '18px', marginTop: '6px', marginBottom: '16px' }}>Agents AI recommends</div>
+              {/* S-3: Named competitor (CITED-207) */}
+              {isRealPersonName(primaryCompetitorName) && (
+                <>
+                  {primaryCompetitorName && (
+                    <div style={{ fontSize: '13px', fontWeight: 700, color: '#1a1a1a', marginBottom: 2 }}>
+                      {primaryCompetitorName}
+                    </div>
+                  )}
+                  {primaryCompetitorBrokerage && (
+                    <div style={{ fontSize: '11px', color: '#94a3b8', marginBottom: 8 }}>
+                      {primaryCompetitorBrokerage}
+                    </div>
+                  )}
+                </>
+              )}
               <div style={{ paddingTop: '14px', borderTop: `1px solid ${D.border}` }}>
                 <div style={{ fontSize: '9px', fontWeight: 700, color: D.textTertiary, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '6px' }}>What they have that you don&apos;t</div>
                 <div style={{ display: 'flex', alignItems: 'flex-start', gap: '5px', marginBottom: '3px' }}>
