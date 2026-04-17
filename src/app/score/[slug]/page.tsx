@@ -349,9 +349,7 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
             </div>
             <div style={{ padding: '24px', background: D.grayBg }}>
               <div style={{ fontSize: '10px', fontWeight: 700, color: D.red, textTransform: 'uppercase', letterSpacing: '1.5px', height: '20px', whiteSpace: 'nowrap', marginBottom: '12px' }}>Benchmark</div>
-              <div style={{ height: '64px', display: 'flex', alignItems: 'flex-start', paddingTop: '4px' }}>
-                <div style={{ fontFamily: 'Georgia, serif', fontSize: '44px', fontWeight: 700, color: '#94a3b8', lineHeight: 1 }}>~{benchmarkScore}</div>
-              </div>
+              <div style={{ fontFamily: 'Georgia, serif', fontSize: '44px', fontWeight: 700, color: '#94a3b8', lineHeight: 1, height: '64px', display: 'flex', alignItems: 'flex-start' }}>~{benchmarkScore}</div>
               <div style={{ fontFamily: 'var(--font-geist-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif', fontSize: '12px', fontWeight: 400, color: D.textTertiary, height: '18px', marginTop: '6px', marginBottom: '16px' }}>out of 100</div>
 
               <div style={{ paddingTop: '14px', borderTop: `1px solid ${D.border}` }}>
