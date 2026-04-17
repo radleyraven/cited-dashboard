@@ -944,22 +944,22 @@ function renderCardContent(p: CardProps) {
           }}>+ Add another notable deal</button>
         )}
 
-        {/* MLS — passive display for RE clients (CA/WA) */}
-        <div style={{ marginTop: "8px", padding: "12px 16px", background: "#f0fdf9", borderRadius: "8px", border: "1px solid rgba(0,191,166,0.15)" }}>
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+        {/* MLS — upload UI (WA/NWMLS or any state where CITED can't auto-pull) */}
+        <div style={{ marginTop: "16px", padding: "18px 20px", background: "#f0fdf9", borderRadius: "10px", border: "1px solid rgba(0,191,166,0.2)" }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "10px" }}>
             <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-              <div style={{
-                width: "20px", height: "20px", borderRadius: "4px", flexShrink: 0,
-                background: "#00BFA6",
-                border: "2px solid #00BFA6",
-                display: "flex", alignItems: "center", justifyContent: "center",
-              }}>
-                <span style={{ color: "#fff", fontSize: "14px", lineHeight: 1 }}>✓</span>
-              </div>
-              <span style={{ fontSize: "13px", color: "#0A1929", fontWeight: 500 }}>MLS transaction data</span>
+              <span style={{ fontSize: "14px", color: "#0A1929", fontWeight: 700 }}>MLS transaction data</span>
+              <span style={{ fontSize: "11px", color: "#64748b", fontWeight: 500, padding: "2px 8px", background: "rgba(100,116,139,0.1)", borderRadius: "10px" }}>Optional</span>
             </div>
-            <span style={{ fontSize: "12px", color: "#00BFA6", fontWeight: 600 }}>CITED handles this</span>
+            <span style={{ fontSize: "11px", color: "#00BFA6", fontWeight: 600 }}>Strengthens your score</span>
           </div>
+          <p style={{ fontSize: "12px", color: "#475569", lineHeight: 1.5, margin: "0 0 12px" }}>
+            Export your sold transactions from your MLS (CSV or XLSX). We&rsquo;ll use this to verify career volume, deal counts, and market specialization — which makes your citation score defensible when AI asks &ldquo;is she actually a top agent?&rdquo;
+          </p>
+          <FileInput accept=".csv,.xlsx,.xls" file={form.mlsFile} onChange={(f) => set("mlsFile", f)} icon={"📊"} label="Upload MLS export (CSV / XLSX)" />
+          <p style={{ fontSize: "11px", color: "#94a3b8", margin: "8px 0 0", lineHeight: 1.5 }}>
+            No MLS file? Skip this — we&rsquo;ll pull data from your Zillow sold tab as a fallback.
+          </p>
         </div>
       </Fields>
       <NextButton onClick={next} />
