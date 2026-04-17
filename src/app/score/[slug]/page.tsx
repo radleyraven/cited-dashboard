@@ -193,12 +193,23 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
   // Pre-fill platform URLs from scan
   const platforms = scan?.platforms_discovered || {};
   if (platforms.Brokerage?.url) prefillParams.set('brokerageProfileUrl', platforms.Brokerage.url);
+  if (platforms['Brokerage Site']?.url) prefillParams.set('brokerageProfileUrl', platforms['Brokerage Site'].url);
   if (platforms.LinkedIn?.url) prefillParams.set('linkedinUrl', platforms.LinkedIn.url);
   if (platforms.Zillow?.url) prefillParams.set('zillowUrl', platforms.Zillow.url);
   if (platforms.Yelp?.url) prefillParams.set('yelpUrl', platforms.Yelp.url);
   if (platforms['Realtor.com']?.url) prefillParams.set('realtorUrl', platforms['Realtor.com'].url);
   if (platforms.YouTube?.url) prefillParams.set('youtubeUrl', platforms.YouTube.url);
   if (platforms.FastExpert?.url) prefillParams.set('fastexpertUrl', platforms.FastExpert.url);
+  if (platforms.HomeLight?.url) prefillParams.set('homelightUrl', platforms.HomeLight.url);
+  if (platforms['Homes.com']?.url) prefillParams.set('homescomUrl', platforms['Homes.com'].url);
+  if (platforms.Instagram?.url) prefillParams.set('instagramUrl', platforms.Instagram.url);
+  if (platforms.Facebook?.url) prefillParams.set('facebookUrl', platforms.Facebook.url);
+  if (platforms.TikTok?.url) prefillParams.set('tiktokUrl', platforms.TikTok.url);
+  if (platforms['About.me']?.url) prefillParams.set('aboutmeUrl', platforms['About.me'].url);
+  // Extra identity fields if present in scan
+  const scanAny = scan as Record<string, unknown> | undefined;
+  if (typeof scanAny?.personal_website === 'string') prefillParams.set('personalWebsiteUrl', scanAny.personal_website as string);
+  if (typeof scanAny?.phone === 'string') prefillParams.set('phone', scanAny.phone as string);
   // DRE data from scan
   if (scan?.dre_data?.agent_license_id) prefillParams.set('licenseNumber', scan.dre_data.agent_license_id);
   if (scan?.dre_data?.broker_license_id) prefillParams.set('brokerDre', scan.dre_data.broker_license_id);

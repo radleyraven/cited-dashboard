@@ -38,9 +38,9 @@ const PLATFORMS = [
 const IMPACT_LABELS = { high: "High Impact", medium: "Medium Impact", supporting: "Supporting" } as const;
 const IMPACT_COLORS = { high: "#dc2626", medium: "#ca8a04", supporting: "#16a34a" } as const;
 
-const PLATFORM_START_CARD = 8;
-const SUMMARY_CARD = PLATFORM_START_CARD + 1; // 9 — single consolidated platforms card
-const CELEBRATION_CARD = SUMMARY_CARD + 1; // 10
+const PLATFORM_START_CARD = 9;
+const SUMMARY_CARD = PLATFORM_START_CARD + 1; // 10 — single consolidated platforms card
+const CELEBRATION_CARD = SUMMARY_CARD + 1; // 11
 const TOTAL_CARDS = CELEBRATION_CARD;
 
 // Fields that came from PRISM scan (show "From CITED PRISM Scan" badge)
@@ -95,6 +95,9 @@ type FormData = {
   homescomStatus: string; homescomUrl: string;
   xStatus: string; xUrl: string;
   instagramStatus: string; instagramUrl: string;
+  facebookStatus: string; facebookUrl: string;
+  tiktokStatus: string; tiktokUrl: string;
+  aboutmeStatus: string; aboutmeUrl: string;
   personalsiteStatus: string;
   additionalPlatforms: string;
   reviewPlatforms: string[];
@@ -111,7 +114,7 @@ function getInitialForm(sp: ReturnType<typeof useSearchParams>): FormData {
     signupEmail: sp.get("email") || "",
     fullName: sp.get("fullName") || "",
     email: sp.get("email") || "",
-    phone: "",
+    phone: sp.get("phone") || "",
     brokerage: sp.get("brokerage") || "",
     title: "",
     licenseNumber: sp.get("licenseNumber") || "",
@@ -150,15 +153,21 @@ function getInitialForm(sp: ReturnType<typeof useSearchParams>): FormData {
     youtubeUrl: sp.get("youtubeUrl") || "",
     fastexpertStatus: sp.get("fastexpertUrl") ? "yes" : "",
     fastexpertUrl: sp.get("fastexpertUrl") || "",
-    homelightStatus: "",
-    homelightUrl: "",
+    homelightStatus: sp.get("homelightUrl") ? "yes" : "",
+    homelightUrl: sp.get("homelightUrl") || "",
     appleStatus: "",
     appleUrl: "",
-    homescomStatus: "",
-    homescomUrl: "",
+    homescomStatus: sp.get("homescomUrl") ? "yes" : "",
+    homescomUrl: sp.get("homescomUrl") || "",
     xStatus: "",
-    instagramStatus: "",
+    instagramStatus: sp.get("instagramUrl") ? "yes" : "",
     instagramUrl: sp.get("instagramUrl") || "",
+    facebookStatus: sp.get("facebookUrl") ? "yes" : "",
+    facebookUrl: sp.get("facebookUrl") || "",
+    tiktokStatus: sp.get("tiktokUrl") ? "yes" : "",
+    tiktokUrl: sp.get("tiktokUrl") || "",
+    aboutmeStatus: sp.get("aboutmeUrl") ? "yes" : "",
+    aboutmeUrl: sp.get("aboutmeUrl") || "",
     personalsiteStatus: sp.get("personalWebsiteUrl") ? "yes" : "",
     xUrl: "",
     additionalPlatforms: "",
@@ -835,8 +844,22 @@ function renderCardContent(p: CardProps) {
     </div>
   );
 
-  // ── Card 5: Notable Transaction ────────────────────────────
+  // ── Card 5: Voice Capture ──────────────────────────────────
   if (cardId === 5) return (
+    <div>
+      <CardHeader title="How would your best client describe you to a friend?"
+        subtitle="Write it like they'd actually say it out loud — not a marketing blurb. One or two sentences." />
+      <FieldGroup label="" hint="This is the most powerful voice signal we can capture. AI cites agents described in human terms, not corporate taglines.">
+        <TextArea value={form.voiceCapture} onChange={(v) => set("voiceCapture", v)} rows={4}
+          placeholder={'e.g., "She\'s the person who actually answers her phone and tells you the truth about a property, even if it kills the deal."'} />
+      </FieldGroup>
+      <NextButton onClick={next} />
+      <SkipButton onClick={() => skip("voiceCapture")} label={"Skip for now — I'll think about this →"} />
+    </div>
+  );
+
+  // ── Card 6: Notable Transaction ────────────────────────────
+  if (cardId === 6) return (
     <div>
       <CardHeader title="One deal you want to be known for"
         subtitle="This becomes the hero deal in your bio and articles." />
@@ -890,8 +913,8 @@ function renderCardContent(p: CardProps) {
     </div>
   );
 
-  // ── Card 6: Micro-Reward ───────────────────────────────────
-  if (cardId === 6) return (
+  // ── Card 7: Micro-Reward ───────────────────────────────────
+  if (cardId === 7) return (
     <MicroReward
       message="Almost there. We have what we need to build your strategy — just a couple more things and we take it from here."
       nextHint="Photos and platform confirmations — fast taps from here."
@@ -899,8 +922,8 @@ function renderCardContent(p: CardProps) {
     />
   );
 
-  // ── Card 7: Photos ─────────────────────────────────────────
-  if (cardId === 7) return (
+  // ── Card 8: Photos ─────────────────────────────────────────
+  if (cardId === 8) return (
     <div>
       <CardHeader title="Your photos" subtitle="We'll resize for all 13+ platforms. You can always add these later." />
       <Fields>
