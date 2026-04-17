@@ -413,17 +413,17 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
 
         {/* ═══ MARKET VISIBILITY RATE ═══ */}
         <div style={{ background: '#fff', borderRadius: '14px', padding: '24px', marginBottom: '32px',  }}>
-          <div style={{ fontSize: '10px', fontWeight: 700, color: D.textTertiary, textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '4px' }}>Market Visibility Rate</div>
+          <div style={{ fontSize: '10px', fontWeight: 700, color: D.textTertiary, textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '4px' }}>AI Discovery Rate</div>
           <div style={{ fontSize: '13px', color: D.textSecondary, marginBottom: '20px' }}>
-            How often AI recommends <strong>{name}</strong> when clients search in {market}
+            How often AI recommends <strong>{name}</strong> when buyers search in {market}
           </div>
           <div style={{ position: 'relative', height: '8px', borderRadius: '4px', background: `linear-gradient(90deg, ${D.red} 0%, #F59E0B 25%, ${D.gold} 45%, ${D.teal} 70%, ${D.navy} 100%)`, marginBottom: '8px' }}>
             <div style={{ position: 'absolute', top: '-5px', left: `${Math.max(1, visibilityRate)}%`, transform: 'translateX(-50%)', width: '18px', height: '18px', borderRadius: '50%', background: visibilityRate < 10 ? D.red : D.teal, border: '3px solid #fff', boxShadow: '0 2px 6px rgba(0,0,0,0.2)' }} />
-            <div style={{ position: 'absolute', top: '-5px', left: `${benchmarkRate}%`, transform: 'translateX(-50%)', width: '18px', height: '18px', borderRadius: '50%', background: D.gold, border: '3px solid #fff', boxShadow: '0 2px 6px rgba(0,0,0,0.2)' }} />
+            <div style={{ position: 'absolute', top: '-3px', left: '40%', transform: 'translateX(-50%)', width: '2px', height: '14px', background: D.gold, borderRadius: '1px' }} />
           </div>
           <div style={{ position: 'relative', height: '22px', marginBottom: '16px' }}>
             <span style={{ position: 'absolute', left: `${Math.max(1, visibilityRate)}%`, transform: 'translateX(-50%)', fontSize: '12px', fontWeight: 800, color: visibilityRate < 10 ? D.red : D.teal, whiteSpace: 'nowrap' }}>You: {visibilityRate}%</span>
-            <span style={{ position: 'absolute', left: `${benchmarkRate}%`, transform: 'translateX(-50%)', fontSize: '12px', fontWeight: 700, color: D.gold, whiteSpace: 'nowrap' }}>Benchmark: {benchmarkRate}%</span>
+            <span style={{ position: 'absolute', left: `40%`, transform: 'translateX(-50%)', fontSize: '12px', fontWeight: 700, color: D.gold, whiteSpace: 'nowrap' }}>Recognized threshold</span>
           </div>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: visibilityRate < 10 ? '16px' : '0' }}>
             {['Invisible', 'Emerging', 'Recognized', 'Dominant'].map((l) => (
