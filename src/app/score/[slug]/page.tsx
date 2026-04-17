@@ -430,7 +430,7 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
             </p>
           </div>
           <p style={{ fontSize: '14px', color: D.textSecondary, lineHeight: 1.7, margin: 0 }}>
-            If your name isn&apos;t in the answer, that&apos;s what your buyers see too. Your Foundation Score measures exactly why — and what to fix.
+            If your name isn&apos;t in the answer, that&apos;s what your sellers see too. Your Foundation Score measures exactly why — and what to fix.
           </p>
         </div>
 
