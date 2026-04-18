@@ -970,7 +970,7 @@ function renderCardContent(p: CardProps) {
         {/* Progress counter */}
         <div style={{ textAlign: 'center', marginTop: '16px' }}>
           {requiredComplete === 2 ? (
-            <span style={{ fontSize: '12px', color: '#00BFA6', fontWeight: 600 }}>\u2713 Ready to continue</span>
+            <span style={{ fontSize: '12px', color: '#00BFA6', fontWeight: 600 }}>✓ Ready to continue</span>
           ) : (
             <span style={{ fontSize: '12px', color: '#94a3b8' }}>{requiredComplete} / 2 required complete</span>
           )}
@@ -992,8 +992,8 @@ function renderCardContent(p: CardProps) {
             cursor: canContinue ? 'pointer' : 'not-allowed',
             marginTop: '24px',
           }}
-        >Continue \u2192</button>
-        <SkipButton onClick={skipCard5} label="Skip for now \u2192 (you can add this later)" />
+        >Continue →</button>
+        <SkipButton onClick={skipCard5} label="Skip for now → (you can add this later)" />
       </div>
     );
   }
