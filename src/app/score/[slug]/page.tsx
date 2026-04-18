@@ -340,7 +340,7 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
           <div style={{ padding: '20px 24px 16px', borderBottom: `1px solid ${D.grayMid}` }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
               <div>
-                <div style={{ fontSize: '10px', fontWeight: 700, color: D.textTertiary, textTransform: 'uppercase', letterSpacing: '1.5px' }}>Foundation Score</div>
+                <div style={{ fontSize: '10px', fontWeight: 700, color: D.textTertiary, textTransform: 'uppercase', letterSpacing: '1.5px' }}>Initial Foundation Score</div>
 
               </div>
               <div style={{ fontSize: '10px', color: D.textTertiary, background: D.grayBg, padding: '3px 8px', borderRadius: '4px' }}>
