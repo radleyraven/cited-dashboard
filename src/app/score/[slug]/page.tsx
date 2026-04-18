@@ -361,7 +361,7 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
             <div style={{ padding: '24px', borderRight: `1px solid ${D.grayMid}` }}>
               <div style={{ fontSize: '10px', fontWeight: 700, color: D.textTertiary, textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '14px' }}>Your Score</div>
               <div style={{ fontFamily: 'Georgia, serif', fontSize: '64px', fontWeight: 900, color: D.navy, lineHeight: 1, whiteSpace: 'nowrap', marginBottom: '8px' }}>{score}<span style={{ fontSize: '18px', color: D.textTertiary, fontWeight: 400, fontFamily: 'var(--font-geist-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif' }}>/100</span></div>
-              <div style={{ fontSize: '11px', color: D.textTertiary, lineHeight: 1.5, marginBottom: '16px', padding: '8px 10px', background: 'rgba(0,0,0,0.04)', borderRadius: '6px' }}>Based on an initial scan. Founding members get a full <span style={{ color: D.gold, fontWeight: 600 }}>PRISM Scan™</span> — 1,700+ queries, complete gap analysis, and competitor intelligence.</div>
+              <div style={{ fontSize: '11px', color: D.textTertiary, lineHeight: 1.5, marginBottom: '16px', padding: '8px 10px', background: 'rgba(0,0,0,0.04)', borderRadius: '6px' }}>Based on an initial scan. Founding members get a full <span style={{ color: D.gold, fontWeight: 600 }}>PRISM Scan™</span> — 1,700+ queries, complete gap analysis, competitor intelligence, and a 90-day optimization plan.</div>
               <div style={{ paddingTop: '14px', borderTop: `1px solid ${D.border}` }}>
                 {gaps.length > 0 && (
                   <>
