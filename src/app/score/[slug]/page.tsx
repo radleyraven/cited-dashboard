@@ -542,11 +542,8 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
           <p style={{ fontSize: '28px', fontWeight: 900, color: '#fff', margin: '0 0 6px', lineHeight: 1.2 }}>
             Completely <span style={{ color: D.teal }}>free</span>. No commitment.
           </p>
-          <p style={{ fontSize: '14px', color: '#94a3b8', lineHeight: 1.7, margin: '0 0 8px' }}>
-            We&apos;re accepting a small group of founding members{market ? ` in ${market}` : ''}. If your Foundation Score doesn&apos;t improve by 20+ points, you owe nothing.
-          </p>
-          <p style={{ fontSize: '13px', color: D.teal, fontWeight: 700, margin: 0 }}>
-            That&apos;s the Citation Guarantee™.
+          <p style={{ fontSize: '14px', color: '#94a3b8', lineHeight: 1.7, margin: 0 }}>
+            We&apos;re accepting a small group of founding members{market ? ` in ${market}` : ''}. Spots are limited.
           </p>
         </div>
 
