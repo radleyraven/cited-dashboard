@@ -454,7 +454,7 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
                 You are invisible to AI in {market}.
               </p>
               <p style={{ fontSize: '12px', color: D.textSecondary, margin: '4px 0 0' }}>
-                AI recommends agents in your market to 45% of consumers. None of those recommendations include you.
+                When sellers in {market} ask AI for an agent, your name does not come up. 45% of consumers now use AI for local business recommendations <span style={{ color: D.textTertiary }}>(BrightLocal, April 2026 — up from 6% a year earlier)</span>.
               </p>
             </div>
           )}
