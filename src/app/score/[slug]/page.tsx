@@ -513,7 +513,7 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
           </p>
           <div style={{ background: D.grayBg, borderRadius: '10px', padding: '16px 20px', marginBottom: '16px', borderLeft: `3px solid ${D.gold}` }}>
             <p style={{ fontSize: '15px', color: D.navy, fontWeight: 700, fontStyle: 'italic', margin: 0 }}>
-              &ldquo;Who is the best luxury real estate agent in {market}?&rdquo;
+              &ldquo;Who is the best real estate agent in {market}?&rdquo;
             </p>
           </div>
           <p style={{ fontSize: '14px', color: D.textSecondary, lineHeight: 1.7, margin: 0 }}>
