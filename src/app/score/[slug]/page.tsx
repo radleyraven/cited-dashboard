@@ -35,6 +35,7 @@ type ScanResults = {
   markets?: { name: string; competitor: string; competitor_score: string; tier?: string; competitor_brokerage?: string }[];
   ai_quote?: { text: string };
   query_count?: number;
+  competitor_frequency?: Record<string, number>;
   brokerage_discovered?: string;
   deal_map?: Record<string, unknown>;
   platforms_discovered?: Record<string, { found: boolean | null; url: string }>;
@@ -164,6 +165,14 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
   const primaryCompetitorVerified = (scan?.markets?.find(m => m.tier === 'primary') as Record<string,unknown>)?.competitor_verified as boolean ?? false;
   const primaryCompetitorFrequency = (scan?.markets?.find(m => m.tier === 'primary') as Record<string,unknown>)?.competitor_frequency as number ?? 0;
   const primaryCompetitorTotal = (scan?.markets?.find(m => m.tier === 'primary') as Record<string,unknown>)?.competitor_total_queries as number ?? 0;
+  // Top real competitors from frequency map (fallback when primary competitor is noise)
+  const topRealCompetitors = Object.entries(scan?.competitor_frequency ?? {})
+    .filter(([name]) => isRealPersonName(name))
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 2);
+  const topTwoNames = topRealCompetitors.map(([name]) => name);
+  const topTwoCombined = topRealCompetitors.reduce((sum, [, count]) => sum + count, 0);
+  const appearances = Math.round((visibilityRate / 100) * (scan?.query_count ?? 60));
   const isRealPersonName = (n: string | null) => n && n.length > 3 && /[A-Z][a-z]/.test(n) && n.includes(' ');
   const clientPct = Math.max(1, (score / 100) * 100);
   const benchmarkPct = Math.max(1, (benchmarkScore / 100) * 100);
@@ -392,17 +401,18 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
           <div style={{ padding: '16px 24px', background: D.navy, textAlign: 'center' }}>
             {scan?.query_count ? (
               <div>
-                {primaryCompetitorName && isRealPersonName(primaryCompetitorName) && primaryCompetitorFrequency > 0 ? (
-                  <div style={{ marginBottom: '6px' }}>
-                    <span style={{ fontSize: '14px', color: '#fff', lineHeight: 1.6 }}>
-                      AI recommended <span style={{ color: D.red, fontWeight: 700 }}>{primaryCompetitorName}</span> in <span style={{ color: D.red, fontWeight: 700 }}>{primaryCompetitorFrequency} of {primaryCompetitorTotal} queries</span>.{' '}
-                      AI did not recommend you at all.
-                    </span>
-                  </div>
+                {topTwoNames.length >= 2 ? (
+                  <span style={{ fontSize: '14px', color: '#fff', lineHeight: 1.6 }}>
+                    AI recommended <span style={{ color: D.red, fontWeight: 700 }}>{topTwoNames[0]}</span> and <span style={{ color: D.red, fontWeight: 700 }}>{topTwoNames[1]}</span> a combined <span style={{ color: D.red, fontWeight: 700 }}>{topTwoCombined} times</span>. Your name came up only <span style={{ color: D.red, fontWeight: 700 }}>{visibilityRate === 0 ? '0' : appearances} times</span>.
+                  </span>
+                ) : primaryCompetitorName && isRealPersonName(primaryCompetitorName) && primaryCompetitorFrequency > 0 ? (
+                  <span style={{ fontSize: '14px', color: '#fff', lineHeight: 1.6 }}>
+                    AI recommended <span style={{ color: D.red, fontWeight: 700 }}>{primaryCompetitorName}</span> in <span style={{ color: D.red, fontWeight: 700 }}>{primaryCompetitorFrequency} of {primaryCompetitorTotal} queries</span>. Your name came up only <span style={{ color: D.red, fontWeight: 700 }}>{visibilityRate === 0 ? '0' : appearances} times</span>.
+                  </span>
                 ) : (
                   <span style={{ fontSize: '14px', color: '#fff', lineHeight: 1.6 }}>
                     We ran <span style={{ color: '#ffffff', fontWeight: 700 }}>{scan.query_count} AI real estate searches</span> in {market}.{' '}
-                    Your name came up only <span style={{ color: D.red, fontWeight: 700 }}>{visibilityRate === 0 ? '0 times' : `${Math.round((visibilityRate / 100) * (scan.query_count ?? 60))} times`}</span>.
+                    Your name came up only <span style={{ color: D.red, fontWeight: 700 }}>{visibilityRate === 0 ? '0 times' : `${appearances} times`}</span>.
                   </span>
                 )}
               </div>
