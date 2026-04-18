@@ -35,7 +35,6 @@ type ScanResults = {
   markets?: { name: string; competitor: string; competitor_score: string; tier?: string; competitor_brokerage?: string }[];
   ai_quote?: { text: string };
   query_count?: number;
-  competitor_frequency?: Record<string, number>;
   brokerage_discovered?: string;
   deal_map?: Record<string, unknown>;
   platforms_discovered?: Record<string, { found: boolean | null; url: string }>;
@@ -50,7 +49,6 @@ type ScanResults = {
 type IntakeRow = {
   id: string;
   full_name: string;
-  preferred_name?: string;
   email?: string;
   brokerage?: string;
   primary_markets?: string;
@@ -81,7 +79,7 @@ async function fetchProspect(slug: string): Promise<IntakeRow | null> {
   const slugName = slug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
 
   const res = await fetch(
-    `${sbUrl}/rest/v1/cited_intake?or=(full_name.ilike.${encodeURIComponent(slugName)})&select=id,full_name,preferred_name,email,brokerage,primary_markets,scan_results,onboarding_token,intake_completion_pct,status&limit=1`,
+    `${sbUrl}/rest/v1/cited_intake?or=(full_name.ilike.${encodeURIComponent(slugName)})&select=id,full_name,email,brokerage,primary_markets,scan_results,onboarding_token,intake_completion_pct,status&limit=1`,
     { headers: { apikey: sbKey, Authorization: `Bearer ${sbKey}` }, next: { revalidate: 120 } }
   );
 
@@ -134,7 +132,7 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
   const scan = prospect.scan_results;
 
   const name = prospect.full_name;
-  const firstName = prospect.preferred_name || name.split(' ')[0];
+  const firstName = name.split(' ')[0];
   const brokerage = prospect.brokerage || scan?.brokerage_discovered || '';
   const market = prospect.primary_markets?.split(',')[0]?.trim() || '';
   const score = scan?.foundation_score ?? scan?.composite_score ?? 0;
@@ -166,22 +164,7 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
   const primaryCompetitorVerified = (scan?.markets?.find(m => m.tier === 'primary') as Record<string,unknown>)?.competitor_verified as boolean ?? false;
   const primaryCompetitorFrequency = (scan?.markets?.find(m => m.tier === 'primary') as Record<string,unknown>)?.competitor_frequency as number ?? 0;
   const primaryCompetitorTotal = (scan?.markets?.find(m => m.tier === 'primary') as Record<string,unknown>)?.competitor_total_queries as number ?? 0;
-  const isRealPersonName = (n: string | null) => {
-    if (!n || n.length <= 3 || !/[A-Z][a-z]/.test(n) || !n.includes(' ')) return false;
-    const words = n.trim().split(/\s+/);
-    // Filter noise: repeated words ("News News"), single-word duplicates, generic terms
-    if (words.length >= 2 && words[0].toLowerCase() === words[1].toLowerCase()) return false;
-    const noiseTerms = ['news', 'view', 'group', 'team', 'agents', 'realty', 'real estate', 'properties', 'homes', 'bay', 'commencement'];
-    if (noiseTerms.some(t => n.toLowerCase() === t || words.every(w => noiseTerms.includes(w.toLowerCase())))) return false;
-    return true;
-  };
-  // Top real competitors from frequency map (fallback when primary competitor is noise)
-  const topRealCompetitors = Object.entries(scan?.competitor_frequency ?? {})
-    .filter(([name]) => isRealPersonName(name))
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, 2);
-  const topTwoNames = topRealCompetitors.map(([name]) => name);
-  const topTwoCombined = topRealCompetitors.reduce((sum, [, count]) => sum + count, 0);
+  const isRealPersonName = (n: string | null) => n && n.length > 3 && /[A-Z][a-z]/.test(n) && n.includes(' ');
   const clientPct = Math.max(1, (score / 100) * 100);
   const benchmarkPct = Math.max(1, (benchmarkScore / 100) * 100);
   const gap = benchmarkScore - score;
@@ -189,7 +172,6 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
   // Visibility
   const visibilityData = scan?.visibility_rates?.[market];
   const visibilityRate = visibilityData?.overall_visibility_pct ?? Math.round((score / 100) * 12);
-  const appearances = Math.floor((visibilityRate / 100) * (scan?.query_count ?? 60));
   const benchmarkRate = visibilityData?.competitor_visibility_pct ?? 76;
 
   // Narrative
@@ -329,7 +311,7 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
         {/* ═══ PERSONALIZATION HEADER ═══ */}
         <div style={{ paddingTop: '40px', marginBottom: '8px' }}>
           <h1 style={{ fontSize: '28px', fontWeight: 800, color: D.navy, margin: '0 0 4px', lineHeight: 1.3 }}>
-            {firstName}, here&apos;s your Initial Foundation Score.
+            {firstName}, here&apos;s your Foundation Score.
           </h1>
           <p style={{ fontSize: '13px', color: D.textTertiary, margin: 0 }}>
             {subheaderText}
@@ -340,7 +322,7 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
         <div style={{ background: D.navy, borderRadius: '12px', padding: '24px', marginBottom: '32px' }}>
           <div style={{ fontSize: '11px', fontWeight: 700, color: D.gold, letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: '10px' }}>What This Measures</div>
           <p style={{ fontSize: '14px', color: '#94a3b8', lineHeight: 1.7, margin: 0 }}>
-<span style={{ color: '#ffffff', fontWeight: 700 }}>45% of consumers now use AI for local business recommendations.</span> Unlike Google, AI doesn&apos;t rank websites — it <span style={{ color: '#fff', fontWeight: 600 }}>recommends agents it already knows</span>. Your Foundation Score measures how visible you are across those AI searches — and where the gaps are.
+            Your clients are using AI tools like ChatGPT and Google AI to find agents. Unlike Google, AI doesn&apos;t rank websites — it <span style={{ color: '#fff', fontWeight: 600 }}>recommends agents it already knows</span>. Your Foundation Score measures how visible you are across those AI searches — and where the gaps are.
           </p>
         </div>
 
@@ -349,7 +331,7 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
           <div style={{ padding: '20px 24px 16px', borderBottom: `1px solid ${D.grayMid}` }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
               <div>
-                <div style={{ fontSize: '10px', fontWeight: 700, color: D.textTertiary, textTransform: 'uppercase', letterSpacing: '1.5px' }}>Initial Foundation Score</div>
+                <div style={{ fontSize: '10px', fontWeight: 700, color: D.textTertiary, textTransform: 'uppercase', letterSpacing: '1.5px' }}>Foundation Score</div>
 
               </div>
               <div style={{ fontSize: '10px', color: D.textTertiary, background: D.grayBg, padding: '3px 8px', borderRadius: '4px' }}>
@@ -369,8 +351,7 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
             <div style={{ padding: '24px', borderRight: `1px solid ${D.grayMid}` }}>
               <div style={{ fontSize: '10px', fontWeight: 700, color: D.textTertiary, textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '14px' }}>Your Score</div>
-              <div style={{ fontFamily: 'Georgia, serif', fontSize: '64px', fontWeight: 900, color: D.navy, lineHeight: 1, whiteSpace: 'nowrap', marginBottom: '8px' }}>{score}<span style={{ fontSize: '18px', color: D.textTertiary, fontWeight: 400, fontFamily: 'var(--font-geist-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif' }}>/100</span></div>
-
+              <div style={{ fontFamily: 'Georgia, serif', fontSize: '64px', fontWeight: 900, color: D.navy, lineHeight: 1, whiteSpace: 'nowrap', marginBottom: '16px' }}>{score}<span style={{ fontSize: '18px', color: D.textTertiary, fontWeight: 400, fontFamily: 'var(--font-geist-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif' }}>/100</span></div>
               <div style={{ paddingTop: '14px', borderTop: `1px solid ${D.border}` }}>
                 {gaps.length > 0 && (
                   <>
@@ -407,7 +388,31 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
             </div>
           </div>
 
-
+          {/* Discovery gap callout — with competitor name if verified */}
+          <div style={{ padding: '16px 24px', background: D.navy, textAlign: 'center' }}>
+            {scan?.query_count ? (
+              <div>
+                {primaryCompetitorName && isRealPersonName(primaryCompetitorName) && primaryCompetitorFrequency > 0 ? (
+                  <div style={{ marginBottom: '6px' }}>
+                    <span style={{ fontSize: '14px', color: '#fff', lineHeight: 1.6 }}>
+                      AI recommended <span style={{ color: D.red, fontWeight: 700 }}>{primaryCompetitorName}</span> in <span style={{ color: D.red, fontWeight: 700 }}>{primaryCompetitorFrequency} of {primaryCompetitorTotal} queries</span>.{' '}
+                      AI did not recommend you at all.
+                    </span>
+                  </div>
+                ) : (
+                  <span style={{ fontSize: '14px', color: '#fff', lineHeight: 1.6 }}>
+                    We ran <span style={{ color: '#ffffff', fontWeight: 700 }}>{scan.query_count} AI real estate searches</span> in {market}.{' '}
+                    Your name came up only <span style={{ color: D.red, fontWeight: 700 }}>{visibilityRate === 0 ? '0 times' : `${Math.round((visibilityRate / 100) * (scan.query_count ?? 60))} times`}</span>.
+                  </span>
+                )}
+              </div>
+            ) : gap > 0 ? (
+              <>
+                <span style={{ fontSize: '14px', color: '#fff', fontWeight: 600 }}>{gap} points behind in {market}.</span>
+                <span style={{ fontSize: '13px', color: D.textTertiary, marginLeft: '8px' }}>AI recommends the benchmark — not you.</span>
+              </>
+            ) : null}
+          </div>
         </div>
 
         {/* ═══ MID-PAGE CTA ═══ */}
@@ -422,10 +427,6 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
           <p style={{ fontSize: '13px', color: D.textTertiary, marginTop: '8px' }}>
             <a href="/how-it-works" style={{ color: D.teal, textDecoration: 'none', fontWeight: 600 }}>Want to know how it works? →</a>
           </p>
-          <div style={{ marginTop: '16px', padding: '14px 20px', background: 'rgba(0,0,0,0.03)', borderRadius: '10px', textAlign: 'left', maxWidth: '480px', margin: '16px auto 0' }}>
-            <p style={{ fontSize: '12px', color: D.textTertiary, lineHeight: 1.6, margin: '0 0 6px 0' }}>Founding members get a full <span style={{ color: D.gold, fontWeight: 600 }}>PRISM Scan™</span> — 1,700+ queries, complete gap analysis, competitor intelligence, and a 90-day optimization plan.</p>
-            <p style={{ fontSize: '12px', color: D.textTertiary, lineHeight: 1.6, margin: 0 }}>Your results may change once we run your full PRISM Scan™.</p>
-          </div>
         </div>
 
         {/* ═══ MARKET VISIBILITY RATE ═══ */}
@@ -438,38 +439,15 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
             <div style={{ position: 'absolute', top: '-5px', left: `${Math.max(1, visibilityRate)}%`, transform: 'translateX(-50%)', width: '18px', height: '18px', borderRadius: '50%', background: visibilityRate < 10 ? D.red : D.teal, border: '3px solid #fff', boxShadow: '0 2px 6px rgba(0,0,0,0.2)' }} />
             <div style={{ position: 'absolute', top: '-3px', left: '40%', transform: 'translateX(-50%)', width: '2px', height: '14px', background: D.gold, borderRadius: '1px' }} />
           </div>
-          {/* You label — above track, pinned to thumb position */}
-          <div style={{ position: 'relative', height: '20px', marginBottom: '4px' }}>
-            <span style={{ position: 'absolute', left: `${Math.max(1, Math.min(visibilityRate, 90))}%`, transform: 'translateX(-50%)', fontSize: '12px', fontWeight: 800, color: visibilityRate < 10 ? D.red : D.teal, whiteSpace: 'nowrap' }}>You: {visibilityRate}%</span>
+          <div style={{ position: 'relative', height: '22px', marginBottom: '16px' }}>
+            <span style={{ position: 'absolute', left: `${Math.max(1, visibilityRate)}%`, transform: 'translateX(-50%)', fontSize: '12px', fontWeight: 800, color: visibilityRate < 10 ? D.red : D.teal, whiteSpace: 'nowrap' }}>You: {visibilityRate}%</span>
+            <span style={{ position: 'absolute', left: `40%`, transform: 'translateX(-50%)', fontSize: '12px', fontWeight: 700, color: D.gold, whiteSpace: 'nowrap' }}>Where AI starts recommending you</span>
           </div>
-          {/* Benchmark label — own row, always centered at 40% */}
-          <div style={{ position: 'relative', height: '20px', marginBottom: '8px' }}>
-            <span style={{ position: 'absolute', left: `40%`, transform: 'translateX(-50%)', fontSize: '12px', fontWeight: 700, color: D.gold, whiteSpace: 'nowrap' }}>Top agents score here</span>
-          </div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '16px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: visibilityRate < 10 ? '16px' : '0' }}>
             {['Invisible', 'Emerging', 'Recognized', 'Dominant'].map((l) => (
               <span key={l} style={{ fontSize: '10px', color: D.textTertiary, textTransform: 'uppercase', letterSpacing: '1px' }}>{l}</span>
             ))}
           </div>
-          {/* Competitor callout — below tier labels */}
-          {scan?.query_count ? (
-            <div style={{ padding: '14px 20px', background: D.navy, borderRadius: '10px', textAlign: 'center', marginBottom: '16px' }}>
-              {topTwoNames.length >= 2 ? (
-                <span style={{ fontSize: '14px', color: '#fff', lineHeight: 1.6 }}>
-                  AI recommended <span style={{ color: D.red, fontWeight: 700 }}>{topTwoNames[0]}</span> and <span style={{ color: D.red, fontWeight: 700 }}>{topTwoNames[1]}</span> a combined <span style={{ color: D.red, fontWeight: 700 }}>{topTwoCombined}x</span>. Your name came up only <span style={{ color: D.red, fontWeight: 700 }}>{visibilityRate === 0 ? '0x' : `${appearances}x`}</span>.
-                </span>
-              ) : primaryCompetitorName && isRealPersonName(primaryCompetitorName) && primaryCompetitorFrequency > 0 ? (
-                <span style={{ fontSize: '14px', color: '#fff', lineHeight: 1.6 }}>
-                  AI recommended <span style={{ color: D.red, fontWeight: 700 }}>{primaryCompetitorName}</span> in <span style={{ color: D.red, fontWeight: 700 }}>{primaryCompetitorFrequency} of {primaryCompetitorTotal} queries</span>. Your name came up only <span style={{ color: D.red, fontWeight: 700 }}>{visibilityRate === 0 ? '0' : appearances} times</span>.
-                </span>
-              ) : (
-                <span style={{ fontSize: '14px', color: '#fff', lineHeight: 1.6 }}>
-                  We ran <span style={{ color: '#ffffff', fontWeight: 700 }}>{scan.query_count} AI real estate searches</span> in {market}.{' '}
-                  Your name came up only <span style={{ color: D.red, fontWeight: 700 }}>{visibilityRate === 0 ? '0 times' : `${appearances} times`}</span>.
-                </span>
-              )}
-            </div>
-          ) : null}
           {visibilityRate < 10 && (
             <div style={{ background: 'rgba(239,68,68,0.06)', border: `1px solid rgba(239,68,68,0.15)`, borderRadius: '8px', padding: '12px 16px', textAlign: 'center' }}>
               <p style={{ fontSize: '14px', fontWeight: 700, color: D.red, margin: 0 }}>
