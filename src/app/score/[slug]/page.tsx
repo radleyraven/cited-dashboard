@@ -340,7 +340,7 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
         <div style={{ background: D.navy, borderRadius: '12px', padding: '24px', marginBottom: '32px' }}>
           <div style={{ fontSize: '11px', fontWeight: 700, color: D.gold, letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: '10px' }}>What This Measures</div>
           <p style={{ fontSize: '14px', color: '#94a3b8', lineHeight: 1.7, margin: 0 }}>
-<span style={{ color: '#ffffff', fontWeight: 700 }}>45% of consumers now use AI for local business recommendations.</span> Your clients are using ChatGPT, Perplexity, and Google AI to find agents. Unlike Google, AI doesn&apos;t rank websites — it <span style={{ color: '#fff', fontWeight: 600 }}>recommends agents it already knows</span>. Your Foundation Score measures how visible you are across those AI searches — and where the gaps are.
+<span style={{ color: '#ffffff', fontWeight: 700 }}>45% of consumers now use AI for local business recommendations.</span> Unlike Google, AI doesn&apos;t rank websites — it <span style={{ color: '#fff', fontWeight: 600 }}>recommends agents it already knows</span>. Your Foundation Score measures how visible you are across those AI searches — and where the gaps are.
           </p>
         </div>
 
