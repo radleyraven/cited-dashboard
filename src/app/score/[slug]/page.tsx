@@ -165,6 +165,7 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
   const primaryCompetitorVerified = (scan?.markets?.find(m => m.tier === 'primary') as Record<string,unknown>)?.competitor_verified as boolean ?? false;
   const primaryCompetitorFrequency = (scan?.markets?.find(m => m.tier === 'primary') as Record<string,unknown>)?.competitor_frequency as number ?? 0;
   const primaryCompetitorTotal = (scan?.markets?.find(m => m.tier === 'primary') as Record<string,unknown>)?.competitor_total_queries as number ?? 0;
+  const isRealPersonName = (n: string | null) => n && n.length > 3 && /[A-Z][a-z]/.test(n) && n.includes(' ');
   // Top real competitors from frequency map (fallback when primary competitor is noise)
   const topRealCompetitors = Object.entries(scan?.competitor_frequency ?? {})
     .filter(([name]) => isRealPersonName(name))
@@ -172,7 +173,6 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
     .slice(0, 2);
   const topTwoNames = topRealCompetitors.map(([name]) => name);
   const topTwoCombined = topRealCompetitors.reduce((sum, [, count]) => sum + count, 0);
-  const isRealPersonName = (n: string | null) => n && n.length > 3 && /[A-Z][a-z]/.test(n) && n.includes(' ');
   const clientPct = Math.max(1, (score / 100) * 100);
   const benchmarkPct = Math.max(1, (benchmarkScore / 100) * 100);
   const gap = benchmarkScore - score;
