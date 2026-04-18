@@ -267,6 +267,12 @@ function IntakeForm() {
   const [currentCard, setCurrentCard] = useState<number>(() => {
     if (typeof window !== "undefined") {
       try {
+        // Dev/review bypass: ?card=N jumps straight to that card number
+        const cardParam = searchParams.get("card");
+        if (cardParam) {
+          const n = parseInt(cardParam, 10);
+          if (!isNaN(n) && n >= 1 && n <= TOTAL_CARDS) return n;
+        }
         // If token param present, always start at Card 1
         if (searchParams.get("token")) return 1;
         const saved = localStorage.getItem(STORAGE_KEY + "-card");
