@@ -637,10 +637,11 @@ function IntakeForm() {
     if (id === 2) return "Your Practice";
     if (id === 3) return "";
     if (id === 4) return "What Makes You Different";
-    if (id === 5) return "Notable Work";
-    if (id === 6) return "";
-    if (id === 7) return "Your Photos";
-    if (id === 8) return "Your Platforms";
+    if (id === 5) return "Your Voice";
+    if (id === 6) return "Notable Work";
+    if (id === 7) return "";
+    if (id === 8) return "Your Photos";
+    if (id === PLATFORM_START_CARD) return "Your Platforms";
     if (id === SUMMARY_CARD) return "Review & Submit";
     return "";
   }
