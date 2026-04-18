@@ -172,7 +172,6 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
     .slice(0, 2);
   const topTwoNames = topRealCompetitors.map(([name]) => name);
   const topTwoCombined = topRealCompetitors.reduce((sum, [, count]) => sum + count, 0);
-  const appearances = Math.round((visibilityRate / 100) * (scan?.query_count ?? 60));
   const isRealPersonName = (n: string | null) => n && n.length > 3 && /[A-Z][a-z]/.test(n) && n.includes(' ');
   const clientPct = Math.max(1, (score / 100) * 100);
   const benchmarkPct = Math.max(1, (benchmarkScore / 100) * 100);
@@ -181,6 +180,7 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
   // Visibility
   const visibilityData = scan?.visibility_rates?.[market];
   const visibilityRate = visibilityData?.overall_visibility_pct ?? Math.round((score / 100) * 12);
+  const appearances = Math.round((visibilityRate / 100) * (scan?.query_count ?? 60));
   const benchmarkRate = visibilityData?.competitor_visibility_pct ?? 76;
 
   // Narrative
