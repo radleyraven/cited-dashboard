@@ -432,24 +432,19 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
           </div>
           <div style={{ position: 'relative', height: '8px', borderRadius: '4px', background: `linear-gradient(90deg, ${D.red} 0%, #F59E0B 25%, ${D.gold} 45%, ${D.teal} 70%, ${D.navy} 100%)`, marginBottom: '8px' }}>
             <div style={{ position: 'absolute', top: '-5px', left: `${Math.max(1, visibilityRate)}%`, transform: 'translateX(-50%)', width: '18px', height: '18px', borderRadius: '50%', background: visibilityRate < 10 ? D.red : D.teal, border: '3px solid #fff', boxShadow: '0 2px 6px rgba(0,0,0,0.2)' }} />
-            <div style={{ position: 'absolute', top: '-3px', left: '40%', transform: 'translateX(-50%)', width: '2px', height: '14px', background: D.gold, borderRadius: '1px' }} />
           </div>
-          {/* You label — above track, pinned to thumb position */}
+          {/* You label — pinned to thumb position */}
           <div style={{ position: 'relative', height: '20px', marginBottom: '4px' }}>
             <span style={{ position: 'absolute', left: `${Math.max(1, Math.min(visibilityRate, 90))}%`, transform: 'translateX(-50%)', fontSize: '12px', fontWeight: 800, color: visibilityRate < 10 ? D.red : D.teal, whiteSpace: 'nowrap' }}>You: {visibilityRate}%</span>
-          </div>
-          {/* Benchmark label — own row, always centered at 40% */}
-          <div style={{ position: 'relative', height: '20px', marginBottom: '8px' }}>
-            <span style={{ position: 'absolute', left: `40%`, transform: 'translateX(-50%)', fontSize: '12px', fontWeight: 700, color: D.gold, whiteSpace: 'nowrap' }}>Top agents score here</span>
           </div>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '16px' }}>
             {['Invisible', 'Emerging', 'Recognized', 'Dominant'].map((l) => (
               <span key={l} style={{ fontSize: '10px', color: D.textTertiary, textTransform: 'uppercase', letterSpacing: '1px' }}>{l}</span>
             ))}
           </div>
-          {/* Competitor callout — below tier labels */}
+          {/* Competitor callout — flush bottom of card */}
           {scan?.query_count ? (
-            <div style={{ padding: '14px 20px', background: D.navy, borderRadius: '10px', textAlign: 'center', marginBottom: '16px' }}>
+            <div style={{ padding: '14px 24px', background: D.navy, borderRadius: '0 0 14px 14px', textAlign: 'center', margin: '0 -24px -24px' }}>
               {topTwoNames.length >= 2 ? (
                 <span style={{ fontSize: '14px', color: '#fff', lineHeight: 1.6 }}>
                   AI recommended <span style={{ color: D.red, fontWeight: 700 }}>{topTwoNames[0]}</span> and <span style={{ color: D.red, fontWeight: 700 }}>{topTwoNames[1]}</span> a combined <span style={{ color: D.red, fontWeight: 700 }}>{topTwoCombined}x</span>. Your name came up only <span style={{ color: D.red, fontWeight: 700 }}>{visibilityRate === 0 ? '0x' : `${appearances}x`}</span>.
