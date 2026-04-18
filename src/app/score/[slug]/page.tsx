@@ -407,32 +407,7 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
             </div>
           </div>
 
-          {/* Discovery gap callout — with competitor name if verified */}
-          <div style={{ padding: '16px 24px', background: D.navy, textAlign: 'center' }}>
-            {scan?.query_count ? (
-              <div>
-                {topTwoNames.length >= 2 ? (
-                  <span style={{ fontSize: '14px', color: '#fff', lineHeight: 1.6 }}>
-                    AI recommended <span style={{ color: D.red, fontWeight: 700 }}>{topTwoNames[0]}</span> and <span style={{ color: D.red, fontWeight: 700 }}>{topTwoNames[1]}</span> a combined <span style={{ color: D.red, fontWeight: 700 }}>{topTwoCombined}x</span>. Your name came up only <span style={{ color: D.red, fontWeight: 700 }}>{visibilityRate === 0 ? '0x' : `${appearances}x`}</span>.
-                  </span>
-                ) : primaryCompetitorName && isRealPersonName(primaryCompetitorName) && primaryCompetitorFrequency > 0 ? (
-                  <span style={{ fontSize: '14px', color: '#fff', lineHeight: 1.6 }}>
-                    AI recommended <span style={{ color: D.red, fontWeight: 700 }}>{primaryCompetitorName}</span> in <span style={{ color: D.red, fontWeight: 700 }}>{primaryCompetitorFrequency} of {primaryCompetitorTotal} queries</span>. Your name came up only <span style={{ color: D.red, fontWeight: 700 }}>{visibilityRate === 0 ? '0' : appearances} times</span>.
-                  </span>
-                ) : (
-                  <span style={{ fontSize: '14px', color: '#fff', lineHeight: 1.6 }}>
-                    We ran <span style={{ color: '#ffffff', fontWeight: 700 }}>{scan.query_count} AI real estate searches</span> in {market}.{' '}
-                    Your name came up only <span style={{ color: D.red, fontWeight: 700 }}>{visibilityRate === 0 ? '0 times' : `${appearances} times`}</span>.
-                  </span>
-                )}
-              </div>
-            ) : gap > 0 ? (
-              <>
-                <span style={{ fontSize: '14px', color: '#fff', fontWeight: 600 }}>{gap} points behind in {market}.</span>
-                <span style={{ fontSize: '13px', color: D.textTertiary, marginLeft: '8px' }}>AI recommends the benchmark — not you.</span>
-              </>
-            ) : null}
-          </div>
+
         </div>
 
         {/* ═══ MID-PAGE CTA ═══ */}
@@ -469,6 +444,25 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
           <div style={{ position: 'relative', height: '20px', marginBottom: '8px' }}>
             <span style={{ position: 'absolute', left: `40%`, transform: 'translateX(-50%)', fontSize: '12px', fontWeight: 700, color: D.gold, whiteSpace: 'nowrap' }}>Where AI starts recommending you</span>
           </div>
+          {/* Competitor callout — belongs with Discovery Rate */}
+          {scan?.query_count ? (
+            <div style={{ padding: '14px 20px', background: D.navy, borderRadius: '10px', textAlign: 'center', marginBottom: '16px' }}>
+              {topTwoNames.length >= 2 ? (
+                <span style={{ fontSize: '14px', color: '#fff', lineHeight: 1.6 }}>
+                  AI recommended <span style={{ color: D.red, fontWeight: 700 }}>{topTwoNames[0]}</span> and <span style={{ color: D.red, fontWeight: 700 }}>{topTwoNames[1]}</span> a combined <span style={{ color: D.red, fontWeight: 700 }}>{topTwoCombined}x</span>. Your name came up only <span style={{ color: D.red, fontWeight: 700 }}>{visibilityRate === 0 ? '0x' : `${appearances}x`}</span>.
+                </span>
+              ) : primaryCompetitorName && isRealPersonName(primaryCompetitorName) && primaryCompetitorFrequency > 0 ? (
+                <span style={{ fontSize: '14px', color: '#fff', lineHeight: 1.6 }}>
+                  AI recommended <span style={{ color: D.red, fontWeight: 700 }}>{primaryCompetitorName}</span> in <span style={{ color: D.red, fontWeight: 700 }}>{primaryCompetitorFrequency} of {primaryCompetitorTotal} queries</span>. Your name came up only <span style={{ color: D.red, fontWeight: 700 }}>{visibilityRate === 0 ? '0' : appearances} times</span>.
+                </span>
+              ) : (
+                <span style={{ fontSize: '14px', color: '#fff', lineHeight: 1.6 }}>
+                  We ran <span style={{ color: '#ffffff', fontWeight: 700 }}>{scan.query_count} AI real estate searches</span> in {market}.{' '}
+                  Your name came up only <span style={{ color: D.red, fontWeight: 700 }}>{visibilityRate === 0 ? '0 times' : `${appearances} times`}</span>.
+                </span>
+              )}
+            </div>
+          ) : null}
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: visibilityRate < 10 ? '16px' : '0' }}>
             {['Invisible', 'Emerging', 'Recognized', 'Dominant'].map((l) => (
               <span key={l} style={{ fontSize: '10px', color: D.textTertiary, textTransform: 'uppercase', letterSpacing: '1px' }}>{l}</span>
