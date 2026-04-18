@@ -403,7 +403,7 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
               <div>
                 {topTwoNames.length >= 2 ? (
                   <span style={{ fontSize: '14px', color: '#fff', lineHeight: 1.6 }}>
-                    AI recommended <span style={{ color: D.red, fontWeight: 700 }}>{topTwoNames[0]}</span> and <span style={{ color: D.red, fontWeight: 700 }}>{topTwoNames[1]}</span> a combined <span style={{ color: D.red, fontWeight: 700 }}>{topTwoCombined} times</span>. Your name came up only <span style={{ color: D.red, fontWeight: 700 }}>{visibilityRate === 0 ? '0' : appearances} times</span>.
+                    AI recommended <span style={{ color: D.red, fontWeight: 700 }}>{topTwoNames[0]}</span> and <span style={{ color: D.red, fontWeight: 700 }}>{topTwoNames[1]}</span> a combined <span style={{ color: D.red, fontWeight: 700 }}>{topTwoCombined}x</span>. Your name came up only <span style={{ color: D.red, fontWeight: 700 }}>{visibilityRate === 0 ? '0x' : `${appearances}x`}</span>.
                   </span>
                 ) : primaryCompetitorName && isRealPersonName(primaryCompetitorName) && primaryCompetitorFrequency > 0 ? (
                   <span style={{ fontSize: '14px', color: '#fff', lineHeight: 1.6 }}>
