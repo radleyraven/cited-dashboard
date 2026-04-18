@@ -428,14 +428,15 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
 
         {/* ═══ MID-PAGE CTA ═══ */}
         <div style={{ textAlign: 'center', marginBottom: '32px' }}>
-          <p style={{ fontSize: '12px', color: D.textTertiary, lineHeight: 1.6, marginBottom: '16px', padding: '10px 16px', background: 'rgba(0,0,0,0.03)', borderRadius: '8px', display: 'inline-block' }}>Based on an initial scan. Founding members get a full <span style={{ color: D.gold, fontWeight: 600 }}>PRISM Scan™</span> — 1,700+ queries, complete gap analysis, competitor intelligence, and a 90-day optimization plan.</p>
           <p style={{ fontSize: '15px', color: D.textSecondary, marginBottom: '14px' }}>Ready to fix this?</p>
           <TrackedLink href={ctaHref} slug={slug} name={name} eventType="cta_click" eventData={{ page: 'score', cta: 'mid_page' }} style={{ display: 'inline-block', background: D.teal, color: '#fff', fontWeight: 700, fontSize: '15px', padding: '14px 36px', borderRadius: '10px', textDecoration: 'none', boxShadow: '0 4px 16px rgba(0,191,166,0.3)' }}>
             {ctaText}
           </TrackedLink>
-          <p style={{ fontSize: '12px', color: D.textTertiary, marginTop: '12px' }}>
-            <strong style={{ color: D.navy }}>Free for Founding Members.</strong> Takes 5 minutes. We handle the rest.
-          </p>
+          <div style={{ marginTop: '16px', padding: '14px 20px', background: 'rgba(0,0,0,0.03)', borderRadius: '10px', display: 'inline-block', textAlign: 'left', maxWidth: '480px' }}>
+            <p style={{ fontSize: '13px', color: D.navy, fontWeight: 700, margin: '0 0 6px 0' }}>Free for Founding Members. Takes 5 minutes. We handle the rest.</p>
+            <p style={{ fontSize: '12px', color: D.textTertiary, lineHeight: 1.6, margin: '0 0 6px 0' }}>Founding members get a full <span style={{ color: D.gold, fontWeight: 600 }}>PRISM Scan™</span> — 1,700+ queries, complete gap analysis, competitor intelligence, and a 90-day optimization plan.</p>
+            <p style={{ fontSize: '12px', color: D.textTertiary, lineHeight: 1.6, margin: 0 }}>Your results may change once we run your full PRISM Scan™.</p>
+          </div>
           <p style={{ fontSize: '13px', color: D.textTertiary, marginTop: '8px' }}>
             <a href="/how-it-works" style={{ color: D.teal, textDecoration: 'none', fontWeight: 600 }}>Want to know how it works? →</a>
           </p>
