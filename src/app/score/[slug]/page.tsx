@@ -416,14 +416,16 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
           <TrackedLink href={ctaHref} slug={slug} name={name} eventType="cta_click" eventData={{ page: 'score', cta: 'mid_page' }} style={{ display: 'inline-block', background: D.teal, color: '#fff', fontWeight: 700, fontSize: '15px', padding: '14px 36px', borderRadius: '10px', textDecoration: 'none', boxShadow: '0 4px 16px rgba(0,191,166,0.3)' }}>
             {ctaText}
           </TrackedLink>
-          <div style={{ marginTop: '16px', padding: '14px 20px', background: 'rgba(0,0,0,0.03)', borderRadius: '10px', display: 'inline-block', textAlign: 'left', maxWidth: '480px' }}>
-            <p style={{ fontSize: '13px', color: D.navy, fontWeight: 700, margin: '0 0 6px 0' }}>Free for Founding Members. Takes 5 minutes. We handle the rest.</p>
-            <p style={{ fontSize: '12px', color: D.textTertiary, lineHeight: 1.6, margin: '0 0 6px 0' }}>Founding members get a full <span style={{ color: D.gold, fontWeight: 600 }}>PRISM Scan™</span> — 1,700+ queries, complete gap analysis, competitor intelligence, and a 90-day optimization plan.</p>
-            <p style={{ fontSize: '12px', color: D.textTertiary, lineHeight: 1.6, margin: 0 }}>Your results may change once we run your full PRISM Scan™.</p>
-          </div>
+          <p style={{ fontSize: '12px', color: D.textTertiary, marginTop: '12px' }}>
+            <strong style={{ color: D.navy }}>Free for Founding Members.</strong> Takes 5 minutes. We handle the rest.
+          </p>
           <p style={{ fontSize: '13px', color: D.textTertiary, marginTop: '8px' }}>
             <a href="/how-it-works" style={{ color: D.teal, textDecoration: 'none', fontWeight: 600 }}>Want to know how it works? →</a>
           </p>
+          <div style={{ marginTop: '16px', padding: '14px 20px', background: 'rgba(0,0,0,0.03)', borderRadius: '10px', textAlign: 'left', maxWidth: '480px', margin: '16px auto 0' }}>
+            <p style={{ fontSize: '12px', color: D.textTertiary, lineHeight: 1.6, margin: '0 0 6px 0' }}>Founding members get a full <span style={{ color: D.gold, fontWeight: 600 }}>PRISM Scan™</span> — 1,700+ queries, complete gap analysis, competitor intelligence, and a 90-day optimization plan.</p>
+            <p style={{ fontSize: '12px', color: D.textTertiary, lineHeight: 1.6, margin: 0 }}>Your results may change once we run your full PRISM Scan™.</p>
+          </div>
         </div>
 
         {/* ═══ MARKET VISIBILITY RATE ═══ */}
@@ -442,7 +444,7 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
           </div>
           {/* Benchmark label — own row, always centered at 40% */}
           <div style={{ position: 'relative', height: '20px', marginBottom: '8px' }}>
-            <span style={{ position: 'absolute', left: `40%`, transform: 'translateX(-50%)', fontSize: '12px', fontWeight: 700, color: D.gold, whiteSpace: 'nowrap' }}>Where AI starts recommending you</span>
+            <span style={{ position: 'absolute', left: `40%`, transform: 'translateX(-50%)', fontSize: '12px', fontWeight: 700, color: D.gold, whiteSpace: 'nowrap' }}>Top agents score here</span>
           </div>
           {/* Competitor callout — belongs with Discovery Rate */}
           {scan?.query_count ? (
