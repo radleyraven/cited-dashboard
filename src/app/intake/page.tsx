@@ -53,6 +53,24 @@ const PRISM_FOUND_FIELDS = new Set([
 
 const STORAGE_KEY = "cited-intake-v2";
 
+// ── Voice Archetype Types & Constants ────────────────────────
+
+type VoiceArchetype = 'expert' | 'friend' | 'straight_shooter' | 'visionary' | 'storyteller' | '';
+
+type ArchetypeOption = {
+  key: Exclude<VoiceArchetype, ''>;
+  label: string;
+  blurb: string;
+};
+
+const VOICE_ARCHETYPES: readonly ArchetypeOption[] = [
+  { key: 'expert',           label: 'The Expert',           blurb: 'Data-driven. Teaches the market. "Let me show you the numbers."' },
+  { key: 'friend',           label: 'The Friend',           blurb: 'Warm and honest. Walks with you. "We\'ll figure this out together."' },
+  { key: 'straight_shooter', label: 'The Straight Shooter', blurb: 'Direct, no fluff. Tells the truth. "Here\'s what I\'d do if this were my house."' },
+  { key: 'visionary',        label: 'The Visionary',        blurb: 'Long-view, strategic. Sees what others miss. "Three years from now, this neighborhood will look different."' },
+  { key: 'storyteller',      label: 'The Storyteller',      blurb: 'Narrative-driven, emotional. Sells the dream. "Every house I sell has a story behind it."' },
+] as const;
+
 // ── Types ──────────────────────────────────────────────────────
 
 type FormData = {
@@ -74,7 +92,10 @@ type FormData = {
   personalWebsiteUrl: string;
   audienceFocus: string;
   differentiator: string;
-  voiceCapture: string;
+  voiceCapture: string;          // legacy read-only — backward compat
+  voiceArchetype: VoiceArchetype;
+  voiceSignaturePhrase: string;
+  voiceMemorableClient: string;
   transactions: string[];
   mlsFile: File | null;
   mlsDoneForYou: boolean;
@@ -130,6 +151,9 @@ function getInitialForm(sp: ReturnType<typeof useSearchParams>): FormData {
     audienceFocus: "",
     differentiator: "",
     voiceCapture: "",
+    voiceArchetype: (sp.get("voiceArchetype") as VoiceArchetype) || "",
+    voiceSignaturePhrase: sp.get("voiceSignaturePhrase") || "",
+    voiceMemorableClient: sp.get("voiceMemorableClient") || "",
     transactions: [""],
     mlsFile: null,
     mlsDoneForYou: true, // CA/WA default
@@ -343,6 +367,12 @@ function IntakeForm() {
           audienceFocus: data.audience_focus ?? prev.audienceFocus,
           differentiator: data.differentiator ?? prev.differentiator,
           voiceCapture: data.voice_capture ?? prev.voiceCapture,
+          voiceArchetype: ((data.voice_archetype as VoiceArchetype) ??
+            (['expert','friend','straight_shooter','visionary','storyteller'].includes(data.voice_capture?.split(',')[0]?.trim())
+              ? data.voice_capture.split(',')[0].trim() as VoiceArchetype
+              : prev.voiceArchetype)),
+          voiceSignaturePhrase: data.voice_signature_phrase ?? prev.voiceSignaturePhrase,
+          voiceMemorableClient: data.voice_memorable_client ?? prev.voiceMemorableClient,
           transactions: data.top_transactions
             ? data.top_transactions.split("\n").filter(Boolean).map((t: string) => t.replace(" — ", "||"))
             : prev.transactions,
@@ -458,7 +488,7 @@ function IntakeForm() {
           primaryMarkets: f.primaryMarkets, primaryMarketZip: f.primaryMarketZips,
           neighborhoods: f.neighborhoods, brokerageProfileUrl: f.brokerageProfileUrl,
           personalWebsiteUrl: f.personalWebsiteUrl, audienceFocus: f.audienceFocus,
-          differentiator: f.differentiator, voiceCapture: f.voiceCapture,
+          differentiator: f.differentiator, voiceArchetype: f.voiceArchetype, voiceSignaturePhrase: f.voiceSignaturePhrase, voiceMemorableClient: f.voiceMemorableClient,
           topTransactions: f.transactions.filter(Boolean).map(t => t.replace("||", " — ")).join("\n"),
           gbpStatus: f.gbpStatus, linkedinUrl: f.linkedinUrl, zillowUrl: f.zillowUrl,
           yelpUrl: f.yelpUrl, realtorUrl: f.realtorUrl, fastexpertUrl: f.fastexpertUrl,
@@ -530,7 +560,7 @@ function IntakeForm() {
           neighborhoods: form.neighborhoods,
           brokerageProfileUrl: form.brokerageProfileUrl, personalWebsiteUrl: form.personalWebsiteUrl,
           audienceFocus: form.audienceFocus, differentiator: form.differentiator,
-          voiceCapture: form.voiceCapture,
+          voiceArchetype: form.voiceArchetype, voiceSignaturePhrase: form.voiceSignaturePhrase, voiceMemorableClient: form.voiceMemorableClient,
           topTransactions: form.transactions.filter(Boolean).join("\n"),
           reviewPlatforms: form.reviewPlatforms, reviewOther: form.reviewOther,
           gbpStatus: form.gbpStatus,
@@ -846,56 +876,54 @@ function renderCardContent(p: CardProps) {
 
   // ── Card 5: Voice Capture (pick 2 archetypes) ──────────────
   if (cardId === 5) {
-    const VOICE_ARCHETYPES = [
-      { key: 'professional', label: 'Professional', blurb: 'Buttoned-up, data-driven, highest level of expertise.' },
-      { key: 'friendly', label: 'Friendly', blurb: 'Warm, patient, makes the whole process feel easy.' },
-      { key: 'direct', label: 'Direct & Honest', blurb: 'Tells you the truth, even when it kills the deal.' },
-      { key: 'insider', label: 'Insider / Connected', blurb: 'Knows every listing before it hits the MLS.' },
-      { key: 'concierge', label: 'Concierge', blurb: 'White-glove service — handles everything.' },
-      { key: 'educator', label: 'Educator / Strategic', blurb: "Explains the market like you're in her class." },
-      { key: 'advocate', label: 'Fierce Advocate', blurb: 'Goes to war for her clients in negotiation.' },
-      { key: 'luxury', label: 'Luxury Specialist', blurb: 'Discreet, polished, understands high-end buyers.' },
-    ];
-    const selected = form.voiceCapture ? form.voiceCapture.split(',').map((s: string) => s.trim()).filter(Boolean) : [];
-    const toggle = (key: string) => {
-      const isSelected = selected.includes(key);
-      let nextSel: string[];
-      if (isSelected) {
-        nextSel = selected.filter((k: string) => k !== key);
-      } else if (selected.length >= 2) {
-        return;
-      } else {
-        nextSel = [...selected, key];
-      }
-      set('voiceCapture', nextSel.join(','));
+    const selectArchetype = (key: Exclude<VoiceArchetype, ''>) => {
+      set('voiceArchetype', key);
+      const slug = form.fullName.toLowerCase().replace(/\s+/g, '-');
+      trackEvent(slug, 'voice_archetype_selected', {
+        archetype: key,
+        page: 'intake',
+        card: 5,
+      }, form.fullName);
     };
+
+    const skipCard5 = () => {
+      p.addSkipped("voiceArchetype");
+      p.addSkipped("voiceSignaturePhrase");
+      p.addSkipped("voiceMemorableClient");
+      skip();
+    };
+
+    const requiredComplete =
+      (form.voiceArchetype !== '' ? 1 : 0) +
+      (form.voiceSignaturePhrase.length >= 20 ? 1 : 0);
+    const canContinue = form.voiceArchetype !== '' && form.voiceSignaturePhrase.length >= 20;
     return (
       <div>
-        <CardHeader title="How would your best clients describe you?"
-          subtitle="Pick the two that sound most like you. This shapes how AI learns to describe you to future clients." />
+        <CardHeader
+          title="How would your clients describe you?"
+          subtitle="Pick the voice that sounds most like you. Then tell us, in your actual words, what you say to clients. This shapes how AI learns to describe you."
+        />
+        {/* Layer 1: Archetype Grid */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '10px', marginTop: '16px' }}>
           {VOICE_ARCHETYPES.map(opt => {
-            const isSelected = selected.includes(opt.key);
-            const atMax = selected.length >= 2 && !isSelected;
+            const isSelected = form.voiceArchetype === opt.key;
             return (
               <button
                 key={opt.key}
                 type="button"
-                onClick={() => toggle(opt.key)}
-                disabled={atMax}
+                onClick={() => selectArchetype(opt.key)}
                 style={{
                   textAlign: 'left',
                   padding: '14px 16px',
                   borderRadius: '10px',
                   border: isSelected ? '2px solid #00BFA6' : '1px solid #e2e8f0',
                   background: isSelected ? 'rgba(0,191,166,0.06)' : '#fff',
-                  cursor: atMax ? 'not-allowed' : 'pointer',
-                  opacity: atMax ? 0.5 : 1,
+                  cursor: 'pointer',
                   transition: 'all 0.15s',
                 }}
               >
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
-                  <span style={{ fontSize: '14px', fontWeight: 700, color: '#0A1929' }}>{opt.label}</span>
+                  <span style={{ fontSize: '15px', fontWeight: 700, color: '#0A1929' }}>{opt.label}</span>
                   {isSelected && <span style={{ fontSize: '12px', fontWeight: 700, color: '#00BFA6' }}>✓ Selected</span>}
                 </div>
                 <div style={{ fontSize: '12px', color: '#64748b', lineHeight: 1.5 }}>{opt.blurb}</div>
@@ -903,11 +931,69 @@ function renderCardContent(p: CardProps) {
             );
           })}
         </div>
-        <div style={{ fontSize: '12px', color: '#94a3b8', marginTop: '12px', textAlign: 'center' }}>
-          {selected.length}/2 selected
+        {/* Layer 2: Signature Phrase (required) */}
+        <div style={{ marginTop: '24px' }}>
+          <FieldGroup
+            label="When someone asks \u2018why you?\u2019 \u2014 what do you actually say?"
+            hint="Not what you think you should say. Not a marketing line. What you really say in a listing presentation."
+          >
+            <TextArea
+              value={form.voiceSignaturePhrase}
+              onChange={(v) => set('voiceSignaturePhrase', v)}
+              rows={3}
+              placeholder="e.g., I tell my clients the truth about a house, even when it kills the deal. That's why they trust me."
+            />
+          </FieldGroup>
+          <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: '4px', gap: '12px' }}>
+            {form.voiceSignaturePhrase.length > 0 && form.voiceSignaturePhrase.length < 20 && (
+              <span style={{ fontSize: '12px', color: '#ef4444' }}>Need at least 20 characters</span>
+            )}
+            <span style={{ fontSize: '12px', color: '#94a3b8' }}>{form.voiceSignaturePhrase.length} / 500</span>
+          </div>
         </div>
-        <NextButton onClick={next} />
-        <SkipButton onClick={() => skip("voiceCapture")} label={"Skip for now →"} />
+        {/* Layer 3: Memorable Client (optional) */}
+        <div style={{ marginTop: '24px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px', flexWrap: 'wrap' }}>
+            <span style={{ fontSize: '14px', fontWeight: 600, color: '#0A1929' }}>One client who stands out \u2014 and why you still think about them</span>
+            <span style={{ fontSize: '11px', color: '#94a3b8', background: '#f1f5f9', borderRadius: '12px', padding: '2px 8px', fontWeight: 500 }}>Optional</span>
+          </div>
+          <div style={{ fontSize: '12px', color: '#64748b', marginBottom: '6px' }}>
+            Doesn&apos;t have to be the biggest deal. Just one that matters. We use this for your bio and future content.
+          </div>
+          <TextArea
+            value={form.voiceMemorableClient}
+            onChange={(v) => set('voiceMemorableClient', v)}
+            rows={4}
+            placeholder="e.g., Family of four who'd been burned by another agent. Found them the home in 3 weeks that the previous agent said didn't exist."
+          />
+        </div>
+        {/* Progress counter */}
+        <div style={{ textAlign: 'center', marginTop: '16px' }}>
+          {requiredComplete === 2 ? (
+            <span style={{ fontSize: '12px', color: '#00BFA6', fontWeight: 600 }}>\u2713 Ready to continue</span>
+          ) : (
+            <span style={{ fontSize: '12px', color: '#94a3b8' }}>{requiredComplete} / 2 required complete</span>
+          )}
+          {form.voiceMemorableClient.length > 0 && (
+            <div style={{ fontSize: '11px', color: '#00BFA6', marginTop: '4px' }}>Memorable client captured \u2014 strengthens your bio</div>
+          )}
+        </div>
+        {/* Next — inline button with disabled state (NextButton component has no disabled prop) */}
+        <button
+          type="button"
+          onClick={canContinue ? next : undefined}
+          disabled={!canContinue}
+          style={{
+            width: '100%', padding: '14px',
+            background: canContinue ? '#00BFA6' : '#e2e8f0',
+            color: canContinue ? '#fff' : '#94a3b8',
+            border: 'none', borderRadius: '10px',
+            fontSize: '15px', fontWeight: 700,
+            cursor: canContinue ? 'pointer' : 'not-allowed',
+            marginTop: '24px',
+          }}
+        >Continue \u2192</button>
+        <SkipButton onClick={skipCard5} label="Skip for now \u2192 (you can add this later)" />
       </div>
     );
   }
