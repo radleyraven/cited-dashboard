@@ -50,6 +50,7 @@ type ScanResults = {
 type IntakeRow = {
   id: string;
   full_name: string;
+  preferred_name?: string;
   email?: string;
   brokerage?: string;
   primary_markets?: string;
@@ -80,7 +81,7 @@ async function fetchProspect(slug: string): Promise<IntakeRow | null> {
   const slugName = slug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
 
   const res = await fetch(
-    `${sbUrl}/rest/v1/cited_intake?or=(full_name.ilike.${encodeURIComponent(slugName)})&select=id,full_name,email,brokerage,primary_markets,scan_results,onboarding_token,intake_completion_pct,status&limit=1`,
+    `${sbUrl}/rest/v1/cited_intake?or=(full_name.ilike.${encodeURIComponent(slugName)})&select=id,full_name,preferred_name,email,brokerage,primary_markets,scan_results,onboarding_token,intake_completion_pct,status&limit=1`,
     { headers: { apikey: sbKey, Authorization: `Bearer ${sbKey}` }, next: { revalidate: 120 } }
   );
 
@@ -133,7 +134,7 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
   const scan = prospect.scan_results;
 
   const name = prospect.full_name;
-  const firstName = name.split(' ')[0];
+  const firstName = prospect.preferred_name || name.split(' ')[0];
   const brokerage = prospect.brokerage || scan?.brokerage_discovered || '';
   const market = prospect.primary_markets?.split(',')[0]?.trim() || '';
   const score = scan?.foundation_score ?? scan?.composite_score ?? 0;
