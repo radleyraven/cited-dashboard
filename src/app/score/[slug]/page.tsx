@@ -329,7 +329,7 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
         {/* ═══ PERSONALIZATION HEADER ═══ */}
         <div style={{ paddingTop: '40px', marginBottom: '8px' }}>
           <h1 style={{ fontSize: '28px', fontWeight: 800, color: D.navy, margin: '0 0 4px', lineHeight: 1.3 }}>
-            {firstName}, here&apos;s your Foundation Score.
+            {firstName}, here&apos;s your Initial Foundation Score.
           </h1>
           <p style={{ fontSize: '13px', color: D.textTertiary, margin: 0 }}>
             {subheaderText}
