@@ -165,7 +165,15 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
   const primaryCompetitorVerified = (scan?.markets?.find(m => m.tier === 'primary') as Record<string,unknown>)?.competitor_verified as boolean ?? false;
   const primaryCompetitorFrequency = (scan?.markets?.find(m => m.tier === 'primary') as Record<string,unknown>)?.competitor_frequency as number ?? 0;
   const primaryCompetitorTotal = (scan?.markets?.find(m => m.tier === 'primary') as Record<string,unknown>)?.competitor_total_queries as number ?? 0;
-  const isRealPersonName = (n: string | null) => n && n.length > 3 && /[A-Z][a-z]/.test(n) && n.includes(' ');
+  const isRealPersonName = (n: string | null) => {
+    if (!n || n.length <= 3 || !/[A-Z][a-z]/.test(n) || !n.includes(' ')) return false;
+    const words = n.trim().split(/\s+/);
+    // Filter noise: repeated words ("News News"), single-word duplicates, generic terms
+    if (words.length >= 2 && words[0].toLowerCase() === words[1].toLowerCase()) return false;
+    const noiseTerms = ['news', 'view', 'group', 'team', 'agents', 'realty', 'real estate', 'properties', 'homes', 'bay', 'commencement'];
+    if (noiseTerms.some(t => n.toLowerCase() === t || words.every(w => noiseTerms.includes(w.toLowerCase())))) return false;
+    return true;
+  };
   // Top real competitors from frequency map (fallback when primary competitor is noise)
   const topRealCompetitors = Object.entries(scan?.competitor_frequency ?? {})
     .filter(([name]) => isRealPersonName(name))
@@ -180,7 +188,7 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
   // Visibility
   const visibilityData = scan?.visibility_rates?.[market];
   const visibilityRate = visibilityData?.overall_visibility_pct ?? Math.round((score / 100) * 12);
-  const appearances = Math.round((visibilityRate / 100) * (scan?.query_count ?? 60));
+  const appearances = Math.floor((visibilityRate / 100) * (scan?.query_count ?? 60));
   const benchmarkRate = visibilityData?.competitor_visibility_pct ?? 76;
 
   // Narrative
