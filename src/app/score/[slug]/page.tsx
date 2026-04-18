@@ -446,7 +446,12 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
           <div style={{ position: 'relative', height: '20px', marginBottom: '8px' }}>
             <span style={{ position: 'absolute', left: `40%`, transform: 'translateX(-50%)', fontSize: '12px', fontWeight: 700, color: D.gold, whiteSpace: 'nowrap' }}>Top agents score here</span>
           </div>
-          {/* Competitor callout — belongs with Discovery Rate */}
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '16px' }}>
+            {['Invisible', 'Emerging', 'Recognized', 'Dominant'].map((l) => (
+              <span key={l} style={{ fontSize: '10px', color: D.textTertiary, textTransform: 'uppercase', letterSpacing: '1px' }}>{l}</span>
+            ))}
+          </div>
+          {/* Competitor callout — below tier labels */}
           {scan?.query_count ? (
             <div style={{ padding: '14px 20px', background: D.navy, borderRadius: '10px', textAlign: 'center', marginBottom: '16px' }}>
               {topTwoNames.length >= 2 ? (
@@ -465,11 +470,6 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
               )}
             </div>
           ) : null}
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: visibilityRate < 10 ? '16px' : '0' }}>
-            {['Invisible', 'Emerging', 'Recognized', 'Dominant'].map((l) => (
-              <span key={l} style={{ fontSize: '10px', color: D.textTertiary, textTransform: 'uppercase', letterSpacing: '1px' }}>{l}</span>
-            ))}
-          </div>
           {visibilityRate < 10 && (
             <div style={{ background: 'rgba(239,68,68,0.06)', border: `1px solid rgba(239,68,68,0.15)`, borderRadius: '8px', padding: '12px 16px', textAlign: 'center' }}>
               <p style={{ fontSize: '14px', fontWeight: 700, color: D.red, margin: 0 }}>
