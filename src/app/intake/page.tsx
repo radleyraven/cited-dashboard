@@ -934,7 +934,7 @@ function renderCardContent(p: CardProps) {
         {/* Layer 2: Signature Phrase (required) */}
         <div style={{ marginTop: '24px' }}>
           <FieldGroup
-            label="When someone asks \u2018why you?\u2019 \u2014 what do you actually say?"
+            label="When someone asks ‘why you?’ — what do you actually say?"
             hint="Not what you think you should say. Not a marketing line. What you really say in a listing presentation."
           >
             <TextArea
@@ -954,7 +954,7 @@ function renderCardContent(p: CardProps) {
         {/* Layer 3: Memorable Client (optional) */}
         <div style={{ marginTop: '24px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px', flexWrap: 'wrap' }}>
-            <span style={{ fontSize: '14px', fontWeight: 600, color: '#0A1929' }}>One client who stands out \u2014 and why you still think about them</span>
+            <span style={{ fontSize: '14px', fontWeight: 600, color: '#0A1929' }}>One client who stands out — and why you still think about them</span>
             <span style={{ fontSize: '11px', color: '#94a3b8', background: '#f1f5f9', borderRadius: '12px', padding: '2px 8px', fontWeight: 500 }}>Optional</span>
           </div>
           <div style={{ fontSize: '12px', color: '#64748b', marginBottom: '6px' }}>
@@ -975,7 +975,7 @@ function renderCardContent(p: CardProps) {
             <span style={{ fontSize: '12px', color: '#94a3b8' }}>{requiredComplete} / 2 required complete</span>
           )}
           {form.voiceMemorableClient.length > 0 && (
-            <div style={{ fontSize: '11px', color: '#00BFA6', marginTop: '4px' }}>Memorable client captured \u2014 strengthens your bio</div>
+            <div style={{ fontSize: '11px', color: '#00BFA6', marginTop: '4px' }}>Memorable client captured — strengthens your bio</div>
           )}
         </div>
         {/* Next — inline button with disabled state (NextButton component has no disabled prop) */}
