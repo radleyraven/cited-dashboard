@@ -417,7 +417,7 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
             {ctaText}
           </TrackedLink>
           <p style={{ fontSize: '12px', color: D.textTertiary, marginTop: '12px' }}>
-            <strong style={{ color: D.navy }}>Free for Founding Members.</strong> Takes 5 minutes. We handle the rest. Founding members get a full <span style={{ color: D.gold, fontWeight: 600 }}>PRISM Scan™</span> — 1,700+ queries, complete gap analysis, competitor intelligence, and a 90-day optimization plan. Your results may change once we run your full PRISM Scan™.
+            <strong style={{ color: D.navy }}>Free for Founding Members.</strong> Takes 5 minutes.<br />We handle the rest. Founding members get a full <span style={{ color: D.gold, fontWeight: 600 }}>PRISM Scan™</span> — 1,700+ queries, complete gap analysis, competitor intelligence, and a 90-day optimization plan. Your results may change once we run your full PRISM Scan™.
           </p>
           <p style={{ fontSize: '13px', color: D.textTertiary, marginTop: '8px' }}>
             <a href="/how-it-works" style={{ color: D.teal, textDecoration: 'none', fontWeight: 600 }}>Want to know how it works? →</a>
