@@ -280,14 +280,14 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
       problemBullets.push("No transaction history — AI has no proof you perform");
     }
     if ((components.earned_media ?? 0) < 5) {
-      problemBullets.push("No third-party mentions — 48% of AI citations come from earned media");
+      problemBullets.push("No third-party mentions — AI has no outside sources to cite you");
     }
     if ((components.content_freshness ?? 0) < 4) {
-      problemBullets.push("No content published in the last 30 days — AI deprioritizes stale profiles");
+      problemBullets.push("No recent content — AI favors agents who are actively publishing");
     }
     const platformCount = Object.values(scan?.platforms_discovered || {}).filter((p: any) => p?.found === true).length;
     if (platformCount < 5) {
-      problemBullets.push(`You're only on ${platformCount} platforms — agents on 6+ get 2.8x more citations`);
+      problemBullets.push(`You\'re only visible on ${platformCount} platforms — AI needs more data sources to recommend you`);
     }
     if ((components.schema_structured_data ?? 0) === 0) {
       problemBullets.push("No structured data — AI can't verify your expertise");
@@ -296,7 +296,7 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
       problemBullets.push("Nothing differentiates you from every other agent");
     }
     // Always add the closer
-    problemBullets.push("88% of consumers fact-check AI — this is what they'd see");
+    problemBullets.push("When sellers fact-check AI's recommendation, this is what they\'d find");
   }
 
   // Take top 4 max (3 dynamic + the closer)
@@ -482,12 +482,12 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
         <div style={{ background: '#fff', borderRadius: '14px', padding: '24px', marginBottom: '32px' }}>
           <div style={{ fontSize: '10px', fontWeight: 700, color: D.textTertiary, textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '4px' }}>This Is What AI Says About You</div>
           <div style={{ fontSize: '13px', color: D.textSecondary, marginBottom: '20px' }}>
-            We asked AI about {firstName} directly. It described you in <span style={{ color: D.red, fontWeight: 700 }}>{scan?.narrative_quality?.query_count || 2}</span> out of the queries we ran — and this is what it said:
+            We asked AI about {firstName} directly. Here’s what it said:
           </div>
           <div style={{ background: D.grayBg, borderLeft: `3px solid ${visibilityRate > 20 ? D.teal : D.red}`, borderRadius: '0 8px 8px 0', padding: '16px 20px', marginBottom: '16px' }}>
             <p style={{ fontSize: '14px', color: D.textSecondary, fontStyle: 'italic', lineHeight: 1.7, margin: 0 }}>
               {scan?.ai_quote?.text
-                ? `\u201C${scan.ai_quote.text.replace(/\*\*/g, '').replace(/##\s*/g, '').replace(/\[\d+\]/g, '').replace(/\n/g, ' ').trim()}\u201D`
+                ? `\u201C${scan.ai_quote.text.replace(/\*\*/g, '').replace(/##\s*/g, '').replace(/\[\d+\]/g, '').replace(/\n/g, ' ').trim().slice(0, 400).replace(/\s+\S*$/, '')}\u2026\u201D`
                 : `\u201C${name} is a real estate agent based in ${market}${brokerage ? ` working with ${brokerage}` : ''}. Limited publicly available detail on specializations or notable transactions.\u201D`
               }
             </p>
