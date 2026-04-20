@@ -171,7 +171,10 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
     const words = n.trim().split(/\s+/);
     // Filter noise: repeated words ("News News"), single-word duplicates, generic terms
     if (words.length >= 2 && words[0].toLowerCase() === words[1].toLowerCase()) return false;
-    const noiseTerms = ['news', 'view', 'group', 'team', 'agents', 'realty', 'real estate', 'properties', 'homes', 'bay', 'commencement'];
+    const noiseTerms = ['news', 'get', 'view', 'group', 'team', 'agents', 'realty', 'real estate', 'properties', 'homes', 'bay', 'commencement', 'happy', 'greater', 'seattle', 'tacoma', 'anne', 'queen', 'central', 'north', 'south', 'east', 'west', 'lake', 'park', 'hill', 'heights', 'valley', 'coast', 'beach', 'island'];
+    // Reject if any word is a noise term
+    if (words.some(w => noiseTerms.includes(w.toLowerCase()))) return false;
+    // Reject if it looks like a place name (all title case, no typical person-name pattern)
     if (noiseTerms.some(t => n.toLowerCase() === t || words.every(w => noiseTerms.includes(w.toLowerCase())))) return false;
     return true;
   };
@@ -447,7 +450,7 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
             <div style={{ padding: '14px 24px', background: D.navy, borderRadius: '0 0 14px 14px', textAlign: 'center', margin: '0 -24px -24px' }}>
               {topTwoNames.length >= 2 ? (
                 <span style={{ fontSize: '14px', color: '#fff', lineHeight: 1.6 }}>
-                  AI recommended <span style={{ color: D.red, fontWeight: 700 }}>{topTwoNames[0]}</span> and <span style={{ color: D.red, fontWeight: 700 }}>{topTwoNames[1]}</span> a combined <span style={{ color: D.red, fontWeight: 700 }}>{topTwoCombined}x</span>. Your name came up only <span style={{ color: D.red, fontWeight: 700 }}>{visibilityRate === 0 ? '0x' : `${appearances}x`}</span>.
+                  AI recommended <span style={{ color: D.red, fontWeight: 700 }}>{topTwoNames[0]}</span> and <span style={{ color: D.red, fontWeight: 700 }}>{topTwoNames[1]}</span> a combined <span style={{ color: D.red, fontWeight: 700 }}>{topTwoCombined}x</span>. Your name {visibilityRate === 0 ? <span style={{ color: D.red, fontWeight: 700 }}>did not come up</span> : <><span style={{ color: D.red, fontWeight: 700 }}>came up only {appearances}x</span></>}.
                 </span>
               ) : primaryCompetitorName && isRealPersonName(primaryCompetitorName) && primaryCompetitorFrequency > 0 ? (
                 <span style={{ fontSize: '14px', color: '#fff', lineHeight: 1.6 }}>
