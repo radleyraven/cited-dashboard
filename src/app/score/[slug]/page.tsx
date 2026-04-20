@@ -463,12 +463,12 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
               <div style={{ padding: '16px 24px 14px' }}>
                 {topTwoNames.length >= 2 ? (
                   <span style={{ fontSize: '14px', color: '#fff', lineHeight: 1.6 }}>
-                    AI recommended <span style={{ color: D.red, fontWeight: 700 }}>{topTwoNames[0]}</span> and <span style={{ color: D.red, fontWeight: 700 }}>{topTwoNames[1]}</span> a combined <span style={{ color: D.red, fontWeight: 700 }}>{topTwoCombined}x</span>.
+                    AI recommended {topTwoNames[0]} and {topTwoNames[1]} a combined {topTwoCombined}x.
                     {' '}<span style={{ color: D.red, fontWeight: 700 }}>{visibilityRate === 0 ? 'You came up 0 times.' : `You came up ${appearances}x.`}</span>
                   </span>
                 ) : primaryCompetitorName && isRealPersonName(primaryCompetitorName) && primaryCompetitorFrequency > 0 ? (
                   <span style={{ fontSize: '14px', color: '#fff', lineHeight: 1.6 }}>
-                    AI recommended <span style={{ color: D.red, fontWeight: 700 }}>{primaryCompetitorName}</span> in <span style={{ color: D.red, fontWeight: 700 }}>{primaryCompetitorFrequency} of {primaryCompetitorTotal} queries</span>.
+                    AI recommended {primaryCompetitorName} in {primaryCompetitorFrequency} of {primaryCompetitorTotal} queries.
                     {' '}<span style={{ color: D.red, fontWeight: 700 }}>{visibilityRate === 0 ? 'You came up 0 times.' : `You came up ${appearances}x.`}</span>
                   </span>
                 ) : (
@@ -483,7 +483,7 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
               <div style={{ padding: '14px 24px 18px' }}>
                 {topTwoNames.length >= 2 ? (
                   <p style={{ fontSize: '12px', color: '#94a3b8', margin: 0, lineHeight: 1.6 }}>
-                    <span style={{ color: D.gold, fontWeight: 600 }}>{topTwoNames[0]}</span> and <span style={{ color: D.gold, fontWeight: 600 }}>{topTwoNames[1]}</span> built this lead over time. Agents who move first own the market before competitors notice.
+                    {topTwoNames[0]} and {topTwoNames[1]} built this lead over time. Agents who move first own the market before competitors notice.
                   </p>
                 ) : (
                   <p style={{ fontSize: '12px', color: '#94a3b8', margin: 0, lineHeight: 1.6 }}>
