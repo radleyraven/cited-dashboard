@@ -460,7 +460,7 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
           {scan?.query_count ? (
             <div style={{ background: D.navy, borderRadius: '0 0 14px 14px', textAlign: 'center', margin: '0 -24px -24px', overflow: 'hidden' }}>
               {/* Top: data */}
-              <div style={{ padding: '16px 24px 14px' }}>
+              <div style={{ padding: '16px 24px 18px' }}>
                 {topTwoNames.length >= 2 ? (
                   <span style={{ fontSize: '14px', color: '#fff', lineHeight: 1.6 }}>
                     AI recommended {topTwoNames[0]} and {topTwoNames[1]} a combined {topTwoCombined}x.
@@ -477,20 +477,7 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
                   </span>
                 )}
               </div>
-              {/* Divider */}
-              <div style={{ height: '1px', background: 'rgba(255,255,255,0.08)', margin: '0 24px' }} />
-              {/* Bottom: opportunity frame */}
-              <div style={{ padding: '14px 24px 18px' }}>
-                {topTwoNames.length >= 2 ? (
-                  <p style={{ fontSize: '12px', color: '#94a3b8', margin: 0, lineHeight: 1.6 }}>
-                    {topTwoNames[0]} and {topTwoNames[1]} built this lead over time. Agents who move first own the market before competitors notice.
-                  </p>
-                ) : (
-                  <p style={{ fontSize: '12px', color: '#94a3b8', margin: 0, lineHeight: 1.6 }}>
-                    The agents AI recommends in {market} built this advantage early. Agents who move first own the market before competitors notice.
-                  </p>
-                )}
-              </div>
+
             </div>
           ) : null}
         </div>
