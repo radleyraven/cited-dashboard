@@ -988,7 +988,7 @@ function renderCardContent(p: CardProps) {
             <span style={{ fontSize: '11px', color: '#94a3b8', background: '#f1f5f9', borderRadius: '12px', padding: '2px 8px', fontWeight: 500 }}>Optional</span>
           </div>
           <div style={{ fontSize: '12px', color: '#64748b', marginBottom: '6px' }}>
-            Doesn&apos;t have to be the biggest deal. Just one that matters. We use this for your bio and future content.
+            Doesn&apos;t have to be the biggest deal. Just one that matters.
           </div>
           <TextArea
             value={form.voiceMemorableClient}
