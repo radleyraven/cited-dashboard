@@ -236,7 +236,10 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
   if (scan?.dre_data?.broker_license_id) prefillParams.set('brokerDre', scan.dre_data.broker_license_id);
   if (scan?.dre_data?.broker_name) prefillParams.set('brokerName', scan.dre_data.broker_name);
   if (scan?.dre_data?.agent_mailing_address) prefillParams.set('brokerageAddress', scan.dre_data.agent_mailing_address);
-  const intakeUrl = `/intake?${prefillParams.toString()}`;
+  // Always route via token when available — prevents wrong row loading
+  const intakeUrl = prospect.onboarding_token
+    ? `/intake?token=${prospect.onboarding_token}`
+    : `/intake?${prefillParams.toString()}`;
 
   // ── Dynamic CTA logic (CITED-176) ──
   const foundingActive = process.env.NEXT_PUBLIC_FOUNDING_ACTIVE === 'true';
