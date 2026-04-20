@@ -387,7 +387,7 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
             </div>
             <div style={{ padding: '24px', background: D.grayBg }}>
               <div style={{ fontSize: '10px', fontWeight: 700, color: D.textTertiary, textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '14px' }}>Benchmark</div>
-              <div style={{ fontFamily: 'Georgia, serif', fontSize: '64px', fontWeight: 900, color: '#94a3b8', lineHeight: 1, whiteSpace: 'nowrap', marginBottom: '16px' }}>~{benchmarkScore}<span style={{ fontSize: '18px', color: D.textTertiary, fontWeight: 400, fontFamily: 'var(--font-geist-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif' }}>/100</span></div>
+              <div style={{ fontFamily: 'Georgia, serif', fontSize: '44px', fontWeight: 900, color: '#94a3b8', lineHeight: 1, whiteSpace: 'nowrap', marginBottom: '16px' }}>~{benchmarkScore}<span style={{ fontSize: '16px', color: D.textTertiary, fontWeight: 400, fontFamily: 'var(--font-geist-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif' }}>/100</span></div>
 
               <div style={{ paddingTop: '14px', borderTop: `1px solid ${D.border}` }}>
                 <div style={{ fontSize: '9px', fontWeight: 700, color: D.textTertiary, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '6px' }}>What they have</div>
@@ -417,7 +417,7 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
             {ctaText}
           </TrackedLink>
           <p style={{ fontSize: '12px', color: D.textTertiary, marginTop: '12px' }}>
-            <strong style={{ color: D.navy }}>Free for Founding Members.</strong> Takes 5 minutes. We handle the rest.<br />Founding members get a full <span style={{ color: D.gold, fontWeight: 600 }}>PRISM Scan™</span> — 1,700+ queries, complete gap analysis, competitor intelligence, and a 90-day optimization plan. Your results may change once we run your full PRISM Scan™.
+            <strong style={{ color: D.navy }}>Free for Founding Members.</strong> Takes 5 minutes. We handle the rest.
           </p>
           <p style={{ fontSize: '13px', color: D.textTertiary, marginTop: '8px' }}>
             <a href="/how-it-works" style={{ color: D.teal, textDecoration: 'none', fontWeight: 600 }}>Want to know how it works? →</a>
