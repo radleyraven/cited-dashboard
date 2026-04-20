@@ -1032,7 +1032,7 @@ function renderCardContent(p: CardProps) {
   if (cardId === 6) return (
     <div>
       <CardHeader title="One deal you want to be known for"
-        subtitle="This becomes the hero deal in your bio and articles." />
+        subtitle="The deal that best shows what you do. One sentence is enough." />
       <Fields>
         {form.transactions.map((tx, i) => {
           const parts = tx.split("||");
@@ -1062,19 +1062,19 @@ function renderCardContent(p: CardProps) {
 
         {/* MLS — upload UI (WA/NWMLS or any state where CITED can't auto-pull) */}
         <div style={{ marginTop: "16px", padding: "18px 20px", background: "#f0fdf9", borderRadius: "10px", border: "1px solid rgba(0,191,166,0.2)" }}>
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "10px" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+          <div style={{ marginBottom: "10px" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "4px" }}>
               <span style={{ fontSize: "14px", color: "#0A1929", fontWeight: 700 }}>MLS transaction data</span>
               <span style={{ fontSize: "11px", color: "#64748b", fontWeight: 500, padding: "2px 8px", background: "rgba(100,116,139,0.1)", borderRadius: "10px" }}>Optional</span>
             </div>
-            <span style={{ fontSize: "11px", color: "#00BFA6", fontWeight: 600 }}>Strengthens your score</span>
+            <span style={{ fontSize: "11px", color: "#00BFA6", fontWeight: 600 }}>Strengthens your Foundation Score</span>
           </div>
           <p style={{ fontSize: "12px", color: "#475569", lineHeight: 1.5, margin: "0 0 12px" }}>
-            Export your sold transactions from your MLS (CSV or XLSX). We&rsquo;ll use this to verify career volume, deal counts, and market specialization — which makes your citation score defensible when AI asks &ldquo;is she actually a top agent?&rdquo;
+            Export your sold transactions from your MLS (CSV or XLSX). We&rsquo;ll use this to verify career volume, deal counts, and market specialization — which makes your Foundation Score defensible when AI evaluates your authority.
           </p>
           <FileInput accept=".csv,.xlsx,.xls" file={form.mlsFile} onChange={(f) => set("mlsFile", f)} icon={"📊"} label="Upload MLS export (CSV / XLSX)" />
           <p style={{ fontSize: "11px", color: "#94a3b8", margin: "8px 0 0", lineHeight: 1.5 }}>
-            No MLS file? Skip this — we&rsquo;ll pull data from your Zillow sold tab as a fallback.
+            No MLS file? Skip it — you can always upload later.
           </p>
         </div>
       </Fields>
