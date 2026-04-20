@@ -280,7 +280,15 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
   } else {
     problemBullets = [];
     if ((components.discovery_visibility ?? 0) === 0) {
-      problemBullets.push("AI doesn't associate you with any specific market");
+      // Only say "no market association" if the AI quote doesn't already mention the market
+      const aiQuoteText = (scan?.ai_quote?.text || '').toLowerCase();
+      const marketMentionedInQuote = market && aiQuoteText.includes(market.toLowerCase());
+      if (marketMentionedInQuote) {
+        // AI knows the market but doesn't recommend them — more precise framing
+        problemBullets.push(`AI knows you work in ${market} but doesn\'t recommend you when buyers search`);
+      } else {
+        problemBullets.push("AI doesn't associate you with any specific market");
+      }
     }
     if (!scan?.ai_quote?.text || scan.ai_quote.text.includes("Limited") || scan.ai_quote.text.includes("limited")) {
       problemBullets.push("No transaction history — AI has no proof you perform");
@@ -468,13 +476,26 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
             </div>
           ) : null}
           {visibilityRate < 10 && (
-            <div style={{ background: 'rgba(239,68,68,0.06)', border: `1px solid rgba(239,68,68,0.15)`, borderRadius: '8px', padding: '12px 16px', textAlign: 'center' }}>
-              <p style={{ fontSize: '14px', fontWeight: 700, color: D.red, margin: 0 }}>
-                You are invisible to AI in {market}.
-              </p>
-              <p style={{ fontSize: '12px', color: D.textSecondary, margin: '4px 0 0' }}>
-                When sellers in {market} ask AI for an agent, your name does not come up. 45% of consumers now use AI for local business recommendations <span style={{ color: D.textTertiary }}>(BrightLocal, April 2026)</span>.
-              </p>
+            <div style={{ background: '#0A1929', borderRadius: '8px', padding: '16px 20px', textAlign: 'center' }}>
+              {topTwoNames.length >= 2 ? (
+                <>
+                  <p style={{ fontSize: '13px', fontWeight: 700, color: '#fff', margin: '0 0 6px' }}>
+                    <span style={{ color: D.gold }}>{topTwoNames[0]}</span> and <span style={{ color: D.gold }}>{topTwoNames[1]}</span> built this advantage over time.
+                  </p>
+                  <p style={{ fontSize: '12px', color: '#94a3b8', margin: 0, lineHeight: 1.6 }}>
+                    Agents who fix their AI visibility early own the market before competitors notice. That window is open right now.
+                  </p>
+                </>
+              ) : (
+                <>
+                  <p style={{ fontSize: '13px', fontWeight: 700, color: '#fff', margin: '0 0 6px' }}>
+                    The agents AI recommends in {market} built this advantage early.
+                  </p>
+                  <p style={{ fontSize: '12px', color: '#94a3b8', margin: 0, lineHeight: 1.6 }}>
+                    Agents who fix their AI visibility now own the market before competitors notice. That window is open right now.
+                  </p>
+                </>
+              )}
             </div>
           )}
         </div>
