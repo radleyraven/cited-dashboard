@@ -55,7 +55,8 @@ const STORAGE_KEY = "cited-intake-v2";
 
 // ── Voice Archetype Types & Constants ────────────────────────
 
-type VoiceArchetype = 'expert' | 'friend' | 'straight_shooter' | 'visionary' | 'storyteller' | '';
+type VoiceArchetype = 'expert' | 'friend' | 'straight_shooter' | 'visionary' | 'storyteller';
+type VoiceArchetypeSelection = VoiceArchetype[];
 
 type ArchetypeOption = {
   key: Exclude<VoiceArchetype, ''>;
@@ -93,7 +94,8 @@ type FormData = {
   audienceFocus: string;
   differentiator: string;
   voiceCapture: string;          // legacy read-only — backward compat
-  voiceArchetype: VoiceArchetype;
+  voiceArchetype: VoiceArchetype | '';     // legacy single — kept for compat
+  voiceArchetypes: VoiceArchetype[];       // multi-select up to 2
   voiceSignaturePhrase: string;
   voiceMemorableClient: string;
   transactions: string[];
@@ -152,6 +154,7 @@ function getInitialForm(sp: ReturnType<typeof useSearchParams>): FormData {
     differentiator: "",
     voiceCapture: "",
     voiceArchetype: (sp.get("voiceArchetype") as VoiceArchetype) || "",
+    voiceArchetypes: [],
     voiceSignaturePhrase: sp.get("voiceSignaturePhrase") || "",
     voiceMemorableClient: sp.get("voiceMemorableClient") || "",
     transactions: [""],
@@ -566,7 +569,7 @@ function IntakeForm() {
           neighborhoods: form.neighborhoods,
           brokerageProfileUrl: form.brokerageProfileUrl, personalWebsiteUrl: form.personalWebsiteUrl,
           audienceFocus: form.audienceFocus, differentiator: form.differentiator,
-          voiceArchetype: form.voiceArchetype, voiceSignaturePhrase: form.voiceSignaturePhrase, voiceMemorableClient: form.voiceMemorableClient,
+          voiceArchetype: form.voiceArchetypes?.join(',') || form.voiceArchetype, voiceSignaturePhrase: form.voiceSignaturePhrase, voiceMemorableClient: form.voiceMemorableClient,
           topTransactions: form.transactions.filter(Boolean).join("\n"),
           reviewPlatforms: form.reviewPlatforms, reviewOther: form.reviewOther,
           gbpStatus: form.gbpStatus,
@@ -881,13 +884,25 @@ function renderCardContent(p: CardProps) {
     </div>
   );
 
-  // ── Card 5: Voice Capture (pick 2 archetypes) ──────────────
+  // ── Card 5: Voice Capture (pick up to 2 archetypes) ────────────
   if (cardId === 5) {
-    const selectArchetype = (key: Exclude<VoiceArchetype, ''>) => {
-      set('voiceArchetype', key);
+    const selected: VoiceArchetype[] = form.voiceArchetypes || [];
+
+    const toggleArchetype = (key: VoiceArchetype) => {
+      let next: VoiceArchetype[];
+      if (selected.includes(key)) {
+        next = selected.filter(k => k !== key);
+      } else if (selected.length < 2) {
+        next = [...selected, key];
+      } else {
+        // already 2 selected — swap out the first one
+        next = [selected[1], key];
+      }
+      set('voiceArchetypes', next);
+      set('voiceArchetype', next[0] || '');  // keep legacy field as primary
       const slug = form.fullName.toLowerCase().replace(/\s+/g, '-');
       trackEvent(slug, 'voice_archetype_selected', {
-        archetype: key,
+        archetypes: next,
         page: 'intake',
         card: 5,
       }, form.fullName);
@@ -901,9 +916,9 @@ function renderCardContent(p: CardProps) {
     };
 
     const requiredComplete =
-      (form.voiceArchetype !== '' ? 1 : 0) +
+      (selected.length > 0 ? 1 : 0) +
       (form.voiceSignaturePhrase.length >= 20 ? 1 : 0);
-    const canContinue = form.voiceArchetype !== '' && form.voiceSignaturePhrase.length >= 20;
+    const canContinue = selected.length > 0 && form.voiceSignaturePhrase.length >= 20;
     return (
       <div>
         <CardHeader
@@ -912,20 +927,28 @@ function renderCardContent(p: CardProps) {
         />
         {/* Layer 1: Archetype Grid */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '10px', marginTop: '16px' }}>
+          {/* pick up to 2 hint */}
+          <div style={{ gridColumn: '1 / -1', fontSize: '12px', color: '#94a3b8', marginBottom: '4px' }}>
+            Pick 1 or 2 that fit you best.
+            {selected.length === 2 && <span style={{ color: '#00BFA6', fontWeight: 600 }}> (2 selected — max)</span>}
+          </div>
           {VOICE_ARCHETYPES.map(opt => {
-            const isSelected = form.voiceArchetype === opt.key;
+            const isSelected = selected.includes(opt.key as VoiceArchetype);
+            const isDisabled = !isSelected && selected.length >= 2;
             return (
               <button
                 key={opt.key}
                 type="button"
-                onClick={() => selectArchetype(opt.key)}
+                onClick={() => toggleArchetype(opt.key as VoiceArchetype)}
+                disabled={isDisabled}
                 style={{
                   textAlign: 'left',
                   padding: '14px 16px',
                   borderRadius: '10px',
                   border: isSelected ? '2px solid #00BFA6' : '1px solid #e2e8f0',
-                  background: isSelected ? 'rgba(0,191,166,0.06)' : '#fff',
-                  cursor: 'pointer',
+                  background: isSelected ? 'rgba(0,191,166,0.06)' : isDisabled ? '#f8fafc' : '#fff',
+                  cursor: isDisabled ? 'not-allowed' : 'pointer',
+                  opacity: isDisabled ? 0.45 : 1,
                   transition: 'all 0.15s',
                 }}
               >
