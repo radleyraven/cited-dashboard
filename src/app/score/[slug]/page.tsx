@@ -317,7 +317,7 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
             <div style={{ fontSize: '9px', fontWeight: 600, color: '#00BFA6', textTransform: 'uppercase', letterSpacing: '2px' }}>AI Citation Optimization™</div>
           </a>
           <div style={{ textAlign: 'right' }}>
-            <div style={{ fontSize: '13px', fontWeight: 700, color: '#fff', lineHeight: 1.2 }}>{name}</div>
+            <div style={{ fontSize: '13px', fontWeight: 700, color: '#fff', lineHeight: 1.2 }}>{firstName}</div>
             <div style={{ fontSize: '10px', fontWeight: 600, color: '#D4A830', marginTop: '2px', letterSpacing: '0.5px' }}>★ Founding Member</div>
           </div>
         </div>
@@ -428,7 +428,7 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
         <div style={{ background: '#fff', borderRadius: '14px', padding: '24px', marginBottom: '32px',  }}>
           <div style={{ fontSize: '10px', fontWeight: 700, color: D.textTertiary, textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '4px' }}>AI Discovery Rate</div>
           <div style={{ fontSize: '13px', color: D.textSecondary, marginBottom: '20px' }}>
-            How often AI recommends <strong>{name}</strong> when sellers search in {market}
+            How often AI recommends <strong>{firstName}</strong> when sellers search in {market}
           </div>
           <div style={{ position: 'relative', height: '8px', borderRadius: '4px', background: `linear-gradient(90deg, ${D.red} 0%, #F59E0B 25%, ${D.gold} 45%, ${D.teal} 70%, ${D.navy} 100%)`, marginBottom: '8px' }}>
             <div style={{ position: 'absolute', top: '-5px', left: `${Math.max(1, visibilityRate)}%`, transform: 'translateX(-50%)', width: '18px', height: '18px', borderRadius: '50%', background: visibilityRate < 10 ? D.red : D.teal, border: '3px solid #fff', boxShadow: '0 2px 6px rgba(0,0,0,0.2)' }} />
