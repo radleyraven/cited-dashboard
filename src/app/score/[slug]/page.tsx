@@ -453,7 +453,7 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
             <div style={{ padding: '14px 24px', background: D.navy, borderRadius: '0 0 14px 14px', textAlign: 'center', margin: '0 -24px -24px' }}>
               {topTwoNames.length >= 2 ? (
                 <span style={{ fontSize: '14px', color: '#fff', lineHeight: 1.6 }}>
-                  AI recommended <span style={{ color: D.red, fontWeight: 700 }}>{topTwoNames[0]}</span> and <span style={{ color: D.red, fontWeight: 700 }}>{topTwoNames[1]}</span> a combined <span style={{ color: D.red, fontWeight: 700 }}>{topTwoCombined}x</span>. Your name {visibilityRate === 0 ? <span style={{ color: D.red, fontWeight: 700 }}>did not come up</span> : <><span style={{ color: D.red, fontWeight: 700 }}>came up only {appearances}x</span></>}.
+                  AI recommended <span style={{ color: D.red, fontWeight: 700 }}>{topTwoNames[0]}</span> and <span style={{ color: D.red, fontWeight: 700 }}>{topTwoNames[1]}</span> a combined <span style={{ color: D.red, fontWeight: 700 }}>{topTwoCombined}x</span>. <span style={{ color: D.red, fontWeight: 700 }}>{visibilityRate === 0 ? 'Your name did not come up.' : `Your name came up only ${appearances}x.`}</span>
                 </span>
               ) : primaryCompetitorName && isRealPersonName(primaryCompetitorName) && primaryCompetitorFrequency > 0 ? (
                 <span style={{ fontSize: '14px', color: '#fff', lineHeight: 1.6 }}>
