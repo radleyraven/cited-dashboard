@@ -456,48 +456,43 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
               <span key={l} style={{ fontSize: '10px', color: D.textTertiary, textTransform: 'uppercase', letterSpacing: '1px' }}>{l}</span>
             ))}
           </div>
-          {/* Competitor callout — flush bottom of card */}
+          {/* Unified competitor + opportunity block */}
           {scan?.query_count ? (
-            <div style={{ padding: '14px 24px', background: D.navy, borderRadius: '0 0 14px 14px', textAlign: 'center', margin: '0 -24px 0', marginBottom: '16px' }}>
-              {topTwoNames.length >= 2 ? (
-                <span style={{ fontSize: '14px', color: '#fff', lineHeight: 1.6 }}>
-                  AI recommended <span style={{ color: D.red, fontWeight: 700 }}>{topTwoNames[0]}</span> and <span style={{ color: D.red, fontWeight: 700 }}>{topTwoNames[1]}</span> a combined <span style={{ color: D.red, fontWeight: 700 }}>{topTwoCombined}x</span>.<br /><span style={{ color: D.red, fontWeight: 700 }}>{visibilityRate === 0 ? 'You came up 0 times.' : `You came up ${appearances}x.`}</span>
-                </span>
-              ) : primaryCompetitorName && isRealPersonName(primaryCompetitorName) && primaryCompetitorFrequency > 0 ? (
-                <span style={{ fontSize: '14px', color: '#fff', lineHeight: 1.6 }}>
-                  AI recommended <span style={{ color: D.red, fontWeight: 700 }}>{primaryCompetitorName}</span> in <span style={{ color: D.red, fontWeight: 700 }}>{primaryCompetitorFrequency} of {primaryCompetitorTotal} queries</span>. Your name came up only <span style={{ color: D.red, fontWeight: 700 }}>{visibilityRate === 0 ? '0' : appearances} times</span>.
-                </span>
-              ) : (
-                <span style={{ fontSize: '14px', color: '#fff', lineHeight: 1.6 }}>
-                  We ran <span style={{ color: '#ffffff', fontWeight: 700 }}>{scan.query_count} AI real estate searches</span> in {market}.{' '}
-                  Your name came up only <span style={{ color: D.red, fontWeight: 700 }}>{visibilityRate === 0 ? '0 times' : `${appearances} times`}</span>.
-                </span>
-              )}
+            <div style={{ background: D.navy, borderRadius: '0 0 14px 14px', textAlign: 'center', margin: '0 -24px -24px', overflow: 'hidden' }}>
+              {/* Top: data */}
+              <div style={{ padding: '16px 24px 14px' }}>
+                {topTwoNames.length >= 2 ? (
+                  <span style={{ fontSize: '14px', color: '#fff', lineHeight: 1.6 }}>
+                    AI recommended <span style={{ color: D.red, fontWeight: 700 }}>{topTwoNames[0]}</span> and <span style={{ color: D.red, fontWeight: 700 }}>{topTwoNames[1]}</span> a combined <span style={{ color: D.red, fontWeight: 700 }}>{topTwoCombined}x</span>.
+                    {' '}<span style={{ color: D.red, fontWeight: 700 }}>{visibilityRate === 0 ? 'You came up 0 times.' : `You came up ${appearances}x.`}</span>
+                  </span>
+                ) : primaryCompetitorName && isRealPersonName(primaryCompetitorName) && primaryCompetitorFrequency > 0 ? (
+                  <span style={{ fontSize: '14px', color: '#fff', lineHeight: 1.6 }}>
+                    AI recommended <span style={{ color: D.red, fontWeight: 700 }}>{primaryCompetitorName}</span> in <span style={{ color: D.red, fontWeight: 700 }}>{primaryCompetitorFrequency} of {primaryCompetitorTotal} queries</span>.
+                    {' '}<span style={{ color: D.red, fontWeight: 700 }}>{visibilityRate === 0 ? 'You came up 0 times.' : `You came up ${appearances}x.`}</span>
+                  </span>
+                ) : (
+                  <span style={{ fontSize: '14px', color: '#fff', lineHeight: 1.6 }}>
+                    We ran <span style={{ color: '#fff', fontWeight: 700 }}>{scan.query_count} AI searches</span> in {market}. Your name came up <span style={{ color: D.red, fontWeight: 700 }}>{visibilityRate === 0 ? '0 times' : `${appearances}x`}</span>.
+                  </span>
+                )}
+              </div>
+              {/* Divider */}
+              <div style={{ height: '1px', background: 'rgba(255,255,255,0.08)', margin: '0 24px' }} />
+              {/* Bottom: opportunity frame */}
+              <div style={{ padding: '14px 24px 18px' }}>
+                {topTwoNames.length >= 2 ? (
+                  <p style={{ fontSize: '12px', color: '#94a3b8', margin: 0, lineHeight: 1.6 }}>
+                    <span style={{ color: D.gold, fontWeight: 600 }}>{topTwoNames[0]}</span> and <span style={{ color: D.gold, fontWeight: 600 }}>{topTwoNames[1]}</span> built this lead over time. Agents who move first own the market before competitors notice.
+                  </p>
+                ) : (
+                  <p style={{ fontSize: '12px', color: '#94a3b8', margin: 0, lineHeight: 1.6 }}>
+                    The agents AI recommends in {market} built this advantage early. Agents who move first own the market before competitors notice.
+                  </p>
+                )}
+              </div>
             </div>
           ) : null}
-          {visibilityRate < 10 && (
-            <div style={{ background: '#0A1929', borderRadius: '8px', padding: '16px 20px', textAlign: 'center' }}>
-              {topTwoNames.length >= 2 ? (
-                <>
-                  <p style={{ fontSize: '13px', fontWeight: 700, color: '#fff', margin: '0 0 6px' }}>
-                    <span style={{ color: D.gold }}>{topTwoNames[0]}</span> and <span style={{ color: D.gold }}>{topTwoNames[1]}</span> built this advantage over time.
-                  </p>
-                  <p style={{ fontSize: '12px', color: '#94a3b8', margin: 0, lineHeight: 1.6 }}>
-                    Agents who fix their AI visibility early own the market before competitors notice. That window is open right now.
-                  </p>
-                </>
-              ) : (
-                <>
-                  <p style={{ fontSize: '13px', fontWeight: 700, color: '#fff', margin: '0 0 6px' }}>
-                    The agents AI recommends in {market} built this advantage early.
-                  </p>
-                  <p style={{ fontSize: '12px', color: '#94a3b8', margin: 0, lineHeight: 1.6 }}>
-                    Agents who fix their AI visibility now own the market before competitors notice. That window is open right now.
-                  </p>
-                </>
-              )}
-            </div>
-          )}
         </div>
 
         {/* ═══ GAPS — expandable cards matching Citation Report ═══ */}
