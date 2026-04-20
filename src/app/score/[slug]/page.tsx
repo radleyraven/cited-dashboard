@@ -450,7 +450,7 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
           </div>
           {/* Competitor callout — flush bottom of card */}
           {scan?.query_count ? (
-            <div style={{ padding: '14px 24px', background: D.navy, borderRadius: '0 0 14px 14px', textAlign: 'center', margin: '0 -24px -24px' }}>
+            <div style={{ padding: '14px 24px', background: D.navy, borderRadius: '0 0 14px 14px', textAlign: 'center', margin: '0 -24px 0', marginBottom: '16px' }}>
               {topTwoNames.length >= 2 ? (
                 <span style={{ fontSize: '14px', color: '#fff', lineHeight: 1.6 }}>
                   AI recommended <span style={{ color: D.red, fontWeight: 700 }}>{topTwoNames[0]}</span> and <span style={{ color: D.red, fontWeight: 700 }}>{topTwoNames[1]}</span> a combined <span style={{ color: D.red, fontWeight: 700 }}>{topTwoCombined}x</span>.<br /><span style={{ color: D.red, fontWeight: 700 }}>{visibilityRate === 0 ? 'You came up 0 times.' : `You came up ${appearances}x.`}</span>
