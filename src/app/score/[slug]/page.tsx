@@ -369,7 +369,7 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
             <div style={{ padding: '24px', borderRight: `1px solid ${D.grayMid}` }}>
               <div style={{ fontSize: '10px', fontWeight: 700, color: D.textTertiary, textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '14px' }}>Your Score</div>
-              <div style={{ fontFamily: 'Georgia, serif', fontSize: '64px', fontWeight: 900, color: D.navy, lineHeight: 1, whiteSpace: 'nowrap', marginBottom: '8px' }}>{score}<span style={{ fontSize: '18px', color: D.textTertiary, fontWeight: 400, fontFamily: 'var(--font-geist-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif' }}>/100</span></div>
+              <div style={{ fontFamily: 'Georgia, serif', fontSize: '64px', fontWeight: 900, color: D.navy, lineHeight: 1, whiteSpace: 'nowrap', marginBottom: '8px', minHeight: '72px', display: 'flex', alignItems: 'flex-end' }}>{score}<span style={{ fontSize: '18px', color: D.textTertiary, fontWeight: 400, fontFamily: 'var(--font-geist-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif' }}>/100</span></div>
 
               <div style={{ paddingTop: '14px', borderTop: `1px solid ${D.border}` }}>
                 {gaps.length > 0 && (
@@ -387,7 +387,7 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
             </div>
             <div style={{ padding: '24px', background: D.grayBg }}>
               <div style={{ fontSize: '10px', fontWeight: 700, color: D.textTertiary, textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '14px' }}>Benchmark</div>
-              <div style={{ fontFamily: 'Georgia, serif', fontSize: '44px', fontWeight: 900, color: '#94a3b8', lineHeight: 1, whiteSpace: 'nowrap', marginBottom: '16px' }}>~{benchmarkScore}<span style={{ fontSize: '16px', color: D.textTertiary, fontWeight: 400, fontFamily: 'var(--font-geist-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif' }}>/100</span></div>
+              <div style={{ fontFamily: 'Georgia, serif', fontSize: '44px', fontWeight: 900, color: '#94a3b8', lineHeight: 1, whiteSpace: 'nowrap', marginBottom: '16px', minHeight: '72px', display: 'flex', alignItems: 'flex-end' }}>~{benchmarkScore}<span style={{ fontSize: '16px', color: D.textTertiary, fontWeight: 400, fontFamily: 'var(--font-geist-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif' }}>/100</span></div>
 
               <div style={{ paddingTop: '14px', borderTop: `1px solid ${D.border}` }}>
                 <div style={{ fontSize: '9px', fontWeight: 700, color: D.textTertiary, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '6px' }}>What they have</div>
