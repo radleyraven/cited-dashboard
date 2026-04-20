@@ -2,7 +2,7 @@ export default function HowItWorksPage() {
   const faqs = [
     {
       q: 'I don\'t actually believe AI recommends specific agents. Does this really happen?',
-      a: 'Yes — and you can test it right now. Open ChatGPT or Perplexity and type "who are the best luxury real estate agents in [your market]?" You\'ll get a specific list of names. The agents on that list didn\'t get there by accident — they have the right platform signals in place. The agents not on the list (likely including you) are invisible to that seller or buyer before they ever pick up the phone.',
+      a: 'Yes — and you can test it right now. Open ChatGPT or Perplexity and type "who are the best real estate agents in [your market]?" You\'ll get 1–3 names. The agents on that list didn\'t get there by accident — they have the right platform signals in place. The agents not on the list (likely including you) don\'t exist to that seller or buyer before they ever pick up the phone.',
     },
     {
       q: 'I already have a Google Business Profile. Doesn\'t that cover it?',
@@ -17,8 +17,8 @@ export default function HowItWorksPage() {
       a: 'Nothing. You walk away, you keep everything we\'ve built (all profile optimizations, all content, all platform setups — it\'s yours). There\'s no invoice, no awkward call. If your score didn\'t move by at least 20 points, you don\'t owe us anything. That\'s the Citation Guarantee™.',
     },
     {
-      q: 'Who else in North County San Diego is doing this?',
-      a: 'Fewer than 5% of agents in any North County market are actively optimizing for AI citation visibility right now. We\'re currently working with a small founding cohort — we don\'t publish their names publicly while they\'re building their competitive advantage. That\'s the point of moving first.',
+      q: 'Who else in my market is doing this?',
+      a: 'Very few. By our analysis, fewer than 5% of agents in any market are actively optimizing for AI citation visibility right now. We\'re currently working with a small founding cohort — we don\'t publish their names publicly while they\'re building their competitive advantage. That\'s the point of moving first.',
     },
   ];
 
@@ -28,7 +28,7 @@ export default function HowItWorksPage() {
     { item: 'LinkedIn profile rewrite — location, markets, expertise signals', value: 350 },
     { item: 'Zillow + Realtor.com bio rewrites for AI keyword structure', value: 300 },
     { item: 'FastExpert + Bing Places + Apple Business profile builds', value: 300 },
-    { item: 'AI-optimized personal website — built, hosted, and maintained by Cited', value: 500 },
+    { item: 'AI citation satellite site — built with RealEstateAgent schema, hosted, and maintained by Cited', value: 500 },
     { item: 'Month 1 authority article (written in your voice, published)', value: 500 },
     { item: 'Monthly PRISM re-scans across 9 AI engines (3 months)', value: 450 },
     { item: 'Monthly performance reports — score, platform, next steps (3 months)', value: 300 },
@@ -36,7 +36,7 @@ export default function HowItWorksPage() {
 
   const weeks = [
     { week: 'Week 1', title: 'We audit. You do nothing.', time: '0 min', color: '#D4A830', detail: 'Full business and visibility audit — we examine your transaction history, AI footprint across 13+ platforms, and market opportunity gaps. Optimization plan built.' },
-    { week: 'Week 2', title: 'Profiles optimized. You review.', time: '15 min', color: '#00BFA6', detail: 'Your Citation Profiles written and ready in your dashboard. You review and post your Citation Profiles from your dashboard — one click per platform, paste-ready fields for everything. Your positioning approval triggers this step.' },
+    { week: 'Week 2', title: 'Copy kit ready. You review.', time: '15 min', color: '#00BFA6', detail: 'Your Copy Kit written and ready — optimized bios for 13+ platforms, each structured for AI citation. You review the positioning, approve it, and paste the copy into each platform. Your positioning approval triggers this step.' },
     { week: 'Week 3', title: 'Article written. You answer 3 questions.', time: '3 min', color: '#00BFA6', detail: 'Article brief: 3 questions, 3 minutes. We write the article in your voice. Posting it to LinkedIn IS your approval — no separate step needed.' },
     { week: 'Week 4', title: 'Article live. Score moves. You see it.', time: '5 min', color: '#D4A830', detail: 'Article live and indexing. First AI signals visible within 7-14 days on Perplexity. Full PRISM re-scan at Day 30.' },
   ];
@@ -70,7 +70,7 @@ export default function HowItWorksPage() {
             AI cites agents it already knows. We make sure it knows you.
           </p>
           <p style={{ fontSize: '16px', color: '#4a5568', lineHeight: 1.8, margin: '0 0 20px' }}>
-            Sellers and buyers used to Google an agent&apos;s name and scroll through results. Now they ask ChatGPT, Perplexity, Google AI Overviews, and Gemini — and those systems give one answer. Not a list. One recommendation. And traditional SEO doesn&apos;t move the needle on any of them.
+            Sellers and buyers used to Google an agent&apos;s name and scroll through results. Now they ask ChatGPT, Perplexity, Google AI Overviews, and Gemini — and those systems surface 1–3 names. Not a directory. A short list of agents AI already knows. And traditional SEO doesn&apos;t influence any of them. <span style={{ fontSize: '13px', color: '#94a3b8' }}>(BrightLocal, 2026)</span>
           </p>
           <p style={{ fontSize: '16px', color: '#4a5568', lineHeight: 1.8, margin: 0 }}>
             The agents who get recommended have something in common: their information exists in the right places, in the right format, for AI to read and cite. It has nothing to do with how good they are. It&apos;s a data problem — and it&apos;s fixable.
@@ -154,7 +154,7 @@ export default function HowItWorksPage() {
             In 2005, most businesses didn&apos;t have a website. The ones that built them early dominated search results for years before competitors caught up. The same shift is happening now with AI.
           </p>
           <p style={{ fontSize: '15px', color: '#4a5568', lineHeight: 1.8, margin: 0 }}>
-            Right now, fewer than 5% of agents in any market have AI-optimized visibility. The window to be the agent AI recommends — before every other agent in your market figures this out — is open. It won&apos;t stay open.
+            By our analysis, fewer than 5% of agents in any market have AI-optimized visibility. The window to be the agent AI recommends — before every other agent in your market figures this out — is open. It won&apos;t stay open.
           </p>
         </div>
 
@@ -167,23 +167,16 @@ export default function HowItWorksPage() {
           <p style={{ fontSize: '15px', color: '#64748b', margin: '0 0 24px' }}>Before building Cited for others, we built it for ourselves.</p>
 
           <div style={{ background: '#fff', borderRadius: '12px', padding: '28px', border: '1px solid #e8edf2', boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr', gap: '20px', alignItems: 'center', marginBottom: '20px' }}>
-              <div style={{ textAlign: 'center' }}>
-                <div style={{ fontSize: '11px', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '6px' }}>Before</div>
-                <div style={{ fontSize: '48px', fontWeight: 800, color: '#dc2626' }}>35</div>
-                <div style={{ fontSize: '13px', color: '#94a3b8' }}>/ 100</div>
-                <div style={{ fontSize: '12px', color: '#64748b', marginTop: '4px' }}>Not mentioned in any<br />AI query for Carmel Valley</div>
+            <div style={{ marginBottom: '20px' }}>
+              <div style={{ fontSize: '13px', color: '#64748b', lineHeight: 1.7, marginBottom: '12px' }}>
+                At baseline scan, Radley Raven — 10-year Carmel Valley agent with $91M+ career volume — was not mentioned in a single AI query for his primary market. Zero citations across ChatGPT, Perplexity, and Google AI when buyers searched for Carmel Valley agents. Foundation Score: <strong style={{ color: '#dc2626' }}>35/100</strong>.
               </div>
-              <div style={{ fontSize: '24px', color: '#D4A830', fontWeight: 700 }}>→</div>
-              <div style={{ textAlign: 'center' }}>
-                <div style={{ fontSize: '11px', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '6px' }}>Target (90 days)</div>
-                <div style={{ fontSize: '48px', fontWeight: 800, color: '#00BFA6' }}>65+</div>
-                <div style={{ fontSize: '13px', color: '#94a3b8' }}>/ 100</div>
-                <div style={{ fontSize: '12px', color: '#64748b', marginTop: '4px' }}>Ranking above all<br />competitors in market</div>
+              <div style={{ fontSize: '13px', color: '#64748b', lineHeight: 1.7 }}>
+                That’s the baseline. Production volume doesn’t create AI citations. Structured digital presence does. That’s exactly what Cited builds.
               </div>
             </div>
             <div style={{ background: '#f8fafc', borderRadius: '8px', padding: '14px 16px', fontSize: '13px', color: '#4a5568', lineHeight: 1.6, textAlign: 'center' }}>
-              Radley Raven · The Oppenheim Group · Carmel Valley, CA · 10 years · $91M+ career volume
+              Radley Raven · The Oppenheim Group · Carmel Valley, CA · 10 years · $91M+ career volume · Foundation Score: 35/100 at baseline
             </div>
           </div>
         </div>
@@ -196,8 +189,11 @@ export default function HowItWorksPage() {
           <h2 style={{ fontSize: '26px', fontWeight: 700, color: '#0A1929', margin: '0 0 8px' }}>
             Here&apos;s everything you get. Here&apos;s what it&apos;s worth.
           </h2>
-          <p style={{ fontSize: '15px', color: '#64748b', margin: '0 0 24px', lineHeight: 1.7 }}>
-            A few select agents in North County San Diego. First 90 days free.
+          <p style={{ fontSize: '15px', color: '#64748b', margin: '0 0 8px', lineHeight: 1.7 }}>
+            A few select agents. First 90 days free.
+          </p>
+          <p style={{ fontSize: '13px', color: '#64748b', margin: '0 0 24px', lineHeight: 1.7 }}>
+            Founding members get a full <span style={{ color: '#D4A830', fontWeight: 600 }}>PRISM Scan™</span> — 1,700+ queries across 9 AI engines, complete gap analysis, competitor intelligence, and a 90-day optimization plan.
           </p>
 
           {/* Value stack */}
@@ -273,12 +269,12 @@ export default function HowItWorksPage() {
             A few select agents. First 90 days free.<br />Takes 5 minutes or less to get started.
           </p>
 
-          <a href="https://citedagent.com/intake" style={{ display: 'block', background: '#00BFA6', color: '#fff', fontWeight: 700, fontSize: '16px', padding: '16px 36px', borderRadius: '8px', textDecoration: 'none', letterSpacing: '0.3px', marginBottom: '12px' }}>
-            Claim My Founding Spot →
+          <a href="https://citedagent.com/score" style={{ display: 'block', background: '#00BFA6', color: '#fff', fontWeight: 700, fontSize: '16px', padding: '16px 36px', borderRadius: '8px', textDecoration: 'none', letterSpacing: '0.3px', marginBottom: '12px' }}>
+            Get My Foundation Score →
           </a>
 
           <p style={{ fontSize: '13px', color: '#94a3b8', margin: 0 }}>
-            Prefer to talk first? Reply directly to Radley&apos;s email.
+            Prefer to talk first? Email Radley directly at <a href="mailto:hello@citedagent.com" style={{ color: '#00BFA6', textDecoration: 'none' }}>hello@citedagent.com</a>
           </p>
         </div>
 
