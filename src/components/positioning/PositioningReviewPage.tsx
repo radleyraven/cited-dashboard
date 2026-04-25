@@ -1,5 +1,7 @@
 import type { PublicPositioningReview, StatTier, StatStatus, StatInventoryRow, ChangeCategory, MarketRole } from '@/types/positioning';
 import CitedHeader from '@/components/CitedHeader';
+import PositioningActions from '@/components/positioning/PositioningActions';
+import { generateActionToken } from '@/lib/positioning-tokens';
 
 /*
   PositioningReviewPage — renders cited_intake.positioning_data.client_view
@@ -261,52 +263,18 @@ export function PositioningReviewPage({ review }: { review: PublicPositioningRev
           </div>
         </div>
 
-        {/* Approval actions — DISABLED in render-only pass */}
+        {/* Approval actions — LIVE (mutation endpoints wired) */}
         <div style={{ marginTop: '48px', background: D.white, borderRadius: '14px', padding: '32px', border: `2px solid ${D.gold}` }}>
           <div style={{ fontSize: '10px', fontWeight: 700, color: D.gold, textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '8px' }}>Your Sign-Off</div>
-          <h2 style={{ fontSize: '24px', fontWeight: 700, color: D.navy, marginBottom: '12px' }}>Approve or request changes</h2>
-          <p style={{ fontSize: '14px', color: D.textSecondary, lineHeight: '1.6', marginBottom: '20px' }}>
-            Approval locks your positioning. Radley reviews and triggers Copy Kit generation manually. You'll be notified when your platform-specific bios, satellite site copy, and downstream drafts are ready for review. Approval includes a 60-second undo window.
-          </p>
+          <h2 style={{ fontSize: '24px', fontWeight: 700, color: D.navy, marginBottom: '20px' }}>Approve or request changes</h2>
 
-          <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', marginBottom: '24px' }}>
-            <button
-              type="button"
-              disabled
-              style={{ padding: '14px 28px', background: D.gold, color: D.navy, border: 'none', borderRadius: '10px', fontSize: '15px', fontWeight: 700, cursor: 'not-allowed', opacity: 0.6 }}
-              title="Actions wired in next phase"
-            >
-              Approve as-is
-            </button>
-            <button
-              type="button"
-              disabled
-              style={{ padding: '14px 28px', background: D.white, color: D.navy, border: `1.5px solid ${D.navy}`, borderRadius: '10px', fontSize: '15px', fontWeight: 700, cursor: 'not-allowed', opacity: 0.6 }}
-              title="Actions wired in next phase"
-            >
-              Request changes
-            </button>
-          </div>
-
-          <div>
-            <div style={{ fontSize: '11px', fontWeight: 700, color: D.textTertiary, textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '10px' }}>What would you like to change?</div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '8px', marginBottom: '14px' }}>
-              {CHANGE_OPTIONS.map(option => (
-                <label key={option.value} style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '14px', color: D.navy, opacity: 0.6 }}>
-                  <input type="checkbox" disabled />
-                  {option.label}
-                </label>
-              ))}
-            </div>
-            <textarea
-              disabled
-              placeholder={`Be specific. Example: "Change the 86% stat to 84% — I just relisted one that reduced."`}
-              style={{ width: '100%', minHeight: '110px', padding: '14px', border: `1.5px solid ${D.border}`, borderRadius: '10px', fontSize: '14px', fontFamily: 'inherit', color: D.navy, resize: 'vertical', opacity: 0.6, cursor: 'not-allowed' }}
-            />
-            <div style={{ marginTop: '12px', padding: '10px 14px', background: D.grayMid, borderRadius: '8px', fontSize: '12px', color: D.textSecondary, fontStyle: 'italic' }}>
-              Actions intentionally disabled in render-only preview. Mutation endpoints wire in the next build phase under separate authorization.
-            </div>
-          </div>
+          <PositioningActions
+            slug={review.slug}
+            token={generateActionToken(review.slug)}
+            version={review.positioning_approved_version || 'v0'}
+            initialStatus={review.positioning_status}
+            approvedAt={review.positioning_approved_at}
+          />
         </div>
 
       </div>
