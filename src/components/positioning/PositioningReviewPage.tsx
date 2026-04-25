@@ -106,10 +106,10 @@ export function PositioningReviewPage({ review }: { review: PublicPositioningRev
 
       <div style={{ maxWidth: '960px', margin: '0 auto', padding: '0 24px 48px' }}>
 
-        {/* Reputation Opener */}
-        <Section heading={cv.reputation_opener.heading} subheading={cv.reputation_opener.subheading}>
+        {/* Reputation Opener — with reputation classification pill */}
+        <SectionWithPill heading={cv.reputation_opener.heading} pill="SEASONED VETERAN">
           <p style={{ fontSize: '19px', lineHeight: '1.6', color: D.navy, fontWeight: 500 }}>{cv.reputation_opener.text}</p>
-        </Section>
+        </SectionWithPill>
 
         {/* Markets (moved up per O's recommendation — highest sensitivity) */}
         <Section heading={cv.markets.heading}>
@@ -242,7 +242,7 @@ export function PositioningReviewPage({ review }: { review: PublicPositioningRev
           <div style={{ fontSize: '10px', fontWeight: 700, color: D.gold, textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '8px' }}>Your Sign-Off</div>
           <h2 style={{ fontSize: '24px', fontWeight: 700, color: D.navy, marginBottom: '12px' }}>Approve or request changes</h2>
           <p style={{ fontSize: '14px', color: D.textSecondary, lineHeight: '1.6', marginBottom: '20px' }}>
-            Once you approve, we finalize your positioning nucleus and generate your platform-specific bios, satellite site copy, and downstream content. Approval includes a 60-second undo window.
+            Approval locks your positioning. Radley reviews and triggers Copy Kit generation manually. You'll be notified when your platform-specific bios, satellite site copy, and downstream drafts are ready for review. Approval includes a 60-second undo window.
           </p>
 
           <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', marginBottom: '24px' }}>
@@ -293,13 +293,25 @@ export function PositioningReviewPage({ review }: { review: PublicPositioningRev
   );
 }
 
-function Section({ heading, subheading, children }: { heading: string; subheading?: string; children: React.ReactNode }) {
+function Section({ heading, children }: { heading: string; subheading?: string; children: React.ReactNode }) {
+  // subheading prop accepted for backward compat but no longer rendered (per 2026-04-24 polish pass)
   return (
     <section style={{ marginTop: '40px' }}>
-      {subheading && (
-        <div style={{ fontSize: '10px', fontWeight: 700, color: D.gold, textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '6px' }}>{subheading}</div>
-      )}
       <h2 style={{ fontSize: '26px', fontWeight: 700, color: D.navy, marginBottom: '16px', lineHeight: '1.2' }}>{heading}</h2>
+      {children}
+    </section>
+  );
+}
+
+// SectionWithPill — used for Reputation Opener and any section that wants a category pill
+// instead of a gold subheading text line.
+function SectionWithPill({ heading, pill, children }: { heading: string; pill: string; children: React.ReactNode }) {
+  return (
+    <section style={{ marginTop: '40px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px', marginBottom: '14px', flexWrap: 'wrap' }}>
+        <h2 style={{ fontSize: '26px', fontWeight: 700, color: D.navy, lineHeight: '1.2', margin: 0 }}>{heading}</h2>
+        <span style={{ padding: '5px 12px', borderRadius: '999px', background: D.grayMid, color: D.navy, fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.8px', whiteSpace: 'nowrap' }}>{pill}</span>
+      </div>
       {children}
     </section>
   );
@@ -307,7 +319,7 @@ function Section({ heading, subheading, children }: { heading: string; subheadin
 
 function PillarSection({ heading, subheading, category, text, proofPoints, verificationPrompt, verificationQuestions, verificationCloser }: {
   heading: string;
-  subheading: string;
+  subheading: string;  // accepted for backward compat; no longer rendered
   category: string;
   text: string;
   proofPoints?: string[];
@@ -315,13 +327,13 @@ function PillarSection({ heading, subheading, category, text, proofPoints, verif
   verificationQuestions?: string[];
   verificationCloser?: string;
 }) {
+  void subheading; // suppress unused warning while preserving prop API
   return (
     <section style={{ marginTop: '40px' }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '6px' }}>
-        <div style={{ fontSize: '10px', fontWeight: 700, color: D.gold, textTransform: 'uppercase', letterSpacing: '2px' }}>{subheading}</div>
-        <span style={{ padding: '3px 10px', borderRadius: '999px', background: D.grayMid, color: D.navy, fontSize: '10px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.8px' }}>{category.replace(/_/g, ' ')}</span>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px', marginBottom: '14px', flexWrap: 'wrap' }}>
+        <h2 style={{ fontSize: '26px', fontWeight: 700, color: D.navy, lineHeight: '1.2', margin: 0 }}>{heading}</h2>
+        <span style={{ padding: '5px 12px', borderRadius: '999px', background: D.grayMid, color: D.navy, fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.8px', whiteSpace: 'nowrap' }}>{category.replace(/_/g, ' ')}</span>
       </div>
-      <h2 style={{ fontSize: '26px', fontWeight: 700, color: D.navy, marginBottom: '16px', lineHeight: '1.2' }}>{heading}</h2>
       <p style={{ fontSize: '18px', lineHeight: '1.65', color: D.navy, marginBottom: proofPoints?.length ? '16px' : '24px' }}>{text}</p>
       {proofPoints && proofPoints.length > 0 && (
         <ul style={{ paddingLeft: '20px', marginBottom: '24px' }}>
