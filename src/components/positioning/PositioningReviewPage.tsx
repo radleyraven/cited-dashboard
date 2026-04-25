@@ -1,9 +1,13 @@
-import type { PublicPositioningReview, StatTier, StatStatus, ChangeCategory } from '@/types/positioning';
+import type { PublicPositioningReview, StatTier, StatStatus, ChangeCategory, MarketRole } from '@/types/positioning';
+import CitedHeader from '@/components/CitedHeader';
+import CitedFooter from '@/components/CitedFooter';
 
 /*
   PositioningReviewPage — renders cited_intake.positioning_data.client_view
   Brand aligned with Citation Report / Score Page design system.
   Actions rendered but DISABLED per RTI-STANDARD Phase 3b render-only scope.
+  Polish pass 2026-04-24: shared Header/Footer, market color hierarchy,
+  Voice demoted to Signature Card, Pillar 2 title cleaned, MLS verification footnote.
 */
 
 const D = {
@@ -57,20 +61,35 @@ function statusColor(status: StatStatus): string {
   return D.gold;
 }
 
+// Market role color hierarchy: primary=gold, secondary=teal, growth=gray
+function marketRoleStyle(role: MarketRole): { bg: string; fg: string } {
+  const r = role.toString().toLowerCase();
+  if (r === 'primary') return { bg: D.gold, fg: D.navy };
+  if (r === 'secondary') return { bg: D.teal, fg: D.white };
+  return { bg: D.grayMid, fg: D.navy }; // growth + fallback
+}
+
+// Strip improvised sub-titles from Pillar 2 subheading.
+// Title becomes "Pillar 2 — [Archetype]" only. Mechanism stays in body text.
+// Component-side cleanup; JSONB source preserved.
+function cleanPillarSubheading(subheading: string): string {
+  // Strip everything after the second em dash or hyphen if it adds a sub-modifier
+  // Example: "Pillar 2 — Process Mastery / Pre-Listing Process" → "Pillar 2 — Process Mastery"
+  const m = subheading.match(/^(.+?\u2014\s*[^\/\u2014]+)/);
+  return m ? m[1].trim() : subheading;
+}
+
 export function PositioningReviewPage({ review }: { review: PublicPositioningReview }) {
   const cv = review.client_view;
 
   return (
     <main style={{ background: D.grayBg, minHeight: '100vh', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif', color: D.navy }}>
-      {/* Gradient bar */}
-      <div style={{ height: '4px', background: `linear-gradient(to right, ${D.gold}, ${D.teal})` }} />
+      {/* Shared Cited dashboard header (matches score page, citation report, etc.) */}
+      <CitedHeader variant="onboarding" stepIndicator="Positioning Review" />
 
-      {/* Header */}
-      <div style={{ maxWidth: '960px', margin: '0 auto', padding: '48px 24px 24px' }}>
-        <div style={{ fontSize: '11px', fontWeight: 700, color: D.gold, textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '12px' }}>
-          Cited — AI Citation Optimization™
-        </div>
-        <h1 style={{ fontSize: '40px', fontWeight: 700, lineHeight: '1.15', color: D.navy, marginBottom: '16px' }}>
+      {/* Hero */}
+      <div style={{ maxWidth: '960px', margin: '0 auto', padding: '40px 24px 24px' }}>
+        <h1 style={{ fontSize: '38px', fontWeight: 700, lineHeight: '1.15', color: D.navy, marginBottom: '16px' }}>
           Review Your Positioning Direction
         </h1>
         <div style={{ fontSize: '16px', color: D.textSecondary, lineHeight: '1.6', maxWidth: '720px' }}>
@@ -105,16 +124,19 @@ export function PositioningReviewPage({ review }: { review: PublicPositioningRev
                 </tr>
               </thead>
               <tbody>
-                {cv.markets.rows.map((m, i) => (
-                  <tr key={`${m.role}-${m.name}-${i}`} style={{ borderTop: `1px solid ${D.border}` }}>
-                    <td style={tdStyle}>
-                      <span style={{ display: 'inline-block', padding: '4px 10px', borderRadius: '999px', background: m.role.toString().toLowerCase() === 'primary' ? D.teal : D.grayMid, color: m.role.toString().toLowerCase() === 'primary' ? D.white : D.navy, fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>{m.role}</span>
-                    </td>
-                    <td style={{ ...tdStyle, fontWeight: 600 }}>{m.name}</td>
-                    <td style={tdStyle}>{m.career_volume}</td>
-                    <td style={tdStyle}>{m.transactions}</td>
-                  </tr>
-                ))}
+                {cv.markets.rows.map((m, i) => {
+                  const rs = marketRoleStyle(m.role);
+                  return (
+                    <tr key={`${m.role}-${m.name}-${i}`} style={{ borderTop: `1px solid ${D.border}` }}>
+                      <td style={tdStyle}>
+                        <span style={{ display: 'inline-block', padding: '4px 10px', borderRadius: '999px', background: rs.bg, color: rs.fg, fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>{m.role}</span>
+                      </td>
+                      <td style={{ ...tdStyle, fontWeight: 600 }}>{m.name}</td>
+                      <td style={tdStyle}>{m.career_volume}</td>
+                      <td style={tdStyle}>{m.transactions}</td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
@@ -124,7 +146,7 @@ export function PositioningReviewPage({ review }: { review: PublicPositioningRev
         {/* Pillar 1 */}
         <PillarSection
           heading={cv.pillar_1.heading}
-          subheading={cv.pillar_1.subheading}
+          subheading={cleanPillarSubheading(cv.pillar_1.subheading)}
           category={cv.pillar_1.category}
           text={cv.pillar_1.text}
           proofPoints={cv.pillar_1.proof_points}
@@ -133,10 +155,10 @@ export function PositioningReviewPage({ review }: { review: PublicPositioningRev
           verificationCloser={cv.pillar_1.verification_closer}
         />
 
-        {/* Pillar 2 */}
+        {/* Pillar 2 — subheading cleaned (improvised modifiers stripped at render) */}
         <PillarSection
           heading={cv.pillar_2.heading}
-          subheading={cv.pillar_2.subheading}
+          subheading={cleanPillarSubheading(cv.pillar_2.subheading)}
           category={cv.pillar_2.category}
           text={cv.pillar_2.text}
           proofPoints={cv.pillar_2.proof_points}
@@ -153,6 +175,9 @@ export function PositioningReviewPage({ review }: { review: PublicPositioningRev
         {/* Stat Inventory */}
         <Section heading={cv.stat_inventory.heading}>
           <p style={{ fontSize: '14px', color: D.textSecondary, marginBottom: '16px', lineHeight: '1.5' }}>{cv.stat_inventory.intro}</p>
+          <div style={{ background: D.grayMid, borderRadius: '8px', padding: '10px 14px', marginBottom: '14px', fontSize: '12px', color: D.textSecondary, lineHeight: '1.5' }}>
+            <strong style={{ color: D.navy }}>Source:</strong> All stats verified against San Diego MLS records and your individual listing history. Each entry below traces to a specific data source (career total, MLS query, or named record sale).
+          </div>
           <div style={{ background: D.white, borderRadius: '12px', overflow: 'hidden', border: `1px solid ${D.border}` }}>
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
               <thead>
@@ -182,31 +207,33 @@ export function PositioningReviewPage({ review }: { review: PublicPositioningRev
           <p style={{ fontSize: '14px', color: D.textSecondary, marginTop: '12px', lineHeight: '1.5' }}>{cv.stat_inventory.closer}</p>
         </Section>
 
-        {/* Voice + What Happens Next (two-column on desktop) */}
+        {/* Voice Signature Card (compact) + What Happens Next */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '24px', marginTop: '40px' }}>
 
-          <div style={{ background: D.white, borderRadius: '12px', padding: '28px', border: `1px solid ${D.border}` }}>
-            <div style={{ fontSize: '10px', fontWeight: 700, color: D.gold, textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '8px' }}>Voice</div>
-            <h2 style={{ fontSize: '22px', fontWeight: 700, color: D.navy, marginBottom: '16px' }}>{cv.voice.heading}</h2>
-            <div style={{ marginBottom: '12px' }}>
+          {/* VOICE SIGNATURE CARD — compact reference, full voice approval moves to Copy Kit stage */}
+          <div style={{ background: D.white, borderRadius: '12px', padding: '20px 24px', border: `1px solid ${D.border}` }}>
+            <div style={{ fontSize: '10px', fontWeight: 700, color: D.gold, textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '6px' }}>Voice Signature</div>
+            <div style={{ fontSize: '20px', fontWeight: 700, color: D.navy, marginBottom: '10px', textTransform: 'capitalize' }}>{cv.voice.archetype.replace(/_/g, ' ')}</div>
+            <div style={{ marginBottom: '10px' }}>
               {cv.voice.descriptors.map((d, i) => (
-                <span key={i} style={{ display: 'inline-block', padding: '4px 10px', borderRadius: '999px', background: D.grayMid, color: D.navy, fontSize: '12px', fontWeight: 600, marginRight: '6px', marginBottom: '6px' }}>{d}</span>
+                <span key={i} style={{ display: 'inline-block', padding: '3px 9px', borderRadius: '999px', background: D.grayMid, color: D.navy, fontSize: '11px', fontWeight: 600, marginRight: '5px', marginBottom: '5px' }}>{d}</span>
               ))}
             </div>
-            <p style={{ fontSize: '15px', color: D.textSecondary, lineHeight: '1.6', marginBottom: '12px' }}>{cv.voice.text}</p>
-            <p style={{ fontSize: '13px', color: D.textTertiary, lineHeight: '1.5', fontStyle: 'italic' }}>{cv.voice.closer}</p>
+            <p style={{ fontSize: '12px', color: D.textTertiary, lineHeight: '1.5', fontStyle: 'italic', marginBottom: 0 }}>
+              Full voice review happens at the Copy Kit stage when you see drafts.
+            </p>
           </div>
 
-          <div style={{ background: D.white, borderRadius: '12px', padding: '28px', border: `1px solid ${D.border}` }}>
+          <div style={{ background: D.white, borderRadius: '12px', padding: '24px 28px', border: `1px solid ${D.border}` }}>
             <div style={{ fontSize: '10px', fontWeight: 700, color: D.gold, textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '8px' }}>What Happens Next</div>
-            <h2 style={{ fontSize: '22px', fontWeight: 700, color: D.navy, marginBottom: '16px' }}>{cv.what_happens_next.heading}</h2>
-            <p style={{ fontSize: '15px', color: D.textSecondary, lineHeight: '1.6', marginBottom: '14px' }}>{cv.what_happens_next.intro}</p>
-            <ul style={{ paddingLeft: '20px', margin: '0 0 14px' }}>
+            <h2 style={{ fontSize: '20px', fontWeight: 700, color: D.navy, marginBottom: '12px' }}>{cv.what_happens_next.heading}</h2>
+            <p style={{ fontSize: '14px', color: D.textSecondary, lineHeight: '1.6', marginBottom: '12px' }}>{cv.what_happens_next.intro}</p>
+            <ul style={{ paddingLeft: '20px', margin: '0 0 12px' }}>
               {cv.what_happens_next.deliverables.map((d, i) => (
-                <li key={i} style={{ fontSize: '14px', color: D.navy, lineHeight: '1.6', marginBottom: '6px' }}>{d}</li>
+                <li key={i} style={{ fontSize: '13px', color: D.navy, lineHeight: '1.55', marginBottom: '4px' }}>{d}</li>
               ))}
             </ul>
-            <p style={{ fontSize: '13px', color: D.textTertiary, lineHeight: '1.5', fontStyle: 'italic' }}>{cv.what_happens_next.closer}</p>
+            <p style={{ fontSize: '12px', color: D.textTertiary, lineHeight: '1.5', fontStyle: 'italic', marginBottom: 0 }}>{cv.what_happens_next.closer}</p>
           </div>
         </div>
 
@@ -260,15 +287,8 @@ export function PositioningReviewPage({ review }: { review: PublicPositioningRev
 
       </div>
 
-      {/* Footer */}
-      <div style={{ background: D.navyDeep, color: D.white, padding: '40px 24px', marginTop: '32px' }}>
-        <div style={{ maxWidth: '960px', margin: '0 auto', textAlign: 'center' }}>
-          <div style={{ fontSize: '11px', fontWeight: 700, color: D.gold, textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '8px' }}>Powered by PRISM™</div>
-          <p style={{ fontSize: '13px', color: '#94a3b8', lineHeight: '1.6', marginBottom: '0' }}>
-            Your positioning nucleus is the single source of truth for every Cited deliverable. Questions? Reply to your intake email or reach us at hello@citedagent.com.
-          </p>
-        </div>
-      </div>
+      {/* Shared Cited dashboard footer (matches score page, citation report) */}
+      <CitedFooter />
     </main>
   );
 }
