@@ -1,14 +1,33 @@
-import type { PublicPositioningReview, StatTier, StatStatus, ChangeCategory, MarketRole } from '@/types/positioning';
+import type { PublicPositioningReview, StatTier, StatStatus, StatInventoryRow, ChangeCategory, MarketRole } from '@/types/positioning';
 import CitedHeader from '@/components/CitedHeader';
-import CitedFooter from '@/components/CitedFooter';
 
 /*
   PositioningReviewPage — renders cited_intake.positioning_data.client_view
   Brand aligned with Citation Report / Score Page design system.
-  Actions rendered but DISABLED per RTI-STANDARD Phase 3b render-only scope.
-  Polish pass 2026-04-24: shared Header/Footer, market color hierarchy,
-  Voice demoted to Signature Card, Pillar 2 title cleaned, MLS verification footnote.
+  Actions rendered but DISABLED.
+  Polish v3 (2026-04-24):
+    - Stats sorted gold → silver per Sugarman slippery slide research
+    - Source statement tightened (Bly Rule 6)
+    - Header passes userName + clientTier (Krug/Yablonski continuity)
+    - Footer matches /score light-footer pattern (was navy, mismatched)
+    - Freshness signal added (SE Ranking 2.3M page study)
 */
+
+// Tier sort order: gold first (Sugarman: lead with strongest claim)
+const TIER_ORDER: Record<StatTier, number> = {
+  gold: 0,
+  gold_conditional: 1,
+  silver: 2,
+  tier_3_authority: 3,
+};
+
+function sortStatsByTier(stats: StatInventoryRow[]): StatInventoryRow[] {
+  return [...stats].sort((a, b) => {
+    const aOrder = TIER_ORDER[a.tier] ?? 99;
+    const bOrder = TIER_ORDER[b.tier] ?? 99;
+    return aOrder - bOrder;
+  });
+}
 
 const D = {
   navy: '#0A1929',
@@ -84,8 +103,13 @@ export function PositioningReviewPage({ review }: { review: PublicPositioningRev
 
   return (
     <main style={{ background: D.grayBg, minHeight: '100vh', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif', color: D.navy }}>
-      {/* Shared Cited dashboard header (matches score page, citation report, etc.) */}
-      <CitedHeader variant="onboarding" stepIndicator="Positioning Review" />
+      {/* Shared Cited dashboard header with member identity (matches score page) */}
+      <CitedHeader
+        variant="onboarding"
+        stepIndicator="Positioning Review"
+        userName={cv.client_name}
+        clientTier="founding_client"
+      />
 
       {/* Hero */}
       <div style={{ maxWidth: '960px', margin: '0 auto', padding: '40px 24px 24px' }}>
@@ -172,11 +196,11 @@ export function PositioningReviewPage({ review }: { review: PublicPositioningRev
           <p style={{ fontSize: '17px', lineHeight: '1.65', color: D.navy }}>{cv.non_fit.text}</p>
         </Section>
 
-        {/* Stat Inventory */}
+        {/* Stat Inventory — sorted gold → silver per Sugarman slippery slide */}
         <Section heading={cv.stat_inventory.heading}>
           <p style={{ fontSize: '14px', color: D.textSecondary, marginBottom: '16px', lineHeight: '1.5' }}>{cv.stat_inventory.intro}</p>
           <div style={{ background: D.grayMid, borderRadius: '8px', padding: '10px 14px', marginBottom: '14px', fontSize: '12px', color: D.textSecondary, lineHeight: '1.5' }}>
-            <strong style={{ color: D.navy }}>Source:</strong> All stats verified against San Diego MLS records and your individual listing history. Each entry below traces to a specific data source (career total, MLS query, or named record sale).
+            <strong style={{ color: D.navy }}>Source:</strong> San Diego MLS career records and individual listing history. Each row below shows the underlying source. Numbers can be cross-checked against your MLS dashboard.
           </div>
           <div style={{ background: D.white, borderRadius: '12px', overflow: 'hidden', border: `1px solid ${D.border}` }}>
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
@@ -189,7 +213,7 @@ export function PositioningReviewPage({ review }: { review: PublicPositioningRev
                 </tr>
               </thead>
               <tbody>
-                {cv.stat_inventory.stats.map((s, i) => (
+                {sortStatsByTier(cv.stat_inventory.stats).map((s, i) => (
                   <tr key={i} style={{ borderTop: `1px solid ${D.border}` }}>
                     <td style={{ ...tdStyle, fontWeight: 500 }}>{s.stat}</td>
                     <td style={tdStyle}>
@@ -287,8 +311,20 @@ export function PositioningReviewPage({ review }: { review: PublicPositioningRev
 
       </div>
 
-      {/* Shared Cited dashboard footer (matches score page, citation report) */}
-      <CitedFooter />
+      {/* Footer — light variant matching /score and /report (was navy CitedFooter, mismatched) */}
+      <div style={{ maxWidth: '960px', margin: '0 auto', padding: '0 24px' }}>
+        <div style={{ fontSize: '11px', color: D.textTertiary, textAlign: 'center', marginTop: '32px', marginBottom: '12px', fontStyle: 'italic' }}>
+          Data current as of April 5, 2026 · Source: San Diego MLS
+        </div>
+        <div style={{ borderTop: `1px solid ${D.border}`, paddingTop: '24px', paddingBottom: '24px', textAlign: 'center' }}>
+          <p style={{ margin: '0 0 6px 0', fontSize: '18px', fontWeight: 800, color: D.navy, letterSpacing: '-0.5px' }}>CITED</p>
+          <p style={{ margin: '0 0 10px 0', fontSize: '11px', fontWeight: 600, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '1.5px' }}>AI Citation Optimization™ for Professionals</p>
+          <p style={{ margin: 0, fontSize: '12px', color: '#94a3b8' }}>
+            Powered by PRISM™ · <a href="/how-it-works" style={{ color: D.teal, textDecoration: 'none', fontWeight: 600 }}>How it works</a> · <a href="/privacy" style={{ color: D.teal, textDecoration: 'none', fontWeight: 600 }}>Privacy</a> · <a href="/terms" style={{ color: D.teal, textDecoration: 'none', fontWeight: 600 }}>Terms</a>
+          </p>
+        </div>
+        <div style={{ height: '4px', background: `linear-gradient(90deg, ${D.teal}, ${D.gold}, ${D.teal})`, borderRadius: '2px', marginBottom: '32px' }} />
+      </div>
     </main>
   );
 }
