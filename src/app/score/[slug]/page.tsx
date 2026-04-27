@@ -268,7 +268,7 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
   // ── CTA copy override for score-page conversion (2026-04-27) ──
   // Mid-page and bottom CTAs use different agent-facing copy.
   // Only applies when intake not started/complete (default 'Get Cited' state).
-  const midPageCtaText = intakeComplete ? ctaText : intakeStarted ? ctaText : 'See My Strategy →';
+  const midPageCtaText = intakeComplete ? ctaText : intakeStarted ? ctaText : 'Confirm My Details →';
   const bottomCtaText  = intakeComplete ? ctaText : intakeStarted ? ctaText : 'Confirm My Details →';
 
   // Dynamic "why this is a problem" bullets based on scan data
