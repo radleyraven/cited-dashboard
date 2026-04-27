@@ -236,9 +236,13 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
   if (scan?.dre_data?.broker_license_id) prefillParams.set('brokerDre', scan.dre_data.broker_license_id);
   if (scan?.dre_data?.broker_name) prefillParams.set('brokerName', scan.dre_data.broker_name);
   if (scan?.dre_data?.agent_mailing_address) prefillParams.set('brokerageAddress', scan.dre_data.agent_mailing_address);
-  // Always route via token when available — prevents wrong row loading
+  // ── Source tracking (conversion patch 2026-04-27) ──
+  // Token route takes priority (prevents wrong row loading).
+  // Prefill URL gets source params for attribution on non-token paths.
+  prefillParams.set('source', 'score_page');
+  prefillParams.set('utm_campaign', 'score_delivery');
   const intakeUrl = prospect.onboarding_token
-    ? `/intake?token=${prospect.onboarding_token}`
+    ? `/intake?token=${prospect.onboarding_token}&source=score_page&utm_campaign=score_delivery`
     : `/intake?${prefillParams.toString()}`;
 
   // ── Dynamic CTA logic (CITED-176) ──
@@ -260,6 +264,12 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
   } else {
     ctaText = 'Get Cited →';
   }
+
+  // ── CTA copy override for score-page conversion (2026-04-27) ──
+  // Mid-page and bottom CTAs use different agent-facing copy.
+  // Only applies when intake not started/complete (default 'Get Cited' state).
+  const midPageCtaText = intakeComplete ? ctaText : intakeStarted ? ctaText : 'See My Strategy →';
+  const bottomCtaText  = intakeComplete ? ctaText : intakeStarted ? ctaText : 'Confirm My Details →';
 
   // Dynamic "why this is a problem" bullets based on scan data
   const components = scan?.foundation_components || {};
@@ -320,7 +330,48 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
 
   return (
     <div style={{ minHeight: '100vh', background: D.grayBg, fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif' }}>
-      <style>{`details > summary { list-style: none; cursor: pointer; transition: background 0.15s; } details > summary::-webkit-details-marker { display: none; } details > summary:hover { background: #f0faf8; } details[open] > summary { background: #f0faf8 !important; } .chevron { transition: transform 0.2s; } details[open] .chevron { transform: rotate(180deg); } .see-fix { } details[open] .see-fix { display: none; } .gap-card { transition: box-shadow 0.15s; } .gap-card:hover { box-shadow: 0 2px 12px rgba(0,191,166,0.12); }`}</style>
+      <style>{`
+        details > summary { list-style: none; cursor: pointer; transition: background 0.15s; }
+        details > summary::-webkit-details-marker { display: none; }
+        details > summary:hover { background: #f0faf8; }
+        details[open] > summary { background: #f0faf8 !important; }
+        .chevron { transition: transform 0.2s; }
+        details[open] .chevron { transform: rotate(180deg); }
+        .see-fix { }
+        details[open] .see-fix { display: none; }
+        .gap-card { transition: box-shadow 0.15s; }
+        .gap-card:hover { box-shadow: 0 2px 12px rgba(0,191,166,0.12); }
+        /* ── Mobile responsive patch (conversion patch 2026-04-27) ── */
+        @media (max-width: 640px) {
+          .score-comparison-grid {
+            display: block !important;
+          }
+          .score-comparison-grid > div {
+            border-right: none !important;
+            border-bottom: 1px solid #f1f5f9;
+          }
+          .score-number {
+            font-size: 48px !important;
+          }
+          .score-benchmark-number {
+            font-size: 40px !important;
+          }
+          .cta-button {
+            display: block !important;
+            width: 100% !important;
+            box-sizing: border-box !important;
+            text-align: center !important;
+            padding: 16px 24px !important;
+            font-size: 16px !important;
+          }
+          .page-header {
+            padding: 16px 20px !important;
+          }
+          h1 {
+            font-size: 22px !important;
+          }
+        }
+      `}</style>
       <ScorePageTracker slug={slug} name={name} />
 
       {/* Header — inline version matching CitedHeader component */}
@@ -380,11 +431,10 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
             </div>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
+          <div className="score-comparison-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
             <div style={{ padding: '24px', borderRight: `1px solid ${D.grayMid}` }}>
               <div style={{ fontSize: '10px', fontWeight: 700, color: D.textTertiary, textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '14px' }}>Your Score</div>
-              <div style={{ fontFamily: 'Georgia, serif', fontSize: '64px', fontWeight: 900, color: D.navy, lineHeight: 1, whiteSpace: 'nowrap', marginBottom: '14px', height: '72px', display: 'flex', alignItems: 'flex-end' }}>{score}<span style={{ fontSize: '18px', color: D.textTertiary, fontWeight: 400, fontFamily: 'var(--font-geist-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif' }}>/100</span></div>
-
+              <div className="score-number" style={{ fontFamily: 'Georgia, serif', fontSize: '64px', fontWeight: 900, color: D.navy, lineHeight: 1, whiteSpace: 'nowrap', marginBottom: '14px', height: '72px', display: 'flex', alignItems: 'flex-end' }}>{score}<span style={{ fontSize: '18px', color: D.textTertiary, fontWeight: 400, fontFamily: 'var(--font-geist-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif' }}>/100</span></div>
               <div style={{ paddingTop: '14px', borderTop: `1px solid ${D.border}` }}>
                 {gaps.length > 0 && (
                   <>
@@ -401,7 +451,7 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
             </div>
             <div style={{ padding: '24px', background: D.grayBg }}>
               <div style={{ fontSize: '10px', fontWeight: 700, color: D.textTertiary, textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '14px' }}>Benchmark</div>
-              <div style={{ fontFamily: 'Georgia, serif', fontSize: '44px', fontWeight: 900, color: '#94a3b8', lineHeight: 1, whiteSpace: 'nowrap', marginBottom: '14px', height: '72px', display: 'flex', alignItems: 'flex-end' }}>~{benchmarkScore}<span style={{ fontSize: '16px', color: D.textTertiary, fontWeight: 400, fontFamily: 'var(--font-geist-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif' }}>/100</span></div>
+              <div className="score-benchmark-number" style={{ fontFamily: 'Georgia, serif', fontSize: '44px', fontWeight: 900, color: '#94a3b8', lineHeight: 1, whiteSpace: 'nowrap', marginBottom: '14px', height: '72px', display: 'flex', alignItems: 'flex-end' }}>~{benchmarkScore}<span style={{ fontSize: '16px', color: D.textTertiary, fontWeight: 400, fontFamily: 'var(--font-geist-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif' }}>/100</span></div>
 
               <div style={{ paddingTop: '14px', borderTop: `1px solid ${D.border}` }}>
                 <div style={{ fontSize: '9px', fontWeight: 700, color: D.textTertiary, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '6px' }}>What they have</div>
@@ -427,8 +477,8 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
         {/* ═══ MID-PAGE CTA ═══ */}
         <div style={{ textAlign: 'center', marginBottom: '32px' }}>
           <p style={{ fontSize: '15px', color: D.textSecondary, marginBottom: '14px' }}>Ready to fix this?</p>
-          <TrackedLink href={ctaHref} slug={slug} name={name} eventType="cta_click" eventData={{ page: 'score', cta: 'mid_page' }} style={{ display: 'inline-block', background: D.teal, color: '#fff', fontWeight: 700, fontSize: '15px', padding: '14px 36px', borderRadius: '10px', textDecoration: 'none', boxShadow: '0 4px 16px rgba(0,191,166,0.3)' }}>
-            {ctaText}
+          <TrackedLink href={ctaHref} slug={slug} name={name} eventType="cta_click" eventData={{ page: 'score', cta: 'mid_page' }} className="cta-button" style={{ display: 'inline-block', background: D.teal, color: '#fff', fontWeight: 700, fontSize: '15px', padding: '14px 36px', borderRadius: '10px', textDecoration: 'none', boxShadow: '0 4px 16px rgba(0,191,166,0.3)' }}>
+            {midPageCtaText}
           </TrackedLink>
           <p style={{ fontSize: '12px', color: D.textTertiary, marginTop: '12px' }}>
             <strong style={{ color: D.navy }}>Free for Founding Members.</strong> Takes 5 minutes. We handle the rest.
@@ -532,8 +582,8 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
 
         {/* ═══ CTA ═══ */}
         <div style={{ textAlign: 'center', marginBottom: '32px' }}>
-          <TrackedLink href={ctaHref} slug={slug} name={name} eventType="cta_click" eventData={{ page: 'score', cta: 'bottom' }} style={{ display: 'inline-block', background: D.teal, color: '#fff', fontWeight: 700, fontSize: '16px', padding: '18px 40px', borderRadius: '10px', textDecoration: 'none', boxShadow: '0 4px 16px rgba(0,191,166,0.3)' }}>
-            {ctaText}
+          <TrackedLink href={ctaHref} slug={slug} name={name} eventType="cta_click" eventData={{ page: 'score', cta: 'bottom' }} className="cta-button" style={{ display: 'inline-block', background: D.teal, color: '#fff', fontWeight: 700, fontSize: '16px', padding: '18px 40px', borderRadius: '10px', textDecoration: 'none', boxShadow: '0 4px 16px rgba(0,191,166,0.3)' }}>
+            {bottomCtaText}
           </TrackedLink>
           <p style={{ fontSize: '12px', color: D.textTertiary, marginTop: '12px' }}>
             <strong style={{ color: D.navy }}>Free for Founding Members.</strong> Takes 5 minutes. We handle the rest.
